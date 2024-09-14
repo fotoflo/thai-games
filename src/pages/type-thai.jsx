@@ -280,7 +280,7 @@ const ThaiWordLearningGame = () => {
             <AlertDialogTitle>Correct!</AlertDialogTitle>
             <AlertDialogDescription>
               <p className="text-2xl mb-4">{targetWord.thai}</p>
-              <p className="mb-4">"{targetWord.english}" in English</p>
+              <p className="mb-4">&quot;{targetWord.english}&quot; in English</p>
               <div className="flex justify-between mb-4">
                 <Button onClick={() => speakText(targetWord.thai)}>
                   Play Full Word
