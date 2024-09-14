@@ -83,7 +83,7 @@ const ThaiWordLearningGame = () => {
   const checkWord = useCallback((word) => {
     if (word === targetWord.thai) {
       setScore(prev => prev + (hintUsed ? 0.5 : 1));
-      setMessage(`Correct! "${word}" means "${targetWord.english}" in English.`);
+      setMessage(`Correct! &quot;${word}&quot; means &quot;${targetWord.english}&quot; in English.`);
       setShowWinDialog(true);
       return true;
     } else if (targetWord.thai.startsWith(word)) {
