@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import ThaiKeyboard from '@/components/ThaiKeyboard';
 import WordDisplay from '@/components/WordDisplay';
+import GameControls from '@/components/GameControls';
 
 const thaiWords = [
   { thai: 'สวัสดี', english: 'Hello', icon: Smile },
@@ -170,20 +171,12 @@ const ThaiWordLearningGame = () => {
           speakText={speakText}
           IconComponent={targetWord.icon}
         />
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center">
-            <Switch
-              id="show-thai"
-              checked={showThaiWord}
-              onCheckedChange={setShowThaiWord}
-            />
-            <label htmlFor="show-thai" className="ml-2">Show Thai Word</label>
-          </div>
-          <Button onClick={toggleHint} className={`flex items-center ${hintActive ? 'bg-green-500' : 'bg-yellow-500'} hover:opacity-80 text-white`}>
-            <Lightbulb className="mr-2" size={16} />
-            {hintActive ? 'Hint On' : 'Hint Off'}
-          </Button>
-        </div>
+        <GameControls 
+          showThaiWord={showThaiWord}
+          setShowThaiWord={setShowThaiWord}
+          toggleHint={toggleHint}
+          hintActive={hintActive}
+        />
         <div className="flex mb-4">
           <Input 
             ref={inputRef}
