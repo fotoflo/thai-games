@@ -1,17 +1,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Volume2 } from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction } from "@/components/ui/alert-dialog";
+import { speakText } from '@/utils/textToSpeech';
 
-const WinDialog = ({ showWinDialog, setShowWinDialog, targetWord, speakText, nextWord, mergeVowels }) => (
+const WinDialog = ({ showWinDialog, setShowWinDialog, targetWord, nextWord, mergeVowels }) => (
   <AlertDialog open={showWinDialog} onOpenChange={setShowWinDialog}>
     <AlertDialogContent className="bg-slate-50 bg-opacity-100 text-black">
       <AlertDialogHeader>
