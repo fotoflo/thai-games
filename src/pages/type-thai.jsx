@@ -13,16 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-
-// Updated Thai keyboard layout to more closely resemble iOS
-const thaiKeyboard = [
-  ['ๅ', '/', '-', 'ภ', 'ถ', 'ุ', 'ึ', 'ค', 'ต', 'จ', 'ข', 'ช'],
-  ['ๆ', 'ไ', 'ำ', 'พ', 'ะ', 'ั', 'ี', 'ร', 'น', 'ย', 'บ', 'ล', 'ฃ'],
-  ['ฟ', 'ห', 'ก', 'ด', 'เ', '้', '่', 'า', 'ส', 'ว', 'ง'],
-  ['ผ', 'ป', 'แ', 'อ', 'ิ', 'ื', 'ท', 'ม', 'ใ', 'ฝ', 'ฦ'],
-  ['', 'ฐ', 'ฑ', 'ธ', 'ณ', 'ญ', 'ฎ', 'ฏ', 'ฐ', ',', '.'],
-  ['๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙']
-];
+import ThaiKeyboard from '@/components/ThaiKeyboard';
 
 const thaiWords = [
   { thai: 'สวัสดี', english: 'Hello', icon: Smile },
@@ -227,35 +218,12 @@ const ThaiWordLearningGame = () => {
             <Volume2 size={20} />
           </Button>
         </div>
-        <div className="mb-4">
-          {thaiKeyboard.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex justify-center mb-2">
-              {row.map((key, keyIndex) => {
-                const isNextLetter = key === getNextLetter();
-                return (
-                  <Button
-                    key={keyIndex}
-                    onClick={() => key && handleLetterClick(key)}
-                    style={{
-                      backgroundColor: (hintActive && isNextLetter) ? '#22c55e' : (darkMode ? '#374151' : '#e5e7eb'),
-                      color: darkMode ? 'white' : 'black',
-                      fontWeight: (hintActive && isNextLetter) ? 'bold' : 'normal',
-                      width: '30px',
-                      height: '40px',
-                      margin: '0 2px',
-                      padding: '0',
-                      fontSize: '16px'
-                    }}
-                    className="hover:opacity-80"
-                    disabled={!key}
-                  >
-                    {key}
-                  </Button>
-                );
-              })}
-            </div>
-          ))}
-        </div>
+        <ThaiKeyboard 
+  handleLetterClick={handleLetterClick}
+  getNextLetter={getNextLetter}
+  hintActive={hintActive}
+  darkMode={darkMode}
+/>
       </div>
       <Alert className={`mb-4 ${darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'}`}>
         <AlertTitle className="text-xl">Score: {score}</AlertTitle>
