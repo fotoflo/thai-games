@@ -7,6 +7,7 @@ import WordDisplay from '@/components/WordDisplay';
 import GameControls from '@/components/GameControls';
 import ThaiWordInputArea from '@/components/ThaiWordInputArea';
 import WinDialog from '@/components/WinDialog';
+import useGameState from '@/hooks/useGameState';
 
 const thaiWords = [
   { thai: 'ขอบคุณ', english: 'Thank you', icon: Smile },
@@ -22,17 +23,30 @@ const thaiWords = [
 ];
 
 const ThaiWordLearningGame = () => {
-  const [currentWord, setCurrentWord] = useState('');
-  const [targetWord, setTargetWord] = useState(thaiWords[0]);
-  const [wordIndex, setWordIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  const [message, setMessage] = useState('');
-  const [showThaiWord, setShowThaiWord] = useState(true);
-  const [ttsAvailable, setTtsAvailable] = useState(true);
-  const [hintUsed, setHintUsed] = useState(false);
-  const [hintActive, setHintActive] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
-  const [showWinDialog, setShowWinDialog] = useState(false);
+  const {
+    currentWord,
+    setCurrentWord,
+    targetWord,
+    setTargetWord,
+    wordIndex,
+    score,
+    message,
+    showWinDialog,
+    setShowWinDialog,
+    hintUsed,
+    setHintUsed,
+    hintActive,
+    setHintActive,
+    ttsAvailable,
+    darkMode,
+    showThaiWord,
+    setShowThaiWord,
+    checkWord,
+    nextWord,
+    toggleDarkMode,
+    toggleHint
+  } = useGameState(thaiWords);
+
   const speakingRef = useRef(false);
   const inputRef = useRef(null);
 
@@ -63,22 +77,6 @@ const ThaiWordLearningGame = () => {
       speakingRef.current = false;
     });
   }, [ttsAvailable]);
-
-  const checkWord = useCallback((word) => {
-    if (word === targetWord.thai) {
-      setScore(prev => prev + (hintUsed ? 0.5 : 1));
-      setMessage(`Correct! &quot;${word}&quot; means &quot;${targetWord.english}&quot; in English.`);
-      setShowWinDialog(true);
-      return true;
-    } else if (targetWord.thai.startsWith(word)) {
-      setMessage('Keep going...');
-      return false;
-    } else {
-      setMessage(`Incorrect. Try again!`);
-      setTimeout(() => setCurrentWord(''), 1000);
-      return false;
-    }
-  }, [targetWord, hintUsed]);
 
   const handleInputChange = useCallback((e) => {
     const newWord = e.target.value;
@@ -114,26 +112,7 @@ const ThaiWordLearningGame = () => {
     return targetWord.thai[currentWord.length] || '';
   }, [targetWord, currentWord]);
 
-  const toggleHint = useCallback(() => {
-    setHintActive(prev => !prev);
-  }, []);
 
-  const toggleDarkMode = useCallback(() => {
-    setDarkMode(prev => !prev);
-  }, []);
-
-  const nextWord = useCallback(() => {
-    setCurrentWord('');
-    setWordIndex(prev => (prev + 1) % thaiWords.length);
-    setMessage('');
-    setHintUsed(false);
-    setShowWinDialog(false);
-  }, []);
-
-  useEffect(() => {
-    setTargetWord(thaiWords[wordIndex]);
-    speakText(thaiWords[wordIndex].thai);
-  }, [wordIndex, speakText]);
 
   const IconComponent = targetWord.icon;
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Volume2 } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -12,29 +13,40 @@ import {
 
 const WinDialog = ({ showWinDialog, setShowWinDialog, targetWord, speakText, nextWord, mergeVowels }) => (
   <AlertDialog open={showWinDialog} onOpenChange={setShowWinDialog}>
-    <AlertDialogContent>
+    <AlertDialogContent className="bg-slate-50 bg-opacity-100 text-black">
       <AlertDialogHeader>
-        <AlertDialogTitle>Correct!</AlertDialogTitle>
+        <AlertDialogTitle className="text-2xl">Correct!</AlertDialogTitle>
         <AlertDialogDescription>
-          <p className="text-2xl mb-4">{targetWord.thai}</p>
+          <p className="text-3xl mb-4">{targetWord.thai}</p>
           <p className="mb-4">&quot;{targetWord.english}&quot; in English</p>
           <div className="flex justify-between mb-4">
-            <Button onClick={() => speakText(targetWord.thai)}>
+            <Button onClick={() => speakText(targetWord.thai)} variant="outline" className="flex items-center">
+              <Volume2 size={16} className="mr-2" />
               Play Full Word
             </Button>
-            <Button onClick={() => nextWord()}>
+            <Button onClick={() => nextWord()} variant="outline">
               Next Word
             </Button>
           </div>
           <div className="flex flex-wrap justify-center">
             {mergeVowels(targetWord.thai).map((char, index) => (
-              <Button 
-                key={index} 
-                onClick={() => speakText(char)} 
-                className="m-1"
-              >
-                {char}
-              </Button>
+              <div key={index} className="flex items-center m-1">
+                <Button 
+                  onClick={() => speakText(char)} 
+                  variant="outline"
+                  className="mr-1"
+                >
+                  {char}
+                </Button>
+                <Button
+                  onClick={() => speakText(char)}
+                  variant="ghost"
+                  size="icon"
+                  className="p-0"
+                >
+                  <Volume2 size={16} />
+                </Button>
+              </div>
             ))}
           </div>
         </AlertDialogDescription>
