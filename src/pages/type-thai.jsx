@@ -1,25 +1,16 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Switch } from '@/components/ui/switch';
-import { Smile, Coffee, Sun, Apple, Home, Volume2, Lightbulb, Moon} from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { Smile, Coffee, Sun, Apple, Home, Moon} from 'lucide-react';
 import ThaiKeyboard from '@/components/ThaiKeyboard';
 import WordDisplay from '@/components/WordDisplay';
 import GameControls from '@/components/GameControls';
+import ThaiWordInputArea from '@/components/ThaiWordInputArea';
+import WinDialog from '@/components/WinDialog';
 
 const thaiWords = [
-  { thai: 'สวัสดี', english: 'Hello', icon: Smile },
   { thai: 'ขอบคุณ', english: 'Thank you', icon: Smile },
+  { thai: 'สวัสดี', english: 'Hello', icon: Smile },
   { thai: 'ใช่', english: 'Yes', icon: Smile },
   { thai: 'ไม่', english: 'No', icon: Smile },
   { thai: 'กาแฟ', english: 'Coffee', icon: Coffee },
@@ -161,8 +152,10 @@ const ThaiWordLearningGame = () => {
 
   return (
     <div className={`mt-6 p-4 max-w-md mx-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
-      <h1 className="text-3xl font-bold mb-4 text-center">Type Thai</h1>
-      <h2 className="text-2xl font-bold mb-4 text-center">The Thai Alphabet and Keyboard Learning Game</h2>
+      <div>
+        <h1 className="text-3xl font-bold mb-4 text-center">Type Thai</h1>
+        <h2 className="text-2xl font-bold mb-4 text-center">The Thai Alphabet and Keyboard Learning Game</h2>
+      </div>
       <div className={`p-4 rounded-lg mb-4 shadow ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
         <WordDisplay 
           targetWord={targetWord}
@@ -177,29 +170,20 @@ const ThaiWordLearningGame = () => {
           toggleHint={toggleHint}
           hintActive={hintActive}
         />
-        <div className="flex mb-4">
-          <Input 
-            ref={inputRef}
-            type="text" 
-            value={currentWord} 
-            onChange={handleInputChange}
-            onKeyPress={handleKeyPress}
-            className={`flex-grow p-2 text-lg border-2 rounded-l ${darkMode ? 'bg-gray-600 border-gray-500 text-white' : 'bg-gray-100 border-gray-300 text-black'}`}
-            placeholder="Type here..."
-          />
-          <Button 
-            onClick={() => speakText(currentWord)} 
-            className="rounded-r"
-          >
-            <Volume2 size={20} />
-          </Button>
-        </div>
+        <ThaiWordInputArea 
+          inputRef={inputRef}
+          currentWord={currentWord}
+          handleInputChange={handleInputChange}
+          handleKeyPress={handleKeyPress}
+          speakText={speakText}
+          darkMode={darkMode}
+        />
         <ThaiKeyboard 
-  handleLetterClick={handleLetterClick}
-  getNextLetter={getNextLetter}
-  hintActive={hintActive}
-  darkMode={darkMode}
-/>
+          handleLetterClick={handleLetterClick}
+          getNextLetter={getNextLetter}
+          hintActive={hintActive}
+          darkMode={darkMode}
+        />
       </div>
       <Alert className={`mb-4 ${darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'}`}>
         <AlertTitle className="text-xl">Score: {score}</AlertTitle>
@@ -218,39 +202,14 @@ const ThaiWordLearningGame = () => {
           {darkMode ? <Sun className="h-[1.2rem] w-[1.2rem]" /> : <Moon className="h-[1.2rem] w-[1.2rem]" />}
         </Button>
       </div>
-      <AlertDialog open={showWinDialog} onOpenChange={setShowWinDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Correct!</AlertDialogTitle>
-            <AlertDialogDescription>
-              <p className="text-2xl mb-4">{targetWord.thai}</p>
-              <p className="mb-4">&quot;{targetWord.english}&quot; in English</p>
-              <div className="flex justify-between mb-4">
-                <Button onClick={() => speakText(targetWord.thai)}>
-                  Play Full Word
-                </Button>
-                <Button onClick={() => nextWord()}>
-                  Next Word
-                </Button>
-              </div>
-              <div className="flex flex-wrap justify-center">
-                {mergeVowels(targetWord.thai).map((char, index) => (
-                  <Button 
-                    key={index} 
-                    onClick={() => speakText(char)} 
-                    className="m-1"
-                  >
-                    {char}
-                  </Button>
-                ))}
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction onClick={nextWord}>Next Word</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <WinDialog 
+        showWinDialog={showWinDialog}
+        setShowWinDialog={setShowWinDialog}
+        targetWord={targetWord}
+        speakText={speakText}
+        nextWord={nextWord}
+        mergeVowels={mergeVowels}
+      />
     </div>
   );
 };
