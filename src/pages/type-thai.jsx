@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import ThaiKeyboard from '@/components/ThaiKeyboard';
+import WordDisplay from '@/components/WordDisplay';
 
 const thaiWords = [
   { thai: 'สวัสดี', english: 'Hello', icon: Smile },
@@ -162,31 +163,13 @@ const ThaiWordLearningGame = () => {
       <h1 className="text-3xl font-bold mb-4 text-center">Type Thai</h1>
       <h2 className="text-2xl font-bold mb-4 text-center">The Thai Alphabet and Keyboard Learning Game</h2>
       <div className={`p-4 rounded-lg mb-4 shadow ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
-        <div className="flex items-center justify-center mb-4">
-          <IconComponent size={48} className="mr-4 text-blue-500" />
-          <div>
-            <p className="text-2xl font-bold">{targetWord.english}</p>
-            {showThaiWord && (
-              <div className="flex items-center">
-                <p className="text-xl mr-2">
-                  {targetWord.thai.split('').map((letter, index) => (
-                    <span key={index} className={index === currentWord.length ? "bg-yellow-300 text-black" : ""}>
-                      {letter}
-                    </span>
-                  ))}
-                </p>
-                <Button 
-                  onClick={() => speakText(targetWord.thai)} 
-                  variant="ghost" 
-                  size="sm"
-                  className="p-1"
-                >
-                  <Volume2 size={20} className="text-blue-500" />
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
+        <WordDisplay 
+          targetWord={targetWord}
+          showThaiWord={showThaiWord}
+          currentWord={currentWord}
+          speakText={speakText}
+          IconComponent={targetWord.icon}
+        />
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
             <Switch
