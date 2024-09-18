@@ -1,5 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Volume2 } from 'lucide-react';
+import { speakText } from '@/utils/textToSpeech';
 
 const thaiKeyboard = [
   ["ๅ", "/", "-", "ภ", "ถ", "ุ", "ึ", "ค", "ต", "จ", "ข", "ช"],
@@ -24,7 +26,12 @@ const ThaiKeyboard = ({
           return (
             <Button
               key={keyIndex}
-              onClick={() => key && handleLetterClick(key)}
+              onClick={() => {
+                if (key) {
+                  handleLetterClick(key);
+                  speakText(key);
+                }
+              }}
               style={{
                 backgroundColor:
                   hintActive && isNextLetter
@@ -40,10 +47,13 @@ const ThaiKeyboard = ({
                 padding: "0",
                 fontSize: "16px",
               }}
-              className="hover:opacity-80"
+              className="hover:opacity-80 relative"
               disabled={!key}
             >
               {key}
+              {key && (
+                <Volume2 size={12} className="absolute bottom-0 right-0 text-blue-500" />
+              )}
             </Button>
           );
         })}

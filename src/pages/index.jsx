@@ -19,6 +19,12 @@ const HomePage = () => {
       subtitle: "The Thai alphabet and keyboard learning game",
       imageSrc: "/type-thai.jpg",
       link: "/type-thai"
+    },
+    {
+      title: "Multiply with Chinese",
+      subtitle: "The multiplication game with Chinese Rhyming",
+      imageSrc: "/multiply-chinese.jpg",
+      link: "/multiply-with-chinese"
     }
   ];
 
