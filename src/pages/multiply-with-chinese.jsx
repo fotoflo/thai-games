@@ -177,8 +177,11 @@ const MultiplicationGame = () => {
         setScore(score + 1);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000); // Turn off confetti after 3 seconds
-        if (score > 0 && score % 5 === 0 && currentLevel < 12) {
-          setCurrentLevel(currentLevel + 1);
+        
+        // Advance to next level immediately, up to a maximum of 12
+        if (currentLevel < 12) {
+          setCurrentLevel(prevLevel => prevLevel + 1);
+          setFeedback(prevFeedback => `${prevFeedback} Level up! New level: ${currentLevel + 1}`);
         }
       } else {
         const lostPoints = Math.floor((num1 * num2) / 2);
@@ -266,7 +269,7 @@ const MultiplicationGame = () => {
             Points: {points}
           </p>
           <p className="text-center mt-2">
-            Current Level: {currentLevel}+
+            Current Level: {currentLevel}
           </p>
           <p className="text-center mt-2">
             Consecutive Correct: {consecutiveCorrect}
