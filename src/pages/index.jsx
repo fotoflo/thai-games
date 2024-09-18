@@ -18,13 +18,15 @@ const HomePage = () => {
       title: "Type Thai",
       subtitle: "The Thai alphabet and keyboard learning game",
       imageSrc: "/type-thai.jpg",
-      link: "/type-thai"
+      link: "/type-thai",
+      remixLink: "https://claude.site/artifacts/e27f6dfd-5dd5-4d0f-918f-09a3a275143b"
     },
     {
       title: "Multiply with Chinese",
       subtitle: "The multiplication game with Chinese Rhyming",
       imageSrc: "/multiply-chinese.jpg",
-      link: "/multiply-with-chinese"
+      link: "/multiply-with-chinese",
+      remixLink: "https://claude.site/artifacts/5cff321a-c639-44cb-8f04-c8fabe68f640"
     }
   ];
 
@@ -39,9 +41,16 @@ const HomePage = () => {
         <h2 className="text-2xl font-semibold mb-6">Our Games</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {games.map((game, index) => (
-            <Link href={game.link} key={index}>
-              <GameCard {...game} />
-            </Link>
+            <div key={index} className="flex flex-col">
+              <Link href={game.link}>
+                <GameCard {...game} />
+              </Link>
+              <Link href={game.remixLink} target="_blank" rel="noopener noreferrer">
+                <button className="mt-2 w-full bg-purple-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-purple-700 transition-colors">
+                  Remix
+                </button>
+              </Link>
+            </div>
           ))}
         </div>
       </main>
