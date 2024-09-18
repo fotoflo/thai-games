@@ -47,7 +47,7 @@ const HomePage = () => {
               </Link>
               <Link href={game.remixLink} target="_blank" rel="noopener noreferrer">
                 <button className="mt-2 w-full bg-purple-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-purple-700 transition-colors">
-                  Remix
+                  Remix with Claude AI
                 </button>
               </Link>
             </div>
