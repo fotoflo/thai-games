@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { SkipForward, Clock, Calculator, Repeat, ArrowRight } from 'lucide-react';
+import { SkipForward, Clock, Calculator, Repeat } from 'lucide-react';
 
 const Confetti = ({ active }) => {
   const confettiCount = 50;
@@ -54,10 +54,6 @@ const MultiplicationGame = () => {
     calculator: 0,
   });
   const questionRef = useRef(null);
-  const [timeLeft, setTimeLeft] = useState(10);
-  const [isActive, setIsActive] = useState(true);
-  const timerRef = useRef(null);
-  const [questionAnswered, setQuestionAnswered] = useState(false);
 
   const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 
@@ -93,9 +89,6 @@ const MultiplicationGame = () => {
     setUserAnswer('');
     setFeedback('');
     questionRef.current = `${newNum1} ${newNum2} ${newNum1 * newNum2}`;
-    setTimeLeft(10);
-    setIsActive(true);
-    setQuestionAnswered(false);
   };
 
   useEffect(() => {
@@ -106,24 +99,6 @@ const MultiplicationGame = () => {
     const timeoutId = setTimeout(speakQuestion, 100);
     return () => clearTimeout(timeoutId);
   }, [num1, num2, speakAnswer]);
-
-  useEffect(() => {
-    if (isActive && timeLeft > 0) {
-      timerRef.current = setTimeout(() => {
-        setTimeLeft(timeLeft - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      handleTimeUp();
-    }
-    return () => clearTimeout(timerRef.current);
-  }, [timeLeft, isActive]);
-
-  const handleTimeUp = () => {
-    setIsActive(false);
-    if (!questionAnswered) {
-      setFeedback("Time's up! You can still answer, but without a time bonus.");
-    }
-  };
 
   const speakQuestion = () => {
     if (questionRef.current) {
@@ -150,46 +125,37 @@ const MultiplicationGame = () => {
     speakQuestion();
   };
 
-  const calculatePoints = (num1, num2, timeSpent) => {
+  const calculatePoints = (num1, num2) => {
     const basePoints = num1 * num2;
     const bonus = consecutiveCorrect * 10;
-    const timeBonus = isActive ? Math.max(0, 10 - timeSpent) * 10 : 0; // Only apply time bonus if answered before time's up
-    return basePoints + bonus + timeBonus;
+    return basePoints + bonus;
   };
 
   const handleAnswer = (answer) => {
-    if (questionAnswered) return;
-    
     const correctAnswer = num1 * num2;
     const correctDigits = correctAnswer.toString().length;
 
     if (answer.length === correctDigits) {
       setTotalQuestions(totalQuestions + 1);
-      setQuestionAnswered(true);
 
       if (parseInt(answer) === correctAnswer) {
-        const timeSpent = 10 - timeLeft;
-        const newPoints = calculatePoints(num1, num2, timeSpent);
+        const newPoints = calculatePoints(num1, num2);
         setPoints(points + newPoints);
         setConsecutiveCorrect(consecutiveCorrect + 1);
-        const timeBonusText = isActive ? ` (including ${Math.max(0, 10 - timeSpent) * 10} time bonus)` : '';
-        setFeedback(`Correct! +${newPoints} points${timeBonusText}`);
+        setFeedback(`Correct! +${newPoints} points`);
         setScore(score + 1);
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000); // Turn off confetti after 3 seconds
-        
-        // Advance to next level immediately, up to a maximum of 12
-        if (currentLevel < 12) {
-          setCurrentLevel(prevLevel => prevLevel + 1);
-          setFeedback(prevFeedback => `${prevFeedback} Level up! New level: ${currentLevel + 1}`);
+        if (score > 0 && score % 5 === 0 && currentLevel < 12) {
+          setCurrentLevel(currentLevel + 1);
         }
+        setTimeout(generateQuestion, 1500);
       } else {
         const lostPoints = Math.floor((num1 * num2) / 2);
         setPoints(Math.max(0, points - lostPoints));
-        setFeedback(`Incorrect! -${lostPoints} points. The correct answer was ${correctAnswer}.`);
+        setFeedback(`Incorrect! -${lostPoints} points.`);
         setConsecutiveCorrect(0);
       }
-      setIsActive(false);
     }
   };
 
@@ -209,31 +175,22 @@ const MultiplicationGame = () => {
     }
   };
 
-  const usePowerUpSkip = () => {
-    if (powerUps.skip > 0) {
-      setPowerUps({ ...powerUps, skip: powerUps.skip - 1 });
-      generateQuestion();
-    } else {
-      setFeedback("You don't have this power-up!");
-    }
-  };
-
-  const usePowerUpExtraTime = () => {
-    if (powerUps.extraTime > 0) {
-      setPowerUps({ ...powerUps, extraTime: powerUps.extraTime - 1 });
-      setTimeLeft(prevTime => Math.min(prevTime + 5, 10));
-      setIsActive(true);
-      setFeedback("Extra time added!");
-    } else {
-      setFeedback("You don't have this power-up!");
-    }
-  };
-
-  const usePowerUpCalculator = () => {
-    if (powerUps.calculator > 0) {
-      setPowerUps({ ...powerUps, calculator: powerUps.calculator - 1 });
-      setUserAnswer((num1 * num2).toString());
-      handleAnswer((num1 * num2).toString());
+  const handlePowerUp = (type) => {
+    if (powerUps[type] > 0) {
+      setPowerUps({ ...powerUps, [type]: powerUps[type] - 1 });
+      switch (type) {
+        case 'skip':
+          generateQuestion();
+          break;
+        case 'extraTime':
+          // Implement extra time logic here
+          setFeedback("Extra time added!");
+          break;
+        case 'calculator':
+          setUserAnswer((num1 * num2).toString());
+          handleAnswer((num1 * num2).toString());
+          break;
+      }
     } else {
       setFeedback("You don't have this power-up!");
     }
@@ -251,9 +208,6 @@ const MultiplicationGame = () => {
               <Repeat className="h-4 w-4" />
             </Button>
           </div>
-          <div className="mb-4 text-center">
-            <p className="text-lg font-bold">Time Left: {timeLeft}s</p>
-          </div>
           <input
             type="number"
             value={userAnswer}
@@ -269,7 +223,7 @@ const MultiplicationGame = () => {
             Points: {points}
           </p>
           <p className="text-center mt-2">
-            Current Level: {currentLevel}
+            Current Level: {currentLevel}+
           </p>
           <p className="text-center mt-2">
             Consecutive Correct: {consecutiveCorrect}
@@ -296,22 +250,17 @@ const MultiplicationGame = () => {
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-2">
-              <Button onClick={usePowerUpSkip} disabled={powerUps.skip === 0} className="text-xs py-1 px-2">
+              <Button onClick={() => handlePowerUp('skip')} disabled={powerUps.skip === 0} className="text-xs py-1 px-2">
                 <SkipForward className="mr-1 h-3 w-3" /> {powerUps.skip}
               </Button>
-              <Button onClick={usePowerUpExtraTime} disabled={powerUps.extraTime === 0} className="text-xs py-1 px-2">
+              <Button onClick={() => handlePowerUp('extraTime')} disabled={powerUps.extraTime === 0} className="text-xs py-1 px-2">
                 <Clock className="mr-1 h-3 w-3" /> {powerUps.extraTime}
               </Button>
-              <Button onClick={usePowerUpCalculator} disabled={powerUps.calculator === 0} className="text-xs py-1 px-2">
+              <Button onClick={() => handlePowerUp('calculator')} disabled={powerUps.calculator === 0} className="text-xs py-1 px-2">
                 <Calculator className="mr-1 h-3 w-3" /> {powerUps.calculator}
               </Button>
             </div>
           </div>
-          {questionAnswered && (
-            <Button onClick={generateQuestion} className="w-full mt-4">
-              Next Question <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          )}
         </CardContent>
       </Card>
     </div>
