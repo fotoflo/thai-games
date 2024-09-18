@@ -206,23 +206,31 @@ const MultiplicationGame = () => {
     }
   };
 
-  const usePowerUp = (type) => {
-    if (powerUps[type] > 0) {
-      setPowerUps({ ...powerUps, [type]: powerUps[type] - 1 });
-      switch (type) {
-        case 'skip':
-          generateQuestion();
-          break;
-        case 'extraTime':
-          setTimeLeft(prevTime => Math.min(prevTime + 5, 10));
-          setIsActive(true);
-          setFeedback("Extra time added!");
-          break;
-        case 'calculator':
-          setUserAnswer((num1 * num2).toString());
-          handleAnswer((num1 * num2).toString());
-          break;
-      }
+  const usePowerUpSkip = () => {
+    if (powerUps.skip > 0) {
+      setPowerUps({ ...powerUps, skip: powerUps.skip - 1 });
+      generateQuestion();
+    } else {
+      setFeedback("You don't have this power-up!");
+    }
+  };
+
+  const usePowerUpExtraTime = () => {
+    if (powerUps.extraTime > 0) {
+      setPowerUps({ ...powerUps, extraTime: powerUps.extraTime - 1 });
+      setTimeLeft(prevTime => Math.min(prevTime + 5, 10));
+      setIsActive(true);
+      setFeedback("Extra time added!");
+    } else {
+      setFeedback("You don't have this power-up!");
+    }
+  };
+
+  const usePowerUpCalculator = () => {
+    if (powerUps.calculator > 0) {
+      setPowerUps({ ...powerUps, calculator: powerUps.calculator - 1 });
+      setUserAnswer((num1 * num2).toString());
+      handleAnswer((num1 * num2).toString());
     } else {
       setFeedback("You don't have this power-up!");
     }
@@ -285,13 +293,13 @@ const MultiplicationGame = () => {
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-2">
-              <Button onClick={() => usePowerUp('skip')} disabled={powerUps.skip === 0} className="text-xs py-1 px-2">
+              <Button onClick={usePowerUpSkip} disabled={powerUps.skip === 0} className="text-xs py-1 px-2">
                 <SkipForward className="mr-1 h-3 w-3" /> {powerUps.skip}
               </Button>
-              <Button onClick={() => usePowerUp('extraTime')} disabled={powerUps.extraTime === 0} className="text-xs py-1 px-2">
+              <Button onClick={usePowerUpExtraTime} disabled={powerUps.extraTime === 0} className="text-xs py-1 px-2">
                 <Clock className="mr-1 h-3 w-3" /> {powerUps.extraTime}
               </Button>
-              <Button onClick={() => usePowerUp('calculator')} disabled={powerUps.calculator === 0} className="text-xs py-1 px-2">
+              <Button onClick={usePowerUpCalculator} disabled={powerUps.calculator === 0} className="text-xs py-1 px-2">
                 <Calculator className="mr-1 h-3 w-3" /> {powerUps.calculator}
               </Button>
             </div>

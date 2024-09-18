@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, {  useCallback, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Smile, Coffee, Sun, Apple, Home, Moon} from 'lucide-react';
@@ -27,16 +27,11 @@ const ThaiWordLearningGame = () => {
     currentWord,
     setCurrentWord,
     targetWord,
-    setTargetWord,
-    wordIndex,
     score,
     message,
     showWinDialog,
     setShowWinDialog,
-    hintUsed,
-    setHintUsed,
     hintActive,
-    setHintActive,
     ttsAvailable,
     darkMode,
     showThaiWord,
@@ -111,10 +106,6 @@ const ThaiWordLearningGame = () => {
   const getNextLetter = useCallback(() => {
     return targetWord.thai[currentWord.length] || '';
   }, [targetWord, currentWord]);
-
-
-
-  const IconComponent = targetWord.icon;
 
   const mergeVowels = (word) => {
     const vowels = ['ะ', 'ั', 'า', 'ำ', 'ิ', 'ี', 'ึ', 'ื', 'ุ', 'ู', 'เ', 'แ', 'โ', 'ใ', 'ไ', '็', '์', '่', '้', '๊', '๋'];
