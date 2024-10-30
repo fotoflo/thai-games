@@ -126,13 +126,6 @@ const ThaiWordLearningGame = () => {
     return merged;
   };
 
-  const handleBackspace = useCallback(() => {
-    if (currentWord.length > 0) {
-      const newWord = currentWord.slice(0, -1);
-      setCurrentWord(newWord);
-      checkWord(newWord);
-    }
-  }, [currentWord, checkWord, setCurrentWord]);
 
   return (
     <div className={`mt-6 p-4 max-w-md mx-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>

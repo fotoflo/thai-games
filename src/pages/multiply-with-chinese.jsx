@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -58,7 +58,7 @@ const MultiplicationGame = () => {
 
   const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 
-  const toChineseNumber = (num) => {
+  const toChineseNumber = useCallback((num) => {
     num = parseInt(num);
     if (isNaN(num) || num < 0) return '未定义';
     if (num <= 10) return chineseNumbers[num];
@@ -79,10 +79,10 @@ const MultiplicationGame = () => {
       if (ones === 0) return result;
       return result + chineseNumbers[ones];
     }
-    return num.toString(); // For numbers 1000 and above
-  };
+    return num.toString();
+  }, [chineseNumbers]);
 
-  const generateQuestion = () => {
+  const generateQuestion = useCallback(() => {
     const newNum1 = Math.floor(Math.random() * (13 - currentLevel)) + currentLevel;
     const newNum2 = Math.floor(Math.random() * 12) + 1;
     setNum1(newNum1);
@@ -90,18 +90,13 @@ const MultiplicationGame = () => {
     setUserAnswer('');
     setFeedback('');
     questionRef.current = `${newNum1} ${newNum2} ${newNum1 * newNum2}`;
-  };
-
-  useEffect(() => {
-    generateQuestion();
   }, [currentLevel]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(speakQuestion, 100);
-    return () => clearTimeout(timeoutId);
-  }, [num1, num2, speakAnswer]);
+    generateQuestion();
+  }, [generateQuestion]);
 
-  const speakQuestion = () => {
+  const speakQuestion = useCallback(() => {
     if (questionRef.current) {
       const [n1, n2, result] = questionRef.current.split(' ');
       const speakPart = (text) => {
@@ -119,7 +114,12 @@ const MultiplicationGame = () => {
         }
       }, 1000);
     }
-  };
+  }, [speakAnswer, toChineseNumber]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(speakQuestion, 100);
+    return () => clearTimeout(timeoutId);
+  }, [num1, num2, speakAnswer, speakQuestion]);
 
   const repeatQuestion = () => {
     window.speechSynthesis.cancel(); // Cancel any ongoing speech

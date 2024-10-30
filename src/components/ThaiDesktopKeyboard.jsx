@@ -42,7 +42,7 @@ const ThaiDesktopKeyboard = ({ handleLetterClick, getNextLetter, hintActive, dar
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleLetterClick]);
+  }, [handleLetterClick, thaiKeyMap]);
 
   // Calculate offsets to center each row
   const getRowStyle = (rowIndex) => {
