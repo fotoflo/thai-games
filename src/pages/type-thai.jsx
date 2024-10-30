@@ -1,4 +1,4 @@
-import React, {  useCallback, useEffect, useRef } from 'react';
+import React, {  useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Smile, Coffee, Sun, Apple, Home, Moon} from 'lucide-react';
@@ -9,6 +9,7 @@ import ThaiWordInputArea from '@/components/ThaiWordInputArea';
 import WinDialog from '@/components/WinDialog';
 import useGameState from '@/hooks/useGameState';
 import GameHeader from '@/components/GameHeader';
+import ThaiDesktopKeyboard from '@/components/ThaiDesktopKeyboard';
 
 const thaiWords = [
   { thai: 'ขอบคุณ', english: 'Thank you', icon: Smile },
@@ -45,6 +46,10 @@ const ThaiWordLearningGame = () => {
 
   const speakingRef = useRef(false);
   const inputRef = useRef(null);
+
+  const [useThaiKeyboard, setUseThaiKeyboard] = useState(true);
+
+  const toggleKeyboard = () => setUseThaiKeyboard(!useThaiKeyboard);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && !window.speechSynthesis) {
@@ -138,6 +143,8 @@ const ThaiWordLearningGame = () => {
           setShowThaiWord={setShowThaiWord}
           toggleHint={toggleHint}
           hintActive={hintActive}
+          useThaiKeyboard={useThaiKeyboard}
+          toggleKeyboard={toggleKeyboard}
         />
         <ThaiWordInputArea 
           inputRef={inputRef}
@@ -147,12 +154,21 @@ const ThaiWordLearningGame = () => {
           speakText={speakText}
           darkMode={darkMode}
         />
-        <ThaiKeyboard 
-          handleLetterClick={handleLetterClick}
-          getNextLetter={getNextLetter}
-          hintActive={hintActive}
-          darkMode={darkMode}
-        />
+        {useThaiKeyboard ? (
+          <ThaiKeyboard 
+            handleLetterClick={handleLetterClick}
+            getNextLetter={getNextLetter}
+            hintActive={hintActive}
+            darkMode={darkMode}
+          />
+        ) : (
+          <ThaiDesktopKeyboard 
+            handleLetterClick={handleLetterClick}
+            getNextLetter={getNextLetter}
+            hintActive={hintActive}
+            darkMode={darkMode}
+          />
+        )}
       </div>
       <Alert className={`mb-4 ${darkMode ? 'bg-blue-900 text-blue-100' : 'bg-blue-100 text-blue-800'}`}>
         <AlertTitle className="text-xl">Score: {score}</AlertTitle>

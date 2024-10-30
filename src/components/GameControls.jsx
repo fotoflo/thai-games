@@ -3,19 +3,23 @@ import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { Lightbulb } from 'lucide-react';
 
-const GameControls = ({ showThaiWord, setShowThaiWord, toggleHint, hintActive }) => (
-  <div className="flex items-center justify-between mb-4">
-    <div className="flex items-center">
-      <Switch
-        id="show-thai"
-        checked={showThaiWord}
-        onCheckedChange={setShowThaiWord}
-      />
-      <label htmlFor="show-thai" className="ml-2">Show Thai Word</label>
-    </div>
-    <Button onClick={toggleHint} className={`flex items-center ${hintActive ? 'bg-green-500' : 'bg-yellow-500'} hover:opacity-80 text-white`}>
-      <Lightbulb className="mr-2" size={16} />
-      {hintActive ? 'Hint On' : 'Hint Off'}
+const GameControls = ({ 
+  showThaiWord, 
+  setShowThaiWord, 
+  toggleHint, 
+  hintActive,
+  useThaiKeyboard,
+  toggleKeyboard
+}) => (
+  <div className="flex justify-center gap-2 mb-4">
+    <Button onClick={() => setShowThaiWord(!showThaiWord)} variant="outline">
+      {showThaiWord ? 'Hide Thai' : 'Show Thai'}
+    </Button>
+    <Button onClick={toggleHint} variant="outline">
+      {hintActive ? 'Hide Hint' : 'Show Hint'}
+    </Button>
+    <Button onClick={toggleKeyboard} variant="outline">
+      {useThaiKeyboard ? 'Use Desktop' : 'Use Thai KB'}
     </Button>
   </div>
 );
