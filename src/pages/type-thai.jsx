@@ -8,6 +8,7 @@ import GameControls from '@/components/GameControls';
 import ThaiWordInputArea from '@/components/ThaiWordInputArea';
 import WinDialog from '@/components/WinDialog';
 import useGameState from '@/hooks/useGameState';
+import GameHeader from '@/components/GameHeader';
 
 const thaiWords = [
   { thai: 'ขอบคุณ', english: 'Thank you', icon: Smile },
@@ -122,10 +123,8 @@ const ThaiWordLearningGame = () => {
 
   return (
     <div className={`mt-6 p-4 max-w-md mx-auto rounded-lg shadow-lg ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-100 text-black'}`}>
-      <div>
-        <h1 className="text-3xl font-bold mb-4 text-center">Type Thai</h1>
-        <h2 className="text-2xl font-bold mb-4 text-center">The Thai Alphabet and Keyboard Learning Game</h2>
-      </div>
+      <GameHeader title="Type Thai" darkMode={darkMode} />
+      <h2 className="text-2xl font-bold mb-4 text-center">The Thai Alphabet and Keyboard Learning Game</h2>
       <div className={`p-4 rounded-lg mb-4 shadow ${darkMode ? 'bg-gray-700' : 'bg-white'}`}>
         <WordDisplay 
           targetWord={targetWord}

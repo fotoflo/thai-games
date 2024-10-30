@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { SkipForward, Clock, Calculator, Repeat } from 'lucide-react';
+import GameHeader from '@/components/GameHeader';
 
 const Confetti = ({ active }) => {
   const confettiCount = 50;
@@ -201,7 +202,7 @@ const MultiplicationGame = () => {
       <Confetti active={showConfetti} />
       <Card className="w-96 p-6 bg-white rounded-xl shadow-md">
         <CardContent>
-          <h1 className="text-2xl font-bold mb-4 text-center">Chinese Multiplication Flashcards</h1>
+          <GameHeader title="Chinese Multiplication" />
           <div className="flex items-center justify-center mb-4">
             <p className="text-xl mr-2">{num1} × {num2} = ?</p>
             <Button onClick={repeatQuestion} size="sm" variant="outline" className="p-1">
