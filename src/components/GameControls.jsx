@@ -19,7 +19,7 @@ const GameControls = ({
       {hintActive ? 'Hide Hint' : 'Show Hint'}
     </Button>
     <Button onClick={toggleKeyboard} variant="outline">
-      {useThaiKeyboard ? 'Use Desktop' : 'Use Thai KB'}
+      {useThaiKeyboard ? 'Use Desktop' : 'Use Mobile'}
     </Button>
   </div>
 );
