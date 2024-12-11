@@ -31,7 +31,7 @@ const HomePage = () => {
     {
       title: "Reading Thai",
       subtitle: "Learn to read Thai with interactive exercises",
-      imageSrc: "/reading-thai.jpg", // Add your image path
+      imageSrc: "/reading-thai.png", // Add your image path
       link: "/reading-thai", // Link to the new page
       remixLink: "https://claude.site/artifacts/f643497b-513f-45e6-a6cd-5f31782df245"
     }

@@ -115,14 +115,14 @@ const ThaiSyllables = () => {
   if (!current) return <div>Loading...</div>;
 
   return (
-    <div className="p-4 relative min-h-screen">
+    <div className="p-4 relative min-h-screen bg-gray-900 text-white">
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">{current.text}</div>
         <button 
           onClick={ () => speakThai({current, setSpeaking, setError})}
           disabled={!hasThai || speaking}
           className={`flex items-center justify-center gap-2 px-4 py-2 rounded ${
-            hasThai ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+            hasThai ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-700 text-gray-400'
           }`}
         >
           {speaking ? <Volume2 className="animate-pulse" size={20} /> : <Volume2 size={20} />}
@@ -137,7 +137,7 @@ const ThaiSyllables = () => {
       </div>
 
       <div className="space-y-2 mb-4">
-        <div className="text-sm text-gray-600 text-center">Mastery level</div>
+        <div className="text-sm text-gray-400 text-center">Mastery level</div>
         <div className="grid grid-cols-5 gap-2">
           {[1, 2, 3, 4, 5].map(rating => (
             <button
@@ -145,7 +145,7 @@ const ThaiSyllables = () => {
               onClick={() => rateMastery(rating)}
               className={`
                 p-2 rounded transition-colors
-                ${current.mastery === rating ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}
+                ${current.mastery === rating ? 'bg-blue-700 text-white' : 'bg-gray-800 hover:bg-gray-700'}
               `}
             >
               {rating}
@@ -154,16 +154,16 @@ const ThaiSyllables = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white bg-opacity-90 border-t p-4">
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
         <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
           {workingSet.map((syllable, i) => (
             <div key={i} className={`
               text-center p-2 rounded
-              ${syllable.text === current.text ? 'bg-blue-100' : ''}
+              ${syllable.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
             `}>
-              <div>{syllable.text}</div>
-              <div className="text-xs text-gray-500">[{thaiToIPA(syllable.text)}]</div>
-              <div className="text-sm text-gray-600">({syllable.mastery})</div>
+              <div className="text-white">{syllable.text}</div>
+              <div className="text-xs text-gray-400">[{thaiToIPA(syllable.text)}]</div>
+              <div className="text-sm text-gray-300">({syllable.mastery})</div>
             </div>
           ))}
         </div>
@@ -204,7 +204,7 @@ const ThaiSyllables = () => {
           </button>
 
           {workingList.length > 0 && (
-            <div className="p-4 bg-green-50 rounded">
+            <div className="p-4 bg-gray-800 rounded">
               <h3 className="font-bold mb-2">Working Syllables:</h3>
               <div className="flex flex-wrap gap-2">
                 {workingList.map((syllable, index) => (
@@ -217,7 +217,7 @@ const ThaiSyllables = () => {
           )}
 
           {possibleProblemList.length > 0 && (
-            <div className="p-4 bg-yellow-50 rounded">
+            <div className="p-4 bg-yellow-600 rounded">
               <h3 className="font-bold mb-2">Possibly Problematic:</h3>
               <div className="flex flex-wrap gap-2">
                 {possibleProblemList.map((syllable, index) => (
@@ -230,7 +230,7 @@ const ThaiSyllables = () => {
           )}
 
           {problemList.length > 0 && (
-            <div className="p-4 bg-red-50 rounded">
+            <div className="p-4 bg-red-600 rounded">
               <h3 className="font-bold mb-2">Problem Syllables:</h3>
               <div className="flex flex-wrap gap-2">
                 {problemList.map((syllable, index) => (
