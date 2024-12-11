@@ -127,14 +127,6 @@ const ThaiSyllables = () => {
 
   return (
     <div className="p-4 relative min-h-screen bg-gray-900 text-white">
-      <style jsx>{`
-        @keyframes flashBlue {
-          0% { background-color: inherit; }
-        }
-        .flash-blue button {
-          animation: flashBlue 0.5s ease;
-        }
-      `}</style>
 
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">{current.text}</div>
@@ -142,7 +134,7 @@ const ThaiSyllables = () => {
           onClick={() => speakThai({ current, setSpeaking, setError })}
           disabled={!hasThai || speaking}
           className={`flex items-center justify-center gap-2 px-4 py-2 rounded ${
-            hasThai ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-700 text-gray-400'
+            hasThai ? 'bg-blue-600 hover:bg-blue-950 text-white' : 'bg-gray-700 text-gray-400'
           }`}
         >
           {speaking ? <Volume2 className="animate-pulse" size={20} /> : <Volume2 size={20} />}
@@ -159,13 +151,13 @@ const ThaiSyllables = () => {
       <div className="space-y-2 mb-4">
         <div className="text-sm text-gray-400 text-center">Mastery level</div>
         <div className="grid grid-cols-5 gap-2">
-          {[1, 2, 3, 4, 'check'].map(rating => (
+          {[1, 2, 3, 4, 5].map(rating => (
             <button
               key={rating}
-              onClick={() => rateMastery(rating === 'check' ? 5 : rating)}
-              className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-600 active:bg-blue-800"
+              onClick={() => rateMastery(rating)}
+              className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-950 active:bg-blue-800"
             >
-              {rating === 'check' ? <Check size={20} className="mx-auto" /> : rating}
+              {rating === 5 ? <Check size={20} className="mx-auto" /> : rating}
             </button>
           ))}
         </div>
