@@ -27,6 +27,13 @@ const HomePage = () => {
       imageSrc: "/multiply-chinese.jpg",
       link: "/multiply-with-chinese",
       remixLink: "https://claude.site/artifacts/5cff321a-c639-44cb-8f04-c8fabe68f640"
+    },
+    {
+      title: "Reading Thai",
+      subtitle: "Learn to read Thai with interactive exercises",
+      imageSrc: "/reading-thai.jpg", // Add your image path
+      link: "/reading-thai", // Link to the new page
+      remixLink: "https://claude.site/artifacts/f643497b-513f-45e6-a6cd-5f31782df245"
     }
   ];
 

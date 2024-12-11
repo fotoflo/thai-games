@@ -19,7 +19,7 @@ export default function Home() {
 
   const handleSync = async () => {
     try {
-      await fetch("/api/sync", {
+      await fetch("/api/notionSync", {
         method: "POST",
         body: JSON.stringify({ pageUrl }),
       });

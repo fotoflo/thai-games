@@ -20,7 +20,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/pages/type-thai.jsx"
+    "src/pages/type-thai.jsx",
+    "src/pages/queues/route.js",
+    "src/pages/queues/welcomeQueue.js"
   ],
   "exclude": ["node_modules"]
 }
