@@ -1,20 +1,12 @@
-import { pronunciationMap } from "./pronunciationMap";
+export const speakText = (text, lang = "th-TH") => {
+  if (typeof window === "undefined") return; // Guard for SSR
 
-export const speakText = (text) => {
-  let pronounceableText = text;
-
-  // Check if the exact text exists in the pronunciation map
-  if (pronunciationMap[text]) {
-    pronounceableText = pronunciationMap[text];
-  } else {
-    // If not, check each character
-    pronounceableText = text
-      .split("")
-      .map((char) => pronunciationMap[char] || char)
-      .join("");
-  }
-
-  const utterance = new SpeechSynthesisUtterance(pronounceableText);
-  utterance.lang = "th-TH";
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
   window.speechSynthesis.speak(utterance);
+};
+
+export const stopSpeaking = () => {
+  if (typeof window === "undefined") return;
+  window.speechSynthesis.cancel();
 };
