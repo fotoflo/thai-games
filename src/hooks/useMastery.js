@@ -9,17 +9,13 @@ const useMastery = (initialWorkingSet, initialCurrent) => {
   const rateMastery = (rating) => {
     if (!current) return;
 
-    if (!workingList.includes(current.text)) {
-      setWorkingList([...workingList, current.text]);
-    }
-
     const updated = workingSet.map((s) =>
       s.text === current.text ? { ...s, mastery: rating } : s
     );
 
     if (rating === 5) {
       const index = updated.findIndex((s) => s.text === current.text);
-      updated[index] = generateSyllable();
+      updated[index] = generateSyllable(); // Generate a new syllable
     }
 
     setWorkingSet(updated);

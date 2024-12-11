@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { thaiToIPA } from '../utils/thaiToIPA';
+import { speakThai } from '../utils/textToSpeech';
 import { initialConsonants, vowels, finalConsonants } from '../utils/thaiLanguage';
-import useMastery from '../hooks/useMastery';
 
-// Function to generate a syllable
+
 const generateSyllable = () => {
   const initial = initialConsonants[Math.floor(Math.random() * initialConsonants.length)];
   const vowel = vowels[Math.floor(Math.random() * vowels.length)];
   const final = finalConsonants[Math.floor(Math.random() * finalConsonants.length)];
   
+  // Handle special vowel positioning rules
   const needsFinal = vowel === 'เ' || vowel === 'แ' || vowel === 'โ' || vowel === 'ไ';
   const actualFinal = needsFinal ? 
     finalConsonants.filter(f => f !== '')[Math.floor(Math.random() * (finalConsonants.length - 1))] : 
     final;
   
+  // Construct syllable based on vowel type
   const text = needsFinal ? 
     vowel + initial + actualFinal : 
     initial + vowel + final;
@@ -22,34 +24,6 @@ const generateSyllable = () => {
   return { text, mastery: 1 };
 };
 
-// Function to check for Thai voices
-const checkThaiVoices = (setHasThai, setError) => {
-  const voices = window.speechSynthesis.getVoices();
-  const thaiVoice = voices.find(voice => voice.lang.includes('th'));
-  setHasThai(!!thaiVoice);
-  setError(thaiVoice ? '' : 'No Thai voice found');
-};
-
-// Component for rendering mastery buttons
-const MasteryButtons = ({ current, rateMastery }) => (
-  <div className="grid grid-cols-5 gap-2">
-    {[1, 2, 3, 4, 5].map(rating => (
-      <button
-        key={rating}
-        onClick={() => rateMastery(rating)}
-        className={`
-          p-2 rounded transition-colors 
-          text-black
-          ${current.mastery === rating ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}
-        `}
-      >
-        {rating}
-      </button>
-    ))}
-  </div>
-);
-
-// Main component
 const ThaiSyllables = () => {
   const [workingSet, setWorkingSet] = useState([]);
   const [current, setCurrent] = useState(null);
@@ -58,38 +32,22 @@ const ThaiSyllables = () => {
   const [error, setError] = useState('');
   const [problemList, setProblemList] = useState([]);
   const [possibleProblemList, setPossibleProblemList] = useState([]);
+  const [workingList, setWorkingList] = useState([]);
   const [copied, setCopied] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
-
-  const { workingList, rateMastery } = useMastery(workingSet, current);
-
-  const speakThai = () => {
-    if (!current) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(current.text);
-    utterance.lang = "th-TH";
-    utterance.rate = 0.8;
-
-    const voices = window.speechSynthesis.getVoices();
-    const thaiVoice = voices.find((voice) => voice.lang.includes("th"));
-    if (thaiVoice) utterance.voice = thaiVoice;
-
-    utterance.onstart = () => setSpeaking(true);
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = (e) => {
-      setSpeaking(false);
-      setError(`Speech error: ${e.error}`);
-    };
-
-    window.speechSynthesis.speak(utterance);
-  };
 
   useEffect(() => {
     const initial = Array(5).fill(null).map(generateSyllable);
     setWorkingSet(initial);
     setCurrent(initial[0]);
 
-    const checkVoices = () => checkThaiVoices(setHasThai, setError);
+    const checkVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      const thaiVoice = voices.find(voice => voice.lang.includes('th'));
+      setHasThai(!!thaiVoice);
+      setError(thaiVoice ? '' : 'No Thai voice found');
+    };
+
     window.speechSynthesis.onvoiceschanged = checkVoices;
     checkVoices();
 
@@ -97,6 +55,28 @@ const ThaiSyllables = () => {
       window.speechSynthesis.cancel();
     };
   }, []);
+
+
+  const rateMastery = (rating) => {
+    if (!current) return;
+    
+    if (!workingList.includes(current.text)) {
+      setWorkingList([...workingList, current.text]);
+    }
+
+    const updated = workingSet.map(s => 
+      s.text === current.text ? {...s, mastery: rating} : s
+    );
+
+    if (rating === 5) {
+      const index = updated.findIndex(s => s.text === current.text);
+      updated[index] = generateSyllable();
+    }
+
+    setWorkingSet(updated);
+    setCurrent(updated[Math.floor(Math.random() * updated.length)]);
+    setError('');
+  };
 
   const reportProblem = () => {
     if (current && !problemList.includes(current.text)) {
@@ -139,9 +119,9 @@ const ThaiSyllables = () => {
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">{current.text}</div>
         <button 
-          onClick={speakThai}
+          onClick={ () => speakThai({current, setSpeaking, setError})}
           disabled={!hasThai || speaking}
-          className={`flex items-center justify-center gap-2 px-4 py-2 rounded  ${
+          className={`flex items-center justify-center gap-2 px-4 py-2 rounded ${
             hasThai ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
           }`}
         >
@@ -157,11 +137,24 @@ const ThaiSyllables = () => {
       </div>
 
       <div className="space-y-2 mb-4">
-        <div className="text-sm text-gray-200 dark:text-black text-center">Mastery level</div>
-        <MasteryButtons current={current} rateMastery={rateMastery} />
+        <div className="text-sm text-gray-600 text-center">Mastery level</div>
+        <div className="grid grid-cols-5 gap-2">
+          {[1, 2, 3, 4, 5].map(rating => (
+            <button
+              key={rating}
+              onClick={() => rateMastery(rating)}
+              className={`
+                p-2 rounded transition-colors
+                ${current.mastery === rating ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'}
+              `}
+            >
+              {rating}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-black bg-opacity-90 border-t p-4 dark:bg-gray-800 dark:bg-opacity-90">
+      <div className="fixed bottom-0 left-0 right-0 bg-white bg-opacity-90 border-t p-4">
         <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
           {workingSet.map((syllable, i) => (
             <div key={i} className={`
@@ -184,7 +177,7 @@ const ThaiSyllables = () => {
       </button>
 
       {showDebug && (
-        <div className="fixed bottom-16 right-4 w-64 space-y-2 bg-white p-4 rounded-lg shadow-lg dark:bg-gray-800">
+        <div className="fixed bottom-16 right-4 w-64 space-y-2 bg-white p-4 rounded-lg shadow-lg">
           <div className="flex gap-2">
             <button
               onClick={reportProblem}

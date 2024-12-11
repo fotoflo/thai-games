@@ -11,8 +11,7 @@ export const stopSpeaking = () => {
   window.speechSynthesis.cancel();
 };
 
-export const useSpeakThai = () => {
-  if (!current) return;
+export const speakThai = ({ current, setSpeaking, setError }) => {
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(current.text);
   utterance.lang = "th-TH";
