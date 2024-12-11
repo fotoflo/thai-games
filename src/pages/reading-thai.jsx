@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
 import syllablesData from '../lessons/1-lesson.json';
@@ -51,6 +51,15 @@ const ThaiSyllables = () => {
 
   const rateMastery = (rating) => {
     if (!current) return;
+
+    // Single animation trigger
+    const container = document.querySelector('.grid-cols-5');
+    container.classList.remove('flash-blue');
+    void container.offsetWidth;
+    container.classList.add('flash-blue');
+    setTimeout(() => {
+      container.classList.remove('flash-blue');
+    }, 500);
 
     if (!workingList.includes(current.text)) {
       setWorkingList([...workingList, current.text]);
@@ -112,11 +121,21 @@ const ThaiSyllables = () => {
 
   if (!current) return <div>Loading...</div>;
 
+  
   // Get the index of the current syllable in the original syllables array
   const currentIndexInJson = syllablesData.syllables.indexOf(current.text) + 1; // +1 for 1-based index
 
   return (
     <div className="p-4 relative min-h-screen bg-gray-900 text-white">
+      <style jsx>{`
+        @keyframes flashBlue {
+          0% { background-color: inherit; }
+        }
+        .flash-blue button {
+          animation: flashBlue 0.5s ease;
+        }
+      `}</style>
+
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">{current.text}</div>
         <button 
@@ -140,16 +159,13 @@ const ThaiSyllables = () => {
       <div className="space-y-2 mb-4">
         <div className="text-sm text-gray-400 text-center">Mastery level</div>
         <div className="grid grid-cols-5 gap-2">
-          {[1, 2, 3, 4, 5].map(rating => (
+          {[1, 2, 3, 4, 'check'].map(rating => (
             <button
               key={rating}
-              onClick={() => rateMastery(rating)}
-              className={`
-                p-2 rounded transition-colors
-                ${current.mastery === rating ? 'bg-blue-700 text-white' : 'bg-gray-800 hover:bg-gray-700'}
-              `}
+              onClick={() => rateMastery(rating === 'check' ? 5 : rating)}
+              className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-600 active:bg-blue-800"
             >
-              {rating}
+              {rating === 'check' ? <Check size={20} className="mx-auto" /> : rating}
             </button>
           ))}
         </div>
