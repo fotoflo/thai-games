@@ -15,15 +15,13 @@ const ThaiSyllables = () => {
   const [workingList, setWorkingList] = useState([]);
   const [copied, setCopied] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
-  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
   const [lastAddedIndex, setLastAddedIndex] = useState(-1);
 
   useEffect(() => {
-    const firstGroup = syllablesData.syllables[1];
-    const selectedSyllables = firstGroup.slice(0, 5).map(syllable => ({ text: syllable, mastery: 1 }));
-
+    const selectedSyllables = syllablesData.syllables.slice(0, 5).map(syllable => ({ text: syllable, mastery: 1 }));
     setWorkingSet(selectedSyllables);
     setCurrent(selectedSyllables[0]);
+    setLastAddedIndex(4);
 
     const checkVoices = () => {
       const voices = window.speechSynthesis.getVoices();
@@ -41,14 +39,13 @@ const ThaiSyllables = () => {
   }, []);
 
   const addMoreSyllables = () => {
-    const currentGroup = syllablesData.syllables[currentGroupIndex + 1];
-
-    if (currentGroup && lastAddedIndex < currentGroup.length - 1) {
-      const newSyllable = currentGroup[lastAddedIndex + 1];
-      setWorkingSet(prev => [...prev, { text: newSyllable, mastery: 1 }]);
-      setLastAddedIndex(lastAddedIndex + 1);
+    const nextIndex = lastAddedIndex + 1;
+    if (nextIndex < syllablesData.syllables.length) {
+      const newSyllable = syllablesData.syllables[nextIndex];
+      setWorkingSet(prev => [{ text: newSyllable, mastery: 1 }, ...prev]);
+      setLastAddedIndex(nextIndex);
     } else {
-      console.log("No more syllables to add from the current group.");
+      console.log("No more syllables to add from the list.");
     }
   };
 
@@ -65,25 +62,14 @@ const ThaiSyllables = () => {
 
     if (rating === 5) {
       const currentIndex = workingSet.indexOf(current);
-      
       updated.splice(currentIndex, 1);
 
-      if (lastAddedIndex < workingSet.length - 1) {
-        setCurrent(workingSet[lastAddedIndex + 1]);
-        setLastAddedIndex(lastAddedIndex + 1);
+      if (updated.length > 0) {
+        setCurrent(updated[0]);
       } else {
-        const nextGroupIndex = currentGroupIndex + 1;
-        if (nextGroupIndex < Object.keys(syllablesData.syllables).length) {
-          const nextGroup = syllablesData.syllables[nextGroupIndex + 1];
-
-          setLastAddedIndex(0);
-
-          const newSyllable = nextGroup[0];
-          updated.push({ text: newSyllable, mastery: 1 });
-
-          setCurrent(newSyllable);
-          setCurrentGroupIndex(nextGroupIndex);
-        }
+        console.log("No more syllables left in the working set.");
+        setLastAddedIndex(-1);
+        setWorkingSet(syllablesData.syllables.map(syllable => ({ text: syllable, mastery: 1 })));
       }
     } else {
       const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
@@ -125,6 +111,9 @@ const ThaiSyllables = () => {
   };
 
   if (!current) return <div>Loading...</div>;
+
+  // Get the index of the current syllable in the original syllables array
+  const currentIndexInJson = syllablesData.syllables.indexOf(current.text) + 1; // +1 for 1-based index
 
   return (
     <div className="p-4 relative min-h-screen bg-gray-900 text-white">
@@ -178,6 +167,9 @@ const ThaiSyllables = () => {
               <div className="text-sm text-gray-300">({syllable.mastery})</div>
             </div>
           ))}
+        </div>
+        <div className="text-center text-white mt-2">
+          {current.text} - {currentIndexInJson} / {syllablesData.syllables.length}
         </div>
       </div>
 
