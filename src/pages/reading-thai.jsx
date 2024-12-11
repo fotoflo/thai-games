@@ -2,27 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
-import { initialConsonants, vowels, finalConsonants } from '../utils/thaiLanguage';
-
-
-const generateSyllable = () => {
-  const initial = initialConsonants[Math.floor(Math.random() * initialConsonants.length)];
-  const vowel = vowels[Math.floor(Math.random() * vowels.length)];
-  const final = finalConsonants[Math.floor(Math.random() * finalConsonants.length)];
-  
-  // Handle special vowel positioning rules
-  const needsFinal = vowel === 'เ' || vowel === 'แ' || vowel === 'โ' || vowel === 'ไ';
-  const actualFinal = needsFinal ? 
-    finalConsonants.filter(f => f !== '')[Math.floor(Math.random() * (finalConsonants.length - 1))] : 
-    final;
-  
-  // Construct syllable based on vowel type
-  const text = needsFinal ? 
-    vowel + initial + actualFinal : 
-    initial + vowel + final;
-  
-  return { text, mastery: 1 };
-};
+import syllablesData from '../lessons/1-lesson.json';
 
 const ThaiSyllables = () => {
   const [workingSet, setWorkingSet] = useState([]);
@@ -35,11 +15,15 @@ const ThaiSyllables = () => {
   const [workingList, setWorkingList] = useState([]);
   const [copied, setCopied] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
+  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
+  const [lastAddedIndex, setLastAddedIndex] = useState(-1);
 
   useEffect(() => {
-    const initial = Array(5).fill(null).map(generateSyllable);
-    setWorkingSet(initial);
-    setCurrent(initial[0]);
+    const firstGroup = syllablesData.syllables[1];
+    const selectedSyllables = firstGroup.slice(0, 5).map(syllable => ({ text: syllable, mastery: 1 }));
+
+    setWorkingSet(selectedSyllables);
+    setCurrent(selectedSyllables[0]);
 
     const checkVoices = () => {
       const voices = window.speechSynthesis.getVoices();
@@ -56,25 +40,57 @@ const ThaiSyllables = () => {
     };
   }, []);
 
+  const addMoreSyllables = () => {
+    const currentGroup = syllablesData.syllables[currentGroupIndex + 1];
+
+    if (currentGroup && lastAddedIndex < currentGroup.length - 1) {
+      const newSyllable = currentGroup[lastAddedIndex + 1];
+      setWorkingSet(prev => [...prev, { text: newSyllable, mastery: 1 }]);
+      setLastAddedIndex(lastAddedIndex + 1);
+    } else {
+      console.log("No more syllables to add from the current group.");
+    }
+  };
 
   const rateMastery = (rating) => {
     if (!current) return;
-    
+
     if (!workingList.includes(current.text)) {
       setWorkingList([...workingList, current.text]);
     }
 
     const updated = workingSet.map(s => 
-      s.text === current.text ? {...s, mastery: rating} : s
+      s.text === current.text ? { ...s, mastery: rating } : s
     );
 
     if (rating === 5) {
-      const index = updated.findIndex(s => s.text === current.text);
-      updated[index] = generateSyllable();
+      const currentIndex = workingSet.indexOf(current);
+      
+      updated.splice(currentIndex, 1);
+
+      if (lastAddedIndex < workingSet.length - 1) {
+        setCurrent(workingSet[lastAddedIndex + 1]);
+        setLastAddedIndex(lastAddedIndex + 1);
+      } else {
+        const nextGroupIndex = currentGroupIndex + 1;
+        if (nextGroupIndex < Object.keys(syllablesData.syllables).length) {
+          const nextGroup = syllablesData.syllables[nextGroupIndex + 1];
+
+          setLastAddedIndex(0);
+
+          const newSyllable = nextGroup[0];
+          updated.push({ text: newSyllable, mastery: 1 });
+
+          setCurrent(newSyllable);
+          setCurrentGroupIndex(nextGroupIndex);
+        }
+      }
+    } else {
+      const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
+      setCurrent(updated[nextIndex]);
     }
 
     setWorkingSet(updated);
-    setCurrent(updated[Math.floor(Math.random() * updated.length)]);
     setError('');
   };
 
@@ -93,12 +109,8 @@ const ThaiSyllables = () => {
   };
 
   const nextSyllable = () => {
-    const newSyllable = generateSyllable();
-    const updated = [...workingSet];
-    const index = updated.findIndex(s => s.text === current.text);
-    updated[index] = newSyllable;
-    setWorkingSet(updated);
-    setCurrent(newSyllable);
+    const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
+    setCurrent(workingSet[nextIndex]);
   };
 
   const copyDebugInfo = async () => {
@@ -119,7 +131,7 @@ const ThaiSyllables = () => {
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">{current.text}</div>
         <button 
-          onClick={ () => speakThai({current, setSpeaking, setError})}
+          onClick={() => speakThai({ current, setSpeaking, setError })}
           disabled={!hasThai || speaking}
           className={`flex items-center justify-center gap-2 px-4 py-2 rounded ${
             hasThai ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-700 text-gray-400'
@@ -242,6 +254,15 @@ const ThaiSyllables = () => {
             </div>
           )}
         </div>
+      )}
+
+      {workingSet.length < 5 && (
+        <button
+          onClick={addMoreSyllables}
+          className="mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+        >
+          Add One More Syllable
+        </button>
       )}
     </div>
   );
