@@ -6,6 +6,7 @@ import { useGameState } from '../hooks/useGameState';
 import LessonSelector from '../components/LessonSelector';
 import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
+import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 
 const ThaiSyllables = () => {
   const {
@@ -87,8 +88,8 @@ const ThaiSyllables = () => {
   }
 
   // Get the index of the current syllable in the original syllables array
-  const currentIndexInJson = getCurrentProgress().currentIndex; // +1 for 1-based index
-  
+  const currentIndexInJson = getCurrentProgress().currentIndex;
+  const totalSyllables = getCurrentProgress().totalSyllables;
 
   return (
     <div className="p-4 relative min-h-screen bg-gray-900 text-white">
@@ -103,39 +104,16 @@ const ThaiSyllables = () => {
       
       <MasteryControls onRatingSelect={handleRateMastery} />
       
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
-        <LessonSelector 
-          currentLesson={currentLesson}
-          setCurrentLesson={setCurrentLesson}
-          totalLessons={totalLessons}
-        />
-        <div className="flex items-center justify-center gap-2">
-          <div className="grid grid-cols-5 gap-2 w-[400px]">
-            {workingSet.map((syllable, i) => (
-              <div key={i} className={`
-                text-center p-2 rounded
-                ${syllable.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
-              `}>
-                <div className="text-white text-lg">{syllable.text}</div>
-                <div className="text-xs text-gray-400">[{thaiToIPA(syllable.text)}]</div>
-                <div className="text-sm text-gray-300">({syllable.mastery})</div>
-              </div>
-            ))}
-          </div>
-          {workingSet.length < 5 && (
-            <button
-              onClick={addMoreSyllables}
-              className="p-2 rounded-full bg-green-500 hover:bg-green-600 text-white"
-              title="Add One More Syllable"
-            >
-              <PlusCircle size={24} />
-            </button>
-          )}
-        </div>
-        <div className="text-center text-white mt-2">
-          {current.text} - {currentIndexInJson} / {getCurrentProgress().totalSyllables}
-        </div>
-      </div>
+      <WorkingSetDisplay
+        currentLesson={currentLesson}
+        setCurrentLesson={setCurrentLesson}
+        totalLessons={totalLessons}
+        workingSet={workingSet}
+        current={current}
+        addMoreSyllables={addMoreSyllables}
+        currentIndexInJson={currentIndexInJson}
+        totalSyllables={totalSyllables}
+      />
 
       <button
         onClick={() => setShowDebug(!showDebug)}
