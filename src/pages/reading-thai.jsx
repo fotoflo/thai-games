@@ -2,30 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp, Check } from 'lucide-react';
 import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
-import syllablesData from '../lessons/1-lesson.json';
-import LessonSelector from '../components/LessonSelector';
+import { useGameState } from '../hooks/useGameState';
 
 const ThaiSyllables = () => {
-  const [workingSet, setWorkingSet] = useState([]);
-  const [current, setCurrent] = useState(null);
+  const {
+    currentLesson,
+    setCurrentLesson,
+    totalLessons,
+    workingSet,
+    current,
+    problemList,
+    possibleProblemList,
+    workingList,
+    rateMastery,
+    reportProblem,
+    reportPossibleProblem,
+    addMoreSyllables,
+    getCurrentProgress
+  } = useGameState();
+
   const [hasThai, setHasThai] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [error, setError] = useState('');
-  const [problemList, setProblemList] = useState([]);
-  const [possibleProblemList, setPossibleProblemList] = useState([]);
-  const [workingList, setWorkingList] = useState([]);
   const [copied, setCopied] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
-  const [lastAddedIndex, setLastAddedIndex] = useState(-1);
-  const [currentLesson, setCurrentLesson] = useState(1);
-  const totalLessons = 2; // Update this as you add more lessons
 
   useEffect(() => {
-    const selectedSyllables = syllablesData.syllables.slice(0, 5).map(syllable => ({ text: syllable, mastery: 1 }));
-    setWorkingSet(selectedSyllables);
-    setCurrent(selectedSyllables[0]);
-    setLastAddedIndex(4);
-
     const checkVoices = () => {
       const voices = window.speechSynthesis.getVoices();
       const thaiVoice = voices.find(voice => voice.lang.includes('th'));
@@ -41,76 +43,6 @@ const ThaiSyllables = () => {
     };
   }, []);
 
-  const addMoreSyllables = () => {
-    const nextIndex = lastAddedIndex + 1;
-    if (nextIndex < syllablesData.syllables.length) {
-      const newSyllable = syllablesData.syllables[nextIndex];
-      setWorkingSet(prev => [{ text: newSyllable, mastery: 1 }, ...prev]);
-      setLastAddedIndex(nextIndex);
-    } else {
-      console.log("No more syllables to add from the list.");
-    }
-  };
-
-  const rateMastery = (rating) => {
-    if (!current) return;
-
-    // Single animation trigger
-    const container = document.querySelector('.grid-cols-5');
-    container.classList.remove('flash-blue');
-    void container.offsetWidth;
-    container.classList.add('flash-blue');
-    setTimeout(() => {
-      container.classList.remove('flash-blue');
-    }, 500);
-
-    if (!workingList.includes(current.text)) {
-      setWorkingList([...workingList, current.text]);
-    }
-
-    const updated = workingSet.map(s => 
-      s.text === current.text ? { ...s, mastery: rating } : s
-    );
-
-    if (rating === 5) {
-      const currentIndex = workingSet.indexOf(current);
-      updated.splice(currentIndex, 1);
-
-      if (updated.length > 0) {
-        setCurrent(updated[0]);
-      } else {
-        console.log("No more syllables left in the working set.");
-        setLastAddedIndex(-1);
-        setWorkingSet(syllablesData.syllables.map(syllable => ({ text: syllable, mastery: 1 })));
-      }
-    } else {
-      const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
-      setCurrent(updated[nextIndex]);
-    }
-
-    setWorkingSet(updated);
-    setError('');
-  };
-
-  const reportProblem = () => {
-    if (current && !problemList.includes(current.text)) {
-      setProblemList([...problemList, current.text]);
-      nextSyllable();
-    }
-  };
-
-  const reportPossibleProblem = () => {
-    if (current && !possibleProblemList.includes(current.text)) {
-      setPossibleProblemList([...possibleProblemList, current.text]);
-      nextSyllable();
-    }
-  };
-
-  const nextSyllable = () => {
-    const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
-    setCurrent(workingSet[nextIndex]);
-  };
-
   const copyDebugInfo = async () => {
     try {
       const debugInfo = `Working syllables: ${workingList.join(', ')}\nPossibly problematic: ${possibleProblemList.join(', ')}\nProblem syllables: ${problemList.join(', ')}`;
@@ -122,11 +54,25 @@ const ThaiSyllables = () => {
     }
   };
 
-  if (!current) return <div>Loading...</div>;
+  if (!current) {
+    return (
+      <div className="p-4 relative min-h-screen bg-gray-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl mb-4">Great job! All syllables completed.</h2>
+          <button
+            onClick={addMoreSyllables}
+            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
+          >
+            Add More Syllables
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-  
   // Get the index of the current syllable in the original syllables array
-  const currentIndexInJson = syllablesData.syllables.indexOf(current.text) + 1; // +1 for 1-based index
+  const currentIndexInJson = getCurrentProgress().currentIndex; // +1 for 1-based index
+  
 
   return (
     <div className="p-4 relative min-h-screen bg-gray-900 text-white">
@@ -167,11 +113,6 @@ const ThaiSyllables = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
-        <LessonSelector 
-          currentLesson={currentLesson}
-          setCurrentLesson={setCurrentLesson}
-          totalLessons={totalLessons}
-        />
         <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
           {workingSet.map((syllable, i) => (
             <div key={i} className={`
@@ -185,7 +126,7 @@ const ThaiSyllables = () => {
           ))}
         </div>
         <div className="text-center text-white mt-2">
-          {current.text} - {currentIndexInJson} / {syllablesData.syllables.length}
+          {current.text} - {currentIndexInJson} / {getCurrentProgress().totalSyllables}
         </div>
       </div>
 
