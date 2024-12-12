@@ -3,6 +3,7 @@ import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronD
 import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
 import { useGameState } from '../hooks/useGameState';
+import LessonSelector from '../components/LessonSelector';
 
 const ThaiSyllables = () => {
   const {
@@ -20,6 +21,8 @@ const ThaiSyllables = () => {
     addMoreSyllables,
     getCurrentProgress
   } = useGameState();
+
+  console.log('Render ThaiSyllables:', { currentLesson, totalLessons });
 
   const [hasThai, setHasThai] = useState(false);
   const [speaking, setSpeaking] = useState(false);
@@ -113,6 +116,11 @@ const ThaiSyllables = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
+        <LessonSelector 
+          currentLesson={currentLesson}
+          setCurrentLesson={setCurrentLesson}
+          totalLessons={totalLessons}
+        />
         <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
           {workingSet.map((syllable, i) => (
             <div key={i} className={`
