@@ -7,6 +7,7 @@ import LessonSelector from '../components/LessonSelector';
 import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
+import DebugPanel from '../components/syllables/DebugPanel';
 
 const ThaiSyllables = () => {
   const {
@@ -115,80 +116,17 @@ const ThaiSyllables = () => {
         totalSyllables={totalSyllables}
       />
 
-      <button
-        onClick={() => setShowDebug(!showDebug)}
-        className="fixed bottom-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-gray-500 bg-opacity-50 hover:bg-opacity-100 transition-all text-white shadow-lg"
-      >
-        {showDebug ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-      </button>
-
-      {showDebug && (
-        <div className="fixed bottom-16 right-4 w-64 space-y-2 bg-white p-4 rounded-lg shadow-lg">
-          <div className="flex gap-2">
-            <button
-              onClick={reportProblem}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
-            >
-              <AlertTriangle size={20} />
-              Problem
-            </button>
-            <button
-              onClick={reportPossibleProblem}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded bg-yellow-500 hover:bg-yellow-600 text-white"
-            >
-              <AlertCircle size={20} />
-              Not Sure
-            </button>
-          </div>
-
-          <button
-            onClick={copyDebugInfo}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
-          >
-            {copied ? <CopyCheck size={20} /> : <Copy size={20} />}
-            {copied ? 'Copied!' : 'Copy Debug Info'}
-          </button>
-
-          {workingList.length > 0 && (
-            <div className="p-4 bg-gray-800 rounded">
-              <h3 className="font-bold mb-2">Working Syllables:</h3>
-              <div className="flex flex-wrap gap-2">
-                {workingList.map((syllable, index) => (
-                  <div key={index} className="bg-white px-2 py-1 rounded border">
-                    {syllable}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {possibleProblemList.length > 0 && (
-            <div className="p-4 bg-yellow-600 rounded">
-              <h3 className="font-bold mb-2">Possibly Problematic:</h3>
-              <div className="flex flex-wrap gap-2">
-                {possibleProblemList.map((syllable, index) => (
-                  <div key={index} className="bg-white px-2 py-1 rounded border">
-                    {syllable}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {problemList.length > 0 && (
-            <div className="p-4 bg-red-600 rounded">
-              <h3 className="font-bold mb-2">Problem Syllables:</h3>
-              <div className="flex flex-wrap gap-2">
-                {problemList.map((syllable, index) => (
-                  <div key={index} className="bg-white px-2 py-1 rounded border">
-                    {syllable}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      <DebugPanel
+        showDebug={showDebug}
+        setShowDebug={setShowDebug}
+        reportProblem={reportProblem}
+        reportPossibleProblem={reportPossibleProblem}
+        copyDebugInfo={copyDebugInfo}
+        copied={copied}
+        workingList={workingList}
+        possibleProblemList={possibleProblemList}
+        problemList={problemList}
+      />
     </div>
   );
 };
