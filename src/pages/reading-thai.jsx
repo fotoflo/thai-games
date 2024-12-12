@@ -83,7 +83,7 @@ const ThaiSyllables = () => {
         onClose={() => setShowWelcome(false)} 
       />
       
-      <div className="p-4 relative min-h-screen bg-gray-900 text-white">
+      <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SyllableDisplay
           current={current}
           hasThai={hasThai}
