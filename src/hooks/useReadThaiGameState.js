@@ -11,6 +11,14 @@ export const useReadThaiGameState = () => {
     "lastAddedIndex",
     -1
   );
+  const [lessonProgress, setLessonProgress] = useLocalStorage(
+    "lessonProgress",
+    {
+      // Structure: { lessonNumber: { firstPassCompleted: boolean } }
+      1: { firstPassCompleted: false },
+      2: { firstPassCompleted: false },
+    }
+  );
   const [problemList, setProblemList] = useLocalStorage("problemList", []);
   const [possibleProblemList, setPossibleProblemList] = useLocalStorage(
     "possibleProblemList",
@@ -31,6 +39,13 @@ export const useReadThaiGameState = () => {
       setWorkingSet(selectedSyllables);
       setCurrent(selectedSyllables[0]);
       setLastAddedIndex(4);
+      // Initialize lesson progress if it doesn't exist
+      if (!lessonProgress[currentLesson]) {
+        setLessonProgress((prev) => ({
+          ...prev,
+          [currentLesson]: { firstPassCompleted: false },
+        }));
+      }
       setProblemList([]);
       setPossibleProblemList([]);
       setWorkingList([]);
@@ -66,24 +81,38 @@ export const useReadThaiGameState = () => {
   ]);
 
   const addMoreSyllables = (count = 1) => {
-    const nextIndex = lastAddedIndex + count;
     const currentLessonSyllables = lessons[currentLesson - 1].syllables;
 
-    // Check if we've reached the end of available syllables
-    if (lastAddedIndex >= currentLessonSyllables.length - 1) {
-      // Reset lastAddedIndex to start over
-      setLastAddedIndex(-1);
-      return; // Exit the function as there are no more syllables to add
+    // Check if this addition would complete the first pass
+    if (lastAddedIndex + count >= currentLessonSyllables.length - 1) {
+      setLessonProgress((prev) => ({
+        ...prev,
+        [currentLesson]: { ...prev[currentLesson], firstPassCompleted: true },
+      }));
     }
 
-    for (let i = 0; i < count; i++) {
-      const index = lastAddedIndex + 1 + i;
-      if (index < currentLessonSyllables.length) {
-        const newSyllable = currentLessonSyllables[index];
+    if (lessonProgress[currentLesson]?.firstPassCompleted) {
+      // Use random indices for subsequent passes
+      for (let i = 0; i < count; i++) {
+        const randomIndex = Math.floor(
+          Math.random() * currentLessonSyllables.length
+        );
+        const newSyllable = currentLessonSyllables[randomIndex];
         const newSyllableObj = { text: newSyllable, mastery: 1 };
         setWorkingSet((prev) => [newSyllableObj, ...prev]);
-        setLastAddedIndex(index);
         setCurrent(newSyllableObj);
+      }
+    } else {
+      // First pass through the lesson - continue sequentially
+      for (let i = 0; i < count; i++) {
+        const index = lastAddedIndex + 1 + i;
+        if (index < currentLessonSyllables.length) {
+          const newSyllable = currentLessonSyllables[index];
+          const newSyllableObj = { text: newSyllable, mastery: 1 };
+          setWorkingSet((prev) => [newSyllableObj, ...prev]);
+          setLastAddedIndex(index);
+          setCurrent(newSyllableObj);
+        }
       }
     }
   };
