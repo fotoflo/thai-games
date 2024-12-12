@@ -10,6 +10,7 @@ import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CurrentDisplay from '../components/syllables/CurrentDisplay';
+import CheckAnswerButton from '../components/syllables/CheckAnswerButton';
 
 const ThaiSyllables = () => {
   const gameState = useGameState();
@@ -102,16 +103,13 @@ const ThaiSyllables = () => {
           current={current}
           hasThai={hasThai}
           speaking={speaking}
-          setSpeaking={setSpeaking}
           error={error}
-          setError={setError}
-          onSpeak={() => {
-            setDisplayTrigger('speak');
-            speak(current);
-          }}
+          onSpeak={() => speak(current)}
         />
         
         <MasteryControls onRatingSelect={handleRateMastery} />
+        
+        <CheckAnswerButton onClick={() => setDisplayTrigger('speak')} />
 
         <CurrentDisplay 
           current={gameState.current}
