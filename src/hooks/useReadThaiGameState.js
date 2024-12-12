@@ -7,9 +7,7 @@ import lesson2Data from "../lessons/2-lesson.json";
 export const useReadThaiGameState = () => {
   const lessons = [testLessonData, syllablesData, lesson2Data];
 
-  const [currentLesson, setCurrentLesson] = useLocalStorage(
-    "currentLesson" || 0
-  );
+  const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
   const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
   const [current, setCurrent] = useLocalStorage("current", null);
   const [lastAddedIndex, setLastAddedIndex] = useLocalStorage(
@@ -40,18 +38,24 @@ export const useReadThaiGameState = () => {
 
   const totalLessons = lessons.length;
 
-  // Helper function to initialize a lesson's working set
+  const getItemText = (item) => {
+    return typeof item === "string" ? item : item.text;
+  };
+
   const initializeWorkingSet = (lessonIndex) => {
     if (lessons[lessonIndex]) {
-      const selectedSyllables = lessons[lessonIndex].syllables
+      const selectedItems = lessons[lessonIndex].items
         .slice(0, 5)
-        .map((syllable) => ({ text: syllable, mastery: 1 }));
+        .map((item) => ({
+          text: getItemText(item),
+          mastery: 1,
+          details: typeof item === "object" ? item : null,
+        }));
 
-      setWorkingSet(selectedSyllables);
-      setCurrent(selectedSyllables[0]);
+      setWorkingSet(selectedItems);
+      setCurrent(selectedItems[0]);
       setLastAddedIndex(4);
 
-      // Initialize lesson progress if it doesn't exist
       if (!lessonProgress[lessonIndex]) {
         setLessonProgress((prev) => ({
           ...prev,
@@ -66,85 +70,82 @@ export const useReadThaiGameState = () => {
     }
   };
 
-  // Modified setCurrentLesson to reset working set
   const setCurrentLessonAndReset = (newLesson) => {
     setCurrentLesson(newLesson);
     initializeWorkingSet(newLesson);
   };
 
   useEffect(() => {
-    // Only initialize if there's no existing working set
     if (workingSet.length === 0) {
       initializeWorkingSet(currentLesson);
     }
-  }, []); // Remove currentLesson dependency since we handle it in setCurrentLessonAndReset
+  }, []);
 
   const setProgressionMode = (mode) => {
     if (mode !== lessonProgress[currentLesson]?.mode) {
-      // First update the mode
       setLessonProgress((prev) => ({
         ...prev,
         [currentLesson]: { ...prev[currentLesson], mode },
       }));
 
       if (mode === "random") {
-        // Reset working set
         setWorkingSet([]);
         setCurrent(null);
 
-        // Reset used syllables for this lesson
         setUsedSyllables((prev) => ({
           ...prev,
           [currentLesson]: [],
         }));
 
-        // Add initial random syllables WITHOUT checking mode again
-        const currentLessonSyllables = lessons[currentLesson - 1].syllables;
+        const currentLessonItems = lessons[currentLesson - 1].items;
         for (let i = 0; i < 5; i++) {
           const randomIndex = getRandomUnusedIndex();
-          const newSyllable = currentLessonSyllables[randomIndex];
-          const newSyllableObj = { text: newSyllable, mastery: 1 };
-          setWorkingSet((prev) => [newSyllableObj, ...prev]);
-          if (i === 0) setCurrent(newSyllableObj);
+          const newItem = currentLessonItems[randomIndex];
+          const newItemObj = {
+            text: getItemText(newItem),
+            mastery: 1,
+            details: typeof newItem === "object" ? newItem : null,
+          };
+          setWorkingSet((prev) => [newItemObj, ...prev]);
+          if (i === 0) setCurrent(newItemObj);
         }
       } else {
-        // Reset for progression mode
         setWorkingSet([]);
         setCurrent(null);
         setLastAddedIndex(-1);
 
-        // Initialize with first 5 syllables in order
-        const selectedSyllables = lessons[currentLesson - 1].syllables
+        const selectedItems = lessons[currentLesson - 1].items
           .slice(0, 5)
-          .map((syllable) => ({ text: syllable, mastery: 1 }));
+          .map((item) => ({
+            text: getItemText(item),
+            mastery: 1,
+            details: typeof item === "object" ? item : null,
+          }));
 
-        setWorkingSet(selectedSyllables);
-        setCurrent(selectedSyllables[0]);
+        setWorkingSet(selectedItems);
+        setCurrent(selectedItems[0]);
         setLastAddedIndex(4);
       }
     }
   };
 
   const getRandomUnusedIndex = () => {
-    const currentLessonSyllables = lessons[currentLesson - 1].syllables;
+    const currentLessonItems = lessons[currentLesson - 1].items;
     const used = usedSyllables[currentLesson] || [];
 
-    // If all syllables have been used, reset the tracking
-    if (used.length >= currentLessonSyllables.length) {
+    if (used.length >= currentLessonItems.length) {
       setUsedSyllables((prev) => ({
         ...prev,
         [currentLesson]: [],
       }));
-      return Math.floor(Math.random() * currentLessonSyllables.length);
+      return Math.floor(Math.random() * currentLessonItems.length);
     }
 
-    // Find an unused index
     let randomIndex;
     do {
-      randomIndex = Math.floor(Math.random() * currentLessonSyllables.length);
+      randomIndex = Math.floor(Math.random() * currentLessonItems.length);
     } while (used.includes(randomIndex));
 
-    // Add to used indices
     setUsedSyllables((prev) => ({
       ...prev,
       [currentLesson]: [...(prev[currentLesson] || []), randomIndex],
@@ -154,32 +155,41 @@ export const useReadThaiGameState = () => {
   };
 
   const addMoreSyllables = (count = 1) => {
-    const currentLessonSyllables = lessons[currentLesson - 1].syllables;
+    const currentLessonItems = lessons[currentLesson].items;
     const currentMode = lessonProgress[currentLesson]?.mode || "progression";
 
     if (currentMode === "random") {
-      // Add random unused syllables
       for (let i = 0; i < count; i++) {
-        const randomIndex = getRandomUnusedIndex();
-        const newSyllable = currentLessonSyllables[randomIndex];
-        const newSyllableObj = { text: newSyllable, mastery: 1 };
-        setWorkingSet((prev) => [newSyllableObj, ...prev]);
-        setCurrent(newSyllableObj);
+        const randomIndex = Math.floor(
+          Math.random() * currentLessonItems.length
+        );
+        const newItem = currentLessonItems[randomIndex];
+        const newItemObj = {
+          text: getItemText(newItem),
+          mastery: 1,
+          details: typeof newItem === "object" ? newItem : null,
+        };
+        setWorkingSet((prev) => [newItemObj, ...prev]);
+        setCurrent(newItemObj);
       }
     } else {
-      // Original progression logic
-      if (lastAddedIndex + count >= currentLessonSyllables.length - 1) {
+      if (lastAddedIndex + count >= currentLessonItems.length - 1) {
         setProgressionMode("random");
+        return;
       }
 
       for (let i = 0; i < count; i++) {
         const index = lastAddedIndex + 1 + i;
-        if (index < currentLessonSyllables.length) {
-          const newSyllable = currentLessonSyllables[index];
-          const newSyllableObj = { text: newSyllable, mastery: 1 };
-          setWorkingSet((prev) => [newSyllableObj, ...prev]);
+        if (index < currentLessonItems.length) {
+          const newItem = currentLessonItems[index];
+          const newItemObj = {
+            text: getItemText(newItem),
+            mastery: 1,
+            details: typeof newItem === "object" ? newItem : null,
+          };
+          setWorkingSet((prev) => [newItemObj, ...prev]);
           setLastAddedIndex(index);
-          setCurrent(newSyllableObj);
+          setCurrent(newItemObj);
         }
       }
     }
@@ -188,7 +198,6 @@ export const useReadThaiGameState = () => {
   const rateMastery = async (rating, speakFunction, targetIndex = null) => {
     if (!current) return;
 
-    // If targetIndex is provided, we're just switching cards
     if (targetIndex !== null) {
       const targetCard = workingSet[targetIndex];
       if (targetCard) {
@@ -197,14 +206,13 @@ export const useReadThaiGameState = () => {
       return;
     }
 
-    // Speak the current syllable before moving on
     if (speakFunction) {
       await new Promise((resolve) => {
         speakFunction({
           current,
           setSpeaking: () => {},
           setError: () => {},
-          onEnd: resolve, // Add an onEnd callback to resolve the promise
+          onEnd: resolve,
         });
       });
     }
@@ -254,8 +262,16 @@ export const useReadThaiGameState = () => {
     setCurrent(workingSet[nextIndex]);
   };
 
+  const getCurrentProgress = () => ({
+    currentIndex: current
+      ? lessons[currentLesson].items.findIndex(
+          (item) => getItemText(item) === current.text
+        ) + 1
+      : 0,
+    totalItems: lessons[currentLesson].items.length,
+  });
+
   return {
-    lessons,
     currentLesson,
     setCurrentLesson: setCurrentLessonAndReset,
     totalLessons,
@@ -268,11 +284,9 @@ export const useReadThaiGameState = () => {
     reportProblem,
     reportPossibleProblem,
     addMoreSyllables,
-    getCurrentProgress: () => ({
-      currentIndex: lessons[currentLesson].syllables.indexOf(current?.text) + 1,
-      totalSyllables: lessons[currentLesson].syllables.length,
-    }),
+    getCurrentProgress,
     setProgressionMode,
     currentMode: lessonProgress[currentLesson]?.mode || "progression",
+    lessons,
   };
 };

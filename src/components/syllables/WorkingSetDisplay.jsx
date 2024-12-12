@@ -5,7 +5,6 @@ import LessonSelector from '../LessonSelector';
 import ProgressionSelector from './ProgressionSelector';
 
 const WorkingSetDisplay = ({
-  lessons,
   currentLesson,
   setCurrentLesson,
   totalLessons,
@@ -16,7 +15,8 @@ const WorkingSetDisplay = ({
   totalSyllables,
   onCardSelect,
   currentMode,
-  setProgressionMode
+  setProgressionMode,
+  lessons
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
@@ -29,21 +29,27 @@ const WorkingSetDisplay = ({
         
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 w-[400px] flex-wrap">
-          {workingSet.map((syllable, i) => (
+          {workingSet.map((item, i) => (
             <div 
               key={i} 
               className={`
                 text-center p-2 rounded cursor-pointer w-[72px] h-[80px]
-                ${syllable.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
+                ${item.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
                 hover:bg-blue-600 transition-colors
+                relative
               `}
-              onClick={() => onCardSelect(syllable)}
+              onClick={() => onCardSelect(item)}
               role="button"
               tabIndex={0}
             >
-              <div className="text-white text-lg">{syllable.text}</div>
-              <div className="text-xs text-gray-400">[{thaiToIPA(syllable.text)}]</div>
-              <div className="text-sm text-gray-300">({syllable.mastery})</div>
+              <div className="text-white text-lg">{item.text}</div>
+              <div className="text-xs text-gray-400">[{thaiToIPA(item.text)}]</div>
+              <div className="text-sm text-gray-300">({item.mastery})</div>
+              {item.details?.translation && (
+                <div className="absolute bottom-0 left-0 right-0 text-xs text-gray-400 bg-black bg-opacity-50 p-1">
+                  {item.details.translation}
+                </div>
+              )}
             </div>
           ))}
           {workingSet.length < 5 && (
@@ -56,7 +62,7 @@ const WorkingSetDisplay = ({
                   addMoreSyllables();
                 }}
                 className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[72px] h-[80px]"
-                title="Add One More Syllable"
+                title="Add One More Item"
               >
                 <PlusCircle size={24} className="text-white" />
               </button>
@@ -65,17 +71,19 @@ const WorkingSetDisplay = ({
         </div>
       </div>
 
+      <div className="text-center text-white mb-4">
+        {current.text} - {currentIndexInJson} / {totalSyllables}
+        {current.details?.translation && (
+          <span className="ml-2 text-gray-400">({current.details.translation})</span>
+        )}
+      </div>
+
       <div className="mt-4">
         <ProgressionSelector 
           mode={currentMode}
           onModeChange={setProgressionMode}
         />
       </div>
-
-      <div className="text-center text-white mb-4">
-        {current.text} - {currentIndexInJson} / {totalSyllables}
-      </div>
-
     </div>
   );
 };

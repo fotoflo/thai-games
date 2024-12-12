@@ -1,6 +1,6 @@
 {
   "lessonName": "Numbers",
-  "syllables": [
+  "items": [
     "1",
     "2",
     "3",
@@ -14,14 +14,39 @@
     "11",
     "12",
     "22",
-    "เท่าไหร่",
-    "ราคา",
-    "จำนวน",
-    "รวม",
-    "มาก",
-    "น้อย",
-    "อีกหนึ่ง",
-    "แพงเกินไป",
+    {
+      "text": "เท่าไหร่",
+      "translation": "how much",
+      "notes": "Question word for prices and quantities"
+    },
+    {
+      "text": "ราคา",
+      "translation": "price"
+    },
+    {
+      "text": "จำนวน",
+      "translation": "quantity/amount"
+    },
+    {
+      "text": "รวม",
+      "translation": "total"
+    },
+    {
+      "text": "มาก",
+      "translation": "a lot/many"
+    },
+    {
+      "text": "น้อย",
+      "translation": "few/little"
+    },
+    {
+      "text": "อีกหนึ่ง",
+      "translation": "one more"
+    },
+    {
+      "text": "แพงเกินไป",
+      "translation": "too expensive"
+    },
     "37",
     "45",
     "68",
