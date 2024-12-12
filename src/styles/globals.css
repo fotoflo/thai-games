@@ -90,3 +90,24 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes extendedActive {
+  0%,
+  100% {
+    background-color: theme("colors.gray.800");
+    transform: scale(1);
+  }
+  50% {
+    background-color: theme("colors.blue.800");
+    transform: scale(1.05);
+  }
+}
+
+.animate-extended-active {
+  position: relative;
+}
+
+.animate-extended-active.clicked {
+  background-color: theme("colors.blue.500") !important;
+  transition: background-color 3s ease-out;
+}

@@ -58,6 +58,13 @@ const ThaiSyllables = () => {
   };
 
   const handleRateMastery = async (rating) => {
+    const button = event.target.closest('button');
+    button.classList.add('clicked');
+    
+    setTimeout(() => {
+      button.classList.remove('clicked');
+    }, 1000);
+
     await rateMastery(rating, speakThai);
   };
 
@@ -111,7 +118,7 @@ const ThaiSyllables = () => {
             <button
               key={rating}
               onClick={() => handleRateMastery(rating)}
-              className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-950 active:bg-blue-800"
+              className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-950 active:bg-blue-800 animate-extended-active"
             >
               {rating === 5 ? <Check size={20} className="mx-auto" /> : rating}
             </button>
