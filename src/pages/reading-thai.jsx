@@ -11,7 +11,7 @@ import DebugPanel from '../components/syllables/DebugPanel';
 import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
-import WelcomeModal from '../components/WelcomeModal';
+import WelcomeModal from '../components/ReadThaiWelcomeModal';
 
 const ThaiSyllables = () => {
   const {
