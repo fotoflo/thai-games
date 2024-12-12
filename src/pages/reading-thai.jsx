@@ -11,6 +11,7 @@ import DebugPanel from '../components/syllables/DebugPanel';
 import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
+import WelcomeModal from '../components/WelcomeModal';
 
 const ThaiSyllables = () => {
   const {
@@ -45,6 +46,8 @@ const ThaiSyllables = () => {
     copyDebugInfo
   } = useDebugMode(workingList, possibleProblemList, problemList);
 
+  const [showWelcome, setShowWelcome] = useState(true);
+
   console.log('Render ThaiSyllables:', { currentLesson, totalLessons });
 
   const handleRateMastery = async (rating) => {
@@ -67,42 +70,49 @@ const ThaiSyllables = () => {
   const totalSyllables = getCurrentProgress().totalSyllables;
 
   return (
-    <div className="p-4 relative min-h-screen bg-gray-900 text-white">
-      <SyllableDisplay
-        current={current}
-        hasThai={hasThai}
-        speaking={speaking}
-        setSpeaking={setSpeaking}
-        error={error}
-        setError={setError}
-        onSpeak={() => speak(current)}
+    <>
+      <WelcomeModal 
+        isOpen={showWelcome} 
+        onClose={() => setShowWelcome(false)} 
       />
       
-      <MasteryControls onRatingSelect={handleRateMastery} />
-      
-      <WorkingSetDisplay
-        currentLesson={currentLesson}
-        setCurrentLesson={setCurrentLesson}
-        totalLessons={totalLessons}
-        workingSet={workingSet}
-        current={current}
-        addMoreSyllables={addMoreSyllables}
-        currentIndexInJson={currentIndexInJson}
-        totalSyllables={totalSyllables}
-      />
+      <div className="p-4 relative min-h-screen bg-gray-900 text-white">
+        <SyllableDisplay
+          current={current}
+          hasThai={hasThai}
+          speaking={speaking}
+          setSpeaking={setSpeaking}
+          error={error}
+          setError={setError}
+          onSpeak={() => speak(current)}
+        />
+        
+        <MasteryControls onRatingSelect={handleRateMastery} />
+        
+        <WorkingSetDisplay
+          currentLesson={currentLesson}
+          setCurrentLesson={setCurrentLesson}
+          totalLessons={totalLessons}
+          workingSet={workingSet}
+          current={current}
+          addMoreSyllables={addMoreSyllables}
+          currentIndexInJson={currentIndexInJson}
+          totalSyllables={totalSyllables}
+        />
 
-      <DebugPanel
-        showDebug={showDebug}
-        setShowDebug={setShowDebug}
-        reportProblem={reportProblem}
-        reportPossibleProblem={reportPossibleProblem}
-        copyDebugInfo={copyDebugInfo}
-        copied={copied}
-        workingList={workingList}
-        possibleProblemList={possibleProblemList}
-        problemList={problemList}
-      />
-    </div>
+        <DebugPanel
+          showDebug={showDebug}
+          setShowDebug={setShowDebug}
+          reportProblem={reportProblem}
+          reportPossibleProblem={reportPossibleProblem}
+          copyDebugInfo={copyDebugInfo}
+          copied={copied}
+          workingList={workingList}
+          possibleProblemList={possibleProblemList}
+          problemList={problemList}
+        />
+      </div>
+    </>
   );
 };
 
