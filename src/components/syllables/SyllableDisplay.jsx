@@ -1,20 +1,18 @@
 import React from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import { speakThai } from '../../utils/textToSpeech';
 
 const SyllableDisplay = ({ 
   current,
   hasThai,
   speaking,
-  setSpeaking,
   error,
-  setError 
+  onSpeak
 }) => {
   return (
     <div className="text-center mb-8">
       <div className="text-6xl mb-4">{current.text}</div>
       <button 
-        onClick={() => speakThai({ current, setSpeaking, setError })}
+        onClick={onSpeak}
         disabled={!hasThai || speaking}
         className={`flex items-center justify-center gap-2 px-4 py-2 rounded ${
           hasThai ? 'bg-blue-600 hover:bg-blue-950 text-white' : 'bg-gray-700 text-gray-400'

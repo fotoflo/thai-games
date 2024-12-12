@@ -9,6 +9,7 @@ import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 import DebugPanel from '../components/syllables/DebugPanel';
 import CompletionScreen from '../components/syllables/CompletionScreen';
+import { useThaiSpeech } from '../hooks/useThaiSpeech';
 
 const ThaiSyllables = () => {
   const {
@@ -27,29 +28,19 @@ const ThaiSyllables = () => {
     getCurrentProgress
   } = useGameState();
 
-  console.log('Render ThaiSyllables:', { currentLesson, totalLessons });
+  const {
+    hasThai,
+    speaking,
+    setSpeaking,
+    error,
+    setError,
+    speak
+  } = useThaiSpeech();
 
-  const [hasThai, setHasThai] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
-  const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
 
-  useEffect(() => {
-    const checkVoices = () => {
-      const voices = window.speechSynthesis.getVoices();
-      const thaiVoice = voices.find(voice => voice.lang.includes('th'));
-      setHasThai(!!thaiVoice);
-      setError(thaiVoice ? '' : 'No Thai voice found');
-    };
-
-    window.speechSynthesis.onvoiceschanged = checkVoices;
-    checkVoices();
-
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, []);
+  console.log('Render ThaiSyllables:', { currentLesson, totalLessons });
 
   const copyDebugInfo = async () => {
     try {
@@ -90,6 +81,7 @@ const ThaiSyllables = () => {
         setSpeaking={setSpeaking}
         error={error}
         setError={setError}
+        onSpeak={() => speak(current)}
       />
       
       <MasteryControls onRatingSelect={handleRateMastery} />
