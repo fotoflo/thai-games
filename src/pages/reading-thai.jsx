@@ -12,6 +12,7 @@ import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
+import ProgressionSelector from '../components/syllables/ProgressionSelector';
 
 const ThaiSyllables = () => {
   const {
@@ -27,7 +28,9 @@ const ThaiSyllables = () => {
     reportProblem,
     reportPossibleProblem,
     addMoreSyllables,
-    getCurrentProgress
+    getCurrentProgress,
+    setProgressionMode,
+    currentMode
   } = useGameState();
 
   const {
@@ -95,7 +98,7 @@ const ThaiSyllables = () => {
         />
         
         <MasteryControls onRatingSelect={handleRateMastery} />
-        
+
         <WorkingSetDisplay
           currentLesson={currentLesson}
           setCurrentLesson={setCurrentLesson}
@@ -106,7 +109,9 @@ const ThaiSyllables = () => {
           currentIndexInJson={currentIndexInJson}
           totalSyllables={totalSyllables}
           onCardSelect={handleCardSelect}
-        />
+          currentMode={currentMode}
+          setProgressionMode={setProgressionMode}
+        />  
 
         <DebugPanel
           showDebug={showDebug}

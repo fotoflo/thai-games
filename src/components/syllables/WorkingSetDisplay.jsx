@@ -2,6 +2,7 @@ import React from 'react';
 import { PlusCircle } from 'lucide-react';
 import { thaiToIPA } from '../../utils/thaiToIPA';
 import LessonSelector from '../LessonSelector';
+import ProgressionSelector from './ProgressionSelector';
 
 const WorkingSetDisplay = ({
   currentLesson,
@@ -12,7 +13,9 @@ const WorkingSetDisplay = ({
   addMoreSyllables,
   currentIndexInJson,
   totalSyllables,
-  onCardSelect
+  onCardSelect,
+  currentMode,
+  setProgressionMode
 }) => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
@@ -21,6 +24,11 @@ const WorkingSetDisplay = ({
         setCurrentLesson={setCurrentLesson}
         totalLessons={totalLessons}
       />
+              <ProgressionSelector 
+          mode={currentMode}
+          onModeChange={setProgressionMode}
+        />
+        
       <div className="flex items-center justify-center gap-2">
         <div className="flex gap-2 w-[400px] flex-wrap">
           {workingSet.map((syllable, i) => (
