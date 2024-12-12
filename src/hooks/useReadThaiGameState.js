@@ -1,31 +1,40 @@
 import { useState, useEffect } from "react";
+import useLocalStorage from "./useLocalStorage";
 import syllablesData from "../lessons/1-lesson.json";
 import lesson2Data from "../lessons/2-lesson.json";
 
 export const useReadThaiGameState = () => {
-  const [currentLesson, setCurrentLesson] = useState(1);
-  const [workingSet, setWorkingSet] = useState([]);
-  const [current, setCurrent] = useState(null);
-  const [lastAddedIndex, setLastAddedIndex] = useState(-1);
-  const [problemList, setProblemList] = useState([]);
-  const [possibleProblemList, setPossibleProblemList] = useState([]);
-  const [workingList, setWorkingList] = useState([]);
+  const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 1);
+  const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
+  const [current, setCurrent] = useLocalStorage("current", null);
+  const [lastAddedIndex, setLastAddedIndex] = useLocalStorage(
+    "lastAddedIndex",
+    -1
+  );
+  const [problemList, setProblemList] = useLocalStorage("problemList", []);
+  const [possibleProblemList, setPossibleProblemList] = useLocalStorage(
+    "possibleProblemList",
+    []
+  );
+  const [workingList, setWorkingList] = useLocalStorage("workingList", []);
 
   const lessons = [syllablesData, lesson2Data];
   const totalLessons = lessons.length;
 
   useEffect(() => {
-    // Reset game state when lesson changes
-    const selectedSyllables = lessons[currentLesson - 1].syllables
-      .slice(0, 5)
-      .map((syllable) => ({ text: syllable, mastery: 1 }));
+    // Only initialize if there's no existing working set
+    if (workingSet.length === 0) {
+      const selectedSyllables = lessons[currentLesson - 1].syllables
+        .slice(0, 5)
+        .map((syllable) => ({ text: syllable, mastery: 1 }));
 
-    setWorkingSet(selectedSyllables);
-    setCurrent(selectedSyllables[0]);
-    setLastAddedIndex(4);
-    setProblemList([]);
-    setPossibleProblemList([]);
-    setWorkingList([]);
+      setWorkingSet(selectedSyllables);
+      setCurrent(selectedSyllables[0]);
+      setLastAddedIndex(4);
+      setProblemList([]);
+      setPossibleProblemList([]);
+      setWorkingList([]);
+    }
   }, [currentLesson]);
 
   useEffect(() => {
@@ -59,6 +68,13 @@ export const useReadThaiGameState = () => {
   const addMoreSyllables = (count = 1) => {
     const nextIndex = lastAddedIndex + count;
     const currentLessonSyllables = lessons[currentLesson - 1].syllables;
+
+    // Check if we've reached the end of available syllables
+    if (lastAddedIndex >= currentLessonSyllables.length - 1) {
+      // Reset lastAddedIndex to start over
+      setLastAddedIndex(-1);
+      return; // Exit the function as there are no more syllables to add
+    }
 
     for (let i = 0; i < count; i++) {
       const index = lastAddedIndex + 1 + i;
@@ -112,7 +128,6 @@ export const useReadThaiGameState = () => {
         setCurrent(updated[0]);
       } else {
         setCurrent(null);
-        setLastAddedIndex(-1);
         setWorkingSet([]);
       }
     } else {
