@@ -9,8 +9,12 @@ import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
+import CurrentDisplay from '../components/syllables/CurrentDisplay';
 
 const ThaiSyllables = () => {
+  const gameState = useGameState();
+  const [displayTrigger, setDisplayTrigger] = useState(null); // 'speak' | 'mastery' | null
+
   const {
     currentLesson,
     setCurrentLesson,
@@ -28,7 +32,8 @@ const ThaiSyllables = () => {
     setProgressionMode,
     currentMode,
     lessons
-  } = useGameState();
+  } = gameState;
+
 
   const {
     hasThai,
@@ -68,6 +73,15 @@ const ThaiSyllables = () => {
     }
   };
 
+  const handleMastery = (level) => {
+    gameState.rateMastery(level);
+    setDisplayTrigger('mastery');
+  };
+
+  const handleSpeak = () => {
+    setDisplayTrigger('speak');
+  };
+
   if (!current) {
     return <CompletionScreen addMoreSyllables={addMoreSyllables} />;
   }
@@ -91,10 +105,23 @@ const ThaiSyllables = () => {
           setSpeaking={setSpeaking}
           error={error}
           setError={setError}
-          onSpeak={() => speak(current)}
+          onSpeak={() => {
+            setDisplayTrigger('speak');
+            speak(current);
+          }}
         />
         
         <MasteryControls onRatingSelect={handleRateMastery} />
+
+        <CurrentDisplay 
+          current={gameState.current}
+          onNext={() => {
+            gameState.addMoreSyllables();
+            setDisplayTrigger(null);
+          }}
+          trigger={displayTrigger}
+          onClose={() => setDisplayTrigger(null)}
+        />
 
         <WorkingSetDisplay
           lessons={lessons}
@@ -109,6 +136,8 @@ const ThaiSyllables = () => {
           onCardSelect={handleCardSelect}
           currentMode={currentMode}
           setProgressionMode={setProgressionMode}
+          onSpeak={handleSpeak}
+          onMastery={handleMastery}
         />  
 
         <DebugPanel

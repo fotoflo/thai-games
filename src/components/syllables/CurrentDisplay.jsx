@@ -1,0 +1,75 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, X, Volume2 } from 'lucide-react';
+import { thaiToIPA } from '../../utils/thaiToIPA';
+import { speakThai } from '../../utils/textToSpeech';
+
+const CurrentDisplay = ({ current, onNext, trigger, onClose }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (trigger === 'mastery') {
+      setIsVisible(true);
+      const timer = setTimeout(() => {
+        onClose();
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [trigger]);
+
+  const handleSpeak = () => {
+    speakThai({
+      current,
+      setSpeaking,
+      setError,
+      onEnd: () => setIsVisible(true)
+    });
+  };
+
+  if (!trigger) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="relative">
+        <button 
+          onClick={onClose}
+          className="absolute -top-2 -right-2 p-1 bg-gray-700 rounded-full hover:bg-gray-600"
+        >
+          <X size={20} />
+        </button>
+        
+        <div className="bg-gray-800 p-8 rounded-xl shadow-lg min-w-[300px]">
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-6xl">{current.text}</div>
+            <button
+              onClick={handleSpeak}
+              className="p-2 rounded-full hover:bg-gray-700 transition-colors"
+              title="Speak"
+            >
+              <Volume2 size={24} className="text-white" />
+            </button>
+          </div>
+          
+          <div className="text-xl text-gray-400 mb-4">[{thaiToIPA(current.text)}]</div>
+          
+          {isVisible && current.details && (
+            <div className="mt-6 pt-6 border-t border-gray-600">
+              <div className="text-2xl text-blue-300 mb-2">
+                {current.details.translation}
+              </div>
+              {current.details.notes && (
+                <div className="text-gray-400 text-sm">
+                  {current.details.notes}
+                </div>
+              )}
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CurrentDisplay; 
