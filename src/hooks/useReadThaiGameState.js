@@ -56,16 +56,19 @@ export const useReadThaiGameState = () => {
     workingList,
   ]);
 
-  const addMoreSyllables = () => {
-    const nextIndex = lastAddedIndex + 1;
+  const addMoreSyllables = (count = 1) => {
+    const nextIndex = lastAddedIndex + count;
     const currentLessonSyllables = lessons[currentLesson - 1].syllables;
 
-    if (nextIndex < currentLessonSyllables.length) {
-      const newSyllable = currentLessonSyllables[nextIndex];
-      const newSyllableObj = { text: newSyllable, mastery: 1 };
-      setWorkingSet((prev) => [newSyllableObj, ...prev]);
-      setLastAddedIndex(nextIndex);
-      setCurrent(newSyllableObj);
+    for (let i = 0; i < count; i++) {
+      const index = lastAddedIndex + 1 + i;
+      if (index < currentLessonSyllables.length) {
+        const newSyllable = currentLessonSyllables[index];
+        const newSyllableObj = { text: newSyllable, mastery: 1 };
+        setWorkingSet((prev) => [newSyllableObj, ...prev]);
+        setLastAddedIndex(index);
+        setCurrent(newSyllableObj);
+      }
     }
   };
 

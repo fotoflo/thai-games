@@ -2,17 +2,33 @@ import React from 'react';
 import { Check } from 'lucide-react';
 
 const MasteryControls = ({ onRatingSelect }) => {
+  const masteryLevels = [
+    { level: 1, label: "Learning", color: "bg-red-700 hover:bg-red-600", value: 1 },
+    { level: 2, label: "Getting It", color: "bg-yellow-600 hover:bg-yellow-500", value: 3 },
+    { level: 3, label: "Mastered", color: "bg-green-700 hover:bg-green-600", value: 5, icon: Check },
+  ];
+
   return (
     <div className="space-y-2 mb-4">
       <div className="text-sm text-gray-400 text-center">Mastery level</div>
-      <div className="grid grid-cols-5 gap-2">
-        {[1, 2, 3, 4, 5].map(rating => (
+      <div className="grid grid-cols-3 gap-2">
+        {masteryLevels.map(({ level, label, color, value, icon: Icon }) => (
           <button
-            key={rating}
-            onClick={() => onRatingSelect(rating)}
-            className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-950 active:bg-blue-800 animate-extended-active"
+            key={level}
+            onClick={() => onRatingSelect(value)}
+            className={`
+              p-2 rounded transition-colors
+              ${color}
+              flex flex-col items-center justify-center
+              min-h-[60px]
+              active:scale-95 transform
+              animate-extended-active
+            `}
           >
-            {rating === 5 ? <Check size={20} className="mx-auto" /> : rating}
+            <div className="flex items-center gap-1">
+              <span className="text-sm">{label}</span>
+              {Icon && <Icon size={16} />}
+            </div>
           </button>
         ))}
       </div>
