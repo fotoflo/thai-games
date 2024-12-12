@@ -10,6 +10,7 @@ import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 import DebugPanel from '../components/syllables/DebugPanel';
 import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
+import { useDebugMode } from '../hooks/useDebugMode';
 
 const ThaiSyllables = () => {
   const {
@@ -37,21 +38,14 @@ const ThaiSyllables = () => {
     speak
   } = useThaiSpeech();
 
-  const [copied, setCopied] = useState(false);
-  const [showDebug, setShowDebug] = useState(false);
+  const {
+    copied,
+    showDebug,
+    setShowDebug,
+    copyDebugInfo
+  } = useDebugMode(workingList, possibleProblemList, problemList);
 
   console.log('Render ThaiSyllables:', { currentLesson, totalLessons });
-
-  const copyDebugInfo = async () => {
-    try {
-      const debugInfo = `Working syllables: ${workingList.join(', ')}\nPossibly problematic: ${possibleProblemList.join(', ')}\nProblem syllables: ${problemList.join(', ')}`;
-      await navigator.clipboard.writeText(debugInfo);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      setError('Failed to copy to clipboard');
-    }
-  };
 
   const handleRateMastery = async (rating) => {
     const button = event.target.closest('button');
