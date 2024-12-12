@@ -8,6 +8,7 @@ import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 import DebugPanel from '../components/syllables/DebugPanel';
+import CompletionScreen from '../components/syllables/CompletionScreen';
 
 const ThaiSyllables = () => {
   const {
@@ -73,19 +74,7 @@ const ThaiSyllables = () => {
   };
 
   if (!current) {
-    return (
-      <div className="p-4 relative min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl mb-4">Great job! All syllables completed.</h2>
-          <button
-            onClick={addMoreSyllables}
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
-          >
-            Add More Syllables
-          </button>
-        </div>
-      </div>
-    );
+    return <CompletionScreen addMoreSyllables={addMoreSyllables} />;
   }
 
   // Get the index of the current syllable in the original syllables array
