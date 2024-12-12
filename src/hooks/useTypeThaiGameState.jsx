@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-const useGameState = (initialWords) => {
+export const useTypeThaiGameState = (initialWords) => {
   const [currentWord, setCurrentWord] = useState('');
   const [targetWord, setTargetWord] = useState(initialWords[0]);
   const [wordIndex, setWordIndex] = useState(0);
@@ -76,5 +76,3 @@ const useGameState = (initialWords) => {
     toggleHint
   };
 };
-
-export default useGameState;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import syllablesData from "../lessons/1-lesson.json";
 import lesson2Data from "../lessons/2-lesson.json";
 
-export const useGameState = () => {
+export const useReadThaiGameState = () => {
   const [currentLesson, setCurrentLesson] = useState(1);
   const [workingSet, setWorkingSet] = useState([]);
   const [current, setCurrent] = useState(null);
@@ -69,8 +69,17 @@ export const useGameState = () => {
     }
   };
 
-  const rateMastery = async (rating, speakFunction) => {
+  const rateMastery = async (rating, speakFunction, targetIndex = null) => {
     if (!current) return;
+
+    // If targetIndex is provided, we're just switching cards
+    if (targetIndex !== null) {
+      const targetCard = workingSet[targetIndex];
+      if (targetCard) {
+        setCurrent(targetCard);
+      }
+      return;
+    }
 
     // Speak the current syllable before moving on
     if (speakFunction) {

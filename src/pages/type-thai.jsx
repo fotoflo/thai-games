@@ -7,7 +7,7 @@ import WordDisplay from '@/components/WordDisplay';
 import GameControls from '@/components/GameControls';
 import ThaiWordInputArea from '@/components/ThaiWordInputArea';
 import WinDialog from '@/components/WinDialog';
-import useGameState from '@/hooks/useGameState';
+import { useTypeThaiGameState  } from '@/hooks/useTypeThaiGameState';
 import GameHeader from '@/components/GameHeader';
 import ThaiDesktopKeyboard from '@/components/ThaiDesktopKeyboard';
 
@@ -42,7 +42,7 @@ const ThaiWordLearningGame = () => {
     nextWord,
     toggleDarkMode,
     toggleHint
-  } = useGameState(thaiWords);
+  } = useTypeThaiGameState(thaiWords);
 
   const speakingRef = useRef(false);
   const inputRef = useRef(null);

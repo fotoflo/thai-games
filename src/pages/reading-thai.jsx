@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp, Check, PlusCircle } from 'lucide-react';
 import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
-import { useGameState } from '../hooks/useGameState';
+import { useReadThaiGameState as useGameState } from '../hooks/useReadThaiGameState';
 import LessonSelector from '../components/LessonSelector';
 import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
@@ -61,6 +61,13 @@ const ThaiSyllables = () => {
     await rateMastery(rating, speakThai);
   };
 
+  const handleCardSelect = (syllable) => {
+    const targetIndex = workingSet.findIndex(s => s.text === syllable.text);
+    if (targetIndex !== -1) {
+      rateMastery(0, null, targetIndex);
+    }
+  };
+
   if (!current) {
     return <CompletionScreen addMoreSyllables={addMoreSyllables} />;
   }
@@ -98,6 +105,7 @@ const ThaiSyllables = () => {
           addMoreSyllables={addMoreSyllables}
           currentIndexInJson={currentIndexInJson}
           totalSyllables={totalSyllables}
+          onCardSelect={handleCardSelect}
         />
 
         <DebugPanel
