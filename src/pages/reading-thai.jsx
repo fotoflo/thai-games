@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp, Check, PlusCircle } from 'lucide-react';
-import { thaiToIPA } from '../utils/thaiToIPA';
+import React, { useState } from 'react';
 import { speakThai } from '../utils/textToSpeech';
 import { useReadThaiGameState as useGameState } from '../hooks/useReadThaiGameState';
-import LessonSelector from '../components/LessonSelector';
 import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
@@ -12,7 +9,6 @@ import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
-import ProgressionSelector from '../components/syllables/ProgressionSelector';
 
 const ThaiSyllables = () => {
   const {
@@ -30,7 +26,8 @@ const ThaiSyllables = () => {
     addMoreSyllables,
     getCurrentProgress,
     setProgressionMode,
-    currentMode
+    currentMode,
+    lessons
   } = useGameState();
 
   const {
@@ -100,6 +97,7 @@ const ThaiSyllables = () => {
         <MasteryControls onRatingSelect={handleRateMastery} />
 
         <WorkingSetDisplay
+          lessons={lessons}
           currentLesson={currentLesson}
           setCurrentLesson={setCurrentLesson}
           totalLessons={totalLessons}

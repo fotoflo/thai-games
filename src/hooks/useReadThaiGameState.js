@@ -1,19 +1,14 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import useLocalStorage from "./useLocalStorage";
 import testLessonData from "../lessons/0-lesson.json";
 import syllablesData from "../lessons/1-lesson.json";
 import lesson2Data from "../lessons/2-lesson.json";
 
 export const useReadThaiGameState = () => {
-  // Create lessons array based on environment
-  const lessons =
-    process.env.NODE_ENV === "development"
-      ? [testLessonData, syllablesData, lesson2Data]
-      : [syllablesData, lesson2Data];
+  const lessons = [testLessonData, syllablesData, lesson2Data];
 
   const [currentLesson, setCurrentLesson] = useLocalStorage(
-    "currentLesson",
-    process.env.NODE_ENV === "development" ? 0 : 1
+    "currentLesson" || 0
   );
   const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
   const [current, setCurrent] = useLocalStorage("current", null);
@@ -32,18 +27,11 @@ export const useReadThaiGameState = () => {
     2: [], // Array of indices that have been used in lesson 2
   });
 
-  // Initialize lesson progress based on environment
-  const initialLessonProgress =
-    process.env.NODE_ENV === "development"
-      ? {
-          0: { mode: "progression" },
-          1: { mode: "progression" },
-          2: { mode: "progression" },
-        }
-      : {
-          1: { mode: "progression" },
-          2: { mode: "progression" },
-        };
+  const initialLessonProgress = {
+    0: { mode: "progression" },
+    1: { mode: "progression" },
+    2: { mode: "progression" },
+  };
 
   const [lessonProgress, setLessonProgress] = useLocalStorage(
     "lessonProgress",
@@ -52,56 +40,44 @@ export const useReadThaiGameState = () => {
 
   const totalLessons = lessons.length;
 
-  useEffect(() => {
-    // Only initialize if there's no existing working set
-    if (workingSet.length === 0) {
-      const selectedSyllables = lessons[currentLesson - 1].syllables
+  // Helper function to initialize a lesson's working set
+  const initializeWorkingSet = (lessonIndex) => {
+    if (lessons[lessonIndex]) {
+      const selectedSyllables = lessons[lessonIndex].syllables
         .slice(0, 5)
         .map((syllable) => ({ text: syllable, mastery: 1 }));
 
       setWorkingSet(selectedSyllables);
       setCurrent(selectedSyllables[0]);
       setLastAddedIndex(4);
+
       // Initialize lesson progress if it doesn't exist
-      if (!lessonProgress[currentLesson]) {
+      if (!lessonProgress[lessonIndex]) {
         setLessonProgress((prev) => ({
           ...prev,
-          [currentLesson]: { mode: "progression" },
+          [lessonIndex]: { mode: "progression" },
         }));
       }
       setProblemList([]);
       setPossibleProblemList([]);
       setWorkingList([]);
+    } else {
+      console.error(`Lesson ${lessonIndex} is undefined`);
     }
-  }, [currentLesson]);
+  };
+
+  // Modified setCurrentLesson to reset working set
+  const setCurrentLessonAndReset = (newLesson) => {
+    setCurrentLesson(newLesson);
+    initializeWorkingSet(newLesson);
+  };
 
   useEffect(() => {
-    console.log({
-      gameState: {
-        currentLesson,
-        workingSetSize: workingSet.length,
-        currentSyllable: current?.text,
-        lastAddedIndex,
-        problemListSize: problemList.length,
-        possibleProblemListSize: possibleProblemList.length,
-        workingListSize: workingList.length,
-        progress: {
-          currentIndex: current
-            ? lessons[currentLesson - 1].syllables.indexOf(current.text) + 1
-            : 0,
-          totalSyllables: lessons[currentLesson - 1].syllables.length,
-        },
-      },
-    });
-  }, [
-    currentLesson,
-    workingSet,
-    current,
-    lastAddedIndex,
-    problemList,
-    possibleProblemList,
-    workingList,
-  ]);
+    // Only initialize if there's no existing working set
+    if (workingSet.length === 0) {
+      initializeWorkingSet(currentLesson);
+    }
+  }, []); // Remove currentLesson dependency since we handle it in setCurrentLessonAndReset
 
   const setProgressionMode = (mode) => {
     if (mode !== lessonProgress[currentLesson]?.mode) {
@@ -279,9 +255,10 @@ export const useReadThaiGameState = () => {
   };
 
   return {
+    lessons,
     currentLesson,
-    setCurrentLesson,
-    totalLessons: lessons.length,
+    setCurrentLesson: setCurrentLessonAndReset,
+    totalLessons,
     workingSet,
     current,
     problemList,
@@ -292,9 +269,8 @@ export const useReadThaiGameState = () => {
     reportPossibleProblem,
     addMoreSyllables,
     getCurrentProgress: () => ({
-      currentIndex:
-        lessons[currentLesson - 1].syllables.indexOf(current?.text) + 1,
-      totalSyllables: lessons[currentLesson - 1].syllables.length,
+      currentIndex: lessons[currentLesson].syllables.indexOf(current?.text) + 1,
+      totalSyllables: lessons[currentLesson].syllables.length,
     }),
     setProgressionMode,
     currentMode: lessonProgress[currentLesson]?.mode || "progression",

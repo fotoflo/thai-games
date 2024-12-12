@@ -5,6 +5,7 @@ import LessonSelector from '../LessonSelector';
 import ProgressionSelector from './ProgressionSelector';
 
 const WorkingSetDisplay = ({
+  lessons,
   currentLesson,
   setCurrentLesson,
   totalLessons,
@@ -23,6 +24,7 @@ const WorkingSetDisplay = ({
         currentLesson={currentLesson}
         setCurrentLesson={setCurrentLesson}
         totalLessons={totalLessons}
+        lessons={lessons}
       />
         
       <div className="flex items-center justify-center gap-2 mb-4">
@@ -69,7 +71,7 @@ const WorkingSetDisplay = ({
           onModeChange={setProgressionMode}
         />
       </div>
-      
+
       <div className="text-center text-white mb-4">
         {current.text} - {currentIndexInJson} / {totalSyllables}
       </div>
