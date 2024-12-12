@@ -3,6 +3,7 @@ import { Volume2, VolumeX, AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronD
 import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
 import syllablesData from '../lessons/1-lesson.json';
+import LessonSelector from '../components/LessonSelector';
 
 const ThaiSyllables = () => {
   const [workingSet, setWorkingSet] = useState([]);
@@ -16,6 +17,8 @@ const ThaiSyllables = () => {
   const [copied, setCopied] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
   const [lastAddedIndex, setLastAddedIndex] = useState(-1);
+  const [currentLesson, setCurrentLesson] = useState(1);
+  const totalLessons = 2; // Update this as you add more lessons
 
   useEffect(() => {
     const selectedSyllables = syllablesData.syllables.slice(0, 5).map(syllable => ({ text: syllable, mastery: 1 }));
@@ -164,6 +167,11 @@ const ThaiSyllables = () => {
       </div>
 
       <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
+        <LessonSelector 
+          currentLesson={currentLesson}
+          setCurrentLesson={setCurrentLesson}
+          totalLessons={totalLessons}
+        />
         <div className="grid grid-cols-5 gap-2 max-w-md mx-auto">
           {workingSet.map((syllable, i) => (
             <div key={i} className={`
