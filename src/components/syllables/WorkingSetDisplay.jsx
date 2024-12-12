@@ -18,6 +18,20 @@ const WorkingSetDisplay = ({
   setProgressionMode,
   lessons
 }) => {
+
+  const getTextSizeClass = (text) => {
+    if (text.length <= 3) return 'text-lg';
+    if (text.length <= 5) return 'text-base';
+    if (text.length <= 7) return 'text-sm';
+    return 'text-xs';
+  };
+
+  const getPhoneticSizeClass = (text) => {
+    if (text.length <= 5) return 'text-xs';
+    if (text.length <= 8) return 'text-[10px]';
+    return 'text-[8px]';
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
       <LessonSelector 
@@ -29,29 +43,31 @@ const WorkingSetDisplay = ({
         
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 w-[400px] flex-wrap">
-          {workingSet.map((item, i) => (
-            <div 
-              key={i} 
-              className={`
-                text-center p-2 rounded cursor-pointer w-[72px] h-[80px]
-                ${item.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
-                hover:bg-blue-600 transition-colors
-                relative
-              `}
-              onClick={() => onCardSelect(item)}
-              role="button"
-              tabIndex={0}
-            >
-              <div className="text-white text-lg">{item.text}</div>
-              <div className="text-xs text-gray-400">[{thaiToIPA(item.text)}]</div>
-              <div className="text-sm text-gray-300">({item.mastery})</div>
-              {item.details?.translation && (
-                <div className="absolute bottom-0 left-0 right-0 text-xs text-gray-400 bg-black bg-opacity-50 p-1">
-                  {item.details.translation}
+          {workingSet.map((item, i) => {
+            const phoneticText = thaiToIPA(item.text);
+            return (
+              <div 
+                key={i} 
+                className={`
+                  text-center p-2 rounded cursor-pointer w-[72px] h-[80px]
+                  ${item.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
+                  hover:bg-blue-600 transition-colors
+                  flex flex-col justify-center
+                `}
+                onClick={() => onCardSelect(item)}
+                role="button"
+                tabIndex={0}
+              >
+                <div className={`text-white ${getTextSizeClass(item.text)} leading-tight`}>
+                  {item.text}
                 </div>
-              )}
-            </div>
-          ))}
+                <div className={`text-gray-400 ${getPhoneticSizeClass(phoneticText)} leading-tight`}>
+                  [{phoneticText}]
+                </div>
+                <div className="text-sm text-gray-300">({item.mastery})</div>
+              </div>
+            );
+          })}
           {workingSet.length < 5 && (
             <div className="ml-auto">
               <button

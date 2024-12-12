@@ -3,9 +3,10 @@ import useLocalStorage from "./useLocalStorage";
 import testLessonData from "../lessons/0-lesson.json";
 import syllablesData from "../lessons/1-lesson.json";
 import lesson2Data from "../lessons/2-lesson.json";
+import firstWordsData from "../lessons/3-lesson.json";
 
 export const useReadThaiGameState = () => {
-  const lessons = [testLessonData, syllablesData, lesson2Data];
+  const lessons = [testLessonData, syllablesData, lesson2Data, firstWordsData];
 
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
   const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);

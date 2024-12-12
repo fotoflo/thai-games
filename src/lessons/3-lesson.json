@@ -1,0 +1,87 @@
+{
+  "lessonName": "First Words",
+  "items": [
+    {
+      "text": "สวัสดี",
+      "translation": "hello",
+      "notes": "Formal greeting"
+    },
+    {
+      "text": "ขอบคุณ",
+      "translation": "thank you",
+      "notes": "Formal thanks"
+    },
+    {
+      "text": "ใช่",
+      "translation": "yes"
+    },
+    {
+      "text": "ไม่",
+      "translation": "no"
+    },
+    {
+      "text": "ไม่เป็นไร",
+      "translation": "no problem/it's okay"
+    },
+    {
+      "text": "กิน",
+      "translation": "to eat"
+    },
+    {
+      "text": "น้ำ",
+      "translation": "water"
+    },
+    {
+      "text": "ร้อน",
+      "translation": "hot"
+    },
+    {
+      "text": "เย็น",
+      "translation": "cold"
+    },
+    {
+      "text": "อร่อย",
+      "translation": "delicious"
+    },
+    {
+      "text": "ห้องน้ำ",
+      "translation": "bathroom"
+    },
+    {
+      "text": "ที่ไหน",
+      "translation": "where"
+    },
+    {
+      "text": "เท่าไหร่",
+      "translation": "how much"
+    },
+    {
+      "text": "ชื่อ",
+      "translation": "name"
+    },
+    {
+      "text": "ผม",
+      "translation": "I (male)"
+    },
+    {
+      "text": "ดิฉัน",
+      "translation": "I (female)"
+    },
+    {
+      "text": "คุณ",
+      "translation": "you (polite)"
+    },
+    {
+      "text": "ไป",
+      "translation": "to go"
+    },
+    {
+      "text": "มา",
+      "translation": "to come"
+    },
+    {
+      "text": "นอน",
+      "translation": "to sleep"
+    }
+  ]
+}
