@@ -69,8 +69,20 @@ export const useGameState = () => {
     }
   };
 
-  const rateMastery = (rating) => {
+  const rateMastery = async (rating, speakFunction) => {
     if (!current) return;
+
+    // Speak the current syllable before moving on
+    if (speakFunction) {
+      await new Promise((resolve) => {
+        speakFunction({
+          current,
+          setSpeaking: () => {},
+          setError: () => {},
+          onEnd: resolve, // Add an onEnd callback to resolve the promise
+        });
+      });
+    }
 
     if (!workingList.includes(current.text)) {
       setWorkingList((prev) => [...prev, current.text]);

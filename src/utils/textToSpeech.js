@@ -11,21 +11,30 @@ export const stopSpeaking = () => {
   window.speechSynthesis.cancel();
 };
 
-export const speakThai = ({ current, setSpeaking, setError }) => {
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(current.text);
-  utterance.lang = "th-TH";
-  utterance.rate = 0.8;
+export const speakThai = ({ current, setSpeaking, setError, onEnd }) => {
+  if (!current) return;
 
+  const utterance = new SpeechSynthesisUtterance(current.text);
   const voices = window.speechSynthesis.getVoices();
   const thaiVoice = voices.find((voice) => voice.lang.includes("th"));
-  if (thaiVoice) utterance.voice = thaiVoice;
 
-  utterance.onstart = () => setSpeaking(true);
-  utterance.onend = () => setSpeaking(false);
-  utterance.onerror = (e) => {
+  if (thaiVoice) {
+    utterance.voice = thaiVoice;
+  }
+
+  utterance.onstart = () => {
+    setSpeaking(true);
+  };
+
+  utterance.onend = () => {
     setSpeaking(false);
-    setError(`Speech error: ${e.error}`);
+    if (onEnd) onEnd();
+  };
+
+  utterance.onerror = (error) => {
+    setSpeaking(false);
+    setError("Speech synthesis failed");
+    if (onEnd) onEnd();
   };
 
   window.speechSynthesis.speak(utterance);

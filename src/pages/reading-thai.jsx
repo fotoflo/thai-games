@@ -57,6 +57,10 @@ const ThaiSyllables = () => {
     }
   };
 
+  const handleRateMastery = async (rating) => {
+    await rateMastery(rating, speakThai);
+  };
+
   if (!current) {
     return (
       <div className="p-4 relative min-h-screen bg-gray-900 text-white flex items-center justify-center">
@@ -106,7 +110,7 @@ const ThaiSyllables = () => {
           {[1, 2, 3, 4, 5].map(rating => (
             <button
               key={rating}
-              onClick={() => rateMastery(rating)}
+              onClick={() => handleRateMastery(rating)}
               className="p-2 rounded transition-colors bg-gray-800 hover:bg-blue-950 active:bg-blue-800"
             >
               {rating === 5 ? <Check size={20} className="mx-auto" /> : rating}
