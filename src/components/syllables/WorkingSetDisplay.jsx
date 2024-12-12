@@ -24,12 +24,8 @@ const WorkingSetDisplay = ({
         setCurrentLesson={setCurrentLesson}
         totalLessons={totalLessons}
       />
-              <ProgressionSelector 
-          mode={currentMode}
-          onModeChange={setProgressionMode}
-        />
         
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 w-[400px] flex-wrap">
           {workingSet.map((syllable, i) => (
             <div 
@@ -61,15 +57,23 @@ const WorkingSetDisplay = ({
                 title="Add One More Syllable"
               >
                 <PlusCircle size={24} className="text-white" />
-
               </button>
             </div>
           )}
         </div>
       </div>
-      <div className="text-center text-white mt-2">
+
+      <div className="mt-4">
+        <ProgressionSelector 
+          mode={currentMode}
+          onModeChange={setProgressionMode}
+        />
+      </div>
+      
+      <div className="text-center text-white mb-4">
         {current.text} - {currentIndexInJson} / {totalSyllables}
       </div>
+
     </div>
   );
 };
