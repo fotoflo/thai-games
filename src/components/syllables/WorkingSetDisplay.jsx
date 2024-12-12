@@ -22,12 +22,12 @@ const WorkingSetDisplay = ({
         totalLessons={totalLessons}
       />
       <div className="flex items-center justify-center gap-2">
-        <div className="grid grid-cols-5 gap-2 w-[400px]">
+        <div className="flex gap-2 w-[400px] flex-wrap">
           {workingSet.map((syllable, i) => (
             <div 
               key={i} 
               className={`
-                text-center p-2 rounded cursor-pointer
+                text-center p-2 rounded cursor-pointer w-[72px] h-[80px]
                 ${syllable.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
                 hover:bg-blue-600 transition-colors
               `}
@@ -40,16 +40,24 @@ const WorkingSetDisplay = ({
               <div className="text-sm text-gray-300">({syllable.mastery})</div>
             </div>
           ))}
+          {workingSet.length < 5 && (
+            <div className="ml-auto">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  console.log("Button clicked");
+                  addMoreSyllables();
+                }}
+                className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[72px] h-[80px]"
+                title="Add One More Syllable"
+              >
+                <PlusCircle size={24} className="text-white" />
+
+              </button>
+            </div>
+          )}
         </div>
-        {workingSet.length < 5 && (
-          <button
-            onClick={addMoreSyllables}
-            className="p-2 rounded-full bg-green-500 hover:bg-green-600 text-white"
-            title="Add One More Syllable"
-          >
-            <PlusCircle size={24} />
-          </button>
-        )}
       </div>
       <div className="text-center text-white mt-2">
         {current.text} - {currentIndexInJson} / {totalSyllables}
