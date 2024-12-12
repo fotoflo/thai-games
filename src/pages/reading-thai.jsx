@@ -4,6 +4,7 @@ import { thaiToIPA } from '../utils/thaiToIPA';
 import { speakThai } from '../utils/textToSpeech';
 import { useGameState } from '../hooks/useGameState';
 import LessonSelector from '../components/LessonSelector';
+import SyllableDisplay from '../components/syllables/SyllableDisplay';
 
 const ThaiSyllables = () => {
   const {
@@ -90,26 +91,14 @@ const ThaiSyllables = () => {
 
   return (
     <div className="p-4 relative min-h-screen bg-gray-900 text-white">
-
-      <div className="text-center mb-8">
-        <div className="text-6xl mb-4">{current.text}</div>
-        <button 
-          onClick={() => speakThai({ current, setSpeaking, setError })}
-          disabled={!hasThai || speaking}
-          className={`flex items-center justify-center gap-2 px-4 py-2 rounded ${
-            hasThai ? 'bg-blue-600 hover:bg-blue-950 text-white' : 'bg-gray-700 text-gray-400'
-          }`}
-        >
-          {speaking ? <Volume2 className="animate-pulse" size={20} /> : <Volume2 size={20} />}
-          {speaking ? 'Speaking...' : 'Speak'}
-        </button>
-        {error && (
-          <div className="flex items-center justify-center gap-2 mt-2 text-red-500">
-            <VolumeX size={16} />
-            <span className="text-sm">{error}</span>
-          </div>
-        )}
-      </div>
+      <SyllableDisplay
+        current={current}
+        hasThai={hasThai}
+        speaking={speaking}
+        setSpeaking={setSpeaking}
+        error={error}
+        setError={setError}
+      />
 
       <div className="space-y-2 mb-4">
         <div className="text-sm text-gray-400 text-center">Mastery level</div>
