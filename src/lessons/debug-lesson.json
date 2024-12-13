@@ -1,0 +1,21 @@
+{
+  "lessonName": "Debug Lesson",
+  "items": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    {
+      "text": "B1",
+      "translation": "Test Item 1",
+      "notes": "This is a test item"
+    },
+    {
+      "text": "B2",
+      "translation": "Test Item 2",
+      "notes": "This is another test item"
+    },
+    "A6"
+  ]
+}
