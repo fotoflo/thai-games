@@ -26,11 +26,6 @@ export const useReadThaiGameState = () => {
     2: [], // Array of indices that have been used in lesson 2
   });
 
-  const [progressionMode, setProgressionMode] = useLocalStorage(
-    "progressionMode",
-    "progression"
-  );
-
   const initialLessonProgress = {
     0: { progressionMode: "progression" },
     1: { progressionMode: "progression" },
@@ -133,7 +128,13 @@ export const useReadThaiGameState = () => {
       }
     } else {
       if (lastAddedIndex + count >= currentLessonItems.length - 1) {
-        setProgressionMode("random");
+        setLessonProgress((prev) => ({
+          ...prev,
+          [currentLesson]: {
+            ...prev[currentLesson],
+            progressionMode: "random",
+          },
+        }));
         return;
       }
 
@@ -230,6 +231,40 @@ export const useReadThaiGameState = () => {
     totalItems: lessons[currentLesson].items.length,
   });
 
+  const setProgressionMode = (newMode) => {
+    // Update the mode in lessonProgress for the current lesson
+    setLessonProgress((prev) => ({
+      ...prev,
+      [currentLesson]: { ...prev[currentLesson], progressionMode: newMode },
+    }));
+
+    // If switching to random mode, regenerate working set with random items
+    if (newMode === "random") {
+      const currentLessonItems = lessons[currentLesson].items;
+      const randomWorkingSet = Array(5)
+        .fill(null)
+        .map(() => {
+          const randomIndex = Math.floor(
+            Math.random() * currentLessonItems.length
+          );
+          const randomItem = currentLessonItems[randomIndex];
+          return {
+            text: getItemText(randomItem),
+            mastery: 1,
+            details: typeof randomItem === "object" ? randomItem : null,
+          };
+        });
+
+      setWorkingSet(randomWorkingSet);
+      setCurrent(randomWorkingSet[0]);
+    } else {
+      // If switching back to progression, reinitialize from the beginning
+      initializeWorkingSet(currentLesson);
+    }
+
+    return newMode;
+  };
+
   return {
     currentLesson,
     setCurrentLesson: setCurrentLessonAndReset,
@@ -245,7 +280,7 @@ export const useReadThaiGameState = () => {
     addMoreSyllables,
     getCurrentProgress,
     setProgressionMode,
-    progressionMode,
+    progressionMode: lessonProgress[currentLesson]?.progressionMode,
     lessons,
   };
 };
