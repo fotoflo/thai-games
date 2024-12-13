@@ -14,7 +14,7 @@ const WorkingSetDisplay = ({
   currentIndexInJson,
   totalSyllables,
   onCardSelect,
-  currentMode,
+  progressionMode,
   setProgressionMode,
   lessons
 }) => {
@@ -96,7 +96,7 @@ const WorkingSetDisplay = ({
 
       <div className="mt-4">
         <ProgressionSelector 
-          mode={currentMode}
+          progressionMode={progressionMode}
           onModeChange={setProgressionMode}
         />
       </div>

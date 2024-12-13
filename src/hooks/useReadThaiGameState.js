@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useLocalStorage from "./useLocalStorage";
 import testLessonData from "../lessons/0-lesson.json";
 import syllablesData from "../lessons/1-lesson.json";
@@ -26,10 +26,15 @@ export const useReadThaiGameState = () => {
     2: [], // Array of indices that have been used in lesson 2
   });
 
+  const [progressionMode, setProgressionMode] = useLocalStorage(
+    "progressionMode",
+    "progression"
+  );
+
   const initialLessonProgress = {
-    0: { mode: "progression" },
-    1: { mode: "progression" },
-    2: { mode: "progression" },
+    0: { progressionMode: "progression" },
+    1: { progressionMode: "progression" },
+    2: { progressionMode: "progression" },
   };
 
   const [lessonProgress, setLessonProgress] = useLocalStorage(
@@ -60,7 +65,7 @@ export const useReadThaiGameState = () => {
       if (!lessonProgress[lessonIndex]) {
         setLessonProgress((prev) => ({
           ...prev,
-          [lessonIndex]: { mode: "progression" },
+          [lessonIndex]: { progressionMode: "progression" },
         }));
       }
       setProblemList([]);
@@ -81,54 +86,6 @@ export const useReadThaiGameState = () => {
       initializeWorkingSet(currentLesson);
     }
   }, []);
-
-  const setProgressionMode = (mode) => {
-    if (mode !== lessonProgress[currentLesson]?.mode) {
-      setLessonProgress((prev) => ({
-        ...prev,
-        [currentLesson]: { ...prev[currentLesson], mode },
-      }));
-
-      if (mode === "random") {
-        setWorkingSet([]);
-        setCurrent(null);
-
-        setUsedSyllables((prev) => ({
-          ...prev,
-          [currentLesson]: [],
-        }));
-
-        const currentLessonItems = lessons[currentLesson - 1].items;
-        for (let i = 0; i < 5; i++) {
-          const randomIndex = getRandomUnusedIndex();
-          const newItem = currentLessonItems[randomIndex];
-          const newItemObj = {
-            text: getItemText(newItem),
-            mastery: 1,
-            details: typeof newItem === "object" ? newItem : null,
-          };
-          setWorkingSet((prev) => [newItemObj, ...prev]);
-          if (i === 0) setCurrent(newItemObj);
-        }
-      } else {
-        setWorkingSet([]);
-        setCurrent(null);
-        setLastAddedIndex(-1);
-
-        const selectedItems = lessons[currentLesson - 1].items
-          .slice(0, 5)
-          .map((item) => ({
-            text: getItemText(item),
-            mastery: 1,
-            details: typeof item === "object" ? item : null,
-          }));
-
-        setWorkingSet(selectedItems);
-        setCurrent(selectedItems[0]);
-        setLastAddedIndex(4);
-      }
-    }
-  };
 
   const getRandomUnusedIndex = () => {
     const currentLessonItems = lessons[currentLesson - 1].items;
@@ -157,9 +114,10 @@ export const useReadThaiGameState = () => {
 
   const addMoreSyllables = (count = 1) => {
     const currentLessonItems = lessons[currentLesson].items;
-    const currentMode = lessonProgress[currentLesson]?.mode || "progression";
+    const mode =
+      lessonProgress[currentLesson]?.progressionMode || "progression";
 
-    if (currentMode === "random") {
+    if (mode === "random") {
       for (let i = 0; i < count; i++) {
         const randomIndex = Math.floor(
           Math.random() * currentLessonItems.length
@@ -287,7 +245,7 @@ export const useReadThaiGameState = () => {
     addMoreSyllables,
     getCurrentProgress,
     setProgressionMode,
-    currentMode: lessonProgress[currentLesson]?.mode || "progression",
+    progressionMode,
     lessons,
   };
 };

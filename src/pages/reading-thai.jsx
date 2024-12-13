@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { speakThai } from '../utils/textToSpeech';
-import { useReadThaiGameState as useGameState } from '../hooks/useReadThaiGameState';
+import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
 import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
@@ -13,7 +13,7 @@ import CurrentDisplay from '../components/syllables/CurrentDisplay';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 
 const ThaiSyllables = () => {
-  const gameState = useGameState();
+  const gameState = useReadThaiGameState();
   const [displayTrigger, setDisplayTrigger] = useState(null); // 'speak' | 'mastery' | null
 
   const {
@@ -31,7 +31,7 @@ const ThaiSyllables = () => {
     addMoreSyllables,
     getCurrentProgress,
     setProgressionMode,
-    currentMode,
+    progressionMode,
     lessons
   } = gameState;
 
@@ -82,6 +82,7 @@ const ThaiSyllables = () => {
   const handleSpeak = () => {
     setDisplayTrigger('speak');
   };
+
 
   if (!current) {
     return <CompletionScreen addMoreSyllables={addMoreSyllables} />;
@@ -136,7 +137,7 @@ const ThaiSyllables = () => {
           currentIndexInJson={currentIndexInJson}
           totalSyllables={totalSyllables}
           onCardSelect={handleCardSelect}
-          currentMode={currentMode}
+          progressionMode={progressionMode}
           setProgressionMode={setProgressionMode}
           onSpeak={handleSpeak}
           onMastery={handleMastery}
@@ -153,6 +154,7 @@ const ThaiSyllables = () => {
           possibleProblemList={possibleProblemList}
           problemList={problemList}
         />
+
       </div>
     </>
   );
