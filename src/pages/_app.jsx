@@ -1,29 +1,50 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "../styles/globals.css"; // Add this line
-import { useEffect } from "react";
-import Script from "next/script";
+import Script from 'next/script';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import '../styles/globals.css'; // Ensure this line is present\
 
-const queryClient = new QueryClient();
+const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GTAG; // Use the environment variable
 
-export default function App({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+
   useEffect(() => {
-    // Initialize gtag
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      window.dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-    gtag("config", process.env.NEXT_PUBLIC_GTAG);
-  }, []);
+    const handleRouteChange = (url) => {
+      window.gtag('config', GA_TRACKING_ID, {
+        page_path: url,
+      });
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <>
+      {/* Load Google Analytics script */}
       <Script
-        id="gtag"
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GTAG}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
       />
       <Component {...pageProps} />
-    </QueryClientProvider>
+    </>
   );
 }
+
+export default MyApp;
