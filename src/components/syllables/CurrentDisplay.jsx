@@ -21,9 +21,9 @@ const CurrentDisplay = ({ current, onNext, trigger, onClose }) => {
 
   }, [trigger]);
 
-  const handleSpeak = () => {
+  const handleSpeak = (text) => {
     speakThai({
-      current,
+      text,
       setSpeaking,
       setError,
       onEnd: () => setIsVisible(true)
@@ -46,11 +46,12 @@ const CurrentDisplay = ({ current, onNext, trigger, onClose }) => {
           <div className="flex justify-between items-center mb-4">
             <div className="text-6xl">{current.text}</div>
             <button
-              onClick={handleSpeak}
+              onClick={() => handleSpeak(current.text)}
               className="p-2 rounded-full hover:bg-gray-700 transition-colors"
-              title="Speak"
+              disabled={speaking}
+              title="Speak Thai"
             >
-              <Volume2 size={24} className="text-white" />
+              <Volume2 size={24} className={`${speaking ? 'text-gray-500' : 'text-white'}`} />
             </button>
           </div>
           
@@ -58,8 +59,18 @@ const CurrentDisplay = ({ current, onNext, trigger, onClose }) => {
           
           {isVisible && current.details && (
             <div className="mt-6 pt-6 border-t border-gray-600">
-              <div className="text-2xl text-blue-300 mb-2">
-                {current.details.translation}
+              <div className="flex justify-between items-center mb-2">
+                <div className="text-2xl text-blue-300">
+                  {current.details.translation}
+                </div>
+                <button
+                  onClick={() => handleSpeak(current.details.translation)}
+                  className="p-2 rounded-full hover:bg-gray-700 transition-colors"
+                  disabled={speaking}
+                  title="Speak Translation"
+                >
+                  <Volume2 size={20} className={`${speaking ? 'text-gray-500' : 'text-white'}`} />
+                </button>
               </div>
               {current.details.notes && (
                 <div className="text-gray-400 text-sm">
@@ -68,7 +79,6 @@ const CurrentDisplay = ({ current, onNext, trigger, onClose }) => {
               )}
             </div>
           )}
-
         </div>
       </div>
     </div>

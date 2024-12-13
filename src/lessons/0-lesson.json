@@ -16,20 +16,16 @@
     "22",
     {
       "text": "เท่าไหร่",
-      "translation": "how much",
+      "translation": "How much?",
       "notes": "Question word for prices and quantities"
+    },
+    {
+      "text": "How Much?",
+      "translation": "เท่าไหร่"
     },
     {
       "text": "ราคา",
       "translation": "price"
-    },
-    {
-      "text": "จำนวน",
-      "translation": "quantity/amount"
-    },
-    {
-      "text": "รวม",
-      "translation": "total"
     },
     {
       "text": "มาก",

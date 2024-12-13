@@ -11,10 +11,13 @@ export const stopSpeaking = () => {
   window.speechSynthesis.cancel();
 };
 
-export const speakThai = ({ current, setSpeaking, setError, onEnd }) => {
-  if (!current) return;
+export const speakThai = ({ text, current, setSpeaking, setError, onEnd }) => {
+  if (current?.text) {
+    text = current?.text;
+  }
+  if (!text) return;
 
-  const utterance = new SpeechSynthesisUtterance(current.text);
+  const utterance = new SpeechSynthesisUtterance(text);
   const voices = window.speechSynthesis.getVoices();
   const thaiVoice = voices.find((voice) => voice.lang.includes("th"));
 
