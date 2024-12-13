@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, X, Volume2 } from 'lucide-react';
-import { thaiToIPA } from '../../utils/thaiToIPA';
+import { X, Volume2 } from 'lucide-react';
 import { speakThai } from '../../utils/textToSpeech';
 
 const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
@@ -10,7 +9,7 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
 
   useEffect(() => {
     if (trigger === 'CheckTranslationButton') {
-      handleSpeak();
+      handleSpeak(current.text);
       setIsVisible(true);
     } else {
       const timer = setTimeout(() => {
@@ -31,6 +30,7 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
+      handleSpeak(current.text);
       onClose();
     }
   };
@@ -44,14 +44,22 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
     >
       <div className="relative">
         <button 
-          onClick={onClose}
+          onClick={() => {
+            handleSpeak(current.text);
+            onClose();
+          }}
           className="absolute -top-2 -right-2 p-1 bg-gray-700 rounded-full hover:bg-gray-600"
         >
           <X size={20} />
         </button>
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg min-w-[300px]">
           <div className="flex justify-between items-center mb-4">
-            <div className="text-6xl">{current.text}</div>
+            <div 
+              className="text-6xl cursor-pointer" 
+              onClick={() => handleSpeak(current.text)}
+            >
+              {current.text}
+            </div>
             <button
               onClick={() => handleSpeak(current.text)}
               className="p-2 rounded-full hover:bg-gray-700 transition-colors"

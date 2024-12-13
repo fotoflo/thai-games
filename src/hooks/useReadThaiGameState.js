@@ -9,12 +9,12 @@ import words1Data from "../lessons/words1.json";
 
 export const useReadThaiGameState = () => {
   const lessons = [
+    words1Data,
+    numbersLesson,
     syllables1Data,
     combos1Data,
     syllables2Data,
     combos2Data,
-    numbersLesson,
-    words1Data,
   ];
 
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
