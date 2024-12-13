@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { speakThai } from '../utils/textToSpeech';
 import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
-import SyllableDisplay from '../components/syllables/SyllableDisplay';
+import ItemDisplay from '../components/syllables/ItemDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 import DebugPanel from '../components/syllables/DebugPanel';
@@ -100,7 +100,7 @@ const ThaiSyllables = () => {
       />
       
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
-        <SyllableDisplay
+        <ItemDisplay
           current={current}
           hasThai={hasThai}
           speaking={speaking}

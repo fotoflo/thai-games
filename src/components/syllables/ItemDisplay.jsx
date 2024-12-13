@@ -1,7 +1,7 @@
 import React from 'react';
 import { Volume2 } from 'lucide-react';
 
-const SyllableDisplay = ({
+const ItemDisplay = ({
   current,
   hasThai,
   speaking,
@@ -36,4 +36,4 @@ const SyllableDisplay = ({
   );
 };
 
-export default SyllableDisplay;
+export default ItemDisplay;
