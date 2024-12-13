@@ -9,13 +9,16 @@ const CurrentDisplay = ({ current, onNext, trigger, onClose }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (trigger === 'mastery') {
+    if (trigger === 'CheckTranslationButton') {
+      handleSpeak();
       setIsVisible(true);
+    } else {
       const timer = setTimeout(() => {
         onClose();
-      }, 1500);
+      }, 2000);
       return () => clearTimeout(timer);
     }
+
   }, [trigger]);
 
   const handleSpeak = () => {
