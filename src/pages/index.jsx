@@ -8,8 +8,9 @@ import DebugPanel from '../components/syllables/DebugPanel';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
-import CurrentDisplay from '../components/syllables/CurrentDisplay';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
+import FlashCardModal from '../components/syllables/FlashCardModal';
+
 
 const ThaiSyllables = () => {
   const gameState = useReadThaiGameState();
@@ -115,7 +116,7 @@ const ThaiSyllables = () => {
           current={current}
         />
 
-        <CurrentDisplay 
+        <FlashCardModal 
           current={gameState.current}
           onNext={() => {
             gameState.addMoreSyllables();
