@@ -7,12 +7,14 @@ const ItemDisplay = ({
   speaking,
   error,
   onSpeak,
+  textSize = 'text-6xl',
+  iconSize = 24,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center mb-8">
       <div className="flex items-center gap-4 mb-4">
         <div 
-          className="text-6xl cursor-pointer" 
+          className={`${textSize} cursor-pointer`} 
           onClick={() => onSpeak(current.text)}
         >
           {current.text}
@@ -23,7 +25,7 @@ const ItemDisplay = ({
           title="Speak"
           disabled={!hasThai || speaking}
         >
-          <Volume2 size={32} className="text-gray-400 hover:text-white" />
+          <Volume2 size={iconSize} className="text-gray-400 hover:text-white" />
         </button>
       </div>
 

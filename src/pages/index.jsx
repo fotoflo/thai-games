@@ -105,6 +105,8 @@ const ThaiSyllables = () => {
           hasThai={hasThai}
           speaking={speaking}
           error={error}
+          iconSize={52}
+          textSize="text-6xl"
           onSpeak={() => speak(current)}
         />
         

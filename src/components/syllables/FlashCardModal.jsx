@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Volume2 } from 'lucide-react';
 import { speakThai } from '../../utils/textToSpeech';
+import ItemDisplay from './ItemDisplay';
 
 const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -54,19 +55,22 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
         </button>
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg min-w-[300px]">
           <div className="flex justify-between items-center mb-4">
-            <div 
-              className="text-6xl cursor-pointer" 
-              onClick={() => handleSpeak(current.text)}
-            >
-              {current.text}
-            </div>
+            <ItemDisplay 
+              current={current} 
+              hasThai={true} 
+              speaking={speaking} 
+              error={error} 
+              onSpeak={handleSpeak} 
+              textSize="text-6xl"
+              iconSize={24}
+            />
             <button
-              onClick={() => handleSpeak(current.text)}
+              onClick={() => handleSpeak(current.details.translation)}
               className="p-2 rounded-full hover:bg-gray-700 transition-colors"
               disabled={speaking}
-              title="Speak Thai"
+              title="Speak Translation"
             >
-              <Volume2 size={24} className={`${speaking ? 'text-gray-500' : 'text-white'}`} />
+              <Volume2 size={20} className={`${speaking ? 'text-gray-500' : 'text-white'}`} />
             </button>
           </div>
           

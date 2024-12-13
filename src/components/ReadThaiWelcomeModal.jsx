@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { X, RefreshCcw, Check, Volume2 } from 'lucide-react';
+import { X, RefreshCcw, Check } from 'lucide-react';
 import { speakThai } from '../utils/textToSpeech';
+import ItemDisplay from './syllables/ItemDisplay';
 
 const WelcomeModal = ({ isOpen, onClose }) => {
   const [speaking, setSpeaking] = useState(false);
@@ -63,28 +64,18 @@ const WelcomeModal = ({ isOpen, onClose }) => {
 
         <div className="space-y-6 mb-8">
           <div className="flex items-center gap-3 text-lg">
-            <span className="bg-blue-600 p-2
-             rounded self-stretch flex items-center justify-center">1</span>
+            <span className="bg-blue-600 p-2 rounded self-stretch flex items-center justify-center">1</span>
             <div>
               <div className="text-white">Listen, Repeat and Recall</div>
-              <div className="flex items-center mt-2">
-                <span 
-                  className="text-3xl cursor-pointer hover:text-blue-400 transition-colors" 
-                  onClick={handleSpeak}
-                >
-                  สวัสดี
-                </span>
-                <button
-                  onClick={handleSpeak}
-                  disabled={speaking}
-                  className="ml-2"
-                >
-                  <Volume2 
-                    size={24} 
-                    className={`${speaking ? 'text-blue-400' : 'text-gray-400 hover:text-blue-400'} transition-colors`}
-                  />
-                </button>
-              </div>
+              <ItemDisplay 
+                current={{ text: "สวัสดี" }} 
+                hasThai={true} 
+                speaking={speaking} 
+                error={null} 
+                onSpeak={handleSpeak} 
+                textSize="text-3xl"
+                iconSize={24}
+              />
               <div className="text-gray-400">Read a word, tap to listen, repeat for more reps.</div>
             </div>
           </div>
