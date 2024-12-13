@@ -9,10 +9,11 @@ const ItemDisplay = ({
   onSpeak,
   textSize = 'text-6xl',
   iconSize = 24,
+  className = 'flex flex-col items-center justify-center mb-8',
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center mb-8">
-      <div className="flex items-center gap-4 mb-4">
+    <div className={className}>
+      <div className="flex items-center gap-4">
         <div 
           className={`${textSize} cursor-pointer`} 
           onClick={() => onSpeak(current.text)}

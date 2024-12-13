@@ -74,7 +74,8 @@ const WelcomeModal = ({ isOpen, onClose }) => {
                 error={null} 
                 onSpeak={handleSpeak} 
                 textSize="text-3xl"
-                iconSize={24}
+                iconSize={28}
+                className="items-start my-1"
               />
               <div className="text-gray-400">Read a word, tap to listen, repeat for more reps.</div>
             </div>
@@ -103,8 +104,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="flex items-center gap-3 text-lg">
-            <span className="bg-blue-600 p-2
-             rounded self-stretch flex items-center justify-center">3</span>
+            <span className="bg-blue-600 p-2 rounded self-stretch flex items-center justify-center">3</span>
             <div>
               <span className="text-white">Add More When Ready</span>
               <div className="text-gray-400">Once you've mastered your current set,

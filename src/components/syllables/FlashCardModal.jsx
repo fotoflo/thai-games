@@ -44,15 +44,6 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
       onClick={handleBackdropClick}
     >
       <div className="relative">
-        <button 
-          onClick={() => {
-            handleSpeak(current.text);
-            onClose();
-          }}
-          className="absolute -top-2 -right-2 p-1 bg-gray-700 rounded-full hover:bg-gray-600"
-        >
-          <X size={20} />
-        </button>
         <div className="bg-gray-800 p-8 rounded-xl shadow-lg min-w-[300px]">
           <div className="flex justify-between items-center mb-4">
             <ItemDisplay 
@@ -64,14 +55,6 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
               textSize="text-6xl"
               iconSize={24}
             />
-            <button
-              onClick={() => handleSpeak(current.details.translation)}
-              className="p-2 rounded-full hover:bg-gray-700 transition-colors"
-              disabled={speaking}
-              title="Speak Translation"
-            >
-              <Volume2 size={20} className={`${speaking ? 'text-gray-500' : 'text-white'}`} />
-            </button>
           </div>
           
           {isVisible && current.details && (
