@@ -1,28 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { X, RefreshCcw, Check, Volume2 } from 'lucide-react';
 import { speakThai } from '../utils/textToSpeech';
 
 const WelcomeModal = ({ isOpen, onClose }) => {
   const [speaking, setSpeaking] = useState(false);
-  const [error, setError] = useState(null);
+  const hasPlayedRef = useRef(false);
 
+  // Effect for initial play
   useEffect(() => {
-    if (isOpen) {
-      handleSpeak();
+    if (isOpen && !hasPlayedRef.current) {
+      hasPlayedRef.current = true;
+      speakThai({ 
+        text: "สวัสดี",
+        setSpeaking 
+      });
+    }
+
+    // Reset the ref when modal closes
+    if (!isOpen) {
+      hasPlayedRef.current = false;
     }
   }, [isOpen]);
 
+  // Handler for manual clicks
   const handleSpeak = () => {
- 
-    speakThai({
-      text: "สวัสดี",
-      setSpeaking,
-      setError,
-      onEnd: () => {
-        setSpeaking(false);
-        setError(null);
-      }
-    });
+    if (!speaking) {
+      speakThai({ 
+        text: "สวัสดี",
+        setSpeaking 
+      });
+    }
   };
 
   if (!isOpen) return null;
@@ -67,7 +74,6 @@ const WelcomeModal = ({ isOpen, onClose }) => {
                   />
                 </button>
               </div>
-              {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
             </div>
           </div>
 
