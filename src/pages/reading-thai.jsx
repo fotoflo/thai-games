@@ -5,7 +5,6 @@ import SyllableDisplay from '../components/syllables/SyllableDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 import DebugPanel from '../components/syllables/DebugPanel';
-import CompletionScreen from '../components/syllables/CompletionScreen';
 import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
@@ -85,7 +84,7 @@ const ThaiSyllables = () => {
 
 
   if (!current) {
-    return <CompletionScreen addMoreSyllables={addMoreSyllables} />;
+    addMoreSyllables(5);
   }
 
   // Get the index of the current syllable in the original syllables array

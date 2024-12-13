@@ -158,10 +158,8 @@ export const useReadThaiGameState = () => {
         setCurrent(newItemObj);
       }
     } else {
-      if (
-        lessonStates[currentLesson]?.lastAddedIndex + count >=
-        currentLessonItems.length - 1
-      ) {
+      const lastIndex = lessonStates[currentLesson]?.lastAddedIndex || -1;
+      if (lastIndex + count >= currentLessonItems.length - 1) {
         setLessonStates((prev) => ({
           ...prev,
           [currentLesson]: {
@@ -173,8 +171,9 @@ export const useReadThaiGameState = () => {
         return;
       }
 
+      const newItems = [];
       for (let i = 0; i < count; i++) {
-        const index = lessonStates[currentLesson]?.lastAddedIndex + 1 + i;
+        const index = lastIndex + 1 + i;
         if (index < currentLessonItems.length) {
           const newItem = currentLessonItems[index];
           const newItemObj = {
@@ -182,22 +181,30 @@ export const useReadThaiGameState = () => {
             mastery: 1,
             details: typeof newItem === "object" ? newItem : null,
           };
-          setWorkingSet((prev) => [newItemObj, ...prev]);
-          setLessonStates((prev) => ({
-            ...prev,
-            [currentLesson]: {
-              ...prev[currentLesson],
-              itemStates: {
-                ...prev[currentLesson].itemStates,
-                [newItemObj.text]: {
-                  mastery: 1,
-                  lastStudied: Date.now(),
-                },
-              },
-            },
-          }));
-          setCurrent(newItemObj);
+          newItems.push(newItemObj);
         }
+      }
+
+      if (newItems.length > 0) {
+        setWorkingSet((prev) => [...newItems, ...prev]);
+        setCurrent(newItems[0]);
+
+        setLessonStates((prev) => ({
+          ...prev,
+          [currentLesson]: {
+            ...prev[currentLesson],
+            lastAddedIndex: lastIndex + newItems.length,
+            itemStates: {
+              ...prev[currentLesson].itemStates,
+              ...Object.fromEntries(
+                newItems.map((item) => [
+                  item.text,
+                  { mastery: 1, lastStudied: Date.now() },
+                ])
+              ),
+            },
+          },
+        }));
       }
     }
   };
