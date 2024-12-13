@@ -47,15 +47,17 @@ const WelcomeModal = ({ isOpen, onClose }) => {
         <h1 className="text-2xl font-bold mb-4">Welcome to Flash Thai - Reading!</h1>
         
         <p className="mb-6 text-gray-300">
-          Your brain can only hold a few things at once - that's why we teach you to read just 5 syllables at a time.
+          Your brain can only hold a few things at once - 
+          that's why we teach just 5 at a time, 
+          and use spaced repetition to encode long term memories.
         </p>
 
         <div className="space-y-6 mb-8">
           <div className="flex items-center gap-3 text-lg">
-            <span className="bg-blue-600 p-2 rounded self-stretch flex items-center justify-center">1</span>
+            <span className="bg-blue-600 p-2
+             rounded self-stretch flex items-center justify-center">1</span>
             <div>
-              <span className="text-white">Listen, Repeat and Recall</span>
-              <div className="text-gray-400">Tap on the word to hear it, then repeat it.</div>
+              <div className="text-white">Listen, Repeat and Recall</div>
               <div className="flex items-center mt-2">
                 <span 
                   className="text-3xl cursor-pointer hover:text-blue-400 transition-colors" 
@@ -74,13 +76,14 @@ const WelcomeModal = ({ isOpen, onClose }) => {
                   />
                 </button>
               </div>
+              <div className="text-gray-400">Read a word, tap to listen, repeat for more reps.</div>
             </div>
           </div>
 
           <div className="flex items-stretch gap-3 text-lg">
             <div className="bg-blue-600 p-2 rounded self-stretch flex items-center justify-center">2</div>
             <div className="flex-1">
-              <span className="text-white mb-2 block">Rate your mastery</span>
+              <span className="text-white mb-2 block">Repeat or Move On</span>
               <div className="flex items-center gap-2">
                 <button className="bg-yellow-600 hover:bg-yellow-500 text-white py-1 px-2 rounded flex items-center">
                   <RefreshCcw size={24} style={{ fontWeight: 'bold' }} />
@@ -93,16 +96,19 @@ const WelcomeModal = ({ isOpen, onClose }) => {
                 </button>
               </div>
               <div className="text-gray-400 mt-2 text-sm">
-                Mastered syllables are removed from your working set, helping you focus on what's left to learn
+                Mastered items are removed from your working set,
+                 helping you focus on the ones that need more reps.
               </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3 text-lg">
-            <span className="bg-blue-600 p-2 rounded">3</span>
+            <span className="bg-blue-600 p-2
+             rounded self-stretch flex items-center justify-center">3</span>
             <div>
-              <span className="text-white">Add more syllables</span>
-              <div className="text-gray-400">Once you've mastered your current set</div>
+              <span className="text-white">Add More When Ready</span>
+              <div className="text-gray-400">Once you've mastered your current set,
+                 or just one syllable, adding more is just a tap away.</div>
             </div>
           </div>
         </div>
