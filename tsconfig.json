@@ -22,7 +22,8 @@
     "**/*.tsx",
     "src/pages/type-thai.jsx",
     "src/pages/queues/route.js",
-    "src/pages/queues/welcomeQueue.js"
+    "src/pages/queues/welcomeQueue.js",
+    "src/pages/_app.jsx"
   ],
   "exclude": ["node_modules"]
 }
