@@ -9,10 +9,9 @@ const CheckTranslationButton = ({ onClick, current }) => {
     <div className="flex justify-center mt-12 mb-8">
       <button
         onClick={onClick}
-        className="px-8 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center gap-2 text-lg"
+        className="px-8 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center justify-center text-lg w-1/2"
       >
         <Eye size={24} />
-        Check Translation
       </button>
     </div>
   );
