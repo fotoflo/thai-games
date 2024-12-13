@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Copy, CopyCheck, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { AlertTriangle, Copy, CopyCheck, AlertCircle, Bug, MessageCircle } from 'lucide-react';
 
 const DebugPanel = ({
   showDebug,
@@ -12,17 +12,24 @@ const DebugPanel = ({
   possibleProblemList,
   problemList
 }) => {
+  const clearLocalStorage = () => {
+    if (window.confirm('Are you sure you want to clear all local storage? This will reset all progress.')) {
+      localStorage.clear();
+      window.location.reload();
+    }
+  };
+
   return (
     <>
       <button
         onClick={() => setShowDebug(!showDebug)}
         className="fixed bottom-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-gray-700 hover:bg-gray-600 transition-all text-white shadow-lg"
       >
-        {showDebug ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        {showDebug ? <Bug size={16} /> : <Bug size={16} />}
       </button>
 
       {showDebug && (
-        <div className="fixed bottom-16 right-4 w-64 space-y-2 bg-gray-800 p-4 rounded-lg shadow-lg text-white">
+        <div className="fixed bottom-16 right-4 w-80 space-y-2 bg-gray-800 p-4 rounded-lg shadow-lg text-white">
           <div className="flex gap-2">
             <button
               onClick={reportProblem}
@@ -45,7 +52,7 @@ const DebugPanel = ({
             className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white"
           >
             {copied ? <CopyCheck size={20} /> : <Copy size={20} />}
-            {copied ? 'Copied!' : 'Copy Debug Info'}
+            {copied ? 'Copied!' : 'Copy Debug'}
           </button>
 
           {workingList.length > 0 && (
@@ -86,6 +93,26 @@ const DebugPanel = ({
               </div>
             </div>
           )}
+
+          <div className="pt-4 space-y-2">
+            <a
+              href="https://wa.me/6281717770552"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-green-600 hover:bg-green-700 text-white"
+            >
+              <MessageCircle size={20} />
+              WhatsApp Feedback
+            </a>
+            
+            <button
+              onClick={clearLocalStorage}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white"
+            >
+              <AlertTriangle size={20} />
+              Reset All Progress
+            </button>
+          </div>
         </div>
       )}
     </>
