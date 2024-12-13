@@ -60,17 +60,15 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
           {isVisible && current.details && (
             <div className="mt-6 pt-6 border-t border-gray-600">
               <div className="flex justify-between items-center mb-2">
-                <div className="text-2xl text-blue-300">
-                  {current.details.translation}
-                </div>
-                <button
-                  onClick={() => handleSpeak(current.details.translation)}
-                  className="p-2 rounded-full hover:bg-gray-700 transition-colors"
-                  disabled={speaking}
-                  title="Speak Translation"
-                >
-                  <Volume2 size={20} className={`${speaking ? 'text-gray-500' : 'text-white'}`} />
-                </button>
+                <ItemDisplay 
+                  current={{ text: current.details.translation }}
+                  hasThai={true} 
+                  speaking={speaking} 
+                  error={error} 
+                  onSpeak={handleSpeak} 
+                  textSize="text-2xl"
+                  iconSize={20}
+                />
               </div>
               {current.details.notes && (
                 <div className="text-gray-400 text-sm">
