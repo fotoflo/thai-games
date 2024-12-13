@@ -1,7 +1,7 @@
 import React from 'react';
 import { PlusCircle } from 'lucide-react';
 import { thaiToIPA } from '../../utils/thaiToIPA';
-import LessonSelector from '../LessonSelector';
+import LessonCarousel from '../LessonCarousel';
 import ProgressionSelector from './ProgressionSelector';
 
 const WorkingSetDisplay = ({
@@ -34,7 +34,7 @@ const WorkingSetDisplay = ({
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
-      <LessonSelector 
+      <LessonCarousel 
         currentLesson={currentLesson}
         setCurrentLesson={setCurrentLesson}
         totalLessons={totalLessons}
@@ -42,14 +42,14 @@ const WorkingSetDisplay = ({
       />
         
       <div className="flex items-center justify-center gap-2 mb-4">
-        <div className="flex gap-2 w-[400px] flex-wrap">
+        <div className="flex gap-2 flex-wrap justify-center">
           {workingSet.map((item, i) => {
             const phoneticText = thaiToIPA(item.text);
             return (
               <div 
                 key={i} 
                 className={`
-                  text-center p-2 rounded cursor-pointer w-[72px] h-[80px]
+                  text-center p-2 rounded cursor-pointer w-[60px] h-[80px]
                   ${item.text === current.text ? 'bg-blue-700' : 'bg-gray-800'}
                   hover:bg-blue-600 transition-colors
                   flex flex-col justify-center
@@ -74,10 +74,9 @@ const WorkingSetDisplay = ({
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  console.log("Button clicked");
                   addMoreSyllables();
                 }}
-                className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[72px] h-[80px]"
+                className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[60px] h-[80px]"
                 title="Add One More Item"
               >
                 <PlusCircle size={24} className="text-white" />

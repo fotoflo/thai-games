@@ -111,3 +111,12 @@ body {
   background-color: theme("colors.blue.500") !important;
   transition: background-color 3s ease-out;
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
