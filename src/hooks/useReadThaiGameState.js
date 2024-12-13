@@ -45,17 +45,41 @@ export const useReadThaiGameState = () => {
 
   const initializeWorkingSet = (lessonIndex) => {
     if (lessons[lessonIndex]) {
-      const selectedItems = lessons[lessonIndex].items
-        .slice(0, 5)
-        .map((item) => ({
-          text: getItemText(item),
-          mastery: 1,
-          details: typeof item === "object" ? item : null,
-        }));
+      const mode =
+        lessonProgress[lessonIndex]?.progressionMode || "progression";
 
-      setWorkingSet(selectedItems);
-      setCurrent(selectedItems[0]);
-      setLastAddedIndex(4);
+      if (mode === "random") {
+        // Create random working set
+        const randomWorkingSet = Array(5)
+          .fill(null)
+          .map(() => {
+            const randomIndex = Math.floor(
+              Math.random() * lessons[lessonIndex].items.length
+            );
+            const randomItem = lessons[lessonIndex].items[randomIndex];
+            return {
+              text: getItemText(randomItem),
+              mastery: 1,
+              details: typeof randomItem === "object" ? randomItem : null,
+            };
+          });
+
+        setWorkingSet(randomWorkingSet);
+        setCurrent(randomWorkingSet[0]);
+      } else {
+        // Original progression logic
+        const selectedItems = lessons[lessonIndex].items
+          .slice(0, 5)
+          .map((item) => ({
+            text: getItemText(item),
+            mastery: 1,
+            details: typeof item === "object" ? item : null,
+          }));
+
+        setWorkingSet(selectedItems);
+        setCurrent(selectedItems[0]);
+        setLastAddedIndex(4);
+      }
 
       if (!lessonProgress[lessonIndex]) {
         setLessonProgress((prev) => ({
