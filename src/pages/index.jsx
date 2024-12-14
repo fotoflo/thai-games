@@ -4,12 +4,10 @@ import ItemDisplay from '../components/syllables/ItemDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
 import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
 import DebugPanel from '../components/syllables/DebugPanel';
-import { useThaiSpeech } from '../hooks/useThaiSpeech';
 import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 import FlashCardModal from '../components/syllables/FlashCardModal';
-import ToggleInvertTranslationButton from '../components/syllables/ToggleInvertTranslationButton';
 
 
 const ThaiSyllables = () => {
