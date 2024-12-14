@@ -92,6 +92,7 @@ const ThaiSyllables = () => {
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
+          speakOnUnmount={true}
         />
         
         <MasteryControls onRatingSelect={handleRateMastery} />
