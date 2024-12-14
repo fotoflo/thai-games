@@ -9,6 +9,7 @@ let globalThaiVoice = null;
 let globalSpeaking = false;
 let globalError = "";
 let globalHasThai = false;
+let globalFirstSpeechEvent = false; // Added this line
 let subscribers = new Set();
 
 const notifySubscribers = () => {
@@ -16,48 +17,84 @@ const notifySubscribers = () => {
 };
 
 const ThaiSpeechController = {
+  checkSpeechHealth: () => {
+    try {
+      if (!window.speechSynthesis) {
+        return false;
+      }
+      const voices = window.speechSynthesis.getVoices();
+      if (window.speechSynthesis.speaking && !globalSpeaking) {
+        return false;
+      }
+      if (globalThaiVoice && voices.length === 0) {
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.error("Speech health check failed:", err);
+      return false;
+    }
+  },
+
+  reset: () => {
+    try {
+      window.speechSynthesis.cancel();
+      globalThaiVoice = null;
+      globalSpeaking = false;
+      globalError = "";
+      globalHasThai = false;
+      notifySubscribers();
+      ThaiSpeechController.findThaiVoice();
+    } catch (err) {
+      console.error("Reset error:", err);
+    }
+  },
+
   findThaiVoice: () => {
-    return new Promise((resolve, reject) => {
-      const checkForVoices = () => {
-        const voices = window.speechSynthesis.getVoices();
-        const thaiVoice = voices.find((voice) => voice.lang.includes("th"));
+    return new Promise((resolve) => {
+      const voices = window.speechSynthesis.getVoices();
+      const thaiVoice = voices.find((voice) => voice.lang.includes("th"));
 
-        if (thaiVoice) {
-          globalThaiVoice = thaiVoice;
-          globalHasThai = true;
-          globalError = "";
-          notifySubscribers();
-          resolve(thaiVoice);
-        } else {
-          if (voices.length === 0) {
-            window.speechSynthesis.addEventListener(
-              "voiceschanged",
-              checkForVoices,
-              { once: true }
-            );
-          } else {
-            // If no Thai voice found, try using any available voice
-            const fallbackVoice = voices[0];
-            globalThaiVoice = fallbackVoice;
-            globalHasThai = true;
-            notifySubscribers();
-            resolve(fallbackVoice);
-          }
-        }
-      };
-
-      checkForVoices();
+      if (thaiVoice) {
+        globalThaiVoice = thaiVoice;
+        globalHasThai = true;
+        globalError = "";
+        notifySubscribers();
+        resolve(thaiVoice);
+      } else if (voices.length > 0) {
+        const fallbackVoice = voices[0];
+        globalThaiVoice = fallbackVoice;
+        globalHasThai = true;
+        notifySubscribers();
+        resolve(fallbackVoice);
+      } else {
+        window.speechSynthesis.addEventListener(
+          "voiceschanged",
+          () => {
+            const newVoices = window.speechSynthesis.getVoices();
+            const newThaiVoice =
+              newVoices.find((voice) => voice.lang.includes("th")) ||
+              newVoices[0];
+            if (newThaiVoice) {
+              globalThaiVoice = newThaiVoice;
+              globalHasThai = true;
+              notifySubscribers();
+              resolve(newThaiVoice);
+            }
+          },
+          { once: true }
+        );
+      }
     });
   },
+
   speak: async (text) => {
     if (!text || globalSpeaking) return;
 
     try {
-      console.log("Speaking", text);
       const thaiVoice =
         globalThaiVoice || (await ThaiSpeechController.findThaiVoice());
 
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
       return new Promise((resolve) => {
@@ -70,6 +107,7 @@ const ThaiSpeechController = {
 
         globalSpeaking = true;
         globalError = "";
+        globalFirstSpeechEvent = true; // Set to true after the first speech event
         notifySubscribers();
 
         utterance.onend = () => {
@@ -79,8 +117,15 @@ const ThaiSpeechController = {
         };
 
         utterance.onerror = (event) => {
-          globalSpeaking = false;
-          globalError = `Speech synthesis failed: ${event.error}`;
+          console.error("Speech error:", event);
+          if (event.error === "not-allowed") {
+            window.speechSynthesis.cancel();
+            globalSpeaking = false;
+            ThaiSpeechController.reset();
+          } else {
+            globalSpeaking = false;
+            globalError = `Speech synthesis failed: ${event.error}`;
+          }
           notifySubscribers();
           resolve();
         };
@@ -88,7 +133,7 @@ const ThaiSpeechController = {
         window.speechSynthesis.speak(utterance);
       });
     } catch (err) {
-      console.error("Speech error:", err); // Debug log
+      console.error("Speech error:", err);
       globalSpeaking = false;
       globalError = err.message;
       notifySubscribers();
@@ -96,27 +141,11 @@ const ThaiSpeechController = {
   },
 
   initialize: () => {
-    const checkVoicesWithBackoff = async (retryCount = 0) => {
-      try {
-        await ThaiSpeechController.findThaiVoice();
-        console.log("Thai voice found");
-      } catch (err) {
-        if (retryCount < MAX_RETRIES) {
-          const delay = Math.min(
-            INITIAL_RETRY_DELAY * Math.pow(2, retryCount),
-            MAX_RETRY_DELAY
-          );
-          setTimeout(() => checkVoicesWithBackoff(retryCount + 1), delay);
-        } else {
-          globalHasThai = false;
-          globalError = `No Thai voice found after ${MAX_RETRIES} attempts`;
-          notifySubscribers();
-        }
-      }
-    };
-
-    window.speechSynthesis.onvoiceschanged = () => checkVoicesWithBackoff(0);
-    checkVoicesWithBackoff(0);
+    if (!ThaiSpeechController.checkSpeechHealth()) {
+      ThaiSpeechController.reset();
+    } else {
+      ThaiSpeechController.findThaiVoice();
+    }
   },
 };
 
@@ -132,7 +161,9 @@ export const useThaiSpeech = (
   const [, forceUpdate] = useState({});
 
   useEffect(() => {
-    const subscriber = () => forceUpdate({});
+    const subscriber = () => {
+      forceUpdate({});
+    };
     subscribers.add(subscriber);
     return () => {
       subscribers.delete(subscriber);
@@ -143,13 +174,13 @@ export const useThaiSpeech = (
   }, [speakOnUnmount, text]);
 
   useEffect(() => {
-    if (speakOnMount && text) {
+    if (speakOnMount && text && globalFirstSpeechEvent) {
+      // Check if first speech event has occurred
       ThaiSpeechController.speak(text);
     }
   }, [speakOnMount, text]);
 
   const handleSpeak = useCallback((textToSpeak) => {
-    console.log("handleSpeak");
     if (textToSpeak && !globalSpeaking) {
       ThaiSpeechController.speak(textToSpeak);
     }
@@ -161,5 +192,6 @@ export const useThaiSpeech = (
     error: globalError,
     speak: ThaiSpeechController.speak,
     handleSpeak,
+    canSpeak: globalFirstSpeechEvent, // Expose the ref state if needed
   };
 };

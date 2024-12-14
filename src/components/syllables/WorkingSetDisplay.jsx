@@ -89,7 +89,7 @@ const WorkingSetDisplay = ({
           progressionMode={progressionMode}
           onModeChange={setProgressionMode}
         />
-                        <ToggleInvertTranslationButton 
+       <ToggleInvertTranslationButton 
           toggleInvertTranslation={toggleInvertTranslation}
           invertTranslation={invertTranslation}
         />
