@@ -63,17 +63,21 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
               )}
 
               {/* Example */}
-              {example && (
-                <div className="mt-4 p-4 bg-gray-700 rounded-lg">
-                  <div className="flex items-center gap-2">
-                  <ItemDisplay 
-                    current={example} 
-                    textSize="text-2xl"
-                    iconSize={22}
-                  />
-                  </div>
-                  <div className="text-gray-300 mt-1">{example.translation}</div>
-                  <div className="text-sm text-gray-400">{example.romanization}</div>
+              {details.examples && details.examples.length > 0 && (
+                <div className="mt-4 space-y-4">
+                  {details.examples.map((example, index) => (
+                    <div key={index} className="p-4 bg-gray-700 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <ItemDisplay 
+                          current={example} 
+                          textSize="text-2xl"
+                          iconSize={22}
+                        />
+                      </div>
+                      <div className="text-gray-300 mt-1">{example.translation}</div>
+                      <div className="text-sm text-gray-400">{example.romanization}</div>
+                    </div>
+                  ))}
                 </div>
               )}
 
