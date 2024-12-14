@@ -1,0 +1,293 @@
+{
+  "lessonName": "Language Learning Phrases in Thai",
+  "lessonDescription": "Essential phrases for learning Thai, including how to ask for clarification, request slower speech, and express that you're a learner. These phrases will help you navigate language learning situations and get help from Thai speakers.",
+  "lessonLevel": "beginner",
+  "lessonType": "phrases",
+  "difficulty": 1,
+  "tags": ["language-learning", "practical", "communication", "basics"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "how-say",
+      "text": "พูดว่าอย่างไร",
+      "translation": "how do you say",
+      "romanization": "pûut wâa yàang-rai",
+      "examples": [
+        {
+          "text": "คำนี้พูดว่าอย่างไร",
+          "translation": "How do you say this word?",
+          "romanization": "kham níi pûut wâa yàang-rai"
+        },
+        {
+          "text": "ภาษาไทยพูดว่าอย่างไร",
+          "translation": "How do you say it in Thai?",
+          "romanization": "phaa-sǎa thai pûut wâa yàang-rai"
+        }
+      ]
+    },
+    {
+      "id": "how-spell",
+      "text": "สะกดอย่างไร",
+      "translation": "how do you spell",
+      "romanization": "sà-gòt yàang-rai",
+      "examples": [
+        {
+          "text": "คำนี้สะกดอย่างไร",
+          "translation": "How do you spell this word?",
+          "romanization": "kham níi sà-gòt yàang-rai"
+        },
+        {
+          "text": "ช่วยสะกดให้ฟังหน่อย",
+          "translation": "Please spell it for me",
+          "romanization": "chûai sà-gòt hâi fang nòi"
+        }
+      ]
+    },
+    {
+      "id": "speak-slower",
+      "text": "พูดช้าๆ",
+      "translation": "speak slower",
+      "romanization": "pûut cháa cháa",
+      "examples": [
+        {
+          "text": "ช่วยพูดช้าๆหน่อย",
+          "translation": "Please speak more slowly",
+          "romanization": "chûai pûut cháa cháa nòi"
+        },
+        {
+          "text": "พูดเร็วไป",
+          "translation": "That's too fast",
+          "romanization": "pûut reo bpai"
+        }
+      ]
+    },
+    {
+      "id": "dont-understand",
+      "text": "ไม่เข้าใจ",
+      "translation": "I don't understand",
+      "romanization": "mâi khâo jai",
+      "examples": [
+        {
+          "text": "ขอโทษ ผม/ดิฉันไม่เข้าใจ",
+          "translation": "Sorry, I don't understand",
+          "romanization": "khɔ̌ɔ thôot pǒm/dì-chǎn mâi khâo jai"
+        },
+        {
+          "text": "ไม่เข้าใจความหมาย",
+          "translation": "I don't understand the meaning",
+          "romanization": "mâi khâo jai khwaam mǎai"
+        }
+      ]
+    },
+    {
+      "id": "learning-thai",
+      "text": "กำลังเรียนภาษาไทย",
+      "translation": "I'm learning Thai",
+      "romanization": "gam-lang rian phaa-sǎa thai",
+      "examples": [
+        {
+          "text": "ผม/ดิฉันกำลังเรียนภาษาไทย",
+          "translation": "I am learning Thai",
+          "romanization": "pǒm/dì-chǎn gam-lang rian phaa-sǎa thai"
+        },
+        {
+          "text": "พูดภาษาไทยได้นิดหน่อย",
+          "translation": "I can speak a little Thai",
+          "romanization": "pûut phaa-sǎa thai dâai nít nɔ̀i"
+        }
+      ]
+    },
+    {
+      "id": "thank-patience",
+      "text": "ขอบคุณที่ใจเย็น",
+      "translation": "thank you for your patience",
+      "romanization": "khɔ̀ɔp khun thîi jai yen",
+      "examples": [
+        {
+          "text": "ขอบคุณที่ช่วยสอน",
+          "translation": "Thank you for teaching me",
+          "romanization": "khɔ̀ɔp khun thîi chûai sɔ̌ɔn"
+        },
+        {
+          "text": "ขอบคุณที่อธิบาย",
+          "translation": "Thank you for explaining",
+          "romanization": "khɔ̀ɔp khun thîi a-thí-baai"
+        }
+      ]
+    },
+    {
+      "id": "what-mean",
+      "text": "หมายความว่าอะไร",
+      "translation": "what does it mean",
+      "romanization": "mǎai khwaam wâa a-rai",
+      "examples": [
+        {
+          "text": "คำนี้หมายความว่าอะไร",
+          "translation": "What does this word mean?",
+          "romanization": "kham níi mǎai khwaam wâa a-rai"
+        },
+        {
+          "text": "ไม่รู้ความหมาย",
+          "translation": "I don't know the meaning",
+          "romanization": "mâi rúu khwaam mǎai"
+        }
+      ]
+    },
+    {
+      "id": "whats-called",
+      "text": "เรียกว่าอะไร",
+      "translation": "what's this called",
+      "romanization": "rîak wâa a-rai",
+      "examples": [
+        {
+          "text": "สิ่งนี้เรียกว่าอะไร",
+          "translation": "What is this thing called?",
+          "romanization": "sìng níi rîak wâa a-rai"
+        },
+        {
+          "text": "ภาษาไทยเรียกว่าอะไร",
+          "translation": "What is it called in Thai?",
+          "romanization": "phaa-sǎa thai rîak wâa a-rai"
+        }
+      ]
+    },
+    {
+      "id": "repeat",
+      "text": "พูดอีกครั้ง",
+      "translation": "say it again",
+      "romanization": "pûut ìik khráng",
+      "examples": [
+        {
+          "text": "ช่วยพูดอีกครั้งได้ไหม",
+          "translation": "Can you say that again?",
+          "romanization": "chûai pûut ìik khráng dâai mǎi"
+        },
+        {
+          "text": "กรุณาพูดซ้ำ",
+          "translation": "Please repeat",
+          "romanization": "gà-rú-naa pûut sám"
+        }
+      ]
+    },
+    {
+      "id": "correct-me",
+      "text": "ช่วยแก้ไขให้",
+      "translation": "please correct me",
+      "romanization": "chûai gâe-khǎi hâi",
+      "examples": [
+        {
+          "text": "ถ้าพูดผิดช่วยแก้ไขให้",
+          "translation": "If I say something wrong, please correct me",
+          "romanization": "thâa pûut phìt chûai gâe-khǎi hâi"
+        },
+        {
+          "text": "พูดถูกไหม",
+          "translation": "Did I say it correctly?",
+          "romanization": "pûut thùuk mǎi"
+        }
+      ]
+    },
+    {
+      "id": "write",
+      "text": "เขียน",
+      "translation": "write",
+      "romanization": "khǐan",
+      "examples": [
+        {
+          "text": "ช่วยเขียนให้ดูหน่อย",
+          "translation": "Please write it for me",
+          "romanization": "chûai khǐan hâi duu nòi"
+        },
+        {
+          "text": "เขียนเป็นภาษาไทย",
+          "translation": "Write it in Thai",
+          "romanization": "khǐan bpen phaa-sǎa thai"
+        }
+      ]
+    },
+    {
+      "id": "practice",
+      "text": "ฝึกพูด",
+      "translation": "practice speaking",
+      "romanization": "fʉ̀k pûut",
+      "examples": [
+        {
+          "text": "อยากฝึกพูดภาษาไทย",
+          "translation": "I want to practice speaking Thai",
+          "romanization": "yàak fʉ̀k pûut phaa-sǎa thai"
+        },
+        {
+          "text": "ช่วยฝึกภาษาไทยหน่อย",
+          "translation": "Help me practice Thai",
+          "romanization": "chûai fʉ̀k phaa-sǎa thai nòi"
+        }
+      ]
+    },
+    {
+      "id": "understand-little",
+      "text": "เข้าใจนิดหน่อย",
+      "translation": "understand a little",
+      "romanization": "khâo jai nít nɔ̀i",
+      "examples": [
+        {
+          "text": "เข้าใจนิดหน่อยแต่พูดไม่ได้",
+          "translation": "I understand a little but can't speak",
+          "romanization": "khâo jai nít nɔ̀i dtɛ̀ɛ pûut mâi dâai"
+        },
+        {
+          "text": "พอเข้าใจบ้าง",
+          "translation": "I understand some",
+          "romanization": "phɔɔ khâo jai bâang"
+        }
+      ]
+    },
+    {
+      "id": "speak-english",
+      "text": "พูดภาษาอังกฤษ",
+      "translation": "speak English",
+      "romanization": "pûut phaa-sǎa ang-grìt",
+      "examples": [
+        {
+          "text": "พูดภาษาอังกฤษได้ไหม",
+          "translation": "Can you speak English?",
+          "romanization": "pûut phaa-sǎa ang-grìt dâai mǎi"
+        },
+        {
+          "text": "ช่วยพูดภาษาอังกฤษ",
+          "translation": "Please speak English",
+          "romanization": "chûai pûut phaa-sǎa ang-grìt"
+        }
+      ]
+    },
+    {
+      "id": "one-more-time",
+      "text": "อีกครั้ง",
+      "translation": "one more time",
+      "romanization": "ìik khráng",
+      "examples": [
+        {
+          "text": "ขออีกครั้งได้ไหม",
+          "translation": "Can you do it one more time?",
+          "romanization": "khɔ̌ɔ ìik khráng dâai mǎi"
+        },
+        {
+          "text": "ฟังอีกครั้ง",
+          "translation": "Listen one more time",
+          "romanization": "fang ìik khráng"
+        }
+      ]
+    }
+  ]
+}

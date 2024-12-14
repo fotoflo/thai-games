@@ -1,0 +1,293 @@
+{
+  "lessonName": "Basic Thai Food Items",
+  "lessonDescription": "Learn essential Thai vocabulary for basic food items, including rice dishes, noodles, and common ingredients. This lesson focuses on food names and basic ordering phrases to help you navigate Thai restaurants and street food stalls.",
+  "lessonLevel": "beginner",
+  "lessonType": "vocabulary",
+  "difficulty": 1,
+  "tags": ["food", "practical", "ordering", "restaurants"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "khao",
+      "text": "ข้าว",
+      "translation": "rice",
+      "romanization": "khâao",
+      "examples": [
+        {
+          "text": "ผมขอข้าวหนึ่งจาน",
+          "translation": "I would like one plate of rice",
+          "romanization": "pǒm khǒo khâao nèung jaan"
+        },
+        {
+          "text": "ข้าวร้อนหรือเปล่า",
+          "translation": "Is the rice hot?",
+          "romanization": "khâao rɔ́ɔn rʉ̌ʉ bplàao"
+        }
+      ]
+    },
+    {
+      "id": "kuay-tiew",
+      "text": "ก๋วยเตี๋ยว",
+      "translation": "noodle soup",
+      "romanization": "gǔay-dtǐaw",
+      "examples": [
+        {
+          "text": "ขอก๋วยเตี๋ยวหมู",
+          "translation": "I would like pork noodle soup",
+          "romanization": "khǒo gǔay-dtǐaw mǔu"
+        },
+        {
+          "text": "ก๋วยเตี๋ยวเผ็ดไหม",
+          "translation": "Is the noodle soup spicy?",
+          "romanization": "gǔay-dtǐaw pèt mǎi"
+        }
+      ]
+    },
+    {
+      "id": "pad-thai",
+      "text": "ผัดไทย",
+      "translation": "Pad Thai",
+      "romanization": "pàt thai",
+      "examples": [
+        {
+          "text": "ขอผัดไทยไม่เผ็ด",
+          "translation": "I would like Pad Thai not spicy",
+          "romanization": "khǒo pàt thai mâi pèt"
+        },
+        {
+          "text": "ผัดไทยใส่ไข่",
+          "translation": "Pad Thai with egg",
+          "romanization": "pàt thai sài khài"
+        }
+      ]
+    },
+    {
+      "id": "moo",
+      "text": "หมู",
+      "translation": "pork",
+      "romanization": "mǔu",
+      "examples": [
+        {
+          "text": "ขอข้าวหมูกรอบ",
+          "translation": "I would like crispy pork with rice",
+          "romanization": "khǒo khâao mǔu grɔ̀ɔp"
+        },
+        {
+          "text": "ไม่เอาหมู",
+          "translation": "No pork",
+          "romanization": "mâi ao mǔu"
+        }
+      ]
+    },
+    {
+      "id": "kai",
+      "text": "ไก่",
+      "translation": "chicken",
+      "romanization": "gài",
+      "examples": [
+        {
+          "text": "ขอข้าวมันไก่",
+          "translation": "I would like chicken rice",
+          "romanization": "khǒo khâao man gài"
+        },
+        {
+          "text": "ไก่ทอดหนึ่งจาน",
+          "translation": "One plate of fried chicken",
+          "romanization": "gài tɔ̂ɔt nèung jaan"
+        }
+      ]
+    },
+    {
+      "id": "pla",
+      "text": "ปลา",
+      "translation": "fish",
+      "romanization": "bplaa",
+      "examples": [
+        {
+          "text": "ขอปลาทอด",
+          "translation": "I would like fried fish",
+          "romanization": "khǒo bplaa tɔ̂ɔt"
+        },
+        {
+          "text": "ปลานี่สดไหม",
+          "translation": "Is this fish fresh?",
+          "romanization": "bplaa nîi sòt mǎi"
+        }
+      ]
+    },
+    {
+      "id": "khao-pad",
+      "text": "ข้าวผัด",
+      "translation": "fried rice",
+      "romanization": "khâao pàt",
+      "examples": [
+        {
+          "text": "ขอข้าวผัดไก่",
+          "translation": "I would like chicken fried rice",
+          "romanization": "khǒo khâao pàt gài"
+        },
+        {
+          "text": "ข้าวผัดไม่เผ็ด",
+          "translation": "Fried rice not spicy",
+          "romanization": "khâao pàt mâi pèt"
+        }
+      ]
+    },
+    {
+      "id": "goong",
+      "text": "กุ้ง",
+      "translation": "shrimp",
+      "romanization": "gûng",
+      "examples": [
+        {
+          "text": "ขอก๋วยเตี๋ยวกุ้ง",
+          "translation": "I would like shrimp noodle soup",
+          "romanization": "khǒo gǔay-dtǐaw gûng"
+        },
+        {
+          "text": "กุ้งใหญ่ไหม",
+          "translation": "Are the shrimp big?",
+          "romanization": "gûng yài mǎi"
+        }
+      ]
+    },
+    {
+      "id": "pak",
+      "text": "ผัก",
+      "translation": "vegetable",
+      "romanization": "pàk",
+      "examples": [
+        {
+          "text": "ขอผัดผัก",
+          "translation": "I would like stir-fried vegetables",
+          "romanization": "khǒo pàt pàk"
+        },
+        {
+          "text": "ไม่เอาผัก",
+          "translation": "No vegetables",
+          "romanization": "mâi ao pàk"
+        }
+      ]
+    },
+    {
+      "id": "khai",
+      "text": "ไข่",
+      "translation": "egg",
+      "romanization": "khài",
+      "examples": [
+        {
+          "text": "ขอข้าวไข่เจียว",
+          "translation": "I would like rice with omelette",
+          "romanization": "khǒo khâao khài jiao"
+        },
+        {
+          "text": "ไข่ดาวหนึ่งฟอง",
+          "translation": "One fried egg",
+          "romanization": "khài daao nèung fɔɔng"
+        }
+      ]
+    },
+    {
+      "id": "tom-yum",
+      "text": "ต้มยำ",
+      "translation": "Tom Yum",
+      "romanization": "dtôm yam",
+      "examples": [
+        {
+          "text": "ขอต้มยำกุ้ง",
+          "translation": "I would like Tom Yum with shrimp",
+          "romanization": "khǒo dtôm yam gûng"
+        },
+        {
+          "text": "ต้มยำเผ็ดมาก",
+          "translation": "Tom Yum very spicy",
+          "romanization": "dtôm yam pèt mâak"
+        }
+      ]
+    },
+    {
+      "id": "som-tam",
+      "text": "ส้มตำ",
+      "translation": "Papaya Salad",
+      "romanization": "sôm dtam",
+      "examples": [
+        {
+          "text": "ขอส้มตำไทย",
+          "translation": "I would like Thai style papaya salad",
+          "romanization": "khǒo sôm dtam thai"
+        },
+        {
+          "text": "ส้มตำไม่ใส่ปู",
+          "translation": "Papaya salad without crab",
+          "romanization": "sôm dtam mâi sài bpuu"
+        }
+      ]
+    },
+    {
+      "id": "khao-neow",
+      "text": "ข้าวเหนียว",
+      "translation": "sticky rice",
+      "romanization": "khâao nǐaw",
+      "examples": [
+        {
+          "text": "ขอข้าวเหนียวหนึ่งห่อ",
+          "translation": "I would like one portion of sticky rice",
+          "romanization": "khǒo khâao nǐaw nèung hɔ̀ɔ"
+        },
+        {
+          "text": "ข้าวเหนียวร้อนๆ",
+          "translation": "Hot sticky rice",
+          "romanization": "khâao nǐaw rɔ́ɔn rɔ́ɔn"
+        }
+      ]
+    },
+    {
+      "id": "khao-soi",
+      "text": "ข้าวซอย",
+      "translation": "Khao Soi (Northern Thai curry noodles)",
+      "romanization": "khâao sɔɔi",
+      "examples": [
+        {
+          "text": "ขอข้าวซอยไก่",
+          "translation": "I would like chicken Khao Soi",
+          "romanization": "khǒo khâao sɔɔi gài"
+        },
+        {
+          "text": "ข้าวซอยเผ็ดไหม",
+          "translation": "Is Khao Soi spicy?",
+          "romanization": "khâao sɔɔi pèt mǎi"
+        }
+      ]
+    },
+    {
+      "id": "khao-tom",
+      "text": "ข้าวต้ม",
+      "translation": "rice soup",
+      "romanization": "khâao dtôm",
+      "examples": [
+        {
+          "text": "ขอข้าวต้มหมู",
+          "translation": "I would like pork rice soup",
+          "romanization": "khǒo khâao dtôm mǔu"
+        },
+        {
+          "text": "ข้าวต้มร้อนๆ",
+          "translation": "Hot rice soup",
+          "romanization": "khâao dtôm rɔ́ɔn rɔ́ɔn"
+        }
+      ]
+    }
+  ]
+}

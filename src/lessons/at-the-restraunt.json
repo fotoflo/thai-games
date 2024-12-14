@@ -1,0 +1,452 @@
+{
+  "lessonName": "Thai Restaurant Phrases",
+  "lessonDescription": "Essential phrases for dining in Thai restaurants, including ordering, making special requests, asking for the bill, and handling common restaurant situations.",
+  "lessonLevel": "beginner",
+  "lessonType": "phrases",
+  "difficulty": 1,
+  "tags": ["restaurant", "practical", "ordering", "food", "service"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "table-for",
+      "text": "โต๊ะสำหรับ...คน",
+      "translation": "table for [number] people",
+      "romanization": "dtó sǎm-ràp ... kon",
+      "examples": [
+        {
+          "text": "ขอโต๊ะสำหรับสองคน",
+          "translation": "Table for two people, please",
+          "romanization": "khǒo dtó sǎm-ràp sɔ̌ɔng kon"
+        },
+        {
+          "text": "มีโต๊ะว่างสำหรับสี่คนไหม",
+          "translation": "Do you have a free table for four people?",
+          "romanization": "mee dtó wâang sǎm-ràp sìi kon mǎi"
+        }
+      ]
+    },
+    {
+      "id": "menu-please",
+      "text": "ขอเมนูหน่อย",
+      "translation": "menu please",
+      "romanization": "khǒo me-nuu nòi",
+      "examples": [
+        {
+          "text": "ขอดูเมนูหน่อยครับ/ค่ะ",
+          "translation": "Can I see the menu please?",
+          "romanization": "khǒo duu me-nuu nòi khráp/khà"
+        },
+        {
+          "text": "มีเมนูภาษาอังกฤษไหม",
+          "translation": "Do you have an English menu?",
+          "romanization": "mee me-nuu paa-sǎa ang-grìt mǎi"
+        }
+      ]
+    },
+    {
+      "id": "recommendations",
+      "text": "แนะนำอะไรดี",
+      "translation": "what do you recommend?",
+      "romanization": "nɛ́-nam a-rai dee",
+      "examples": [
+        {
+          "text": "อาหารจานเด็ดมีอะไรบ้าง",
+          "translation": "What are your specialty dishes?",
+          "romanization": "aa-hǎan jaan dèt mee a-rai bâang"
+        },
+        {
+          "text": "วันนี้มีอาหารแนะนำอะไรบ้าง",
+          "translation": "What are today's recommended dishes?",
+          "romanization": "wan-níi mee aa-hǎan nɛ́-nam a-rai bâang"
+        }
+      ]
+    },
+    {
+      "id": "order",
+      "text": "สั่งอาหาร",
+      "translation": "to order food",
+      "romanization": "sàng aa-hǎan",
+      "examples": [
+        {
+          "text": "ผม/ดิฉันจะสั่งอาหาร",
+          "translation": "I would like to order",
+          "romanization": "pǒm/dì-chǎn jà sàng aa-hǎan"
+        },
+        {
+          "text": "สั่งอาหารได้หรือยัง",
+          "translation": "Can I order now?",
+          "romanization": "sàng aa-hǎan dâai rʉ̌ʉ yang"
+        }
+      ]
+    },
+    {
+      "id": "water",
+      "text": "ขอน้ำ",
+      "translation": "water please",
+      "romanization": "khǒo náam",
+      "examples": [
+        {
+          "text": "ขอน้ำเปล่า",
+          "translation": "Plain water please",
+          "romanization": "khǒo náam bplàao"
+        },
+        {
+          "text": "ขอน้ำแข็ง",
+          "translation": "Ice please",
+          "romanization": "khǒo náam khǎeng"
+        }
+      ]
+    },
+    {
+      "id": "spiciness",
+      "text": "เผ็ด",
+      "translation": "spicy",
+      "romanization": "pèt",
+      "examples": [
+        {
+          "text": "เผ็ดน้อย",
+          "translation": "A little spicy",
+          "romanization": "pèt nɔ́ɔi"
+        },
+        {
+          "text": "ไม่เผ็ด",
+          "translation": "Not spicy",
+          "romanization": "mâi pèt"
+        }
+      ]
+    },
+    {
+      "id": "bill",
+      "text": "เก็บเงิน",
+      "translation": "bill please",
+      "romanization": "gèp ngən",
+      "examples": [
+        {
+          "text": "ขอเก็บเงินด้วย",
+          "translation": "Bill please",
+          "romanization": "khǒo gèp ngən dûai"
+        },
+        {
+          "text": "คิดเงินด้วยครับ/ค่ะ",
+          "translation": "Check please",
+          "romanization": "khít ngən dûai khráp/khà"
+        }
+      ]
+    },
+    {
+      "id": "portion-size",
+      "text": "จานใหญ่/เล็ก",
+      "translation": "large/small portion",
+      "romanization": "jaan yài/lék",
+      "examples": [
+        {
+          "text": "ขอจานใหญ่",
+          "translation": "I would like a large portion",
+          "romanization": "khǒo jaan yài"
+        },
+        {
+          "text": "จานเล็กพอ",
+          "translation": "Small portion is enough",
+          "romanization": "jaan lék phɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "wait",
+      "text": "รอ",
+      "translation": "to wait",
+      "romanization": "rɔɔ",
+      "examples": [
+        {
+          "text": "ต้องรอนานไหม",
+          "translation": "Do I have to wait long?",
+          "romanization": "dtɔ̂ɔng rɔɔ naan mǎi"
+        },
+        {
+          "text": "รออีกสักครู่",
+          "translation": "Please wait a moment",
+          "romanization": "rɔɔ ìik sàk khrûu"
+        }
+      ]
+    },
+    {
+      "id": "takeaway",
+      "text": "ห่อกลับบ้าน",
+      "translation": "takeaway",
+      "romanization": "hɔ̀ɔ glàp bâan",
+      "examples": [
+        {
+          "text": "ขอห่อกลับบ้าน",
+          "translation": "I would like this to take away",
+          "romanization": "khǒo hɔ̀ɔ glàp bâan"
+        },
+        {
+          "text": "ทานที่นี่หรือห่อกลับ",
+          "translation": "Dine in or takeaway?",
+          "romanization": "thaan thîi nîi rʉ̌ʉ hɔ̀ɔ glàp"
+        }
+      ]
+    },
+    {
+      "id": "taste",
+      "text": "รสชาติ",
+      "translation": "taste",
+      "romanization": "rót-châat",
+      "examples": [
+        {
+          "text": "รสชาติเป็นอย่างไร",
+          "translation": "How does it taste?",
+          "romanization": "rót-châat bpen yàang-rai"
+        },
+        {
+          "text": "รสชาติดี",
+          "translation": "It tastes good",
+          "romanization": "rót-châat dee"
+        }
+      ]
+    },
+    {
+      "id": "napkin",
+      "text": "กระดาษทิชชู",
+      "translation": "napkin/tissue",
+      "romanization": "grà-dàat thít-chúu",
+      "examples": [
+        {
+          "text": "ขอทิชชูหน่อย",
+          "translation": "Tissue please",
+          "romanization": "khǒo thít-chúu nòi"
+        },
+        {
+          "text": "มีทิชชูไหม",
+          "translation": "Do you have tissues?",
+          "romanization": "mee thít-chúu mǎi"
+        }
+      ]
+    },
+    {
+      "id": "cutlery",
+      "text": "ช้อนส้อม",
+      "translation": "cutlery",
+      "romanization": "chɔ́ɔn-sɔ̂ɔm",
+      "examples": [
+        {
+          "text": "ขอช้อนส้อมใหม่",
+          "translation": "New cutlery please",
+          "romanization": "khǒo chɔ́ɔn-sɔ̂ɔm mài"
+        },
+        {
+          "text": "ขอตะเกียบ",
+          "translation": "Chopsticks please",
+          "romanization": "khǒo dtà-gìap"
+        }
+      ]
+    },
+    {
+      "id": "service",
+      "text": "พนักงาน",
+      "translation": "service/waiter",
+      "romanization": "phá-nak-ngaan",
+      "examples": [
+        {
+          "text": "ขอเรียกพนักงาน",
+          "translation": "Can I call the waiter?",
+          "romanization": "khǒo rîak phá-nak-ngaan"
+        },
+        {
+          "text": "พนักงานครับ/คะ",
+          "translation": "Excuse me (to waiter)",
+          "romanization": "phá-nak-ngaan khráp/khà"
+        }
+      ]
+    },
+    {
+      "id": "payment",
+      "text": "จ่ายเงิน",
+      "translation": "to pay",
+      "romanization": "jàai ngən",
+      "examples": [
+        {
+          "text": "จ่ายด้วยบัตรได้ไหม",
+          "translation": "Can I pay by card?",
+          "romanization": "jàai dûai bàt dâai mǎi"
+        },
+        {
+          "text": "จ่ายเงินสด",
+          "translation": "Pay in cash",
+          "romanization": "jàai ngən sòt"
+        }
+      ]
+    },
+    {
+      "id": "one-more",
+      "text": "ขออีกอัน",
+      "translation": "one more",
+      "romanization": "khǒo ìik an",
+      "examples": [
+        {
+          "text": "ขออีกจานนึง",
+          "translation": "One more plate please",
+          "romanization": "khǒo ìik jaan nʉ̀ng"
+        },
+        {
+          "text": "ขออีกที่",
+          "translation": "Another serving please",
+          "romanization": "khǒo ìik thîi"
+        }
+      ]
+    },
+    {
+      "id": "tableware",
+      "text": "ภาชนะ",
+      "translation": "tableware",
+      "romanization": "phaa-chá-ná",
+      "examples": [
+        {
+          "text": "ขอจานเปล่า",
+          "translation": "Empty plate please",
+          "romanization": "khǒo jaan bplàao"
+        },
+        {
+          "text": "ขอถ้วยเปล่า",
+          "translation": "Empty bowl please",
+          "romanization": "khǒo tûai bplàao"
+        }
+      ]
+    },
+    {
+      "id": "bowl",
+      "text": "ชาม",
+      "translation": "bowl",
+      "romanization": "chaam",
+      "examples": [
+        {
+          "text": "ขอชามใหญ่",
+          "translation": "Large bowl please",
+          "romanization": "khǒo chaam yài"
+        },
+        {
+          "text": "ชามเล็ก",
+          "translation": "Small bowl",
+          "romanization": "chaam lék"
+        }
+      ]
+    },
+    {
+      "id": "cup",
+      "text": "แก้ว",
+      "translation": "cup/glass",
+      "romanization": "gâew",
+      "examples": [
+        {
+          "text": "ขอแก้วใหม่",
+          "translation": "New glass please",
+          "romanization": "khǒo gâew mài"
+        },
+        {
+          "text": "แก้วสกปรก",
+          "translation": "The glass is dirty",
+          "romanization": "gâew sòk-gà-bpròk"
+        }
+      ]
+    },
+    {
+      "id": "get-attention",
+      "text": "น้อง/พี่",
+      "translation": "excuse me (to server)",
+      "romanization": "nɔ́ɔng/phîi",
+      "examples": [
+        {
+          "text": "น้องครับ/คะ",
+          "translation": "Excuse me (to younger server)",
+          "romanization": "nɔ́ɔng khráp/khà"
+        },
+        {
+          "text": "พี่ครับ/คะ",
+          "translation": "Excuse me (to older server)",
+          "romanization": "phîi khráp/khà"
+        }
+      ]
+    },
+    {
+      "id": "delicious",
+      "text": "อร่อย",
+      "translation": "delicious",
+      "romanization": "à-rɔ̀i",
+      "examples": [
+        {
+          "text": "อร่อยมาก",
+          "translation": "Very delicious",
+          "romanization": "à-rɔ̀i mâak"
+        },
+        {
+          "text": "อร่อยที่สุด",
+          "translation": "Most delicious",
+          "romanization": "à-rɔ̀i thîi-sùt"
+        }
+      ]
+    },
+    {
+      "id": "food-problem",
+      "text": "มีปัญหากับอาหาร",
+      "translation": "there's a problem with the food",
+      "romanization": "mee bpan-hǎa gàp aa-hǎan",
+      "examples": [
+        {
+          "text": "อาหารไม่ร้อน",
+          "translation": "The food is not hot",
+          "romanization": "aa-hǎan mâi rɔ́ɔn"
+        },
+        {
+          "text": "อาหารเค็มเกินไป",
+          "translation": "The food is too salty",
+          "romanization": "aa-hǎan khem gəən bpai"
+        },
+        {
+          "text": "อาหารยังไม่สุก",
+          "translation": "The food is not cooked",
+          "romanization": "aa-hǎan yang mâi sùk"
+        },
+        {
+          "text": "นี่ไม่ใช่ที่สั่ง",
+          "translation": "This is not what I ordered",
+          "romanization": "nîi mâi châi thîi sàng"
+        },
+        {
+          "text": "มีของแปลกปลอมในอาหาร",
+          "translation": "There's something foreign in my food",
+          "romanization": "mee khɔ̌ɔng bplɛ̀ɛk-bplɔɔm nai aa-hǎan"
+        }
+      ]
+    },
+    {
+      "id": "mistake",
+      "text": "ผิด",
+      "translation": "wrong/mistake",
+      "romanization": "phìt",
+      "examples": [
+        {
+          "text": "สั่งผิด",
+          "translation": "Ordered wrong",
+          "romanization": "sàng phìt"
+        },
+        {
+          "text": "เอาผิดโต๊ะ",
+          "translation": "Brought to wrong table",
+          "romanization": "ao phìt dtó"
+        }
+      ]
+    }
+  ]
+}

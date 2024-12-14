@@ -7,6 +7,11 @@ import combos1Data from "../lessons/combos1.json";
 import combos2Data from "../lessons/combos2.json";
 import words1Data from "../lessons/words1.json";
 import verbsData from "../lessons/verbs.json";
+import languageLearning2Data from "../lessons/language-learning-2.json";
+import food1Data from "../lessons/food1.json";
+import food2VegData from "../lessons/food2veg.json";
+import atTheRestrauntData from "../lessons/at-the-restraunt.json";
+import languageLearningData from "../lessons/language-learning.json";
 
 export const useReadThaiGameState = () => {
   const lessons = [
@@ -17,6 +22,11 @@ export const useReadThaiGameState = () => {
     combos1Data,
     syllables2Data,
     combos2Data,
+    languageLearning2Data,
+    food1Data,
+    food2VegData,
+    atTheRestrauntData,
+    languageLearningData,
   ];
 
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);

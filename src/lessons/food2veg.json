@@ -1,0 +1,689 @@
+{
+  "lessonName": "Thai Vegetarian Food Basics",
+  "lessonDescription": "Learn essential Thai vocabulary for ordering vegetarian food, including meat-free dishes, vegetables, and important phrases to ensure your meal is vegetarian. This lesson helps vegetarians navigate Thai restaurants and street food stalls safely.",
+  "lessonLevel": "beginner",
+  "lessonType": "vocabulary",
+  "difficulty": 1,
+  "tags": ["food", "practical", "ordering", "restaurants", "vegetarian"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "jay",
+      "text": "เจ",
+      "translation": "vegan/strict vegetarian",
+      "romanization": "jee",
+      "examples": [
+        {
+          "text": "ผม/ดิฉันกินเจ",
+          "translation": "I eat vegan food",
+          "romanization": "pǒm/dì-chǎn gin jee"
+        },
+        {
+          "text": "ร้านอาหารเจอยู่ไหน",
+          "translation": "Where is a vegan restaurant?",
+          "romanization": "ráan aa-hǎan jee yùu nǎi"
+        }
+      ]
+    },
+    {
+      "id": "mangsawirat",
+      "text": "มังสวิรัติ",
+      "translation": "vegetarian",
+      "romanization": "mang-sà-wí-rát",
+      "examples": [
+        {
+          "text": "ผม/ดิฉันทานมังสวิรัติ",
+          "translation": "I am vegetarian",
+          "romanization": "pǒm/dì-chǎn taan mang-sà-wí-rát"
+        },
+        {
+          "text": "มีอาหารมังสวิรัติไหม",
+          "translation": "Do you have vegetarian food?",
+          "romanization": "mee aa-hǎan mang-sà-wí-rát mǎi"
+        }
+      ]
+    },
+    {
+      "id": "mai-sai-neua",
+      "text": "ไม่ใส่เนื้อ",
+      "translation": "without meat",
+      "romanization": "mâi sài néua",
+      "examples": [
+        {
+          "text": "ขอผัดไทยไม่ใส่เนื้อ",
+          "translation": "I would like Pad Thai without meat",
+          "romanization": "khǒo pàt thai mâi sài néua"
+        },
+        {
+          "text": "ไม่ใส่เนื้อสัตว์ทุกชนิด",
+          "translation": "No meat of any kind",
+          "romanization": "mâi sài néua sàt túk chá-nít"
+        }
+      ]
+    },
+    {
+      "id": "pak-ruam",
+      "text": "ผักรวม",
+      "translation": "mixed vegetables",
+      "romanization": "pàk ruam",
+      "examples": [
+        {
+          "text": "ขอผัดผักรวมมิตร",
+          "translation": "I would like stir-fried mixed vegetables",
+          "romanization": "khǒo pàt pàk ruam mít"
+        },
+        {
+          "text": "ผักรวมกับข้าวสวย",
+          "translation": "Mixed vegetables with steamed rice",
+          "romanization": "pàk ruam gàp khâao sǔai"
+        }
+      ]
+    },
+    {
+      "id": "taohu",
+      "text": "เต้าหู้",
+      "translation": "tofu",
+      "romanization": "dtâo-hûu",
+      "examples": [
+        {
+          "text": "ขอผัดเต้าหู้",
+          "translation": "I would like stir-fried tofu",
+          "romanization": "khǒo pàt dtâo-hûu"
+        },
+        {
+          "text": "ใส่เต้าหู้แทนเนื้อ",
+          "translation": "Substitute meat with tofu",
+          "romanization": "sài dtâo-hûu taen néua"
+        }
+      ]
+    },
+    {
+      "id": "pad-pak",
+      "text": "ผัดผัก",
+      "translation": "stir-fried vegetables",
+      "romanization": "pàt pàk",
+      "examples": [
+        {
+          "text": "ขอผัดผักกับข้าว",
+          "translation": "I would like stir-fried vegetables with rice",
+          "romanization": "khǒo pàt pàk gàp khâao"
+        },
+        {
+          "text": "ผัดผักไม่ใส่น้ำมันหอย",
+          "translation": "Stir-fried vegetables without oyster sauce",
+          "romanization": "pàt pàk mâi sài náam man hɔɔi"
+        }
+      ]
+    },
+    {
+      "id": "kaow-pad-pak",
+      "text": "ข้าวผัดผัก",
+      "translation": "vegetable fried rice",
+      "romanization": "khâao pàt pàk",
+      "examples": [
+        {
+          "text": "ขอข้าวผัดผักไม่ใส่ไข่",
+          "translation": "I would like vegetable fried rice without egg",
+          "romanization": "khǒo khâao pàt pàk mâi sài khài"
+        },
+        {
+          "text": "ข้าวผัดผักใส่เต้าหู้",
+          "translation": "Vegetable fried rice with tofu",
+          "romanization": "khâao pàt pàk sài dtâo-hûu"
+        }
+      ]
+    },
+    {
+      "id": "tom-yum-hed",
+      "text": "ต้มยำเห็ด",
+      "translation": "mushroom tom yum",
+      "romanization": "dtôm yam hèt",
+      "examples": [
+        {
+          "text": "ขอต้มยำเห็ดไม่ใส่น้ำปลา",
+          "translation": "I would like mushroom tom yum without fish sauce",
+          "romanization": "khǒo dtôm yam hèt mâi sài náam bplaa"
+        },
+        {
+          "text": "ต้มยำเห็ดเจ",
+          "translation": "Vegan mushroom tom yum",
+          "romanization": "dtôm yam hèt jee"
+        }
+      ]
+    },
+    {
+      "id": "som-tam-jay",
+      "text": "ส้มตำเจ",
+      "translation": "vegan papaya salad",
+      "romanization": "sôm dtam jee",
+      "examples": [
+        {
+          "text": "ขอส้มตำเจไม่ใส่กะปิ",
+          "translation": "I would like vegan papaya salad without shrimp paste",
+          "romanization": "khǒo sôm dtam jee mâi sài gà-bpì"
+        },
+        {
+          "text": "ส้มตำไม่ใส่น้ำปลา",
+          "translation": "Papaya salad without fish sauce",
+          "romanization": "sôm dtam mâi sài náam bplaa"
+        }
+      ]
+    },
+    {
+      "id": "khao-neow-ma-muang",
+      "text": "ข้าวเหนียวมะม่วง",
+      "translation": "mango with sticky rice",
+      "romanization": "khâao nǐao má-mûang",
+      "examples": [
+        {
+          "text": "ขอข้าวเหนียวมะม่วงหนึ่งที่",
+          "translation": "I would like one serving of mango with sticky rice",
+          "romanization": "khǒo khâao nǐao má-mûang nèung thîi"
+        },
+        {
+          "text": "ข้าวเหนียวมะม่วงไม่ใส่กะทิ",
+          "translation": "Mango with sticky rice without coconut milk",
+          "romanization": "khâao nǐao má-mûang mâi sài gà-thí"
+        }
+      ]
+    },
+    {
+      "id": "pad-pak-bung",
+      "text": "ผัดผักบุ้ง",
+      "translation": "stir-fried morning glory",
+      "romanization": "pàt pàk bûng",
+      "examples": [
+        {
+          "text": "ขอผัดผักบุ้งเจ",
+          "translation": "I would like vegan stir-fried morning glory",
+          "romanization": "khǒo pàt pàk bûng jee"
+        },
+        {
+          "text": "ผัดผักบุ้งไม่ใส่น้ำมันหอย",
+          "translation": "Stir-fried morning glory without oyster sauce",
+          "romanization": "pàt pàk bûng mâi sài náam man hɔɔi"
+        }
+      ]
+    },
+    {
+      "id": "gaeng-jeud-taohu",
+      "text": "แกงจืดเต้าหู้",
+      "translation": "clear soup with tofu",
+      "romanization": "gaeng jèut dtâo-hûu",
+      "examples": [
+        {
+          "text": "ขอแกงจืดเต้าหู้ไม่ใส่หมู",
+          "translation": "I would like clear soup with tofu without pork",
+          "romanization": "khǒo gaeng jèut dtâo-hûu mâi sài mǔu"
+        },
+        {
+          "text": "แกงจืดเต้าหู้ใส่ผักเยอะๆ",
+          "translation": "Clear soup with tofu and lots of vegetables",
+          "romanization": "gaeng jèut dtâo-hûu sài pàk yɤ́ yɤ́"
+        }
+      ]
+    },
+    {
+      "id": "khao-tom-pak",
+      "text": "ข้าวต้มผัก",
+      "translation": "rice soup with vegetables",
+      "romanization": "khâao dtôm pàk",
+      "examples": [
+        {
+          "text": "ขอข้าวต้มผักเจ",
+          "translation": "I would like vegan rice soup with vegetables",
+          "romanization": "khǒo khâao dtôm pàk jee"
+        },
+        {
+          "text": "ข้าวต้มผักใส่เห็ด",
+          "translation": "Rice soup with vegetables and mushrooms",
+          "romanization": "khâao dtôm pàk sài hèt"
+        }
+      ]
+    },
+    {
+      "id": "nam-prik",
+      "text": "น้ำพริกผัก",
+      "translation": "chili dip with vegetables",
+      "romanization": "náam prík pàk",
+      "examples": [
+        {
+          "text": "ขอน้ำพริกผักสดเจ",
+          "translation": "I would like vegan chili dip with fresh vegetables",
+          "romanization": "khǒo náam prík pàk sòt jee"
+        },
+        {
+          "text": "น้ำพริกกับผักต้ม",
+          "translation": "Chili dip with steamed vegetables",
+          "romanization": "náam prík gàp pàk dtôm"
+        }
+      ]
+    },
+    {
+      "id": "kuay-tiew-pak",
+      "text": "ก๋วยเตี๋ยวผัก",
+      "translation": "vegetable noodle soup",
+      "romanization": "gǔay-dtǐaw pàk",
+      "examples": [
+        {
+          "text": "ขอก๋วยเตี๋ยวผักเจ",
+          "translation": "I would like vegan vegetable noodle soup",
+          "romanization": "khǒo gǔay-dtǐaw pàk jee"
+        },
+        {
+          "text": "ก๋วยเตี๋ยวผักไม่ใส่น้ำปลา",
+          "translation": "Vegetable noodle soup without fish sauce",
+          "romanization": "gǔay-dtǐaw pàk mâi sài náam bplaa"
+        }
+      ]
+    },
+    {
+      "id": "carrot",
+      "text": "แครอท",
+      "translation": "carrot",
+      "romanization": "kae-rɔ̀ɔt",
+      "examples": [
+        {
+          "text": "ไม่เอาแครอท",
+          "translation": "No carrots",
+          "romanization": "mâi ao kae-rɔ̀ɔt"
+        },
+        {
+          "text": "ใส่แครอทเยอะๆ",
+          "translation": "Add lots of carrots",
+          "romanization": "sài kae-rɔ̀ɔt yɤ́ yɤ́"
+        }
+      ]
+    },
+    {
+      "id": "cucumber",
+      "text": "แตงกวา",
+      "translation": "cucumber",
+      "romanization": "dtaeng-gwaa",
+      "examples": [
+        {
+          "text": "ขอแตงกวาสด",
+          "translation": "I would like fresh cucumber",
+          "romanization": "khǒo dtaeng-gwaa sòt"
+        },
+        {
+          "text": "ไม่ใส่แตงกวา",
+          "translation": "Without cucumber",
+          "romanization": "mâi sài dtaeng-gwaa"
+        }
+      ]
+    },
+    {
+      "id": "broccoli",
+      "text": "บร็อคโคลี่",
+      "translation": "broccoli",
+      "romanization": "brɔ́k-khoo-lîi",
+      "examples": [
+        {
+          "text": "ผัดบร็อคโคลี่",
+          "translation": "Stir-fried broccoli",
+          "romanization": "pàt brɔ́k-khoo-lîi"
+        },
+        {
+          "text": "บร็อคโคลี่ต้มสุก",
+          "translation": "Steamed broccoli",
+          "romanization": "brɔ́k-khoo-lîi dtôm sùk"
+        }
+      ]
+    },
+    {
+      "id": "make-veg",
+      "text": "ทำเป็นมังสวิรัติได้ไหม",
+      "translation": "Can you make it vegetarian?",
+      "romanization": "tam bpen mang-sà-wí-rát dâai mǎi",
+      "examples": [
+        {
+          "text": "ผัดไทยทำเป็นมังสวิรัติได้ไหม",
+          "translation": "Can you make Pad Thai vegetarian?",
+          "romanization": "pàt thai tam bpen mang-sà-wí-rát dâai mǎi"
+        },
+        {
+          "text": "ทำเป็นอาหารเจได้ไหม",
+          "translation": "Can you make it vegan?",
+          "romanization": "tam bpen aa-hǎan jee dâai mǎi"
+        }
+      ]
+    },
+    {
+      "id": "no-fish-sauce",
+      "text": "ไม่ใส่น้ำปลา",
+      "translation": "no fish sauce",
+      "romanization": "mâi sài náam bplaa",
+      "examples": [
+        {
+          "text": "ขอไม่ใส่น้ำปลาและกะปิ",
+          "translation": "Please no fish sauce and shrimp paste",
+          "romanization": "khǒo mâi sài náam bplaa lae gà-bpì"
+        },
+        {
+          "text": "อันนี้มีน้ำปลาไหม",
+          "translation": "Does this have fish sauce?",
+          "romanization": "an níi mee náam bplaa mǎi"
+        }
+      ]
+    },
+    {
+      "id": "add-egg",
+      "text": "ใส่ไข่",
+      "translation": "add egg",
+      "romanization": "sài khài",
+      "examples": [
+        {
+          "text": "ขอใส่ไข่ดาว",
+          "translation": "Please add a fried egg",
+          "romanization": "khǒo sài khài daao"
+        },
+        {
+          "text": "ใส่ไข่เจียว",
+          "translation": "Add omelette",
+          "romanization": "sài khài jiao"
+        }
+      ]
+    },
+    {
+      "id": "add-tofu",
+      "text": "ใส่เต้าหู้",
+      "translation": "add tofu",
+      "romanization": "sài dtâo-hûu",
+      "examples": [
+        {
+          "text": "ขอใส่เต้าหู้เพิ่ม",
+          "translation": "Please add extra tofu",
+          "romanization": "khǒo sài dtâo-hûu pəəm"
+        },
+        {
+          "text": "ใส่เต้าหู้แทนหมู",
+          "translation": "Substitute pork with tofu",
+          "romanization": "sài dtâo-hûu taen mǔu"
+        }
+      ]
+    },
+    {
+      "id": "add-mushroom",
+      "text": "ใส่เห็ด",
+      "translation": "add mushroom",
+      "romanization": "sài hèt",
+      "examples": [
+        {
+          "text": "ขอใส่เห็ดเยอะๆ",
+          "translation": "Please add lots of mushrooms",
+          "romanization": "khǒo sài hèt yɤ́ yɤ́"
+        },
+        {
+          "text": "ใส่เห็ดแทนเนื้อ",
+          "translation": "Substitute meat with mushrooms",
+          "romanization": "sài hèt taen néua"
+        }
+      ]
+    },
+    {
+      "id": "potato",
+      "text": "มันฝรั่ง",
+      "translation": "potato",
+      "romanization": "man fà-ràng",
+      "examples": [
+        {
+          "text": "ไม่เอามันฝรั่ง",
+          "translation": "No potatoes",
+          "romanization": "mâi ao man fà-ràng"
+        },
+        {
+          "text": "มันฝรั่งทอด",
+          "translation": "Fried potatoes",
+          "romanization": "man fà-ràng tɔ̂ɔt"
+        }
+      ]
+    },
+    {
+      "id": "cabbage",
+      "text": "กะหล่ำปลี",
+      "translation": "cabbage",
+      "romanization": "gà-làm-bplee",
+      "examples": [
+        {
+          "text": "ผัดกะหล่ำปลี",
+          "translation": "Stir-fried cabbage",
+          "romanization": "pàt gà-làm-bplee"
+        },
+        {
+          "text": "กะหล่ำปลีสด",
+          "translation": "Fresh cabbage",
+          "romanization": "gà-làm-bplee sòt"
+        }
+      ]
+    },
+    {
+      "id": "cauliflower",
+      "text": "ดอกกะหล่ำ",
+      "translation": "cauliflower",
+      "romanization": "dɔ̀ɔk gà-làm",
+      "examples": [
+        {
+          "text": "ผัดดอกกะหล่ำ",
+          "translation": "Stir-fried cauliflower",
+          "romanization": "pàt dɔ̀ɔk gà-làm"
+        },
+        {
+          "text": "ดอกกะหล่ำต้มสุก",
+          "translation": "Steamed cauliflower",
+          "romanization": "dɔ̀ɔk gà-làm dtôm sùk"
+        }
+      ]
+    },
+    {
+      "id": "onion",
+      "text": "หัวหอม",
+      "translation": "onion",
+      "romanization": "hǔa hɔ̌ɔm",
+      "examples": [
+        {
+          "text": "ไม่ใส่หัวหอม",
+          "translation": "No onions",
+          "romanization": "mâi sài hǔa hɔ̌ɔm"
+        },
+        {
+          "text": "หัวหอมผัด",
+          "translation": "Stir-fried onions",
+          "romanization": "hǔa hɔ̌ɔm pàt"
+        }
+      ]
+    },
+    {
+      "id": "garlic",
+      "text": "กระเทียม",
+      "translation": "garlic",
+      "romanization": "grà-tiam",
+      "examples": [
+        {
+          "text": "ไม่ใส่กระเทียม",
+          "translation": "No garlic",
+          "romanization": "mâi sài grà-tiam"
+        },
+        {
+          "text": "กระเทียมเจียว",
+          "translation": "Fried garlic",
+          "romanization": "grà-tiam jian"
+        }
+      ]
+    },
+    {
+      "id": "green-beans",
+      "text": "ถั่วแขก",
+      "translation": "green beans",
+      "romanization": "tùa khàek",
+      "examples": [
+        {
+          "text": "ผัดถั่วแขก",
+          "translation": "Stir-fried green beans",
+          "romanization": "pàt tùa khàek"
+        },
+        {
+          "text": "ถั่วแขกต้มสุก",
+          "translation": "Steamed green beans",
+          "romanization": "tùa khàek dtôm sùk"
+        }
+      ]
+    },
+    {
+      "id": "corn",
+      "text": "ข้าวโพด",
+      "translation": "corn",
+      "romanization": "khâao-pôot",
+      "examples": [
+        {
+          "text": "ข้าวโพดต้ม",
+          "translation": "Boiled corn",
+          "romanization": "khâao-pôot dtôm"
+        },
+        {
+          "text": "ใส่ข้าวโพด",
+          "translation": "Add corn",
+          "romanization": "sài khâao-pôot"
+        }
+      ]
+    },
+    {
+      "id": "eggplant",
+      "text": "มะเขือ",
+      "translation": "eggplant",
+      "romanization": "mà-khʉ̌a",
+      "examples": [
+        {
+          "text": "ผัดมะเขือ",
+          "translation": "Stir-fried eggplant",
+          "romanization": "pàt mà-khʉ̌a"
+        },
+        {
+          "text": "มะเขือย่าง",
+          "translation": "Grilled eggplant",
+          "romanization": "mà-khʉ̌a yâang"
+        }
+      ]
+    },
+    {
+      "id": "tomato",
+      "text": "มะเขือเทศ",
+      "translation": "tomato",
+      "romanization": "mà-khʉ̌a-thêet",
+      "examples": [
+        {
+          "text": "ไม่ใส่มะเขือเทศ",
+          "translation": "No tomatoes",
+          "romanization": "mâi sài mà-khʉ̌a-thêet"
+        },
+        {
+          "text": "มะเขือเทศสด",
+          "translation": "Fresh tomatoes",
+          "romanization": "mà-khʉ̌a-thêet sòt"
+        }
+      ]
+    },
+    {
+      "id": "baby-corn",
+      "text": "ข้าวโพดอ่อน",
+      "translation": "baby corn",
+      "romanization": "khâao-pôot-òon",
+      "examples": [
+        {
+          "text": "ใส่ข้าวโพดอ่อน",
+          "translation": "Add baby corn",
+          "romanization": "sài khâao-pôot-òon"
+        },
+        {
+          "text": "ผัดข้าวโพดอ่อน",
+          "translation": "Stir-fried baby corn",
+          "romanization": "pàt khâao-pôot-òon"
+        }
+      ]
+    },
+    {
+      "id": "chinese-kale",
+      "text": "คะน้า",
+      "translation": "Chinese kale/kailan",
+      "romanization": "kà-náa",
+      "examples": [
+        {
+          "text": "ผัดคะน้า",
+          "translation": "Stir-fried Chinese kale",
+          "romanization": "pàt kà-náa"
+        },
+        {
+          "text": "คะน้าลวก",
+          "translation": "Blanched Chinese kale",
+          "romanization": "kà-náa lûak"
+        }
+      ]
+    },
+    {
+      "id": "long-beans",
+      "text": "ถั่วฝักยาว",
+      "translation": "long beans",
+      "romanization": "tùa fàk yaao",
+      "examples": [
+        {
+          "text": "ผัดถั่วฝักยาว",
+          "translation": "Stir-fried long beans",
+          "romanization": "pàt tùa fàk yaao"
+        },
+        {
+          "text": "ถั่วฝักยาวสด",
+          "translation": "Fresh long beans",
+          "romanization": "tùa fàk yaao sòt"
+        }
+      ]
+    },
+    {
+      "id": "mushroom",
+      "text": "เห็ด",
+      "translation": "mushroom",
+      "romanization": "hèt",
+      "examples": [
+        {
+          "text": "ผัดเห็ดรวม",
+          "translation": "Stir-fried mixed mushrooms",
+          "romanization": "pàt hèt ruam"
+        },
+        {
+          "text": "เห็ดหอม",
+          "translation": "Shiitake mushrooms",
+          "romanization": "hèt hɔ̌ɔm"
+        }
+      ]
+    },
+    {
+      "id": "spring-onion",
+      "text": "ต้นหอม",
+      "translation": "spring onion/scallion",
+      "romanization": "dtôn-hɔ̌ɔm",
+      "examples": [
+        {
+          "text": "ใส่ต้นหอม",
+          "translation": "Add spring onions",
+          "romanization": "sài dtôn-hɔ̌ɔm"
+        },
+        {
+          "text": "ไม่ใส่ต้นหอม",
+          "translation": "No spring onions",
+          "romanization": "mâi sài dtôn-hɔ̌ɔm"
+        }
+      ]
+    }
+  ]
+}
