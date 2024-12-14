@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { speakThai } from '../utils/textToSpeech';
 import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
 import ItemDisplay from '../components/syllables/ItemDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
@@ -37,15 +36,6 @@ const ThaiSyllables = () => {
 
 
   const {
-    hasThai,
-    speaking,
-    setSpeaking,
-    error,
-    setError,
-    speak
-  } = useThaiSpeech();
-
-  const {
     copied,
     showDebug,
     setShowDebug,
@@ -64,7 +54,7 @@ const ThaiSyllables = () => {
       button.classList.remove('clicked');
     }, 1000);
 
-    await rateMastery(rating, speakThai);
+    await rateMastery(rating);
   };
 
   const handleCardSelect = (syllable) => {
@@ -79,9 +69,6 @@ const ThaiSyllables = () => {
     setDisplayTrigger('mastery');
   };
 
-  const handleSpeak = () => {
-    setDisplayTrigger('speak');
-  };
 
 
   if (!current) {
@@ -102,12 +89,9 @@ const ThaiSyllables = () => {
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <ItemDisplay
           current={current}
-          hasThai={hasThai}
-          speaking={speaking}
-          error={error}
           iconSize={52}
           textSize="text-6xl"
-          onSpeak={() => speak(current)}
+          speakOnMount={true}
         />
         
         <MasteryControls onRatingSelect={handleRateMastery} />
@@ -141,7 +125,6 @@ const ThaiSyllables = () => {
           onCardSelect={handleCardSelect}
           progressionMode={progressionMode}
           setProgressionMode={setProgressionMode}
-          onSpeak={handleSpeak}
           onMastery={handleMastery}
         />  
 

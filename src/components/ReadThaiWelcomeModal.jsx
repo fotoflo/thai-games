@@ -1,37 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { X, RefreshCcw, Check } from 'lucide-react';
-import { speakThai } from '../utils/textToSpeech';
 import ItemDisplay from './syllables/ItemDisplay';
 
 const WelcomeModal = ({ isOpen, onClose }) => {
-  const [speaking, setSpeaking] = useState(false);
-  const hasPlayedRef = useRef(false);
-
-  // Effect for initial play
-  useEffect(() => {
-    if (isOpen && !hasPlayedRef.current) {
-      hasPlayedRef.current = true;
-      speakThai({ 
-        text: "สวัสดี",
-        setSpeaking 
-      });
-    }
-
-    // Reset the ref when modal closes
-    if (!isOpen) {
-      hasPlayedRef.current = false;
-    }
-  }, [isOpen]);
-
-  // Handler for manual clicks
-  const handleSpeak = () => {
-    if (!speaking) {
-      speakThai({ 
-        text: "สวัสดี",
-        setSpeaking 
-      });
-    }
-  };
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {  // Only close if clicking the backdrop itself
@@ -70,12 +41,10 @@ const WelcomeModal = ({ isOpen, onClose }) => {
               <ItemDisplay 
                 current={{ text: "สวัสดี" }} 
                 hasThai={true} 
-                speaking={speaking} 
-                error={null} 
-                onSpeak={handleSpeak} 
                 textSize="text-3xl"
                 iconSize={28}
                 className="items-start my-1"
+                speakOnMount={true} // Automatically speak on mount
               />
               <div className="text-gray-400">Read a word, tap to listen, repeat for more reps.</div>
             </div>

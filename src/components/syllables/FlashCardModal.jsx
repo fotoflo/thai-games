@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { X, Volume2 } from 'lucide-react';
-import { speakThai } from '../../utils/textToSpeech';
+import { X } from 'lucide-react';
 import ItemDisplay from './ItemDisplay';
 
 const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [speaking, setSpeaking] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (trigger === 'CheckTranslationButton') {
-      handleSpeak(current.text);
       setIsVisible(true);
     } else {
       const timer = setTimeout(() => {
@@ -18,20 +14,10 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [trigger]);
-
-  const handleSpeak = (text) => {
-    speakThai({
-      text,
-      setSpeaking,
-      setError,
-      onEnd: () => setIsVisible(true)
-    });
-  };
+  }, [trigger, onClose]);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
-      handleSpeak(current.text);
       onClose();
     }
   };
@@ -48,12 +34,9 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
           <div className="flex justify-between items-center mb-4">
             <ItemDisplay 
               current={current} 
-              hasThai={true} 
-              speaking={speaking} 
-              error={error} 
-              onSpeak={handleSpeak} 
               textSize="text-6xl"
               iconSize={24}
+              speakOnMount={trigger === 'CheckTranslationButton'} // Speak when showing translation
             />
           </div>
           
@@ -61,11 +44,7 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
             <div className="mt-6 pt-6 border-t border-gray-600">
               <div className="flex justify-between items-center mb-2">
                 <ItemDisplay 
-                  current={{ text: current.details.translation }}
-                  hasThai={true} 
-                  speaking={speaking} 
-                  error={error} 
-                  onSpeak={handleSpeak} 
+                  current={{ text: current.details.translation }} 
                   textSize="text-2xl"
                   iconSize={20}
                 />
@@ -83,4 +62,4 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
   );
 };
 
-export default FlashCardModal; 
+export default FlashCardModal;
