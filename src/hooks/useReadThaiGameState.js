@@ -58,6 +58,11 @@ export const useReadThaiGameState = () => {
     initialLessonStates
   );
 
+  const setCurrentLessonAndReset = (newLesson) => {
+    setCurrentLesson(newLesson);
+    initializeWorkingSet(newLesson);
+  };
+
   const totalLessons = lessons.length;
 
   const getItemText = (item) => {
@@ -118,11 +123,6 @@ export const useReadThaiGameState = () => {
         },
       }));
     }
-  };
-
-  const setCurrentLessonAndReset = (newLesson) => {
-    setCurrentLesson(newLesson);
-    initializeWorkingSet(newLesson);
   };
 
   useEffect(() => {
