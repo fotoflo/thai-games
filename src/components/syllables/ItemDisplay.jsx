@@ -23,7 +23,10 @@ const ItemDisplay = ({
 
   const displayText = current.text;
   return (
-    <div className={`flex flex-col ${className}`} onClick={() => handleSpeak(displayText)}>
+    <div 
+        className={`flex flex-col ${className}`} 
+        onClick={() => handleSpeak(displayText)}>
+          
       <div className="flex items-center justify-center gap-4">
         {invertTranslation ? (
           <div className={`${textSize} ${textColor}`}>
