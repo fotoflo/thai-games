@@ -36,7 +36,8 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
               current={current} 
               textSize="text-6xl"
               iconSize={24}
-              speakOnMount={trigger === 'CheckTranslationButton'} // Speak when showing translation
+              speakOnMount={true} // Speak when showing translation
+              speakOnUnmount={true}
             />
           </div>
           
