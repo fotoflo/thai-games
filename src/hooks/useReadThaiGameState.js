@@ -6,11 +6,13 @@ import syllables2Data from "../lessons/syllables2.json";
 import combos1Data from "../lessons/combos1.json";
 import combos2Data from "../lessons/combos2.json";
 import words1Data from "../lessons/words1.json";
+import verbsData from "../lessons/verbs.json";
 
 export const useReadThaiGameState = () => {
   const lessons = [
     words1Data,
     numbersLesson,
+    verbsData,
     syllables1Data,
     combos1Data,
     syllables2Data,

@@ -1,87 +1,170 @@
 {
   "lessonName": "First Words",
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
     {
+      "id": "sawasdee",
       "text": "สวัสดี",
       "translation": "hello",
-      "notes": "Formal greeting"
+      "romanization": "sà-wàt-dii",
+      "notes": "Formal greeting",
+      "examples": [
+        {
+          "text": "สวัสดีครับ/ค่ะ",
+          "translation": "Hello (polite, male/female)",
+          "romanization": "sà-wàt-dii kráp/kâ"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["greeting", "formal", "common"]
     },
     {
+      "id": "khobkhun",
       "text": "ขอบคุณ",
       "translation": "thank you",
-      "notes": "Formal thanks"
+      "romanization": "kɔ̀ɔp-kuun",
+      "notes": "Formal thanks",
+      "examples": [
+        {
+          "text": "ขอบคุณมาก",
+          "translation": "Thank you very much",
+          "romanization": "kɔ̀ɔp-kuun mâak"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["polite", "formal", "common"]
     },
     {
+      "id": "chai",
       "text": "ใช่",
-      "translation": "yes"
+      "translation": "yes",
+      "romanization": "châi",
+      "examples": [
+        {
+          "text": "ใช่ไหม",
+          "translation": "Is that right?",
+          "romanization": "châi mǎi"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["basic", "common"]
     },
     {
+      "id": "mai",
       "text": "ไม่",
-      "translation": "no"
+      "translation": "no",
+      "romanization": "mâi",
+      "examples": [
+        {
+          "text": "ไม่ใช่",
+          "translation": "No, it's not",
+          "romanization": "mâi châi"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["basic", "common"]
     },
     {
+      "id": "maipenrai",
       "text": "ไม่เป็นไร",
-      "translation": "no problem/it's okay"
+      "translation": "no problem/it's okay",
+      "romanization": "mâi-pen-rai",
+      "examples": [
+        {
+          "text": "ไม่เป็นไรครับ/ค่ะ",
+          "translation": "It's okay (polite, male/female)",
+          "romanization": "mâi-pen-rai kráp/kâ"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["polite", "common"]
     },
     {
+      "id": "kin",
       "text": "กิน",
-      "translation": "to eat"
+      "translation": "to eat",
+      "romanization": "gin",
+      "examples": [
+        {
+          "text": "กินข้าว",
+          "translation": "Eat rice/have a meal",
+          "romanization": "gin khâao"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "food"]
     },
     {
+      "id": "nam",
       "text": "น้ำ",
-      "translation": "water"
+      "translation": "water",
+      "romanization": "náam",
+      "examples": [
+        {
+          "text": "น้ำเย็น",
+          "translation": "Cold water",
+          "romanization": "náam yen"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["noun", "drink", "basic"]
     },
     {
+      "id": "ron",
       "text": "ร้อน",
-      "translation": "hot"
+      "translation": "hot",
+      "romanization": "rɔ́ɔn",
+      "examples": [
+        {
+          "text": "อากาศร้อน",
+          "translation": "Hot weather",
+          "romanization": "aa-gàat rɔ́ɔn"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["adjective", "weather"]
     },
     {
+      "id": "yen",
       "text": "เย็น",
-      "translation": "cold"
+      "translation": "cold",
+      "romanization": "yen",
+      "examples": [
+        {
+          "text": "น้ำเย็น",
+          "translation": "Cold water",
+          "romanization": "náam yen"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["adjective", "weather"]
     },
     {
+      "id": "aroi",
       "text": "อร่อย",
-      "translation": "delicious"
-    },
-    {
-      "text": "ห้องน้ำ",
-      "translation": "bathroom"
-    },
-    {
-      "text": "ที่ไหน",
-      "translation": "where"
-    },
-    {
-      "text": "เท่าไหร่",
-      "translation": "how much"
-    },
-    {
-      "text": "ชื่อ",
-      "translation": "name"
-    },
-    {
-      "text": "ผม",
-      "translation": "I (male)"
-    },
-    {
-      "text": "ดิฉัน",
-      "translation": "I (female)"
-    },
-    {
-      "text": "คุณ",
-      "translation": "you (polite)"
-    },
-    {
-      "text": "ไป",
-      "translation": "to go"
-    },
-    {
-      "text": "มา",
-      "translation": "to come"
-    },
-    {
-      "text": "นอน",
-      "translation": "to sleep"
+      "translation": "delicious",
+      "romanization": "à-rɔ̀i",
+      "examples": [
+        {
+          "text": "อาหารอร่อย",
+          "translation": "The food is delicious",
+          "romanization": "aa-hǎan à-rɔ̀i"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["adjective", "food"]
     }
   ]
 }

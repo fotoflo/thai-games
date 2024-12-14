@@ -1,0 +1,218 @@
+{
+  "lessonName": "Common Verbs",
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "gin",
+      "text": "กิน",
+      "translation": "to eat",
+      "romanization": "gin",
+      "examples": [
+        {
+          "text": "คุณกินข้าว",
+          "translation": "You eat rice",
+          "romanization": "kun gin khâao"
+        },
+        {
+          "text": "ผมกินอาหาร",
+          "translation": "I eat food",
+          "romanization": "pǒm gin aa-hǎan"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "food", "basic"]
+    },
+    {
+      "id": "deum",
+      "text": "ดื่ม",
+      "translation": "to drink",
+      "romanization": "dèum",
+      "examples": [
+        {
+          "text": "คุณดื่มน้ำ",
+          "translation": "You drink water",
+          "romanization": "kun dèum nám"
+        },
+        {
+          "text": "ผมดื่มกาแฟ",
+          "translation": "I drink coffee",
+          "romanization": "pǒm dèum gaa-fae"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "food", "basic"]
+    },
+    {
+      "id": "pai",
+      "text": "ไป",
+      "translation": "to go",
+      "romanization": "bpai",
+      "examples": [
+        {
+          "text": "คุณไปไหน",
+          "translation": "Where are you going?",
+          "romanization": "kun bpai nǎi"
+        },
+        {
+          "text": "ผมไปบ้าน",
+          "translation": "I go home",
+          "romanization": "pǒm bpai bâan"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "movement", "basic"]
+    },
+    {
+      "id": "ma",
+      "text": "มา",
+      "translation": "to come",
+      "romanization": "maa",
+      "examples": [
+        {
+          "text": "คุณมาไหม",
+          "translation": "Are you coming?",
+          "romanization": "kun maa mǎi"
+        },
+        {
+          "text": "ผมมาแล้ว",
+          "translation": "I am here",
+          "romanization": "pǒm maa láew"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "movement", "basic"]
+    },
+    {
+      "id": "nang",
+      "text": "นั่ง",
+      "translation": "to sit",
+      "romanization": "nâng",
+      "examples": [
+        {
+          "text": "คุณนั่งนี่",
+          "translation": "You sit here",
+          "romanization": "kun nâng nîi"
+        },
+        {
+          "text": "ผมนั่งเก้าอี้",
+          "translation": "I sit on the chair",
+          "romanization": "pǒm nâng gâo-îi"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "action", "basic"]
+    },
+    {
+      "id": "yeun",
+      "text": "ยืน",
+      "translation": "to stand",
+      "romanization": "yeun",
+      "examples": [
+        {
+          "text": "คุณยืนตรงนี้",
+          "translation": "You stand here",
+          "romanization": "kun yeun dtrong níi"
+        },
+        {
+          "text": "ผมยืนรอ",
+          "translation": "I stand and wait",
+          "romanization": "pǒm yeun rɔɔ"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "action", "basic"]
+    },
+    {
+      "id": "norn",
+      "text": "นอน",
+      "translation": "to sleep/lie down",
+      "romanization": "nɔɔn",
+      "examples": [
+        {
+          "text": "คุณนอนไหม",
+          "translation": "Do you sleep?",
+          "romanization": "kun nɔɔn mǎi"
+        },
+        {
+          "text": "ผมนอนแล้ว",
+          "translation": "I am sleeping",
+          "romanization": "pǒm nɔɔn láew"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "action", "basic"]
+    },
+    {
+      "id": "doen",
+      "text": "เดิน",
+      "translation": "to walk",
+      "romanization": "dəən",
+      "examples": [
+        {
+          "text": "คุณเดินไหม",
+          "translation": "Do you walk?",
+          "romanization": "kun dəən mǎi"
+        },
+        {
+          "text": "ผมเดินบ้าน",
+          "translation": "I walk home",
+          "romanization": "pǒm dəən bâan"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "movement", "basic"]
+    },
+    {
+      "id": "wing",
+      "text": "วิ่ง",
+      "translation": "to run",
+      "romanization": "wîng",
+      "examples": [
+        {
+          "text": "คุณวิ่งไหม",
+          "translation": "Do you run?",
+          "romanization": "kun wîng mǎi"
+        },
+        {
+          "text": "ผมวิ่งเร็ว",
+          "translation": "I run fast",
+          "romanization": "pǒm wîng reo"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "movement", "basic"]
+    },
+    {
+      "id": "phut",
+      "text": "พูด",
+      "translation": "to speak",
+      "romanization": "pûut",
+      "examples": [
+        {
+          "text": "คุณพูดไทย",
+          "translation": "You speak Thai",
+          "romanization": "kun pûut thai"
+        },
+        {
+          "text": "ผมพูดอังกฤษ",
+          "translation": "I speak English",
+          "romanization": "pǒm pûut ang-grìt"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["verb", "communication", "basic"]
+    }
+  ]
+}

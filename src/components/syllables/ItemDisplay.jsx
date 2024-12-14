@@ -15,22 +15,24 @@ const ItemDisplay = ({
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,
     speakOnUnmount,
-    current.text
+    current?.text
   );
 
+  if (!current) return null;
+
+  const displayText = current.text;
+
   return (
-    <div className={`flex flex-col ${className}`}
-     onClick={() => handleSpeak(current.text)}>
-      <div className="flex items-center gap-4 mb-0">
-        <div 
-          className={`${textSize} ${textColor} cursor-pointer`}
-        >
-          {current.text}
+    <div className={`flex flex-col ${className}`}>
+      <div className="flex items-center justify-center gap-4">
+        <div className={`${textSize} ${textColor}`}>
+          {displayText}
         </div>
         <button
           className="p-2 rounded-full hover:bg-gray-800 transition-colors"
           title="Speak"
           disabled={!hasThai || speaking}
+          onClick={() => handleSpeak(displayText)}
         >
           <Volume2 
             size={iconSize} 
@@ -38,6 +40,7 @@ const ItemDisplay = ({
           />
         </button>
       </div>
+
       {error && (
         <div className="text-red-500 text-sm mt-1">
           {error}

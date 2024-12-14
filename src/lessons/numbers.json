@@ -1,76 +1,198 @@
 {
   "lessonName": "Numbers",
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "22",
     {
-      "text": "เท่าไหร่",
-      "translation": "How much?",
-      "notes": "Question word for prices and quantities"
+      "id": "neung",
+      "text": "หนึ่ง",
+      "translation": "one",
+      "romanization": "nèung",
+      "examples": [
+        {
+          "text": "หนึ่งร้อย",
+          "translation": "one hundred",
+          "romanization": "nèung rɔ́ɔi"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
     {
-      "text": "How Much?",
-      "translation": "เท่าไหร่"
+      "id": "song",
+      "text": "สอง",
+      "translation": "two",
+      "romanization": "sɔ̌ɔng",
+      "examples": [
+        {
+          "text": "สองคน",
+          "translation": "two people",
+          "romanization": "sɔ̌ɔng kon"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
     {
-      "text": "ราคา",
-      "translation": "price"
+      "id": "saam",
+      "text": "สาม",
+      "translation": "three",
+      "romanization": "sǎam",
+      "examples": [
+        {
+          "text": "สามบาท",
+          "translation": "three baht",
+          "romanization": "sǎam bàat"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
     {
-      "text": "มาก",
-      "translation": "a lot/many"
+      "id": "sii",
+      "text": "สี่",
+      "translation": "four",
+      "romanization": "sìi",
+      "examples": [
+        {
+          "text": "สี่โมง",
+          "translation": "four o'clock",
+          "romanization": "sìi moong"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
     {
-      "text": "น้อย",
-      "translation": "few/little"
+      "id": "haa",
+      "text": "ห้า",
+      "translation": "five",
+      "romanization": "hâa",
+      "examples": [
+        {
+          "text": "ห้านาที",
+          "translation": "five minutes",
+          "romanization": "hâa naa-tii"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
     {
-      "text": "อีกหนึ่ง",
-      "translation": "one more"
+      "id": "hok",
+      "text": "หก",
+      "translation": "six",
+      "romanization": "hòk",
+      "examples": [
+        {
+          "text": "หกโมงเย็น",
+          "translation": "six in the evening",
+          "romanization": "hòk moong yen"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
     {
-      "text": "แพงเกินไป",
-      "translation": "too expensive"
+      "id": "jet",
+      "text": "เจ็ด",
+      "translation": "seven",
+      "romanization": "jèt",
+      "examples": [
+        {
+          "text": "เจ็ดวัน",
+          "translation": "seven days",
+          "romanization": "jèt wan"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
     },
-    "37",
-    "45",
-    "68",
-    "100",
-    "150",
-    "256",
-    "342",
-    "487",
-    "600",
-    "752",
-    "890",
-    "999",
-    "1000",
-    "1742",
-    "2500",
-    "3850",
-    "5000",
-    "6789",
-    "10000",
-    "15000",
-    "20000",
-    "50000",
-    "99999",
-    "100000",
-    "250000",
-    "500000",
-    "752000",
-    "999999",
-    "1000000"
+    {
+      "id": "paet",
+      "text": "แปด",
+      "translation": "eight",
+      "romanization": "bpàet",
+      "examples": [
+        {
+          "text": "แปดชั่วโมง",
+          "translation": "eight hours",
+          "romanization": "bpàet chûa-moong"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
+    },
+    {
+      "id": "kao",
+      "text": "เก้า",
+      "translation": "nine",
+      "romanization": "gâo",
+      "examples": [
+        {
+          "text": "เก้าโมงเช้า",
+          "translation": "nine in the morning",
+          "romanization": "gâo moong cháo"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
+    },
+    {
+      "id": "sip",
+      "text": "สิบ",
+      "translation": "ten",
+      "romanization": "sìp",
+      "examples": [
+        {
+          "text": "สิบบาท",
+          "translation": "ten baht",
+          "romanization": "sìp bàat"
+        }
+      ],
+      "difficulty": 1,
+      "tags": ["number", "basic"]
+    },
+    {
+      "id": "roi",
+      "text": "ร้อย",
+      "translation": "hundred",
+      "romanization": "rɔ́ɔi",
+      "examples": [
+        {
+          "text": "หนึ่งร้อยบาท",
+          "translation": "one hundred baht",
+          "romanization": "nèung rɔ́ɔi bàat"
+        }
+      ],
+      "difficulty": 2,
+      "tags": ["number", "counter"]
+    },
+    {
+      "id": "phan",
+      "text": "พัน",
+      "translation": "thousand",
+      "romanization": "pan",
+      "examples": [
+        {
+          "text": "หนึ่งพันบาท",
+          "translation": "one thousand baht",
+          "romanization": "nèung pan bàat"
+        }
+      ],
+      "difficulty": 2,
+      "tags": ["number", "counter"]
+    }
   ]
 }
