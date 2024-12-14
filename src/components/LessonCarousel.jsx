@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import LessonListModal from './LessonListModal';
 
 const LessonCarousel = ({ currentLesson, setCurrentLesson, totalLessons, lessons }) => {
   const carouselRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -28,19 +30,21 @@ const LessonCarousel = ({ currentLesson, setCurrentLesson, totalLessons, lessons
           style={{ margin: '0', padding: '0' }}
         >
           {totalLessons > 0 ? (
-            lessons.map((lesson, index) => (
+            <>
               <button
-                key={index}
-                onClick={() => setCurrentLesson(index)}
-                className={`px-3 py-2 rounded-md transition-colors ${
-                  currentLesson === index
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-700 hover:bg-gray-600 text-gray-300"
-                }`}
+                key={currentLesson}
+                onClick={() => setCurrentLesson(currentLesson)}
+                className={`px-3 py-2 rounded-md transition-colors bg-blue-600 text-white`}
               >
-                {lesson.lessonName}
+                {lessons[currentLesson].lessonName}
               </button>
-            ))
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className={`px-3 py-2 rounded-md transition-colors bg-gray-700 hover:bg-gray-600 text-gray-300`}
+              >
+                More Lessons
+              </button>
+            </>
           ) : (
             <div className="text-white">No lessons available</div>
           )}
@@ -49,6 +53,14 @@ const LessonCarousel = ({ currentLesson, setCurrentLesson, totalLessons, lessons
       <button onClick={scrollRight} className="p-2">
         <ChevronRight size={24} className="text-gray-300" />
       </button>
+
+      {isModalOpen && (
+        <LessonListModal 
+          lessons={lessons}
+          setCurrentLesson={setCurrentLesson}
+          onClose={() => setIsModalOpen(false)} 
+        />
+      )}
     </div>
   );
 };
