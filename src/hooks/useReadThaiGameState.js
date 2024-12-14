@@ -22,6 +22,14 @@ export const useReadThaiGameState = () => {
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
   const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
   const [current, setCurrent] = useLocalStorage("current", null);
+  const [invertTranslation, setInvertTranslation] = useLocalStorage(
+    "invertTranslation",
+    false
+  );
+
+  const toggleInvertTranslation = () => {
+    setInvertTranslation((prevState) => !prevState);
+  };
 
   const initialLessonStates = lessons.reduce((acc, _, index) => {
     acc[index] = {
@@ -390,5 +398,7 @@ export const useReadThaiGameState = () => {
     progressionMode: lessonStates[currentLesson]?.progressionMode,
     lessons,
     getLessonProgress,
+    invertTranslation,
+    toggleInvertTranslation,
   };
 };

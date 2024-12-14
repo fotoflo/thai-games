@@ -3,6 +3,7 @@ import { PlusCircle } from 'lucide-react';
 import { thaiToIPA } from '../../utils/thaiToIPA';
 import LessonCarousel from '../LessonCarousel';
 import ProgressionSelector from './ProgressionSelector';
+import ToggleInvertTranslationButton from './ToggleInvertTranslationButton';
 
 const WorkingSetDisplay = ({
   currentLesson,
@@ -11,12 +12,12 @@ const WorkingSetDisplay = ({
   workingSet,
   current,
   addMoreSyllables,
-  currentIndexInJson,
-  totalSyllables,
   onCardSelect,
   progressionMode,
   setProgressionMode,
-  lessons
+  lessons,
+  invertTranslation,
+  toggleInvertTranslation,
 }) => {
   const getTextSizeClass = (text) => {
     if (text.length <= 3) return 'text-lg';
@@ -66,7 +67,6 @@ const WorkingSetDisplay = ({
                 <div className={`text-gray-400 ${getPhoneticSizeClass(phoneticText)} leading-tight`}>
                   [{phoneticText}]
                 </div>
-                <div className="text-sm text-gray-300">({item.mastery})</div>
               </div>
             );
           })}
@@ -84,17 +84,14 @@ const WorkingSetDisplay = ({
         </div>
       </div>
 
-      <div className="text-center text-white mb-4">
-        {current?.text} - {currentIndexInJson} / {totalSyllables}
-        {translation && (
-          <span className="ml-2 text-gray-400">({translation})</span>
-        )}
-      </div>
-
       <div className="mt-4">
         <ProgressionSelector 
           progressionMode={progressionMode}
           onModeChange={setProgressionMode}
+        />
+                        <ToggleInvertTranslationButton 
+          toggleInvertTranslation={toggleInvertTranslation}
+          invertTranslation={invertTranslation}
         />
       </div>
     </div>

@@ -9,6 +9,7 @@ import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 import FlashCardModal from '../components/syllables/FlashCardModal';
+import ToggleInvertTranslationButton from '../components/syllables/ToggleInvertTranslationButton';
 
 
 const ThaiSyllables = () => {
@@ -31,7 +32,9 @@ const ThaiSyllables = () => {
     getCurrentProgress,
     setProgressionMode,
     progressionMode,
-    lessons
+    lessons,
+    invertTranslation,
+    toggleInvertTranslation,
   } = gameState;
 
 
@@ -93,15 +96,19 @@ const ThaiSyllables = () => {
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
           speakOnUnmount={true}
+          invertTranslation={invertTranslation}
         />
         
         <MasteryControls onRatingSelect={handleRateMastery} />
-        
+
 
         <CheckTranslationButton 
           onClick={() => setDisplayTrigger('CheckTranslationButton')} 
           current={current}
+          invertTranslation={invertTranslation}
+          toggleInvertTranslation={toggleInvertTranslation}
         />
+
 
         <FlashCardModal 
           current={gameState.current}
@@ -127,6 +134,8 @@ const ThaiSyllables = () => {
           progressionMode={progressionMode}
           setProgressionMode={setProgressionMode}
           onMastery={handleMastery}
+          invertTranslation={invertTranslation}
+          toggleInvertTranslation={toggleInvertTranslation}
         />  
 
         <DebugPanel

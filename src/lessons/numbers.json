@@ -17,7 +17,7 @@
     {
       "id": "neung",
       "text": "หนึ่ง",
-      "translation": "one",
+      "translation": "1",
       "romanization": "nèung",
       "examples": [
         {
@@ -32,7 +32,7 @@
     {
       "id": "song",
       "text": "สอง",
-      "translation": "two",
+      "translation": "2",
       "romanization": "sɔ̌ɔng",
       "examples": [
         {
@@ -46,13 +46,13 @@
     },
     {
       "id": "saam",
-      "text": "สาม",
-      "translation": "three",
+      "text": "3",
+      "translation": "3",
       "romanization": "sǎam",
       "examples": [
         {
           "text": "สามบาท",
-          "translation": "three baht",
+          "translation": "3 baht",
           "romanization": "sǎam bàat"
         }
       ],
@@ -62,12 +62,12 @@
     {
       "id": "sii",
       "text": "สี่",
-      "translation": "four",
+      "translation": "4",
       "romanization": "sìi",
       "examples": [
         {
           "text": "สี่โมง",
-          "translation": "four o'clock",
+          "translation": "4 o'clock",
           "romanization": "sìi moong"
         }
       ],
@@ -77,12 +77,12 @@
     {
       "id": "haa",
       "text": "ห้า",
-      "translation": "five",
+      "translation": "5",
       "romanization": "hâa",
       "examples": [
         {
           "text": "ห้านาที",
-          "translation": "five minutes",
+          "translation": "5 minutes",
           "romanization": "hâa naa-tii"
         }
       ],
@@ -92,12 +92,12 @@
     {
       "id": "hok",
       "text": "หก",
-      "translation": "six",
+      "translation": "6",
       "romanization": "hòk",
       "examples": [
         {
           "text": "หกโมงเย็น",
-          "translation": "six in the evening",
+          "translation": "6 in the evening",
           "romanization": "hòk moong yen"
         }
       ],
@@ -107,12 +107,12 @@
     {
       "id": "jet",
       "text": "เจ็ด",
-      "translation": "seven",
+      "translation": "7",
       "romanization": "jèt",
       "examples": [
         {
           "text": "เจ็ดวัน",
-          "translation": "seven days",
+          "translation": "7 days",
           "romanization": "jèt wan"
         }
       ],
@@ -122,12 +122,12 @@
     {
       "id": "paet",
       "text": "แปด",
-      "translation": "eight",
+      "translation": "8",
       "romanization": "bpàet",
       "examples": [
         {
           "text": "แปดชั่วโมง",
-          "translation": "eight hours",
+          "translation": "8 hours",
           "romanization": "bpàet chûa-moong"
         }
       ],
@@ -137,12 +137,12 @@
     {
       "id": "kao",
       "text": "เก้า",
-      "translation": "nine",
+      "translation": "9",
       "romanization": "gâo",
       "examples": [
         {
           "text": "เก้าโมงเช้า",
-          "translation": "nine in the morning",
+          "translation": "9 in the morning",
           "romanization": "gâo moong cháo"
         }
       ],
@@ -152,12 +152,12 @@
     {
       "id": "sip",
       "text": "สิบ",
-      "translation": "ten",
+      "translation": "10",
       "romanization": "sìp",
       "examples": [
         {
           "text": "สิบบาท",
-          "translation": "ten baht",
+          "translation": "10 baht",
           "romanization": "sìp bàat"
         }
       ],
@@ -167,12 +167,12 @@
     {
       "id": "roi",
       "text": "ร้อย",
-      "translation": "hundred",
+      "translation": "100",
       "romanization": "rɔ́ɔi",
       "examples": [
         {
           "text": "หนึ่งร้อยบาท",
-          "translation": "one hundred baht",
+          "translation": "100 baht",
           "romanization": "nèung rɔ́ɔi bàat"
         }
       ],
@@ -182,12 +182,12 @@
     {
       "id": "phan",
       "text": "พัน",
-      "translation": "thousand",
+      "translation": "1000",
       "romanization": "pan",
       "examples": [
         {
           "text": "หนึ่งพันบาท",
-          "translation": "one thousand baht",
+          "translation": "1000 baht",
           "romanization": "nèung pan bàat"
         }
       ],
