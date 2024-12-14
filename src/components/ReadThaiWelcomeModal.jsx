@@ -29,8 +29,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
         
         <p className="mb-6 text-gray-300">
           Your brain can only hold a few things at once - 
-          that's why we teach just 5 at a time, 
-          and use spaced repetition to encode long term memories.
+          that's why we teach just 5 at a time
         </p>
 
         <div className="space-y-6 mb-8">
@@ -75,8 +74,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
             <span className="bg-blue-600 p-2 rounded self-stretch flex items-center justify-center">3</span>
             <div>
               <span className="text-white">Add More When Ready</span>
-              <div className="text-gray-400">Once you've mastered your current set,
-                 or just one syllable, adding more is just a tap away.</div>
+              <div className="text-gray-400">Done with your words, try more lessons.</div>
             </div>
           </div>
         </div>
