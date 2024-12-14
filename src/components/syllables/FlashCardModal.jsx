@@ -41,8 +41,9 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
             <ItemDisplay 
               current={current} 
               textSize="text-6xl"
-              iconSize={24}
+              iconSize={52}
               speakOnMount={true}
+              speakOnUnmount={true}
             />
           </div>
           
@@ -65,15 +66,11 @@ const FlashCardModal = ({ current, onNext, trigger, onClose }) => {
               {example && (
                 <div className="mt-4 p-4 bg-gray-700 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <div className="text-lg text-white">{example.text}</div>
-                    <button
-                      className="p-2 rounded-full hover:bg-gray-600 transition-colors"
-                      title="Speak Example"
-                      disabled={!hasThai || speaking}
-                      onClick={() => handleSpeak(example.text)}
-                    >
-                      <Volume2 size={16} className="text-gray-400 hover:text-white" />
-                    </button>
+                  <ItemDisplay 
+                    current={example} 
+                    textSize="text-2xl"
+                    iconSize={22}
+                  />
                   </div>
                   <div className="text-gray-300 mt-1">{example.translation}</div>
                   <div className="text-sm text-gray-400">{example.romanization}</div>

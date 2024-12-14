@@ -3,7 +3,7 @@ import { RefreshCcw, Check } from 'lucide-react';
 
 const MasteryControls = ({ onRatingSelect }) => {
   const masteryLevels = [
-    { level: 2, label: "More Reps", color: "bg-yellow-600 hover:bg-yellow-500", value: 3, icon: RefreshCcw },
+    { level: 2, label: "Next", color: "bg-yellow-600 hover:bg-yellow-500", value: 3, icon: RefreshCcw },
     { level: 3, label: "Mastered", color: "bg-green-700 hover:bg-green-600", value: 5, icon: Check },
   ];
 

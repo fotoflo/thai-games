@@ -23,7 +23,7 @@ const ItemDisplay = ({
   const displayText = current.text;
 
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={`flex flex-col ${className}`} onClick={() => handleSpeak(displayText)}>
       <div className="flex items-center justify-center gap-4">
         <div className={`${textSize} ${textColor}`}>
           {displayText}
@@ -32,7 +32,6 @@ const ItemDisplay = ({
           className="p-2 rounded-full hover:bg-gray-800 transition-colors"
           title="Speak"
           disabled={!hasThai || speaking}
-          onClick={() => handleSpeak(displayText)}
         >
           <Volume2 
             size={iconSize} 
