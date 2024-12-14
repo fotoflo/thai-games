@@ -20,7 +20,6 @@ const ThaiSpeechController = {
     return new Promise((resolve, reject) => {
       const checkForVoices = () => {
         const voices = window.speechSynthesis.getVoices();
-        console.log("Available voices:", voices); // Debug log
         const thaiVoice = voices.find((voice) => voice.lang.includes("th"));
 
         if (thaiVoice) {
@@ -55,7 +54,6 @@ const ThaiSpeechController = {
 
     try {
       console.log("Speaking", text);
-      debugger;
       const thaiVoice =
         globalThaiVoice || (await ThaiSpeechController.findThaiVoice());
 
@@ -81,7 +79,6 @@ const ThaiSpeechController = {
         };
 
         utterance.onerror = (event) => {
-          console.error("Speech error:", event); // Debug log
           globalSpeaking = false;
           globalError = `Speech synthesis failed: ${event.error}`;
           notifySubscribers();

@@ -19,16 +19,15 @@ const ItemDisplay = ({
   );
 
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={`flex flex-col ${className}`}
+     onClick={() => handleSpeak(current.text)}>
       <div className="flex items-center gap-4 mb-0">
         <div 
           className={`${textSize} ${textColor} cursor-pointer`}
-          onClick={() => handleSpeak(current.text)}
         >
           {current.text}
         </div>
         <button
-          onClick={() => handleSpeak(current.text)}
           className="p-2 rounded-full hover:bg-gray-800 transition-colors"
           title="Speak"
           disabled={!hasThai || speaking}

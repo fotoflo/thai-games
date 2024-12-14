@@ -44,7 +44,6 @@ const WelcomeModal = ({ isOpen, onClose }) => {
                 textSize="text-3xl"
                 iconSize={28}
                 className="items-start my-1"
-                speakOnMount={true} // Automatically speak on mount
               />
               <div className="text-gray-400">Read a word, tap to listen, repeat for more reps.</div>
             </div>

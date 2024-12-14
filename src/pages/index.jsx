@@ -91,7 +91,6 @@ const ThaiSyllables = () => {
           current={current}
           iconSize={52}
           textSize="text-6xl"
-          speakOnMount={true}
           className="flex items-center justify-center mb-10"
         />
         
