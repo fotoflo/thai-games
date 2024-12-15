@@ -12,11 +12,13 @@ import food1Data from "../lessons/food1.json";
 import food2VegData from "../lessons/food2veg.json";
 import atTheRestrauntData from "../lessons/at-the-restraunt.json";
 import languageLearningData from "../lessons/language-learning.json";
+import lessonForKids1Data from "../lessons/lesson-for-kids1.json";
 
 export const useReadThaiGameState = () => {
   const lessons = [
     words1Data,
     numbersLesson,
+    lessonForKids1Data,
     verbsData,
     syllables1Data,
     combos1Data,
