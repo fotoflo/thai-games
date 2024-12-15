@@ -1,5 +1,4 @@
 import React from 'react';
-import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
 
 const LessonListModal = ({ onClose, lessons, setCurrentLesson }) => {
   const handleLessonClick = (index) => {

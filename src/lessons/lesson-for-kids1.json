@@ -25,8 +25,16 @@
       "translation": "kid / children",
       "romanization": "dèk",
       "examples": [
-        {"text": "เด็กชอบเล่นของเล่น", "translation": "Kids like to play with toys.", "romanization": "dèk chɔ̂ɔp lên khɔ̌ɔng lên"},
-        {"text": "ฉันเห็นเด็กในสนามเด็กเล่น", "translation": "I see children at the playground.", "romanization": "chǎn hěn dèk nai sà-nǎam dèk lên"}
+        {
+          "text": "เด็กชอบเล่นของเล่น",
+          "translation": "Kids like to play with toys.",
+          "romanization": "dèk chɔ̂ɔp lên khɔ̌ɔng lên"
+        },
+        {
+          "text": "ฉันเห็นเด็กในสนามเด็กเล่น",
+          "translation": "I see children at the playground.",
+          "romanization": "chǎn hěn dèk nai sà-nǎam dèk lên"
+        }
       ]
     },
     {
@@ -35,8 +43,16 @@
       "translation": "name",
       "romanization": "chʉ̂ʉ",
       "examples": [
-        {"text": "ชื่อของฉันคือไดออน", "translation": "My name is Dion.", "romanization": "chʉ̂ʉ khɔ̌ɔng chǎn khʉʉ Dai-on"},
-        {"text": "คุณชื่ออะไร", "translation": "What is your name?", "romanization": "khun chʉ̂ʉ à-rai"}
+        {
+          "text": "ชื่อของฉันคือไดออน",
+          "translation": "My name is Dion.",
+          "romanization": "chʉ̂ʉ khɔ̌ɔng chǎn khʉʉ Dai-on"
+        },
+        {
+          "text": "คุณชื่ออะไร",
+          "translation": "What is your name?",
+          "romanization": "khun chʉ̂ʉ à-rai"
+        }
       ]
     },
     {
@@ -47,8 +63,16 @@
       "difficulty": 1,
       "tags": ["concepts", "questions"],
       "examples": [
-        {"text": "คุณอายุเท่าไหร่", "translation": "How old are you?", "romanization": "khun aa-yú tâo-rài?"},
-        {"text": "ฉันอายุแปดปี", "translation": "I am eight years old.", "romanization": "chǎn aa-yú bpàet bpii"}
+        {
+          "text": "คุณอายุเท่าไหร่",
+          "translation": "How old are you?",
+          "romanization": "khun aa-yú tâo-rài?"
+        },
+        {
+          "text": "ฉันอายุแปดปี",
+          "translation": "I am eight years old.",
+          "romanization": "chǎn aa-yú bpàet bpii"
+        }
       ]
     },
     {
@@ -59,8 +83,16 @@
       "difficulty": 1,
       "tags": ["animals", "kids"],
       "examples": [
-        {"text": "นี่คือแมว", "translation": "This is a kitty.", "romanization": "nîi khʉʉ mæw"},
-        {"text": "ฉันชอบแมว", "translation": "I like kitties.", "romanization": "chǎn chɔ̂ɔp mæw"}
+        {
+          "text": "นี่คือแมว",
+          "translation": "This is a kitty.",
+          "romanization": "nîi khʉʉ mæw"
+        },
+        {
+          "text": "ฉันชอบแมว",
+          "translation": "I like kitties.",
+          "romanization": "chǎn chɔ̂ɔp mæw"
+        }
       ]
     },
     {
@@ -71,8 +103,16 @@
       "difficulty": 1,
       "tags": ["toys", "play"],
       "examples": [
-        {"text": "นี่คือลูกบอลของฉัน", "translation": "This is my ball.", "romanization": "nîi khʉʉ lûuk bɔɔn khɔ̌ɔng chǎn"},
-        {"text": "ลูกบอลกลิ้งไป", "translation": "The ball rolled away.", "romanization": "lûuk bɔɔn glîng bpai"}
+        {
+          "text": "นี่คือลูกบอลของฉัน",
+          "translation": "This is my ball.",
+          "romanization": "nîi khʉʉ lûuk bɔɔn khɔ̌ɔng chǎn"
+        },
+        {
+          "text": "ลูกบอลกลิ้งไป",
+          "translation": "The ball rolled away.",
+          "romanization": "lûuk bɔɔn glîng bpai"
+        }
       ]
     },
     {
@@ -83,8 +123,16 @@
       "difficulty": 1,
       "tags": ["actions", "kids"],
       "examples": [
-        {"text": "คุณจะเล่นกับฉันไหม", "translation": "Will you play with me?", "romanization": "khun jà lên gàp chǎn mái?"},
-        {"text": "เด็กๆ ชอบเล่น", "translation": "Kids like to play.", "romanization": "dèk dèk chɔ̂ɔp lên"}
+        {
+          "text": "คุณจะเล่นกับฉันไหม",
+          "translation": "Will you play with me?",
+          "romanization": "khun jà lên gàp chǎn mái?"
+        },
+        {
+          "text": "เด็กๆ ชอบเล่น",
+          "translation": "Kids like to play.",
+          "romanization": "dèk dèk chɔ̂ɔp lên"
+        }
       ]
     },
 
@@ -96,8 +144,16 @@
       "difficulty": 1,
       "tags": ["animals", "kids"],
       "examples": [
-        {"text": "นี่คือหมา", "translation": "This is a puppy.", "romanization": "nîi khʉʉ mǎa"},
-        {"text": "หมาวิ่งเร็วมาก", "translation": "The dog runs very fast.", "romanization": "mǎa wîng reo mâak"}
+        {
+          "text": "นี่คือหมา",
+          "translation": "This is a puppy.",
+          "romanization": "nîi khʉʉ mǎa"
+        },
+        {
+          "text": "หมาวิ่งเร็วมาก",
+          "translation": "The dog runs very fast.",
+          "romanization": "mǎa wîng reo mâak"
+        }
       ]
     },
     {
@@ -108,7 +164,11 @@
       "difficulty": 1,
       "tags": ["animals"],
       "examples": [
-        {"text": "นกบินสูง", "translation": "The bird flies high.", "romanization": "nók bin sǔung"}
+        {
+          "text": "นกบินสูง",
+          "translation": "The bird flies high.",
+          "romanization": "nók bin sǔung"
+        }
       ]
     },
     {
@@ -119,7 +179,11 @@
       "difficulty": 1,
       "tags": ["animals"],
       "examples": [
-        {"text": "ปลาว่ายน้ำ", "translation": "The fish swims.", "romanization": "bplaa wâai náam"}
+        {
+          "text": "ปลาว่ายน้ำ",
+          "translation": "The fish swims.",
+          "romanization": "bplaa wâai náam"
+        }
       ]
     },
     {
@@ -130,7 +194,11 @@
       "difficulty": 1,
       "tags": ["toys"],
       "examples": [
-        {"text": "นี่คือตุ๊กตาของฉัน", "translation": "This is my doll.", "romanization": "nîi khʉʉ dtúk-gà-dtaa khɔ̌ɔng chǎn"}
+        {
+          "text": "นี่คือตุ๊กตาของฉัน",
+          "translation": "This is my doll.",
+          "romanization": "nîi khʉʉ dtúk-gà-dtaa khɔ̌ɔng chǎn"
+        }
       ]
     },
     {
@@ -141,7 +209,11 @@
       "difficulty": 1,
       "tags": ["toys", "vehicles"],
       "examples": [
-        {"text": "รถสีแดง", "translation": "The car is red.", "romanization": "rót sǐi dɛɛng"}
+        {
+          "text": "รถสีแดง",
+          "translation": "The car is red.",
+          "romanization": "rót sǐi dɛɛng"
+        }
       ]
     },
     {
@@ -152,7 +224,11 @@
       "difficulty": 1,
       "tags": ["places"],
       "examples": [
-        {"text": "นี่คือบ้านของฉัน", "translation": "This is my house.", "romanization": "nîi khʉʉ bâan khɔ̌ɔng chǎn"}
+        {
+          "text": "นี่คือบ้านของฉัน",
+          "translation": "This is my house.",
+          "romanization": "nîi khʉʉ bâan khɔ̌ɔng chǎn"
+        }
       ]
     },
     {
@@ -163,7 +239,11 @@
       "difficulty": 1,
       "tags": ["actions"],
       "examples": [
-        {"text": "เด็กวิ่งเร็ว", "translation": "The kid runs fast.", "romanization": "dèk wîng reo"}
+        {
+          "text": "เด็กวิ่งเร็ว",
+          "translation": "The kid runs fast.",
+          "romanization": "dèk wîng reo"
+        }
       ]
     },
     {
@@ -174,7 +254,11 @@
       "difficulty": 1,
       "tags": ["actions"],
       "examples": [
-        {"text": "เด็กยิ้ม", "translation": "The kid smiles.", "romanization": "dèk yím"}
+        {
+          "text": "เด็กยิ้ม",
+          "translation": "The kid smiles.",
+          "romanization": "dèk yím"
+        }
       ]
     },
     {
@@ -185,7 +269,11 @@
       "difficulty": 1,
       "tags": ["school"],
       "examples": [
-        {"text": "นี่คือดินสอ", "translation": "This is a pencil.", "romanization": "nîi khʉʉ din-sɔ̌ɔ"}
+        {
+          "text": "นี่คือดินสอ",
+          "translation": "This is a pencil.",
+          "romanization": "nîi khʉʉ din-sɔ̌ɔ"
+        }
       ]
     },
     {
@@ -196,7 +284,11 @@
       "difficulty": 1,
       "tags": ["colors"],
       "examples": [
-        {"text": "บอลสีแดง", "translation": "The ball is red.", "romanization": "bɔɔn sǐi dɛɛng"}
+        {
+          "text": "บอลสีแดง",
+          "translation": "The ball is red.",
+          "romanization": "bɔɔn sǐi dɛɛng"
+        }
       ]
     },
     {
@@ -207,7 +299,11 @@
       "difficulty": 1,
       "tags": ["colors"],
       "examples": [
-        {"text": "รถสีฟ้า", "translation": "The car is blue.", "romanization": "rót sǐi fáa"}
+        {
+          "text": "รถสีฟ้า",
+          "translation": "The car is blue.",
+          "romanization": "rót sǐi fáa"
+        }
       ]
     },
     {
@@ -218,7 +314,11 @@
       "difficulty": 1,
       "tags": ["animals"],
       "examples": [
-        {"text": "หนูตัวเล็ก", "translation": "The mouse is small.", "romanization": "nǔu dtuua lék"}
+        {
+          "text": "หนูตัวเล็ก",
+          "translation": "The mouse is small.",
+          "romanization": "nǔu dtuua lék"
+        }
       ]
     },
     {
@@ -229,7 +329,11 @@
       "difficulty": 1,
       "tags": ["food"],
       "examples": [
-        {"text": "ฉันชอบขนม", "translation": "I like snacks.", "romanization": "chǎn chɔ̂ɔp khà-nǒm"}
+        {
+          "text": "ฉันชอบขนม",
+          "translation": "I like snacks.",
+          "romanization": "chǎn chɔ̂ɔp khà-nǒm"
+        }
       ]
     },
     {
@@ -240,7 +344,11 @@
       "difficulty": 1,
       "tags": ["actions"],
       "examples": [
-        {"text": "ฉันดื่มน้ำ", "translation": "I drink water.", "romanization": "chǎn dʉ̀ʉm náam"}
+        {
+          "text": "ฉันดื่มน้ำ",
+          "translation": "I drink water.",
+          "romanization": "chǎn dʉ̀ʉm náam"
+        }
       ]
     },
     {
@@ -251,7 +359,11 @@
       "difficulty": 1,
       "tags": ["actions"],
       "examples": [
-        {"text": "เด็กหัวเราะดัง", "translation": "The kid laughs loudly.", "romanization": "dèk hǔa-rɔ́ dang"}
+        {
+          "text": "เด็กหัวเราะดัง",
+          "translation": "The kid laughs loudly.",
+          "romanization": "dèk hǔa-rɔ́ dang"
+        }
       ]
     },
     {
@@ -262,146 +374,207 @@
       "difficulty": 1,
       "tags": ["actions"],
       "examples": [
-        {"text": "เราร้องเพลงด้วยกัน", "translation": "We sing together.", "romanization": "rao rɔ́ɔng pleeng dûai gan"}
+        {
+          "text": "เราร้องเพลงด้วยกัน",
+          "translation": "We sing together.",
+          "romanization": "rao rɔ́ɔng pleeng dûai gan"
+        }
       ]
     },
-    Here’s a list of 15 “cute” items that focus on kid-friendly topics like snacks, games, animals, and fun activities:
-
-[
-  {
-    "id": "36",
-    "text": "ขนม",
-    "translation": "snack",
-    "romanization": "khà-nǒm",
-    "examples": [
-      {"text": "ฉันชอบขนมหวาน", "translation": "I like sweet snacks.", "romanization": "chǎn chɔ̂ɔp khà-nǒm wǎan"}
-    ]
-  },
-  {
-    "id": "37",
-    "text": "ช็อกโกแลต",
-    "translation": "chocolate",
-    "romanization": "chók-gòo-lɛ́t",
-    "examples": [
-      {"text": "ฉันอยากกินช็อกโกแลต", "translation": "I want to eat chocolate.", "romanization": "chǎn yàak gin chók-gòo-lɛ́t"}
-    ]
-  },
-  {
-    "id": "38",
-    "text": "ลูกสุนัข",
-    "translation": "puppy",
-    "romanization": "lûuk sù-nák",
-    "examples": [
-      {"text": "ลูกสุนัขน่ารักมาก", "translation": "The puppy is very cute.", "romanization": "lûuk sù-nák nâa-rák mâak"}
-    ]
-  },
-  {
-    "id": "39",
-    "text": "เล่นซ่อนหา",
-    "translation": "play hide and seek",
-    "romanization": "lên sɔ̂ɔn hǎa",
-    "examples": [
-      {"text": "มาเล่นซ่อนหากัน", "translation": "Let’s play hide and seek.", "romanization": "maa lên sɔ̂ɔn hǎa gan"}
-    ]
-  },
-  {
-    "id": "40",
-    "text": "เล่นวิ่งไล่จับ",
-    "translation": "play tag",
-    "romanization": "lên wîng lâi jàp",
-    "examples": [
-      {"text": "ฉันชอบเล่นวิ่งไล่จับ", "translation": "I like to play tag.", "romanization": "chǎn chɔ̂ɔp lên wîng lâi jàp"}
-    ]
-  },
-  {
-    "id": "41",
-    "text": "สนุก",
-    "translation": "fun",
-    "romanization": "sà-nùk",
-    "examples": [
-      {"text": "วันนี้สนุกมาก", "translation": "Today is so much fun.", "romanization": "wan-níi sà-nùk mâak"}
-    ]
-  },
-  {
-    "id": "42",
-    "text": "เล่น",
-    "translation": "play",
-    "romanization": "lên",
-    "examples": [
-      {"text": "ฉันจะเล่นกับเพื่อน", "translation": "I will play with my friend.", "romanization": "chǎn jà lên gàp phʉ̂an"}
-    ]
-  },
-  {
-    "id": "43",
-    "text": "ตุ๊กตา",
-    "translation": "doll",
-    "romanization": "dtúk-gà-dtaa",
-    "examples": [
-      {"text": "ตุ๊กตาของฉันน่ารัก", "translation": "My doll is cute.", "romanization": "dtúk-gà-dtaa khɔ̌ɔng chǎn nâa-rák"}
-    ]
-  },
-  {
-    "id": "44",
-    "text": "รถของเล่น",
-    "translation": "toy car",
-    "romanization": "rót khɔ̌ɔng lên",
-    "examples": [
-      {"text": "เขาเล่นรถของเล่น", "translation": "He plays with a toy car.", "romanization": "khǎo lên rót khɔ̌ɔng lên"}
-    ]
-  },
-  {
-    "id": "45",
-    "text": "ลูกอม",
-    "translation": "candy",
-    "romanization": "lûuk om",
-    "examples": [
-      {"text": "ลูกอมรสหวาน", "translation": "The candy is sweet.", "romanization": "lûuk om rót wǎan"}
-    ]
-  },
-  {
-    "id": "46",
-    "text": "แมว",
-    "translation": "cat",
-    "romanization": "mæw",
-    "examples": [
-      {"text": "แมวของฉันนุ่มมาก", "translation": "My cat is very soft.", "romanization": "mæw khɔ̌ɔng chǎn nûm mâak"}
-    ]
-  },
-  {
-    "id": "47",
-    "text": "หมา",
-    "translation": "dog",
-    "romanization": "mǎa",
-    "examples": [
-      {"text": "หมาวิ่งเล่นในสวน", "translation": "The dog is running in the garden.", "romanization": "mǎa wîng lên nai sǔan"}
-    ]
-  },
-  {
-    "id": "48",
-    "text": "แกะ",
-    "translation": "sheep",
-    "romanization": "gàe",
-    "examples": [
-      {"text": "แกะตัวนี้น่ารัก", "translation": "This sheep is cute.", "romanization": "gàe dtuua níi nâa-rák"}
-    ]
-  },
-  {
-    "id": "49",
-    "text": "เค้ก",
-    "translation": "cake",
-    "romanization": "khéek",
-    "examples": [
-      {"text": "ฉันชอบกินเค้ก", "translation": "I like eating cake.", "romanization": "chǎn chɔ̂ɔp gin khéek"}
-    ]
-  },
-  {
-    "id": "50",
-    "text": "เล่นน้ำ",
-    "translation": "play in water",
-    "romanization": "lên náam",
-    "examples": [
-      {"text": "ไปเล่นน้ำที่ทะเล", "translation": "Let’s play in the water at the beach.", "romanization": "bpai lên náam thîi thá-lee"}
-    ]
-  }
+    {
+      "id": "36",
+      "text": "ขนม",
+      "translation": "snack",
+      "romanization": "khà-nǒm",
+      "examples": [
+        {
+          "text": "ฉันชอบขนมหวาน",
+          "translation": "I like sweet snacks.",
+          "romanization": "chǎn chɔ̂ɔp khà-nǒm wǎan"
+        }
+      ]
+    },
+    {
+      "id": "37",
+      "text": "ช็อกโกแลต",
+      "translation": "chocolate",
+      "romanization": "chók-gòo-lɛ́t",
+      "examples": [
+        {
+          "text": "ฉันอยากกินช็อกโกแลต",
+          "translation": "I want to eat chocolate.",
+          "romanization": "chǎn yàak gin chók-gòo-lɛ́t"
+        }
+      ]
+    },
+    {
+      "id": "38",
+      "text": "ลูกสุนัข",
+      "translation": "puppy",
+      "romanization": "lûuk sù-nák",
+      "examples": [
+        {
+          "text": "ลูกสุนัขน่ารักมาก",
+          "translation": "The puppy is very cute.",
+          "romanization": "lûuk sù-nák nâa-rák mâak"
+        }
+      ]
+    },
+    {
+      "id": "39",
+      "text": "เล่นซ่อนหา",
+      "translation": "play hide and seek",
+      "romanization": "lên sɔ̂ɔn hǎa",
+      "examples": [
+        {
+          "text": "มาเล่นซ่อนหากัน",
+          "translation": "Let’s play hide and seek.",
+          "romanization": "maa lên sɔ̂ɔn hǎa gan"
+        }
+      ]
+    },
+    {
+      "id": "40",
+      "text": "เล่นวิ่งไล่จับ",
+      "translation": "play tag",
+      "romanization": "lên wîng lâi jàp",
+      "examples": [
+        {
+          "text": "ฉันชอบเล่นวิ่งไล่จับ",
+          "translation": "I like to play tag.",
+          "romanization": "chǎn chɔ̂ɔp lên wîng lâi jàp"
+        }
+      ]
+    },
+    {
+      "id": "41",
+      "text": "สนุก",
+      "translation": "fun",
+      "romanization": "sà-nùk",
+      "examples": [
+        {
+          "text": "วันนี้สนุกมาก",
+          "translation": "Today is so much fun.",
+          "romanization": "wan-níi sà-nùk mâak"
+        }
+      ]
+    },
+    {
+      "id": "42",
+      "text": "เล่น",
+      "translation": "play",
+      "romanization": "lên",
+      "examples": [
+        {
+          "text": "ฉันจะเล่นกับเพื่อน",
+          "translation": "I will play with my friend.",
+          "romanization": "chǎn jà lên gàp phʉ̂an"
+        }
+      ]
+    },
+    {
+      "id": "43",
+      "text": "ตุ๊กตา",
+      "translation": "doll",
+      "romanization": "dtúk-gà-dtaa",
+      "examples": [
+        {
+          "text": "ตุ๊กตาของฉันน่ารัก",
+          "translation": "My doll is cute.",
+          "romanization": "dtúk-gà-dtaa khɔ̌ɔng chǎn nâa-rák"
+        }
+      ]
+    },
+    {
+      "id": "44",
+      "text": "รถของเล่น",
+      "translation": "toy car",
+      "romanization": "rót khɔ̌ɔng lên",
+      "examples": [
+        {
+          "text": "เขาเล่นรถของเล่น",
+          "translation": "He plays with a toy car.",
+          "romanization": "khǎo lên rót khɔ̌ɔng lên"
+        }
+      ]
+    },
+    {
+      "id": "45",
+      "text": "ลูกอม",
+      "translation": "candy",
+      "romanization": "lûuk om",
+      "examples": [
+        {
+          "text": "ลูกอมรสหวาน",
+          "translation": "The candy is sweet.",
+          "romanization": "lûuk om rót wǎan"
+        }
+      ]
+    },
+    {
+      "id": "46",
+      "text": "แมว",
+      "translation": "cat",
+      "romanization": "mæw",
+      "examples": [
+        {
+          "text": "แมวของฉันนุ่มมาก",
+          "translation": "My cat is very soft.",
+          "romanization": "mæw khɔ̌ɔng chǎn nûm mâak"
+        }
+      ]
+    },
+    {
+      "id": "47",
+      "text": "หมา",
+      "translation": "dog",
+      "romanization": "mǎa",
+      "examples": [
+        {
+          "text": "หมาวิ่งเล่นในสวน",
+          "translation": "The dog is running in the garden.",
+          "romanization": "mǎa wîng lên nai sǔan"
+        }
+      ]
+    },
+    {
+      "id": "48",
+      "text": "แกะ",
+      "translation": "sheep",
+      "romanization": "gàe",
+      "examples": [
+        {
+          "text": "แกะตัวนี้น่ารัก",
+          "translation": "This sheep is cute.",
+          "romanization": "gàe dtuua níi nâa-rák"
+        }
+      ]
+    },
+    {
+      "id": "49",
+      "text": "เค้ก",
+      "translation": "cake",
+      "romanization": "khéek",
+      "examples": [
+        {
+          "text": "ฉันชอบกินเค้ก",
+          "translation": "I like eating cake.",
+          "romanization": "chǎn chɔ̂ɔp gin khéek"
+        }
+      ]
+    },
+    {
+      "id": "50",
+      "text": "เล่นน้ำ",
+      "translation": "play in water",
+      "romanization": "lên náam",
+      "examples": [
+        {
+          "text": "ไปเล่นน้ำที่ทะเล",
+          "translation": "Let’s play in the water at the beach.",
+          "romanization": "bpai lên náam thîi thá-lee"
+        }
+      ]
+    }
   ]
 }
