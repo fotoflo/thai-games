@@ -32,9 +32,6 @@ const WorkingSetDisplay = ({
     return 'text-[8px]';
   };
 
-  const currentLessonData = lessons[currentLesson];
-  const translation = current?.details?.translation || current?.translation;
-
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 border-t p-4">
       <LessonCarousel 
@@ -65,7 +62,7 @@ const WorkingSetDisplay = ({
                   {item.text}
                 </div>
                 <div className={`text-gray-400 ${getPhoneticSizeClass(phoneticText)} leading-tight`}>
-                  [{phoneticText}]
+                  [{phoneticText.length > 10 ? `${phoneticText.substring(0, 10)}...` : phoneticText}]
                 </div>
               </div>
             );
