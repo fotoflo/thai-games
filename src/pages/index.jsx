@@ -5,18 +5,20 @@ import MasteryControls from '../components/syllables/MasteryControls';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 import FlashCardModal from '../components/syllables/FlashCardModal';
-import SettingsModal from '../components/SettingsModal';
+import SettingsModalContainer from '../components/SettingsModalContainer';
 import WorkingSetCards from '../components/syllables/WorkingSetCards';
 import LessonCarousel from '../components/LessonCarousel';
 import ProgressionSelector from '../components/syllables/ProgressionSelector';
 import ToggleInvertTranslationButton from '../components/syllables/ToggleInvertTranslationButton';
+import SettingsHamburger from '../components/ui/SettingsHamburger';
 import Divider from '../components/ui/divider';
+import SettingsMenuButton from '../components/SettingsMenuButton';
 
 const ThaiSyllables = () => {
   const gameState = useReadThaiGameState();
   const [displayTrigger, setDisplayTrigger] = useState(null); // 'speak' | 'mastery' | null
   const [showWelcome, setShowWelcome] = useState(true);
-  const [showSettings, setShowSettings] = useState(false); // State for SettingsModal
+  const [showSettingsContainer, setShowSettingsContainer] = useState(false); // State for SettingsModalContainer
 
   const {
     currentLesson,
@@ -73,11 +75,11 @@ const ThaiSyllables = () => {
   const totalSyllables = getCurrentProgress().totalSyllables;
 
   const openSettings = () => {
-    setShowSettings(true); // Show the SettingsModal
+    setShowSettingsContainer(true); // Show the SettingsModalContainer
   };
 
   const closeSettings = () => {
-    setShowSettings(false); // Hide the SettingsModal
+    setShowSettingsContainer(false); // Hide the SettingsModalContainer
   };
 
   return (
@@ -88,17 +90,10 @@ const ThaiSyllables = () => {
       />
       
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
-        <button 
-          onClick={openSettings} 
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-700"
-          title="Settings"
-        >
-          <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="6" r="2" />
-            <circle cx="12" cy="12" r="2" />
-            <circle cx="12" cy="18" r="2" />
-          </svg>
-        </button>
+        
+
+
+        <SettingsHamburger onClick={openSettings} />
 
         <ItemDisplay
           current={current}
@@ -166,8 +161,8 @@ const ThaiSyllables = () => {
           </div>
         </div>
 
-        {/* Render SettingsModal if showSettings is true */}
-        {showSettings && <SettingsModal onClose={closeSettings} />}
+        {/* Render SettingsModalContainer if showSettingsContainer is true */}
+        {showSettingsContainer && <SettingsModalContainer onClose={closeSettings} />}
       </div>
     </>
   );
