@@ -8,7 +8,14 @@ const ToggleInvertTranslationButton = ({ toggleInvertTranslation, invertTranslat
 
   return (
     <button
-      className="flex items-center p-2 rounded-full bg-gray-800 text-white hover:bg-gray-700 transition-colors"
+      className="flex
+      items-center
+      p-2
+      rounded-full
+      bg-gray-800
+      text-white
+      hover:bg-gray-700
+      transition-colors"
       onClick={handleToggle}
       title={invertTranslation ? 'Show Original' : 'Show Translation'}
     >

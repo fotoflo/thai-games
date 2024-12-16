@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
 import ItemDisplay from '../components/syllables/ItemDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
-import WorkingSetDisplay from '../components/syllables/WorkingSetDisplay';
-import DebugPanel from '../components/syllables/DebugPanel';
-import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 import FlashCardModal from '../components/syllables/FlashCardModal';
 import SettingsModal from '../components/SettingsModal';
+import WorkingSetCards from '../components/syllables/WorkingSetCards';
+import LessonCarousel from '../components/LessonCarousel';
+import ProgressionSelector from '../components/syllables/ProgressionSelector';
+import ToggleInvertTranslationButton from '../components/syllables/ToggleInvertTranslationButton';
+import Divider from '../components/ui/divider';
 
 const ThaiSyllables = () => {
   const gameState = useReadThaiGameState();
@@ -127,24 +128,43 @@ const ThaiSyllables = () => {
           onClose={() => setDisplayTrigger(null)}
         />
 
-        <WorkingSetDisplay
-          lessons={lessons}
-          currentLesson={currentLesson}
-          setCurrentLesson={setCurrentLesson}
-          totalLessons={totalLessons}
+      <div className="fixed
+      bottom-0
+      left-0
+      right-0
+      bg-gray-900
+      bg-opacity-90  p-4">
+
+        <Divider className="mb-4 -mx-4" borderClass="border-slate-700"/>
+
+        <WorkingSetCards 
           workingSet={workingSet}
           current={current}
-          addMoreSyllables={addMoreSyllables}
-          currentIndexInJson={currentIndexInJson}
-          totalSyllables={totalSyllables}
           onCardSelect={handleCardSelect}
-          progressionMode={progressionMode}
-          setProgressionMode={setProgressionMode}
-          onMastery={handleMastery}
-          invertTranslation={invertTranslation}
-          toggleInvertTranslation={toggleInvertTranslation}
-        />  
+          addMoreSyllables={addMoreSyllables}
+          />
 
+<Divider className="mb-4 -mx-4" borderClass="border-slate-700"/>
+
+          <div className="mt-4">
+            <LessonCarousel 
+              currentLesson={currentLesson}
+              setCurrentLesson={setCurrentLesson}
+              totalLessons={totalLessons}
+              lessons={lessons}
+            />
+            
+            <ProgressionSelector 
+              progressionMode={progressionMode}
+              onModeChange={setProgressionMode}
+            />
+            
+            <ToggleInvertTranslationButton 
+              toggleInvertTranslation={toggleInvertTranslation}
+              invertTranslation={invertTranslation}
+            />
+          </div>
+        </div>
 
         {/* Render SettingsModal if showSettings is true */}
         {showSettings && <SettingsModal onClose={closeSettings} />}
