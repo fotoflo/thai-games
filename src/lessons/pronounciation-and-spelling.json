@@ -1,0 +1,293 @@
+{
+  "lessonName": "Thai Pronunciation and Spelling",
+  "lessonDescription": "Essential phrases and vocabulary for discussing pronunciation and spelling in Thai, including how to ask about tones, consonants, vowels, and spelling rules.",
+  "lessonLevel": "beginner",
+  "lessonType": "phrases",
+  "difficulty": 2,
+  "tags": ["pronunciation", "spelling", "language-learning", "tones"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "tone",
+      "text": "วรรณยุกต์",
+      "translation": "tone mark",
+      "romanization": "wan-ná-yúk",
+      "examples": [
+        {
+          "text": "ใช้วรรณยุกต์อะไร",
+          "translation": "Which tone mark is used?",
+          "romanization": "chái wan-ná-yúk a-rai"
+        },
+        {
+          "text": "เสียงวรรณยุกต์ถูกไหม",
+          "translation": "Is the tone correct?",
+          "romanization": "sǐang wan-ná-yúk thùuk mǎi"
+        }
+      ]
+    },
+    {
+      "id": "consonant",
+      "text": "พยัญชนะ",
+      "translation": "consonant",
+      "romanization": "phá-yan-chá-ná",
+      "examples": [
+        {
+          "text": "ใช้พยัญชนะตัวไหน",
+          "translation": "Which consonant is used?",
+          "romanization": "chái phá-yan-chá-ná dtua nǎi"
+        },
+        {
+          "text": "นี่พยัญชนะอะไร",
+          "translation": "What consonant is this?",
+          "romanization": "nîi phá-yan-chá-ná a-rai"
+        }
+      ]
+    },
+    {
+      "id": "vowel",
+      "text": "สระ",
+      "translation": "vowel",
+      "romanization": "sà-rà",
+      "examples": [
+        {
+          "text": "ใช้สระอะไร",
+          "translation": "Which vowel is used?",
+          "romanization": "chái sà-rà a-rai"
+        },
+        {
+          "text": "สระอยู่ตรงไหน",
+          "translation": "Where is the vowel?",
+          "romanization": "sà-rà yùu dtrong nǎi"
+        }
+      ]
+    },
+    {
+      "id": "syllable",
+      "text": "พยางค์",
+      "translation": "syllable",
+      "romanization": "phá-yaang",
+      "examples": [
+        {
+          "text": "มีกี่พยางค์",
+          "translation": "How many syllables?",
+          "romanization": "mee gìi phá-yaang"
+        },
+        {
+          "text": "แยกพยางค์อย่างไร",
+          "translation": "How do you separate the syllables?",
+          "romanization": "yɛ̂ɛk phá-yaang yàang-rai"
+        }
+      ]
+    },
+    {
+      "id": "pronunciation",
+      "text": "การออกเสียง",
+      "translation": "pronunciation",
+      "romanization": "gaan-ɔ̀ɔk-sǐang",
+      "examples": [
+        {
+          "text": "ออกเสียงอย่างไร",
+          "translation": "How do you pronounce it?",
+          "romanization": "ɔ̀ɔk sǐang yàang-rai"
+        },
+        {
+          "text": "ออกเสียงถูกไหม",
+          "translation": "Is my pronunciation correct?",
+          "romanization": "ɔ̀ɔk sǐang thùuk mǎi"
+        }
+      ]
+    },
+    {
+      "id": "sound",
+      "text": "เสียง",
+      "translation": "sound",
+      "romanization": "sǐang",
+      "examples": [
+        {
+          "text": "เสียงแบบไหน",
+          "translation": "What kind of sound?",
+          "romanization": "sǐang bɛ̀ɛp nǎi"
+        },
+        {
+          "text": "ออกเสียงเหมือนกัน",
+          "translation": "It sounds the same",
+          "romanization": "ɔ̀ɔk sǐang mʉ̌an gan"
+        }
+      ]
+    },
+    {
+      "id": "stress",
+      "text": "เน้นเสียง",
+      "translation": "stress (emphasis)",
+      "romanization": "nén sǐang",
+      "examples": [
+        {
+          "text": "เน้นเสียงตรงไหน",
+          "translation": "Where is the stress?",
+          "romanization": "nén sǐang dtrong nǎi"
+        },
+        {
+          "text": "ต้องเน้นเสียงไหม",
+          "translation": "Should it be stressed?",
+          "romanization": "dtɔ̂ɔng nén sǐang mǎi"
+        }
+      ]
+    },
+    {
+      "id": "rising-tone",
+      "text": "เสียงโท",
+      "translation": "rising tone",
+      "romanization": "sǐang thoo",
+      "examples": [
+        {
+          "text": "ใช้เสียงโทหรือเอก",
+          "translation": "Is it rising or falling tone?",
+          "romanization": "chái sǐang thoo rʉ̌ʉ èek"
+        },
+        {
+          "text": "นี่เสียงโท",
+          "translation": "This is rising tone",
+          "romanization": "nîi sǐang thoo"
+        }
+      ]
+    },
+    {
+      "id": "falling-tone",
+      "text": "เสียงเอก",
+      "translation": "falling tone",
+      "romanization": "sǐang èek",
+      "examples": [
+        {
+          "text": "ต้องใช้เสียงเอก",
+          "translation": "It should be falling tone",
+          "romanization": "dtɔ̂ɔng chái sǐang èek"
+        },
+        {
+          "text": "นี่ไม่ใช่เสียงเอก",
+          "translation": "This is not falling tone",
+          "romanization": "nîi mâi chái sǐang èek"
+        }
+      ]
+    },
+    {
+      "id": "spell-out",
+      "text": "สะกดทีละตัว",
+      "translation": "spell letter by letter",
+      "romanization": "sà-gòt thee-lá dtua",
+      "examples": [
+        {
+          "text": "ช่วยสะกดทีละตัว",
+          "translation": "Please spell it letter by letter",
+          "romanization": "chûai sà-gòt thee-lá dtua"
+        },
+        {
+          "text": "สะกดให้ช้าๆ",
+          "translation": "Spell it slowly",
+          "romanization": "sà-gòt hâi cháa cháa"
+        }
+      ]
+    },
+    {
+      "id": "alphabet",
+      "text": "ตัวอักษร",
+      "translation": "alphabet/letter",
+      "romanization": "dtua àk-sɔ̌ɔn",
+      "examples": [
+        {
+          "text": "นี่ตัวอักษรอะไร",
+          "translation": "What letter is this?",
+          "romanization": "nîi dtua àk-sɔ̌ɔn a-rai"
+        },
+        {
+          "text": "เขียนตัวอักษรให้ดูหน่อย",
+          "translation": "Show me how to write this letter",
+          "romanization": "khǐan dtua àk-sɔ̌ɔn hâi duu nòi"
+        }
+      ]
+    },
+    {
+      "id": "clear",
+      "text": "ชัดเจน",
+      "translation": "clear (pronunciation)",
+      "romanization": "chát-jeen",
+      "examples": [
+        {
+          "text": "พูดให้ชัดเจน",
+          "translation": "Speak clearly",
+          "romanization": "pûut hâi chát-jeen"
+        },
+        {
+          "text": "ออกเสียงไม่ชัด",
+          "translation": "The pronunciation is not clear",
+          "romanization": "ɔ̀ɔk sǐang mâi chát"
+        }
+      ]
+    },
+    {
+      "id": "repeat-after",
+      "text": "พูดตาม",
+      "translation": "repeat after",
+      "romanization": "pûut dtaam",
+      "examples": [
+        {
+          "text": "พูดตามฉัน",
+          "translation": "Repeat after me",
+          "romanization": "pûut dtaam chǎn"
+        },
+        {
+          "text": "ลองพูดตาม",
+          "translation": "Try to repeat",
+          "romanization": "lɔɔng pûut dtaam"
+        }
+      ]
+    },
+    {
+      "id": "similar-sound",
+      "text": "เสียงคล้าย",
+      "translation": "similar sound",
+      "romanization": "sǐang khláai",
+      "examples": [
+        {
+          "text": "มีเสียงคล้ายกัน",
+          "translation": "They have similar sounds",
+          "romanization": "mee sǐang khláai gan"
+        },
+        {
+          "text": "ออกเสียงคล้ายกับ",
+          "translation": "It sounds similar to",
+          "romanization": "ɔ̀ɔk sǐang khláai gàp"
+        }
+      ]
+    },
+    {
+      "id": "mistake",
+      "text": "ออกเสียงผิด",
+      "translation": "pronunciation mistake",
+      "romanization": "ɔ̀ɔk sǐang phìt",
+      "examples": [
+        {
+          "text": "ฉันออกเสียงผิดหรือเปล่า",
+          "translation": "Did I pronounce it wrong?",
+          "romanization": "chǎn ɔ̀ɔk sǐang phìt rʉ̌ʉ bplàao"
+        },
+        {
+          "text": "สะกดผิด",
+          "translation": "Spelled wrong",
+          "romanization": "sà-gòt phìt"
+        }
+      ]
+    }
+  ]
+}

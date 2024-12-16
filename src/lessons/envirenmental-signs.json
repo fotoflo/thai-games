@@ -1,0 +1,229 @@
+{
+  "lessonName": "Essential Thai Signs and Environmental Text",
+  "lessonDescription": "Common words and phrases you'll encounter while walking or driving around Thailand. This lesson focuses on essential text you'll see on signs, shops, and facilities to help you start recognizing and reading Thai script in real-world contexts.",
+  "lessonLevel": "beginner",
+  "lessonType": "environmental-literacy",
+  "tags": [
+    "signs",
+    "daily-life",
+    "public-places",
+    "transportation",
+    "facilities"
+  ],
+  "difficulty": 2,
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "Thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "rest-001",
+      "text": "ห้องน้ำ",
+      "translation": "Restroom/Bathroom",
+      "romanization": "hɔ̂ɔng náam",
+      "difficulty": 1,
+      "tags": ["facilities", "essential", "public-places"],
+      "examples": [
+        {
+          "text": "ห้องน้ำอยู่ชั้น 2",
+          "translation": "The restroom is on the 2nd floor",
+          "romanization": "hɔ̂ɔng náam yùu chán sɔ̌ɔng"
+        },
+        {
+          "text": "ห้องน้ำปิดปรับปรุง",
+          "translation": "Restroom closed for maintenance",
+          "romanization": "hɔ̂ɔng náam pìt pràp-prung"
+        }
+      ]
+    },
+    {
+      "id": "mass-001",
+      "text": "นวด",
+      "translation": "Massage",
+      "romanization": "nuat",
+      "difficulty": 1,
+      "tags": ["wellness", "services", "tourism"],
+      "examples": [
+        {
+          "text": "นวดแผนไทย",
+          "translation": "Thai traditional massage",
+          "romanization": "nuat phɛ̌ɛn thai"
+        },
+        {
+          "text": "นวดเปิด 9:00-22:00",
+          "translation": "Massage open 9:00-22:00",
+          "romanization": "nuat pə̀ət kâo mong tʰʉ̌ng sɔ̌ɔng-sìp-sɔ̌ɔng mong"
+        }
+      ]
+    },
+    {
+      "id": "gas-001",
+      "text": "ปั๊มน้ำมัน",
+      "translation": "Gas Station",
+      "romanization": "pam náam man",
+      "difficulty": 2,
+      "tags": ["transportation", "facilities", "essential"],
+      "examples": [
+        {
+          "text": "ปั๊มน้ำมันถัดไป 5 กม.",
+          "translation": "Next gas station 5 km",
+          "romanization": "pam náam man tàt pai hâa ki-loh"
+        },
+        {
+          "text": "ปั๊มน้ำมันเปิด 24 ชม.",
+          "translation": "Gas station open 24 hours",
+          "romanization": "pam náam man pə̀ət yîi-sìp-sìi chua-moong"
+        }
+      ]
+    },
+    {
+      "id": "rest-002",
+      "text": "ชาย",
+      "translation": "Men",
+      "romanization": "chaai",
+      "difficulty": 1,
+      "tags": ["facilities", "essential", "restroom"],
+      "examples": [
+        {
+          "text": "ห้องน้ำชาย",
+          "translation": "Men's restroom",
+          "romanization": "hɔ̂ɔng náam chaai"
+        },
+        {
+          "text": "ทางเข้าห้องน้ำชาย",
+          "translation": "Men's restroom entrance",
+          "romanization": "thaang khâo hɔ̂ɔng náam chaai"
+        }
+      ]
+    },
+    {
+      "id": "conv-001",
+      "text": "เซเว่น",
+      "translation": "7-Eleven",
+      "romanization": "se-wen",
+      "difficulty": 1,
+      "tags": ["shops", "convenience-store", "essential"],
+      "examples": [
+        {
+          "text": "เซเว่นอยู่หน้าปากซอย",
+          "translation": "7-Eleven is at the entrance of the alley",
+          "romanization": "se-wen yùu nâa pàak sɔɔi"
+        },
+        {
+          "text": "เซเว่นเปิด 24 ชั่วโมง",
+          "translation": "7-Eleven open 24 hours",
+          "romanization": "se-wen pə̀ət yîi-sìp-sìi chûa-moong"
+        }
+      ]
+    },
+    {
+      "id": "park-001",
+      "text": "ห้ามจอด",
+      "translation": "No Parking",
+      "romanization": "hâam jɔ̀ɔt",
+      "difficulty": 2,
+      "tags": ["traffic", "signs", "regulations"],
+      "examples": [
+        {
+          "text": "ห้ามจอดทุกเวลา",
+          "translation": "No parking at any time",
+          "romanization": "hâam jɔ̀ɔt túk wee-laa"
+        },
+        {
+          "text": "ห้ามจอด มีค่าปรับ",
+          "translation": "No parking, violators will be fined",
+          "romanization": "hâam jɔ̀ɔt mii kâa pràp"
+        }
+      ]
+    },
+    {
+      "id": "food-001",
+      "text": "ร้านอาหาร",
+      "translation": "Restaurant",
+      "romanization": "ráan aa-hǎan",
+      "difficulty": 2,
+      "tags": ["food", "shops", "essential"],
+      "examples": [
+        {
+          "text": "ร้านอาหารเปิดใหม่",
+          "translation": "New restaurant opening",
+          "romanization": "ráan aa-hǎan pə̀ət mài"
+        },
+        {
+          "text": "ร้านอาหารปิดปรับปรุง",
+          "translation": "Restaurant closed for renovation",
+          "romanization": "ráan aa-hǎan pìt pràp-prung"
+        }
+      ]
+    },
+    {
+      "id": "bank-001",
+      "text": "เอทีเอ็ม",
+      "translation": "ATM",
+      "romanization": "ae-tii-em",
+      "difficulty": 1,
+      "tags": ["banking", "facilities", "essential"],
+      "examples": [
+        {
+          "text": "เอทีเอ็มขัดข้อง",
+          "translation": "ATM out of service",
+          "romanization": "ae-tii-em kàt khɔ̂ɔng"
+        },
+        {
+          "text": "เอทีเอ็มอยู่ด้านใน",
+          "translation": "ATM is inside",
+          "romanization": "ae-tii-em yùu dâan nai"
+        }
+      ]
+    },
+    {
+      "id": "trans-001",
+      "text": "แท็กซี่",
+      "translation": "Taxi",
+      "romanization": "táek-sîi",
+      "difficulty": 1,
+      "tags": ["transportation", "services", "essential"],
+      "examples": [
+        {
+          "text": "จุดจอดแท็กซี่",
+          "translation": "Taxi stand",
+          "romanization": "jùt jɔ̀ɔt táek-sîi"
+        },
+        {
+          "text": "แท็กซี่ว่าง",
+          "translation": "Taxi available",
+          "romanization": "táek-sîi wâang"
+        }
+      ]
+    },
+    {
+      "id": "coffee-001",
+      "text": "กาแฟ",
+      "translation": "Coffee",
+      "romanization": "kaafae",
+      "difficulty": 1,
+      "tags": ["food", "drinks", "shops"],
+      "examples": [
+        {
+          "text": "ร้านกาแฟสด",
+          "translation": "Fresh coffee shop",
+          "romanization": "ráan kaafae sòt"
+        },
+        {
+          "text": "กาแฟเย็น",
+          "translation": "Iced coffee",
+          "romanization": "kaafae yen"
+        }
+      ]
+    }
+  ]
+}

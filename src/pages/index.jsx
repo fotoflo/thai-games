@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
 import ItemDisplay from '../components/syllables/ItemDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
@@ -8,11 +9,13 @@ import { useDebugMode } from '../hooks/useDebugMode';
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 import FlashCardModal from '../components/syllables/FlashCardModal';
-
+import SettingsModal from '../components/SettingsModal';
 
 const ThaiSyllables = () => {
   const gameState = useReadThaiGameState();
   const [displayTrigger, setDisplayTrigger] = useState(null); // 'speak' | 'mastery' | null
+  const [showWelcome, setShowWelcome] = useState(true);
+  const [showSettings, setShowSettings] = useState(false); // State for SettingsModal
 
   const {
     currentLesson,
@@ -34,16 +37,6 @@ const ThaiSyllables = () => {
     invertTranslation,
     toggleInvertTranslation,
   } = gameState;
-
-
-  const {
-    copied,
-    showDebug,
-    setShowDebug,
-    copyDebugInfo
-  } = useDebugMode(workingList, possibleProblemList, problemList);
-
-  const [showWelcome, setShowWelcome] = useState(true);
 
   console.log('Render ThaiSyllables:', { currentLesson, totalLessons });
 
@@ -70,8 +63,6 @@ const ThaiSyllables = () => {
     setDisplayTrigger('mastery');
   };
 
-
-
   if (!current) {
     addMoreSyllables(5);
   }
@@ -79,6 +70,14 @@ const ThaiSyllables = () => {
   // Get the index of the current syllable in the original syllables array
   const currentIndexInJson = getCurrentProgress().currentIndex;
   const totalSyllables = getCurrentProgress().totalSyllables;
+
+  const openSettings = () => {
+    setShowSettings(true); // Show the SettingsModal
+  };
+
+  const closeSettings = () => {
+    setShowSettings(false); // Hide the SettingsModal
+  };
 
   return (
     <>
@@ -88,6 +87,18 @@ const ThaiSyllables = () => {
       />
       
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
+        <button 
+          onClick={openSettings} 
+          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-700"
+          title="Settings"
+        >
+          <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="6" r="2" />
+            <circle cx="12" cy="12" r="2" />
+            <circle cx="12" cy="18" r="2" />
+          </svg>
+        </button>
+
         <ItemDisplay
           current={current}
           iconSize={52}
@@ -99,14 +110,12 @@ const ThaiSyllables = () => {
         
         <MasteryControls onRatingSelect={handleRateMastery} />
 
-
         <CheckTranslationButton 
           onClick={() => setDisplayTrigger('CheckTranslationButton')} 
           current={current}
           invertTranslation={invertTranslation}
           toggleInvertTranslation={toggleInvertTranslation}
         />
-
 
         <FlashCardModal 
           current={gameState.current}
@@ -136,18 +145,9 @@ const ThaiSyllables = () => {
           toggleInvertTranslation={toggleInvertTranslation}
         />  
 
-        <DebugPanel
-          showDebug={showDebug}
-          setShowDebug={setShowDebug}
-          reportProblem={reportProblem}
-          reportPossibleProblem={reportPossibleProblem}
-          copyDebugInfo={copyDebugInfo}
-          copied={copied}
-          workingList={workingList}
-          possibleProblemList={possibleProblemList}
-          problemList={problemList}
-        />
 
+        {/* Render SettingsModal if showSettings is true */}
+        {showSettings && <SettingsModal onClose={closeSettings} />}
       </div>
     </>
   );

@@ -1,0 +1,293 @@
+{
+  "lessonName": "Thai Greetings and Farewells",
+  "lessonDescription": "Essential phrases for greeting people and saying goodbye in Thai, including formal and informal expressions, time-specific greetings, and polite particles. Includes common social phrases used when meeting and parting.",
+  "lessonLevel": "beginner",
+  "lessonType": "phrases",
+  "difficulty": 1,
+  "tags": ["greetings", "social", "basics", "politeness"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "sawadee",
+      "text": "สวัสดี",
+      "translation": "hello",
+      "romanization": "sà-wàt-dee",
+      "examples": [
+        {
+          "text": "สวัสดีครับ/ค่ะ",
+          "translation": "Hello (formal)",
+          "romanization": "sà-wàt-dee khráp/khà"
+        },
+        {
+          "text": "สวัสดีตอนเช้า",
+          "translation": "Good morning",
+          "romanization": "sà-wàt-dee dtɔɔn cháo"
+        }
+      ]
+    },
+    {
+      "id": "how-are-you",
+      "text": "สบายดีไหม",
+      "translation": "how are you",
+      "romanization": "sà-baai-dee mǎi",
+      "examples": [
+        {
+          "text": "คุณสบายดีไหม",
+          "translation": "How are you? (formal)",
+          "romanization": "khun sà-baai-dee mǎi"
+        },
+        {
+          "text": "สบายดี ขอบคุณ",
+          "translation": "I'm fine, thank you",
+          "romanization": "sà-baai-dee khɔ̀ɔp-khun"
+        }
+      ]
+    },
+    {
+      "id": "nice-to-meet",
+      "text": "ยินดีที่ได้รู้จัก",
+      "translation": "nice to meet you",
+      "romanization": "yin-dee thîi dâai rúu-jàk",
+      "examples": [
+        {
+          "text": "ยินดีที่ได้รู้จักครับ/ค่ะ",
+          "translation": "Nice to meet you (formal)",
+          "romanization": "yin-dee thîi dâai rúu-jàk khráp/khà"
+        },
+        {
+          "text": "ยินดีที่ได้พบกัน",
+          "translation": "Nice to meet you (alternative)",
+          "romanization": "yin-dee thîi dâai phóp gan"
+        }
+      ]
+    },
+    {
+      "id": "goodbye",
+      "text": "ลาก่อน",
+      "translation": "goodbye",
+      "romanization": "laa gɔ̀ɔn",
+      "examples": [
+        {
+          "text": "ลาก่อนครับ/ค่ะ",
+          "translation": "Goodbye (formal)",
+          "romanization": "laa gɔ̀ɔn khráp/khà"
+        },
+        {
+          "text": "แล้วพบกันใหม่",
+          "translation": "See you again",
+          "romanization": "lɛ́ɛo phóp gan mài"
+        }
+      ]
+    },
+    {
+      "id": "see-you-later",
+      "text": "เจอกันใหม่",
+      "translation": "see you later",
+      "romanization": "jəə gan mài",
+      "examples": [
+        {
+          "text": "เดี๋ยวเจอกัน",
+          "translation": "See you soon",
+          "romanization": "dǐaw jəə gan"
+        },
+        {
+          "text": "พรุ่งนี้เจอกัน",
+          "translation": "See you tomorrow",
+          "romanization": "phrûng-níi jəə gan"
+        }
+      ]
+    },
+    {
+      "id": "good-morning",
+      "text": "อรุณสวัสดิ์",
+      "translation": "good morning (formal)",
+      "romanization": "a-run-sà-wàt",
+      "examples": [
+        {
+          "text": "อรุณสวัสดิ์ครับ/ค่ะ",
+          "translation": "Good morning (very formal)",
+          "romanization": "a-run-sà-wàt khráp/khà"
+        },
+        {
+          "text": "สวัสดีตอนเช้า",
+          "translation": "Good morning (common)",
+          "romanization": "sà-wàt-dee dtɔɔn cháo"
+        }
+      ]
+    },
+    {
+      "id": "good-evening",
+      "text": "สวัสดีตอนเย็น",
+      "translation": "good evening",
+      "romanization": "sà-wàt-dee dtɔɔn yen",
+      "examples": [
+        {
+          "text": "สวัสดีตอนเย็นครับ/ค่ะ",
+          "translation": "Good evening (formal)",
+          "romanization": "sà-wàt-dee dtɔɔn yen khráp/khà"
+        },
+        {
+          "text": "ตอนเย็นแล้ว สวัสดี",
+          "translation": "It's evening now, hello",
+          "romanization": "dtɔɔn yen lɛ́ɛo sà-wàt-dee"
+        }
+      ]
+    },
+    {
+      "id": "good-night",
+      "text": "ราตรีสวัสดิ์",
+      "translation": "good night",
+      "romanization": "raa-dtree-sà-wàt",
+      "examples": [
+        {
+          "text": "ราตรีสวัสดิ์ครับ/ค่ะ",
+          "translation": "Good night (formal)",
+          "romanization": "raa-dtree-sà-wàt khráp/khà"
+        },
+        {
+          "text": "ฝันดีนะ",
+          "translation": "Sweet dreams",
+          "romanization": "fǎn dee ná"
+        }
+      ]
+    },
+    {
+      "id": "take-care",
+      "text": "รักษาตัวนะ",
+      "translation": "take care",
+      "romanization": "rák-sǎa dtua ná",
+      "examples": [
+        {
+          "text": "รักษาตัวด้วยนะ",
+          "translation": "Please take care",
+          "romanization": "rák-sǎa dtua dûai ná"
+        },
+        {
+          "text": "ดูแลตัวเองนะ",
+          "translation": "Take care of yourself",
+          "romanization": "duu-lɛɛ dtua-eeŋ ná"
+        }
+      ]
+    },
+    {
+      "id": "welcome",
+      "text": "ยินดีต้อนรับ",
+      "translation": "welcome",
+      "romanization": "yin-dee dtɔ̂ɔn-ráp",
+      "examples": [
+        {
+          "text": "ยินดีต้อนรับครับ/ค่ะ",
+          "translation": "Welcome (formal)",
+          "romanization": "yin-dee dtɔ̂ɔn-ráp khráp/khà"
+        },
+        {
+          "text": "ยินดีต้อนรับสู่ประเทศไทย",
+          "translation": "Welcome to Thailand",
+          "romanization": "yin-dee dtɔ̂ɔn-ráp sùu prà-thêet thai"
+        }
+      ]
+    },
+    {
+      "id": "long-time",
+      "text": "ไม่ได้เจอกันนาน",
+      "translation": "long time no see",
+      "romanization": "mâi dâai jəə gan naan",
+      "examples": [
+        {
+          "text": "ไม่ได้เจอกันนานเลย",
+          "translation": "Haven't seen you in a long time",
+          "romanization": "mâi dâai jəə gan naan ləəi"
+        },
+        {
+          "text": "หายไปไหนมา",
+          "translation": "Where have you been?",
+          "romanization": "hǎai bpai nǎi maa"
+        }
+      ]
+    },
+    {
+      "id": "how-are-family",
+      "text": "ครอบครัวสบายดีไหม",
+      "translation": "how is your family",
+      "romanization": "khrɔ̂ɔp-khruua sà-baai-dee mǎi",
+      "examples": [
+        {
+          "text": "ที่บ้านสบายดีไหม",
+          "translation": "How is everyone at home?",
+          "romanization": "thîi bâan sà-baai-dee mǎi"
+        },
+        {
+          "text": "ทุกคนสบายดี",
+          "translation": "Everyone is fine",
+          "romanization": "thúk khon sà-baai-dee"
+        }
+      ]
+    },
+    {
+      "id": "have-a-good-day",
+      "text": "ขอให้เป็นวันที่ดี",
+      "translation": "have a good day",
+      "romanization": "khɔ̌ɔ hâi bpen wan thîi dee",
+      "examples": [
+        {
+          "text": "ขอให้โชคดี",
+          "translation": "Good luck",
+          "romanization": "khɔ̌ɔ hâi chôok dee"
+        },
+        {
+          "text": "ขอให้เดินทางปลอดภัย",
+          "translation": "Have a safe journey",
+          "romanization": "khɔ̌ɔ hâi dəən thaang bplɔ̀ɔt-phai"
+        }
+      ]
+    },
+    {
+      "id": "excuse-me",
+      "text": "ขอโทษ",
+      "translation": "excuse me",
+      "romanization": "khɔ̌ɔ-thôot",
+      "examples": [
+        {
+          "text": "ขอโทษที่รบกวน",
+          "translation": "Sorry to bother you",
+          "romanization": "khɔ̌ɔ-thôot thîi róp-guan"
+        },
+        {
+          "text": "ขอโทษนะครับ/คะ",
+          "translation": "Excuse me (polite)",
+          "romanization": "khɔ̌ɔ-thôot ná khráp/khà"
+        }
+      ]
+    },
+    {
+      "id": "informal-bye",
+      "text": "บาย",
+      "translation": "bye (informal)",
+      "romanization": "baai",
+      "examples": [
+        {
+          "text": "บายบาย",
+          "translation": "Bye bye (very informal)",
+          "romanization": "baai-baai"
+        },
+        {
+          "text": "บายก่อนนะ",
+          "translation": "Bye for now",
+          "romanization": "baai gɔ̀ɔn ná"
+        }
+      ]
+    }
+  ]
+}

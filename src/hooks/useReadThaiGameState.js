@@ -13,6 +13,10 @@ import food2VegData from "../lessons/food2veg.json";
 import atTheRestrauntData from "../lessons/at-the-restraunt.json";
 import languageLearningData from "../lessons/language-learning.json";
 import lessonForKids1Data from "../lessons/lesson-for-kids1.json";
+import greetingsData from "../lessons/greetings.json";
+import envirenmentalSignsData from "../lessons/envirenmental-signs.json";
+import atTheBarData from "../lessons/at-the-bar.json";
+import pronunciationAndSpellingData from "../lessons/pronounciation-and-spelling";
 
 export const useReadThaiGameState = () => {
   const lessons = [
@@ -29,6 +33,10 @@ export const useReadThaiGameState = () => {
     food2VegData,
     atTheRestrauntData,
     languageLearningData,
+    greetingsData,
+    envirenmentalSignsData,
+    atTheBarData,
+    pronunciationAndSpellingData,
   ];
 
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);

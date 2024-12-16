@@ -1,0 +1,586 @@
+{
+  "lessonName": "Thai Bar and Social Phrases",
+  "lessonDescription": "Common phrases used in Thai bars and social settings, including ordering drinks, making friends, casual conversation, and handling unwanted attention. Note: some phrases may be informal or colloquial.",
+  "lessonLevel": "intermediate",
+  "lessonType": "phrases",
+  "difficulty": 2,
+  "tags": ["social", "nightlife", "casual", "drinks", "slang"],
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
+  "items": [
+    {
+      "id": "order-drink",
+      "text": "สั่งเครื่องดื่ม",
+      "translation": "order drinks",
+      "romanization": "sàng khrʉ̂ang dʉ̀ʉm",
+      "examples": [
+        {
+          "text": "ขอเบียร์เย็นๆ",
+          "translation": "I'd like a cold beer",
+          "romanization": "khǒo bia yen yen"
+        },
+        {
+          "text": "ขอเหล้าโซดา",
+          "translation": "Whiskey soda please",
+          "romanization": "khǒo lâo soo-daa"
+        }
+      ]
+    },
+    {
+      "id": "cheers",
+      "text": "ชนแก้ว",
+      "translation": "cheers/toast",
+      "romanization": "chon gâew",
+      "examples": [
+        {
+          "text": "ชนแก้วให้กับมิตรภาพ",
+          "translation": "Cheers to friendship",
+          "romanization": "chon gâew hâi gàp mít-trà-phaap"
+        },
+        {
+          "text": "ไชโย",
+          "translation": "Cheers! (celebratory)",
+          "romanization": "chai-yoo"
+        }
+      ]
+    },
+    {
+      "id": "another-round",
+      "text": "อีกรอบ",
+      "translation": "another round",
+      "romanization": "ìik rɔ̂ɔp",
+      "examples": [
+        {
+          "text": "ขออีกรอบนึง",
+          "translation": "One more round please",
+          "romanization": "khǒo ìik rɔ̂ɔp nʉng"
+        },
+        {
+          "text": "รอบสุดท้าย",
+          "translation": "Last round",
+          "romanization": "rɔ̂ɔp sùt tháai"
+        }
+      ]
+    },
+    {
+      "id": "not-interested",
+      "text": "ไม่สนใจ",
+      "translation": "not interested",
+      "romanization": "mâi sǒn-jai",
+      "examples": [
+        {
+          "text": "ไม่สนใจ ขอบคุณ",
+          "translation": "Not interested, thanks",
+          "romanization": "mâi sǒn-jai khɔ̀ɔp-khun"
+        },
+        {
+          "text": "มีแฟนแล้ว",
+          "translation": "I have a partner already",
+          "romanization": "mee fɛɛn lɛ́ɛo"
+        }
+      ]
+    },
+    {
+      "id": "go-away",
+      "text": "ไปให้พ้น",
+      "translation": "go away",
+      "romanization": "bpai hâi phón",
+      "examples": [
+        {
+          "text": "ไม่ต้องมายุ่ง",
+          "translation": "Don't bother me",
+          "romanization": "mâi dtɔ̂ɔng maa yûng"
+        },
+        {
+          "text": "ขอความเป็นส่วนตัว",
+          "translation": "I want privacy",
+          "romanization": "khɔ̌ɔ khwaam bpen sùan dtua"
+        }
+      ]
+    },
+    {
+      "id": "compliment",
+      "text": "หล่อ/สวย",
+      "translation": "handsome/beautiful",
+      "romanization": "lɔ̀ɔ/sǔai",
+      "examples": [
+        {
+          "text": "คุณดูดีจัง",
+          "translation": "You look really good",
+          "romanization": "khun duu dee jang"
+        },
+        {
+          "text": "ยิ้มสวยจัง",
+          "translation": "Beautiful smile",
+          "romanization": "yím sǔai jang"
+        }
+      ]
+    },
+    {
+      "id": "buy-drink",
+      "text": "เลี้ยงเครื่องดื่ม",
+      "translation": "buy a drink",
+      "romanization": "líang khrʉ̂ang-dʉ̀ʉm",
+      "examples": [
+        {
+          "text": "ขอเลี้ยงเครื่องดื่มได้ไหม",
+          "translation": "Can I buy you a drink?",
+          "romanization": "khɔ̌ɔ líang khrʉ̂ang-dʉ̀ʉm dâai mǎi"
+        },
+        {
+          "text": "ให้ฉันเลี้ยงนะ",
+          "translation": "Let me treat you",
+          "romanization": "hâi chǎn líang ná"
+        }
+      ]
+    },
+    {
+      "id": "too-drunk",
+      "text": "เมามาก",
+      "translation": "very drunk",
+      "romanization": "mao mâak",
+      "examples": [
+        {
+          "text": "เมาแล้ว กลับดีกว่า",
+          "translation": "I'm drunk, better go home",
+          "romanization": "mao lɛ́ɛo glàp dee gwàa"
+        },
+        {
+          "text": "ดื่มพอแล้ว",
+          "translation": "I've had enough to drink",
+          "romanization": "dʉ̀ʉm phɔɔ lɛ́ɛo"
+        }
+      ]
+    },
+    {
+      "id": "dance",
+      "text": "เต้น",
+      "translation": "dance",
+      "romanization": "dtên",
+      "examples": [
+        {
+          "text": "ไปเต้นกันไหม",
+          "translation": "Want to dance?",
+          "romanization": "bpai dtên gan mǎi"
+        },
+        {
+          "text": "ชอบเพลงนี้",
+          "translation": "I like this song",
+          "romanization": "chɔ̂ɔp phleeng níi"
+        }
+      ]
+    },
+    {
+      "id": "hangover",
+      "text": "เมาค้าง",
+      "translation": "hangover",
+      "romanization": "mao kháang",
+      "examples": [
+        {
+          "text": "เมาค้างหนักมาก",
+          "translation": "Really bad hangover",
+          "romanization": "mao kháang nàk mâak"
+        },
+        {
+          "text": "ปวดหัวจัง",
+          "translation": "Such a headache",
+          "romanization": "bpùat hǔa jang"
+        }
+      ]
+    },
+    {
+      "id": "bill-share",
+      "text": "แชร์บิล",
+      "translation": "split the bill",
+      "romanization": "chɛɛ bin",
+      "examples": [
+        {
+          "text": "แชร์กันคนละครึ่ง",
+          "translation": "Split it half-half",
+          "romanization": "chɛɛ gan khon lá khrʉ̂ng"
+        },
+        {
+          "text": "คิดเงินแยกกัน",
+          "translation": "Separate bills please",
+          "romanization": "khít ngən yɛ̂ɛk gan"
+        }
+      ]
+    },
+    {
+      "id": "joke",
+      "text": "ตลก",
+      "translation": "funny/joke",
+      "romanization": "dtà-lòk",
+      "examples": [
+        {
+          "text": "ล้อเล่นนะ",
+          "translation": "Just kidding",
+          "romanization": "lɔ́ɔ lên ná"
+        },
+        {
+          "text": "ขำจัง",
+          "translation": "That's hilarious",
+          "romanization": "khǎm jang"
+        }
+      ]
+    },
+    {
+      "id": "friends",
+      "text": "เพื่อน",
+      "translation": "friend",
+      "romanization": "phʉ̂an",
+      "examples": [
+        {
+          "text": "มาดื่มกับเพื่อน",
+          "translation": "Drinking with friends",
+          "romanization": "maa dʉ̀ʉm gàp phʉ̂an"
+        },
+        {
+          "text": "แนะนำเพื่อนหน่อย",
+          "translation": "Introduce your friends",
+          "romanization": "nɛ́-nam phʉ̂an nɔ̀i"
+        }
+      ]
+    },
+    {
+      "id": "party",
+      "text": "ปาร์ตี้",
+      "translation": "party",
+      "romanization": "bpaa-dtîi",
+      "examples": [
+        {
+          "text": "ไปปาร์ตี้กัน",
+          "translation": "Let's go party",
+          "romanization": "bpai bpaa-dtîi gan"
+        },
+        {
+          "text": "ฉลองกันมั้ย",
+          "translation": "Shall we celebrate?",
+          "romanization": "chà-lɔɔng gan mái"
+        }
+      ]
+    },
+    {
+      "id": "leave",
+      "text": "กลับแล้ว",
+      "translation": "heading out",
+      "romanization": "glàp lɛ́ɛo",
+      "examples": [
+        {
+          "text": "ฉันจะกลับแล้ว",
+          "translation": "I'm leaving now",
+          "romanization": "chǎn jà glàp lɛ́ɛo"
+        },
+        {
+          "text": "ขอตัวก่อน",
+          "translation": "I'll excuse myself",
+          "romanization": "khɔ̌ɔ dtua gɔ̀ɔn"
+        }
+      ]
+    },
+    {
+      "lessonName": "Thai Bar and Social Phrases",
+      "lessonDescription": "Common phrases used in Thai bars and social settings, including ordering drinks, making friends, casual conversation, and handling unwanted attention. Note: some phrases may be informal or colloquial.",
+      "lessonLevel": "intermediate",
+      "lessonType": "phrases",
+      "difficulty": 2,
+      "tags": ["social", "nightlife", "casual", "drinks", "slang"],
+      "languagePair": {
+        "target": {
+          "code": "th",
+          "name": "Thai",
+          "nativeName": "ภาษาไทย",
+          "script": "thai"
+        },
+        "native": {
+          "code": "en",
+          "name": "English",
+          "nativeName": "English"
+        }
+      },
+      "items": [
+        {
+          "id": "order-drink",
+          "text": "สั่งเครื่องดื่ม",
+          "translation": "order drinks",
+          "romanization": "sàng khrʉ̂ang dʉ̀ʉm",
+          "examples": [
+            {
+              "text": "ขอเบียร์เย็นๆ",
+              "translation": "I'd like a cold beer",
+              "romanization": "khǒo bia yen yen"
+            },
+            {
+              "text": "ขอเหล้าโซดา",
+              "translation": "Whiskey soda please",
+              "romanization": "khǒo lâo soo-daa"
+            }
+          ]
+        },
+        {
+          "id": "cheers",
+          "text": "ชนแก้ว",
+          "translation": "cheers/toast",
+          "romanization": "chon gâew",
+          "examples": [
+            {
+              "text": "ชนแก้วให้กับมิตรภาพ",
+              "translation": "Cheers to friendship",
+              "romanization": "chon gâew hâi gàp mít-trà-phaap"
+            },
+            {
+              "text": "ไชโย",
+              "translation": "Cheers! (celebratory)",
+              "romanization": "chai-yoo"
+            }
+          ]
+        },
+        {
+          "id": "another-round",
+          "text": "อีกรอบ",
+          "translation": "another round",
+          "romanization": "ìik rɔ̂ɔp",
+          "examples": [
+            {
+              "text": "ขออีกรอบนึง",
+              "translation": "One more round please",
+              "romanization": "khǒo ìik rɔ̂ɔp nʉng"
+            },
+            {
+              "text": "รอบสุดท้าย",
+              "translation": "Last round",
+              "romanization": "rɔ̂ɔp sùt tháai"
+            }
+          ]
+        },
+        {
+          "id": "not-interested",
+          "text": "ไม่สนใจ",
+          "translation": "not interested",
+          "romanization": "mâi sǒn-jai",
+          "examples": [
+            {
+              "text": "ไม่สนใจ ขอบคุณ",
+              "translation": "Not interested, thanks",
+              "romanization": "mâi sǒn-jai khɔ̀ɔp-khun"
+            },
+            {
+              "text": "มีแฟนแล้ว",
+              "translation": "I have a partner already",
+              "romanization": "mee fɛɛn lɛ́ɛo"
+            }
+          ]
+        },
+        {
+          "id": "go-away",
+          "text": "ไปให้พ้น",
+          "translation": "go away",
+          "romanization": "bpai hâi phón",
+          "examples": [
+            {
+              "text": "ไม่ต้องมายุ่ง",
+              "translation": "Don't bother me",
+              "romanization": "mâi dtɔ̂ɔng maa yûng"
+            },
+            {
+              "text": "ขอความเป็นส่วนตัว",
+              "translation": "I want privacy",
+              "romanization": "khɔ̌ɔ khwaam bpen sùan dtua"
+            }
+          ]
+        },
+        {
+          "id": "compliment",
+          "text": "หล่อ/สวย",
+          "translation": "handsome/beautiful",
+          "romanization": "lɔ̀ɔ/sǔai",
+          "examples": [
+            {
+              "text": "คุณดูดีจัง",
+              "translation": "You look really good",
+              "romanization": "khun duu dee jang"
+            },
+            {
+              "text": "ยิ้มสวยจัง",
+              "translation": "Beautiful smile",
+              "romanization": "yím sǔai jang"
+            }
+          ]
+        },
+        {
+          "id": "buy-drink",
+          "text": "เลี้ยงเครื่องดื่ม",
+          "translation": "buy a drink",
+          "romanization": "líang khrʉ̂ang-dʉ̀ʉm",
+          "examples": [
+            {
+              "text": "ขอเลี้ยงเครื่องดื่มได้ไหม",
+              "translation": "Can I buy you a drink?",
+              "romanization": "khɔ̌ɔ líang khrʉ̂ang-dʉ̀ʉm dâai mǎi"
+            },
+            {
+              "text": "ให้ฉันเลี้ยงนะ",
+              "translation": "Let me treat you",
+              "romanization": "hâi chǎn líang ná"
+            }
+          ]
+        },
+        {
+          "id": "too-drunk",
+          "text": "เมามาก",
+          "translation": "very drunk",
+          "romanization": "mao mâak",
+          "examples": [
+            {
+              "text": "เมาแล้ว กลับดีกว่า",
+              "translation": "I'm drunk, better go home",
+              "romanization": "mao lɛ́ɛo glàp dee gwàa"
+            },
+            {
+              "text": "ดื่มพอแล้ว",
+              "translation": "I've had enough to drink",
+              "romanization": "dʉ̀ʉm phɔɔ lɛ́ɛo"
+            }
+          ]
+        },
+        {
+          "id": "dance",
+          "text": "เต้น",
+          "translation": "dance",
+          "romanization": "dtên",
+          "examples": [
+            {
+              "text": "ไปเต้นกันไหม",
+              "translation": "Want to dance?",
+              "romanization": "bpai dtên gan mǎi"
+            },
+            {
+              "text": "ชอบเพลงนี้",
+              "translation": "I like this song",
+              "romanization": "chɔ̂ɔp phleeng níi"
+            }
+          ]
+        },
+        {
+          "id": "hangover",
+          "text": "เมาค้าง",
+          "translation": "hangover",
+          "romanization": "mao kháang",
+          "examples": [
+            {
+              "text": "เมาค้างหนักมาก",
+              "translation": "Really bad hangover",
+              "romanization": "mao kháang nàk mâak"
+            },
+            {
+              "text": "ปวดหัวจัง",
+              "translation": "Such a headache",
+              "romanization": "bpùat hǔa jang"
+            }
+          ]
+        },
+        {
+          "id": "bill-share",
+          "text": "แชร์บิล",
+          "translation": "split the bill",
+          "romanization": "chɛɛ bin",
+          "examples": [
+            {
+              "text": "แชร์กันคนละครึ่ง",
+              "translation": "Split it half-half",
+              "romanization": "chɛɛ gan khon lá khrʉ̂ng"
+            },
+            {
+              "text": "คิดเงินแยกกัน",
+              "translation": "Separate bills please",
+              "romanization": "khít ngən yɛ̂ɛk gan"
+            }
+          ]
+        },
+        {
+          "id": "joke",
+          "text": "ตลก",
+          "translation": "funny/joke",
+          "romanization": "dtà-lòk",
+          "examples": [
+            {
+              "text": "ล้อเล่นนะ",
+              "translation": "Just kidding",
+              "romanization": "lɔ́ɔ lên ná"
+            },
+            {
+              "text": "ขำจัง",
+              "translation": "That's hilarious",
+              "romanization": "khǎm jang"
+            }
+          ]
+        },
+        {
+          "id": "friends",
+          "text": "เพื่อน",
+          "translation": "friend",
+          "romanization": "phʉ̂an",
+          "examples": [
+            {
+              "text": "มาดื่มกับเพื่อน",
+              "translation": "Drinking with friends",
+              "romanization": "maa dʉ̀ʉm gàp phʉ̂an"
+            },
+            {
+              "text": "แนะนำเพื่อนหน่อย",
+              "translation": "Introduce your friends",
+              "romanization": "nɛ́-nam phʉ̂an nɔ̀i"
+            }
+          ]
+        },
+        {
+          "id": "party",
+          "text": "ปาร์ตี้",
+          "translation": "party",
+          "romanization": "bpaa-dtîi",
+          "examples": [
+            {
+              "text": "ไปปาร์ตี้กัน",
+              "translation": "Let's go party",
+              "romanization": "bpai bpaa-dtîi gan"
+            },
+            {
+              "text": "ฉลองกันมั้ย",
+              "translation": "Shall we celebrate?",
+              "romanization": "chà-lɔɔng gan mái"
+            }
+          ]
+        },
+        {
+          "id": "leave",
+          "text": "กลับแล้ว",
+          "translation": "heading out",
+          "romanization": "glàp lɛ́ɛo",
+          "examples": [
+            {
+              "text": "ฉันจะกลับแล้ว",
+              "translation": "I'm leaving now",
+              "romanization": "chǎn jà glàp lɛ́ɛo"
+            },
+            {
+              "text": "ขอตัวก่อน",
+              "translation": "I'll excuse myself",
+              "romanization": "khɔ̌ɔ dtua gɔ̀ɔn"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
