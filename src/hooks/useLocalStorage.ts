@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const useLocalStorage = (key, initialValue) => {
+const useLocalStorage = (key: string, initialValue: any) => {
   // Always start with initialValue on server-side
   const [storedValue, setStoredValue] = useState(initialValue);
 

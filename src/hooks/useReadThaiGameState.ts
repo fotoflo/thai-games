@@ -1,5 +1,15 @@
 import { useEffect } from "react";
 import useLocalStorage from "./useLocalStorage";
+import {
+  Lesson,
+  LessonItem,
+  WorkingSetItem,
+  LessonState,
+  GameProgress,
+  LessonProgress,
+} from "../types/lessons";
+
+// Import lesson data
 import numbersLesson from "../lessons/numbers.json";
 import syllables1Data from "../lessons/syllables1.json";
 import syllables2Data from "../lessons/syllables2.json";
@@ -16,10 +26,17 @@ import lessonForKids1Data from "../lessons/lesson-for-kids1.json";
 import greetingsData from "../lessons/greetings.json";
 import envirenmentalSignsData from "../lessons/envirenmental-signs.json";
 import atTheBarData from "../lessons/at-the-bar.json";
-import pronunciationAndSpellingData from "../lessons/pronounciation-and-spelling";
+import pronunciationAndSpellingData from "../lessons/pronounciation-and-spelling.json";
+
+interface SpeakFunctionParams {
+  current: WorkingSetItem;
+  setSpeaking: () => void;
+  setError: () => void;
+  onEnd: () => void;
+}
 
 export const useReadThaiGameState = () => {
-  const lessons = [
+  const lessons: Lesson[] = [
     words1Data,
     numbersLesson,
     lessonForKids1Data,
@@ -35,51 +52,53 @@ export const useReadThaiGameState = () => {
     languageLearningData,
     greetingsData,
     envirenmentalSignsData,
-    atTheBarData,
     pronunciationAndSpellingData,
   ];
 
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
   const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
   const [current, setCurrent] = useLocalStorage("current", null);
-  const [invertTranslation, setInvertTranslation] = useLocalStorage(
+  const [invertTranslation, setInvertTranslation] = useLocalStorage<boolean>(
     "invertTranslation",
     false
   );
 
-  const toggleInvertTranslation = () => {
+  const toggleInvertTranslation = (): void => {
     setInvertTranslation((prevState) => !prevState);
   };
 
-  const initialLessonStates = lessons.reduce((acc, _, index) => {
-    acc[index] = {
-      progressionMode: "progression",
-      itemStates: {},
-      lastAddedIndex: -1,
-      problemList: [],
-      possibleProblemList: [],
-      workingList: [],
-    };
-    return acc;
-  }, {});
+  const initialLessonStates: Record<number, LessonState> = lessons.reduce(
+    (acc, _, index) => {
+      acc[index] = {
+        progressionMode: "progression",
+        itemStates: {},
+        lastAddedIndex: -1,
+        problemList: [],
+        possibleProblemList: [],
+        workingList: [],
+      };
+      return acc;
+    },
+    {} as Record<number, LessonState>
+  );
 
   const [lessonStates, setLessonStates] = useLocalStorage(
     "lessonStates",
     initialLessonStates
   );
 
-  const setCurrentLessonAndReset = (newLesson) => {
+  const setCurrentLessonAndReset = (newLesson: number): void => {
     setCurrentLesson(newLesson);
     initializeWorkingSet(newLesson);
   };
 
   const totalLessons = lessons.length;
 
-  const getItemText = (item) => {
+  const getItemText = (item: string | LessonItem): string => {
     return typeof item === "string" ? item : item?.text;
   };
 
-  const initializeWorkingSet = (lessonIndex) => {
+  const initializeWorkingSet = (lessonIndex: number): void => {
     if (!lessons[lessonIndex]) {
       console.error(`Lesson ${lessonIndex} is undefined`);
       return;
@@ -94,7 +113,7 @@ export const useReadThaiGameState = () => {
         return currentState?.itemStates[itemText]?.mastery !== 5;
       });
 
-      const randomWorkingSet = Array(5)
+      const randomWorkingSet: WorkingSetItem[] = Array(5)
         .fill(null)
         .map(() => {
           const randomIndex = Math.floor(Math.random() * availableItems.length);
@@ -141,7 +160,7 @@ export const useReadThaiGameState = () => {
     }
   }, []);
 
-  const getRandomUnusedIndex = () => {
+  const getRandomUnusedIndex = (): number => {
     const currentLessonItems = lessons[currentLesson - 1].items;
     const used = lessonStates[currentLesson - 1]?.itemStates || {};
 
@@ -156,7 +175,7 @@ export const useReadThaiGameState = () => {
       return Math.floor(Math.random() * currentLessonItems.length);
     }
 
-    let randomIndex;
+    let randomIndex: number;
     do {
       randomIndex = Math.floor(Math.random() * currentLessonItems.length);
     } while (Object.keys(used).includes(currentLessonItems[randomIndex].text));
@@ -178,7 +197,7 @@ export const useReadThaiGameState = () => {
     return randomIndex;
   };
 
-  const addMoreSyllables = (count = 1) => {
+  const addMoreSyllables = (count: number = 1): void => {
     const currentLessonItems = lessons[currentLesson].items;
     const mode = lessonStates[currentLesson]?.progressionMode || "progression";
 
@@ -188,7 +207,7 @@ export const useReadThaiGameState = () => {
           Math.random() * currentLessonItems.length
         );
         const newItem = currentLessonItems[randomIndex];
-        const newItemObj = {
+        const newItemObj: WorkingSetItem = {
           text: getItemText(newItem),
           mastery: 1,
           details: typeof newItem === "object" ? newItem : null,
@@ -210,12 +229,12 @@ export const useReadThaiGameState = () => {
         return;
       }
 
-      const newItems = [];
+      const newItems: WorkingSetItem[] = [];
       for (let i = 0; i < count; i++) {
         const index = lastIndex + 1 + i;
         if (index < currentLessonItems.length) {
           const newItem = currentLessonItems[index];
-          const newItemObj = {
+          const newItemObj: WorkingSetItem = {
             text: getItemText(newItem),
             mastery: 1,
             details: typeof newItem === "object" ? newItem : null,
@@ -248,7 +267,11 @@ export const useReadThaiGameState = () => {
     }
   };
 
-  const rateMastery = async (rating, speakFunction, targetIndex = null) => {
+  const rateMastery = async (
+    rating: number,
+    speakFunction?: (params: SpeakFunctionParams) => void,
+    targetIndex: number | null = null
+  ): Promise<void> => {
     if (!current) return;
 
     if (targetIndex !== null) {
@@ -260,7 +283,7 @@ export const useReadThaiGameState = () => {
     }
 
     if (speakFunction) {
-      await new Promise((resolve) => {
+      await new Promise<void>((resolve) => {
         speakFunction({
           current,
           setSpeaking: () => {},
@@ -309,7 +332,7 @@ export const useReadThaiGameState = () => {
     setWorkingSet(updated);
   };
 
-  const reportProblem = () => {
+  const reportProblem = (): void => {
     if (current) {
       setLessonStates((prev) => ({
         ...prev,
@@ -322,7 +345,7 @@ export const useReadThaiGameState = () => {
     }
   };
 
-  const reportPossibleProblem = () => {
+  const reportPossibleProblem = (): void => {
     if (current) {
       setLessonStates((prev) => ({
         ...prev,
@@ -338,12 +361,12 @@ export const useReadThaiGameState = () => {
     }
   };
 
-  const nextSyllable = () => {
-    const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
+  const nextSyllable = (): void => {
+    const nextIndex = (workingSet.indexOf(current!) + 1) % workingSet.length;
     setCurrent(workingSet[nextIndex]);
   };
 
-  const getCurrentProgress = () => ({
+  const getCurrentProgress = (): GameProgress => ({
     currentIndex: current
       ? lessons[currentLesson].items.findIndex(
           (item) => getItemText(item) === current.text
@@ -352,7 +375,9 @@ export const useReadThaiGameState = () => {
     totalItems: lessons[currentLesson].items.length,
   });
 
-  const setProgressionMode = (newMode) => {
+  const setProgressionMode = (
+    newMode: LessonState["progressionMode"]
+  ): LessonState["progressionMode"] => {
     setLessonStates((prev) => ({
       ...prev,
       [currentLesson]: {
@@ -386,7 +411,7 @@ export const useReadThaiGameState = () => {
     return newMode;
   };
 
-  const getLessonProgress = (lessonIndex) => {
+  const getLessonProgress = (lessonIndex: number): LessonProgress => {
     const states = lessonStates[lessonIndex]?.itemStates || {};
     const totalItems = lessons[lessonIndex].items.length;
     const masteredItems = Object.values(states).filter(
