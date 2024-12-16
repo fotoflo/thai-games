@@ -1,14 +1,32 @@
-import React from 'react';
-import { RefreshCcw, Check } from 'lucide-react';
+import React from "react";
+import { RefreshCcw, Check } from "lucide-react";
 
-const MasteryControls = ({ onRatingSelect }) => {
+const MasteryControls = ({
+  onRatingSelect,
+  className,
+}: {
+  onRatingSelect: (value: number) => void;
+  className?: string;
+}) => {
   const masteryLevels = [
-    { level: 2, label: "Next", color: "bg-yellow-600 hover:bg-yellow-500", value: 3, icon: RefreshCcw },
-    { level: 3, label: "Mastered", color: "bg-green-700 hover:bg-green-600", value: 5, icon: Check },
+    {
+      level: 2,
+      label: "Next",
+      color: "bg-yellow-600 hover:bg-yellow-500",
+      value: 3,
+      icon: RefreshCcw,
+    },
+    {
+      level: 3,
+      label: "Mastered",
+      color: "bg-green-700 hover:bg-green-600",
+      value: 5,
+      icon: Check,
+    },
   ];
 
   return (
-    <div className="space-y-2 mb-4">
+    <div className={`space-y-2 mb-10`}>
       <div className="grid grid-cols-2 gap-2">
         {masteryLevels.map(({ level, label, color, value, icon: Icon }) => (
           <button
@@ -25,7 +43,7 @@ const MasteryControls = ({ onRatingSelect }) => {
           >
             <div className="flex items-center gap-1">
               <span className="text-sm">{label}</span>
-              {Icon && <Icon size={24} style={{ fontWeight: 'bold' }} />}
+              {Icon && <Icon size={24} style={{ fontWeight: "bold" }} />}
             </div>
           </button>
         ))}

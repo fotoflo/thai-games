@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useReadThaiGameState } from '../hooks/useReadThaiGameState';
 import ItemDisplay from '../components/syllables/ItemDisplay';
 import MasteryControls from '../components/syllables/MasteryControls';
+
 import WelcomeModal from '../components/ReadThaiWelcomeModal';
 import CheckTranslationButton from '../components/syllables/CheckTranslationButton';
 import FlashCardModal from '../components/syllables/FlashCardModal';
@@ -103,8 +104,6 @@ const ThaiSyllables = () => {
           speakOnUnmount={true}
           invertTranslation={invertTranslation}
         />
-        
-        <MasteryControls onRatingSelect={handleRateMastery} />
 
         <CheckTranslationButton 
           onClick={() => setDisplayTrigger('CheckTranslationButton')} 
@@ -129,6 +128,11 @@ const ThaiSyllables = () => {
       right-0
       bg-gray-900
       bg-opacity-90  p-4">
+
+        <Divider className="mb-10 -mx-4" borderClass="border-slate-700"/>
+
+          <MasteryControls onRatingSelect={handleRateMastery} className="mb-10"/>
+
 
         <Divider className="mb-4 -mx-4" borderClass="border-slate-700"/>
 
