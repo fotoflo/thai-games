@@ -85,8 +85,12 @@ const ThaiSyllables = () => {
     setShowSettingsContainer(false); // Hide the SettingsModalContainer
   };
 
-  const handleViewLessonDetails = (lesson) => {
-    setSelectedLesson(lesson);
+  const handleViewLessonDetails = (lesson, index) => {
+    setSelectedLesson({ lesson, index });
+  };
+
+  const handleStudyLesson = (index) => {
+    setCurrentLesson(index);
   };
 
   return (
@@ -179,8 +183,10 @@ const ThaiSyllables = () => {
         {selectedLesson && (
           <div className="fixed inset-0 z-50">
             <LessonDetails 
-              lesson={selectedLesson}
+              lesson={selectedLesson.lesson}
+              lessonIndex={selectedLesson.index}
               onClose={() => setSelectedLesson(null)}
+              onStudyLesson={handleStudyLesson}
             />
           </div>
         )}
