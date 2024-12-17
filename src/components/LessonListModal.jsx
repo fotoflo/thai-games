@@ -1,6 +1,7 @@
 import React from 'react';
+import LessonItemsIcon from './Icons/LessonItemsIcon';
 
-const LessonListModal = ({ onClose, lessons, setCurrentLesson }) => {
+const LessonListModal = ({ onClose, lessons, setCurrentLesson, onViewDetails }) => {
   const handleLessonClick = (index) => {
     setCurrentLesson(index);
     onClose();
@@ -17,13 +18,13 @@ const LessonListModal = ({ onClose, lessons, setCurrentLesson }) => {
           <div className="grid grid-cols-1 gap-4">
             {lessons.map((lesson, index) => (
               <div 
-                key={index} 
-                className="bg-gray-700 p-5 rounded-lg shadow-md cursor-pointer 
-                         transition-all duration-200 
-                         hover:shadow-xl"
-                onClick={() => handleLessonClick(index)}
+                key={lesson.id || index} 
+                className="bg-gray-700 p-5 rounded-lg shadow-md"
               >
-                <div className="flex justify-between items-start mb-2">
+                <div 
+                  className="flex justify-between items-start mb-2 cursor-pointer" 
+                  onClick={() => handleLessonClick(index)}
+                >
                   <h3 className="text-white text-xl font-semibold">{lesson.lessonName}</h3>
                   {lesson.lessonLevel && (
                     <span className="bg-blue-600 text-white text-sm px-3 py-1 rounded-full">
@@ -35,11 +36,22 @@ const LessonListModal = ({ onClose, lessons, setCurrentLesson }) => {
                 <p className="text-gray-300 mb-3">{lesson.lessonDescription}</p>
                 
                 <div className="flex items-center text-gray-400 text-sm">
-                  <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
-                  </svg>
+                  <LessonItemsIcon />
                   {lesson.items.length} items
                 </div>
+
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onViewDetails(lesson);
+                    onClose();
+                  }}
+                  className="mt-4 w-full p-2 bg-green-600 text-white rounded-lg font-semibold
+                           transition-colors duration-200 hover:bg-green-700
+                           focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                >
+                  Lesson Details
+                </button>
               </div>
             ))}
           </div>

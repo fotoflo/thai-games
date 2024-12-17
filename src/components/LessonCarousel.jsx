@@ -2,9 +2,15 @@ import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import LessonListModal from './LessonListModal';
 
-const LessonCarousel = ({ currentLesson, setCurrentLesson, totalLessons, lessons }) => {
+const LessonCarousel = ({ 
+  currentLesson, 
+  setCurrentLesson, 
+  totalLessons, 
+  lessons,
+  onViewDetails 
+}) => {
   const carouselRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showLessonList, setShowLessonList] = useState(false);
 
   return (
     <div className="flex items-center mb-6">
@@ -24,7 +30,7 @@ const LessonCarousel = ({ currentLesson, setCurrentLesson, totalLessons, lessons
                 {lessons[currentLesson].lessonName}
               </button>
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => setShowLessonList(true)}
                 className={`px-3 py-2 rounded-md transition-colors bg-gray-700 hover:bg-gray-600 text-gray-300`}
               >
                 More Lessons
@@ -36,11 +42,12 @@ const LessonCarousel = ({ currentLesson, setCurrentLesson, totalLessons, lessons
         </div>
       </div>
 
-      {isModalOpen && (
-        <LessonListModal 
+      {showLessonList && (
+        <LessonListModal
+          onClose={() => setShowLessonList(false)}
           lessons={lessons}
           setCurrentLesson={setCurrentLesson}
-          onClose={() => setIsModalOpen(false)} 
+          onViewDetails={onViewDetails}
         />
       )}
     </div>

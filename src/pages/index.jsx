@@ -14,12 +14,14 @@ import ToggleInvertTranslationButton from '../components/syllables/ToggleInvertT
 import SettingsHamburger from '../components/ui/SettingsHamburger';
 import Divider from '../components/ui/divider';
 import SettingsMenuButton from '../components/SettingsMenuButton';
+import LessonDetails from '../components/syllables/LessonDetailScreen';
 
 const ThaiSyllables = () => {
   const gameState = useReadThaiGameState();
   const [displayTrigger, setDisplayTrigger] = useState(null); // 'speak' | 'mastery' | null
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false); // State for SettingsModalContainer
+  const [selectedLesson, setSelectedLesson] = useState(null);
 
   const {
     currentLesson,
@@ -81,6 +83,10 @@ const ThaiSyllables = () => {
 
   const closeSettings = () => {
     setShowSettingsContainer(false); // Hide the SettingsModalContainer
+  };
+
+  const handleViewLessonDetails = (lesson) => {
+    setSelectedLesson(lesson);
   };
 
   return (
@@ -151,6 +157,7 @@ const ThaiSyllables = () => {
               setCurrentLesson={setCurrentLesson}
               totalLessons={totalLessons}
               lessons={lessons}
+              onViewDetails={handleViewLessonDetails}
             />
             
             <ProgressionSelector 
@@ -167,6 +174,16 @@ const ThaiSyllables = () => {
 
         {/* Render SettingsModalContainer if showSettingsContainer is true */}
         {showSettingsContainer && <SettingsModalContainer onClose={closeSettings} />}
+        
+        {/* Add LessonDetails as a modal overlay */}
+        {selectedLesson && (
+          <div className="fixed inset-0 z-50">
+            <LessonDetails 
+              lesson={selectedLesson}
+              onClose={() => setSelectedLesson(null)}
+            />
+          </div>
+        )}
       </div>
     </>
   );
