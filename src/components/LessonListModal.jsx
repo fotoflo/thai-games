@@ -14,7 +14,7 @@ const LessonListModal = ({ onClose, lessons, setCurrentLesson, onViewDetails }) 
         {lessons.map((lesson, index) => (
           <div 
             key={lesson.id || index} 
-            className="bg-gray-700 p-5 rounded-lg shadow-md"
+            className="bg-gray-700 p-5 rounded-lg shadow-md border border-gray-600"
           >
             <div 
               className="flex justify-between items-start mb-2 cursor-pointer" 

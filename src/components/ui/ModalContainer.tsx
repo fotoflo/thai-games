@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 
 interface ModalContainerProps {
   children: ReactNode;
@@ -17,10 +17,33 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
   showClose = true,
   bottomButtons,
 }) => {
+  // Close modal on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
+      onClick={handleBackdropClick}
+    >
       <div
-        className={`bg-gray-800 p-6 rounded-lg shadow-2xl max-w-md w-full h-[90vh] relative ${className}`}
+        className={`bg-gray-800 p-6 rounded-lg shadow-2xl max-w-4xl w-full h-[90vh] relative ${className}`}
       >
         <h2 className="text-2xl font-bold mb-6 text-white border-b border-gray-600 pb-3 flex justify-between items-center">
           {title}

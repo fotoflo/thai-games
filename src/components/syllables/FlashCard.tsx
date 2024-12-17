@@ -6,17 +6,21 @@ interface FlashCardProps {
   current: any; // Replace with the appropriate type
   isVisible: boolean;
   onSpeak: () => void;
+  className?: string; // Add className prop
 }
 
 const FlashCard: React.FC<FlashCardProps> = ({
   current,
   isVisible,
   onSpeak,
+  className = "", // Default to an empty string
 }) => {
   const details = current?.details || current;
 
   return (
-    <div className="bg-gray-800 p-8 rounded-xl shadow-lg min-w-[300px]">
+    <div
+      className={`bg-gray-800 rounded-xl shadow-lg min-w-[300px] ${className}`}
+    >
       {/* Main word */}
       <div className="flex justify-between items-center mb-4">
         <ItemDisplay
