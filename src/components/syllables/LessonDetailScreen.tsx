@@ -57,83 +57,98 @@ const LessonDetails = ({
       className="max-w-4xl"
       bottomButtons={studyButton}
     >
-      <Card className="bg-gray-900 border-gray-800">
-        <CardHeader>
-          <div className="flex items-center justify-between mb-2">
-            <Badge
-              variant="outline"
-              className="text-slate-300 border-slate-600"
-            >
-              {lesson.lessonLevel}
-            </Badge>
-            <div className="flex gap-2">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-2 h-2 rounded-full ${
-                    i < lesson.difficulty
-                      ? getDifficultyColor(lesson.difficulty)
-                      : "bg-slate-700"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-          <CardTitle className="text-2xl font-bold text-slate-50">
-            {lesson.lessonName}
-          </CardTitle>
-          <CardDescription className="text-slate-400">
-            {lesson.lessonDescription}
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-2">
-              <Globe className="w-5 h-5 text-slate-400" />
-              <div>
-                <p className="text-sm text-slate-400">Target Language</p>
-                <p className="text-slate-50">
-                  {lesson.languagePair?.target?.name} (
-                  {lesson.languagePair?.target?.nativeName})
-                </p>
+      <ScrollArea className="h-full">
+        <Card className="bg-gray-900 border-gray-800">
+          <CardHeader>
+            <div className="flex items-center justify-between mb-2">
+              <Badge
+                variant="outline"
+                className="text-slate-300 border-slate-600"
+              >
+                {lesson.lessonLevel}
+              </Badge>
+              <div className="flex gap-2">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full ${
+                      i < lesson.difficulty
+                        ? getDifficultyColor(lesson.difficulty)
+                        : "bg-slate-700"
+                    }`}
+                  />
+                ))}
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Book className="w-5 h-5 text-slate-400" />
-              <div>
-                <p className="text-sm text-slate-400">Lesson Type</p>
-                <p className="text-slate-50 capitalize">{lesson.lessonType}</p>
+            <CardTitle className="text-2xl font-bold text-slate-50">
+              {lesson.lessonName}
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              {lesson.lessonDescription}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center gap-2">
+                <Globe className="w-5 h-5 text-slate-400" />
+                <div>
+                  <p className="text-sm text-slate-400">Target Language</p>
+                  <p className="text-slate-50">
+                    {lesson.languagePair?.target?.name} (
+                    {lesson.languagePair?.target?.nativeName})
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Book className="w-5 h-5 text-slate-400" />
+                <div>
+                  <p className="text-sm text-slate-400">Lesson Type</p>
+                  <p className="text-slate-50 capitalize">
+                    {lesson.lessonType}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Tag className="w-4 h-4 text-slate-400" />
-              <h3 className="text-sm font-medium text-slate-400">Tags</h3>
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Tag className="w-4 h-4 text-slate-400" />
+                <h3 className="text-sm font-medium text-slate-400">Tags</h3>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {lesson.tags?.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="bg-slate-800 text-slate-300"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {lesson.tags?.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="bg-slate-800 text-slate-300"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
 
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <BarChart3 className="w-4 h-4 text-slate-400" />
-              <h3 className="text-sm font-medium text-slate-400">
-                Vocabulary Items
+            <div>
+              <h3 className="text-lg font-medium text-slate-200">
+                Vocabulary List
               </h3>
+              <ul className="list-disc pl-5 text-slate-300">
+                {lesson.items?.map((item) => (
+                  <li key={item.id} className="mb-1">
+                    {item.text} - {item.translation}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <ScrollArea className="h-96 rounded-md border border-slate-800">
+
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <BarChart3 className="w-4 h-4 text-slate-400" />
+                <h3 className="text-sm font-medium text-slate-400">
+                  Vocabulary Items
+                </h3>
+              </div>
               <div className="p-4 space-y-6">
                 {lesson.items?.map((item) => (
                   <Card key={item.id} className="bg-slate-800 border-slate-700">
@@ -179,10 +194,10 @@ const LessonDetails = ({
                   </Card>
                 ))}
               </div>
-            </ScrollArea>
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
+      </ScrollArea>
     </ModalContainer>
   );
 };
