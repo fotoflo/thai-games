@@ -1,4 +1,47 @@
-// src/types/lessons.ts
+export interface Lesson {
+  lessonName: string;
+  lessonDescription: string;
+  lessonLevel: "beginner" | "intermediate" | "advanced";
+  lessonType: string;
+  tags: string[];
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  languagePair: LanguagePair;
+  items: VocabularyItem[];
+}
+
+export interface Language {
+  code: string;
+  name: string;
+  nativeName: string;
+}
+
+export interface TargetLanguage extends Language {
+  script: string;
+}
+
+export interface LanguagePair {
+  target: TargetLanguage;
+  native: Language;
+}
+
+// Example and vocabulary types
+export interface Example {
+  text: string;
+  translation: string;
+  romanization: string;
+}
+
+export interface VocabularyItem {
+  id: string;
+  text: string;
+  translation: string;
+  romanization: string;
+  difficulty?: number;
+  tags: string[];
+  examples: Example[];
+}
+
+// Lesson content types
 export interface LessonItem {
   text: string;
   details?: {
@@ -6,11 +49,6 @@ export interface LessonItem {
     romanization?: string;
     [key: string]: any;
   };
-}
-
-export interface Lesson {
-  lessonName: string;
-  items: LessonItem[] | string[];
 }
 
 export interface WorkingSetItem {
