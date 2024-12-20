@@ -43,9 +43,9 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
       onClick={handleBackdropClick}
     >
       <div
-        className={`bg-gray-800 p-6 rounded-lg shadow-2xl max-w-4xl w-full h-[90vh] relative ${className}`}
+        className={`bg-gray-800 p-4 xs:p-5 rounded-lg shadow-2xl max-w-md w-full h-[90vh] relative ${className}`}
       >
-        <h2 className="text-2xl font-bold mb-6 text-white border-b border-gray-600 pb-3 flex justify-between items-center">
+        <h2 className="text-2xl font-bold mb-4 xs:mb-6 text-white border-b border-gray-600 pb-3 flex justify-between items-center">
           {title}
           {showClose && (
             <button
