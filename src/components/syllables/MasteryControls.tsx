@@ -12,21 +12,21 @@ const MasteryControls = ({
     {
       level: 2,
       label: "Next",
-      color: "bg-yellow-600 hover:bg-yellow-500",
+      color: "bg-blue-400 hover:bg-blue-300",
       value: 3,
       icon: RefreshCcw,
     },
     {
       level: 3,
       label: "Mastered",
-      color: "bg-green-700 hover:bg-green-600",
+      color: "bg-purple-400 hover:bg-purple-300",
       value: 5,
       icon: Check,
     },
   ];
 
   return (
-    <div className={`space-y-2 mb-10`}>
+    <div className={`space-y-2 mb-10 ${className}`}>
       <div className="grid grid-cols-2 gap-2">
         {masteryLevels.map(({ level, label, color, value, icon: Icon }) => (
           <button
