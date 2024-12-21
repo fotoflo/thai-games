@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import LessonListModal from './LessonListModal';
+import LessonListScreen from './LessonListScreen';
 
 const LessonCarousel = ({ 
   currentLesson, 
@@ -43,7 +42,7 @@ const LessonCarousel = ({
       </div>
 
       {showLessonList && (
-        <LessonListModal
+        <LessonListScreen
           onClose={() => setShowLessonList(false)}
           lessons={lessons}
           setCurrentLesson={setCurrentLesson}

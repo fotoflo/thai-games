@@ -3,7 +3,7 @@ import { BookOpen } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 
-const LessonListModal = ({ onClose, lessons, setCurrentLesson, onViewDetails }) => {
+const LessonListScreen = ({ onClose, lessons, setCurrentLesson, onViewDetails }) => {
   const handleLessonClick = (index) => {
     setCurrentLesson(index);
     onClose();
@@ -69,4 +69,4 @@ const LessonListModal = ({ onClose, lessons, setCurrentLesson, onViewDetails }) 
   );
 };
 
-export default LessonListModal;
+export default LessonListScreen; 
