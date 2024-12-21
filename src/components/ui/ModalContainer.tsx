@@ -21,6 +21,7 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
   bottomButtons,
   showHeader = true,
   gradientColor = "from-emerald-600/20",
+  headerContent,
 }) => {
   // Close modal on Escape key press
   useEffect(() => {
@@ -48,32 +49,42 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
       onClick={handleBackdropClick}
     >
       <div
-        className="fixed inset-0 bg-slate-900 text-white flex flex-col md:m-8 md:rounded-lg"
+        className="fixed inset-0 bg-slate-900 text-white flex flex-col md:m-8 md:rounded-lg overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {showHeader && title && (
-          <div className="relative">
-            <div
-              className={`absolute inset-0 bg-gradient-to-b ${gradientColor} to-transparent -z-10`}
-            />
-            <div className="px-4 py-6">
-              <div className="flex items-start justify-between">
-                <h2 className="text-2xl font-semibold">{title}</h2>
-                {showClose && (
-                  <button
-                    onClick={onClose}
-                    className="p-2 hover:bg-slate-800/50 rounded-lg"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                )}
-              </div>
+        {/* Fixed Header Section */}
+        <div className="relative">
+          <div
+            className={`absolute inset-0 bg-gradient-to-b ${gradientColor} to-transparent`}
+          />
+          {showHeader && (title || headerContent) && (
+            <div className="relative z-10">
+              {title && (
+                <div className="px-4 py-6">
+                  <div className="flex items-start justify-between">
+                    <h2 className="text-2xl font-semibold">{title}</h2>
+                    {showClose && (
+                      <button
+                        onClick={onClose}
+                        className="p-2 hover:bg-slate-800/50 rounded-lg"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+              {headerContent}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className={`flex-1 overflow-y-auto ${className}`}>{children}</div>
+        {/* Scrollable Content Section */}
+        <div className={`flex-1 overflow-y-auto relative ${className}`}>
+          {children}
+        </div>
 
+        {/* Fixed Bottom Section */}
         {bottomButtons && (
           <div className="p-4 border-t border-slate-800">{bottomButtons}</div>
         )}

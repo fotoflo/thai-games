@@ -206,12 +206,11 @@ const LessonDetails = ({
   return (
     <ModalContainer
       onClose={onClose}
-      showHeader={false}
+      showHeader={true}
       bottomButtons={studyButton}
       gradientColor="from-emerald-600/20"
+      headerContent={<LessonHeader lesson={lesson} onClose={onClose} />}
     >
-      <LessonHeader lesson={lesson} onClose={onClose} />
-
       {/* Vocabulary Overview Grid */}
       <div className="py-4">
         <VocabularyGrid items={lesson.items} />
