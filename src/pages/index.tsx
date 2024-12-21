@@ -31,25 +31,32 @@ const IndexPage: React.FC = () => {
     useState<LessonDetailsSelection | null>(null);
 
   const {
-    currentLesson,
-    setCurrentLesson,
-    totalLessons,
+    settings,
+    updateSettings,
+    updateProfile,
     workingSet,
-    selectedItem: activeItem, // renamed from current
-    problemList,
-    possibleProblemList,
-    workingList,
+    activeVocabItem,
+    setActiveVocabItem,
+    totalLessons,
     rateMastery,
-    reportProblem,
-    reportPossibleProblem,
     addMoreItems,
-    getCurrentProgress,
-    setProgressionMode,
-    progressionMode,
+    nextItem,
     lessons,
     invertTranslation,
     toggleInvertTranslation,
   } = gameState;
+
+  const {
+    currentLesson,
+    setCurrentLesson,
+    problemList,
+    possibleProblemList,
+    workingList,
+    reportProblem,
+    getCurrentProgress,
+    progressionMode,
+    setProgressionMode,
+  } = gameState.lessonState;
 
   console.log("Render IndexPage:", { currentLesson, totalLessons });
 
@@ -75,7 +82,7 @@ const IndexPage: React.FC = () => {
     }
   };
 
-  if (!activeItem) {
+  if (!activeVocabItem) {
     addMoreItems(5);
   }
 
@@ -105,18 +112,27 @@ const IndexPage: React.FC = () => {
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SettingsHamburger onClick={openSettings} />
 
-        <ItemDisplay
-          vocabItem={activeItem?.vocabularyItem}
-          iconSize={52}
-          textSize="text-6xl"
-          className="flex items-center justify-center mb-10"
-          speakOnUnmount={true}
-          invertTranslation={invertTranslation}
-        />
+        {activeVocabItem && (
+          <ItemDisplay
+            vocabItem={activeVocabItem?.vocabularyItem}
+            iconSize={52}
+            textSize="text-6xl"
+            className="flex items-center justify-center mb-10"
+            speakOnUnmount={true}
+            invertTranslation={invertTranslation}
+          />
+        )}
+        {!activeVocabItem && (
+          <div className="flex items-center justify-center mb-10">
+            <p className="text-2xl text-gray-500">
+              No item selected. Please select a lesson to study.
+            </p>
+          </div>
+        )}
 
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
-          current={activeItem}
+          current={activeVocabItem}
         />
 
         {/* <pre style={{ fontSize: "small" }}>
@@ -124,7 +140,7 @@ const IndexPage: React.FC = () => {
         </pre> */}
 
         <FlashCardModal
-          vocabItem={activeItem?.vocabularyItem}
+          vocabItem={activeVocabItem?.vocabularyItem}
           onNext={() => {
             gameState.addMoreItems();
             setDisplayTrigger(null);
@@ -145,7 +161,7 @@ const IndexPage: React.FC = () => {
 
           <WorkingSetCards
             workingSet={workingSet}
-            selectedItem={activeItem}
+            selectedItem={activeVocabItem}
             onCardSelect={handleCardSelect}
             addMoreItems={addMoreItems}
           />

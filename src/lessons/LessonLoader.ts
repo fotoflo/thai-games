@@ -20,8 +20,10 @@ import syllables2 from "./syllables2.json";
 import verbs from "./verbs.json";
 import words1 from "./words1.json";
 
-// Validation function to ensure lesson data matches our schema
-const validateLesson = (lesson: any): lesson is Lesson => {
+// Move validation logic to a separate file if needed
+export const validateLesson = (lesson: any): lesson is Lesson => {
+  if (!lesson) return false;
+
   try {
     // Basic structure validation
     if (!lesson.lessonName || typeof lesson.lessonName !== "string")
@@ -58,9 +60,10 @@ const validateLesson = (lesson: any): lesson is Lesson => {
     // Validate each item has required fields
     return lesson.items.every(
       (item: any) =>
-        item.id &&
-        item.text &&
-        item.translation &&
+        item &&
+        typeof item.id === "string" &&
+        typeof item.text === "string" &&
+        typeof item.translation === "string" &&
         Array.isArray(item.tags) &&
         Array.isArray(item.examples)
     );
@@ -93,7 +96,7 @@ const allLessons = [
 ];
 
 // Validate and load lessons
-const loadLessons = (): Lesson[] => {
+export const loadLessons = (): Lesson[] => {
   const validLessons = allLessons.filter((lesson): lesson is Lesson => {
     const isValid = validateLesson(lesson);
     if (!isValid) {
@@ -111,10 +114,10 @@ const loadLessons = (): Lesson[] => {
   return validLessons;
 };
 
-// Export the validated lessons
+// Export lessons array directly
 export const lessons = loadLessons();
 
-// Helper functions for lesson management
+// Helper functions
 export const getLessonById = (id: string): Lesson | undefined =>
   lessons.find((lesson) => lesson.lessonName === id);
 
@@ -127,6 +130,3 @@ export const getLessonsByTag = (tag: string): Lesson[] =>
 export const getLessonsByDifficulty = (
   difficulty: Lesson["difficulty"]
 ): Lesson[] => lessons.filter((lesson) => lesson.difficulty === difficulty);
-
-// Export default for direct import
-export default lessons;
