@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import {
-  X,
-  Volume2,
-  ChevronDown,
-  ChevronUp,
-  BookOpen,
-  Tag,
-  Globe,
-} from "lucide-react";
-import { Lesson } from "@/types/lessons";
+import { X, BookOpen, Globe } from "lucide-react";
+import { Lesson, VocabularyItem } from "@/types/lessons";
 import ModalContainer from "../ui/ModalContainer";
 import ItemDisplay from "./ItemDisplay";
+import DetailCard from "./DetailCard";
 
 interface LessonDetailsProps {
   lesson: Lesson;
@@ -61,111 +54,6 @@ const LessonHeader = ({
   </div>
 );
 
-interface VocabularyItem {
-  id?: string;
-  text: string;
-  translation: string;
-  romanization?: string;
-  examples?: Array<{
-    text: string;
-    translation: string;
-    romanization?: string;
-  }>;
-}
-
-interface VocabularyGridProps {
-  items: VocabularyItem[];
-}
-
-const VocabularyGrid: React.FC<VocabularyGridProps> = ({ items }) => (
-  <div className="px-4">
-    <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">
-      Vocabulary Overview
-    </h2>
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-      {items.map((item, idx) => (
-        <div
-          key={idx}
-          className="bg-slate-800/30 p-3 hover:bg-slate-700/30 transition-colors"
-        >
-          <div className="text-lg sm:text-xl text-slate-100">{item.text}</div>
-          <div className="text-xs sm:text-sm text-slate-400">
-            {item.translation}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-interface DetailCardProps {
-  item: VocabularyItem;
-  showExamples: boolean;
-  onToggleExamples: () => void;
-  onSpeak: (text: string) => void;
-}
-
-const DetailCard: React.FC<DetailCardProps> = ({
-  item,
-  showExamples,
-  onToggleExamples,
-  onSpeak,
-}) => (
-  <div className="bg-slate-800/30 rounded-xl overflow-hidden">
-    <div className="p-4 space-y-3">
-      <ItemDisplay
-        current={item}
-        textSize="text-3xl"
-        iconSize={20}
-        onSpeak={onSpeak}
-      />
-      <div className="space-y-1">
-        <div className="text-lg text-slate-300">{item.translation}</div>
-        <div className="text-sm text-slate-400 font-mono">
-          {item.romanization}
-        </div>
-      </div>
-
-      {item.examples?.length > 0 && (
-        <button
-          onClick={onToggleExamples}
-          className="flex items-center gap-2 mt-2 text-sm text-slate-400 hover:text-slate-300 w-full justify-between p-2 rounded-lg hover:bg-slate-700/30"
-        >
-          <span>Examples ({item.examples.length})</span>
-          {showExamples ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-      )}
-    </div>
-
-    {showExamples && item.examples && (
-      <div className="border-t border-slate-700/50">
-        <div className="divide-y divide-slate-700/50">
-          {item.examples.map((example, idx) => (
-            <div key={idx} className="p-4 hover:bg-slate-700/20">
-              <ItemDisplay
-                current={{
-                  text: example.text,
-                  details: { translation: example.translation },
-                }}
-                textSize="text-lg"
-                iconSize={16}
-                onSpeak={onSpeak}
-                className="mb-2"
-              />
-              <div className="text-sm text-slate-400">
-                {example.translation}
-              </div>
-              <div className="text-xs text-slate-500 font-mono mt-1">
-                {example.romanization}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </div>
-);
-
 const LessonDetails = ({
   lesson,
   onClose,
@@ -213,7 +101,24 @@ const LessonDetails = ({
     >
       {/* Vocabulary Overview Grid */}
       <div className="py-4">
-        <VocabularyGrid items={lesson.items} />
+        <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">
+          Vocabulary Overview
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {lesson.items.map((item, index) => (
+            <div
+              key={index}
+              className="bg-slate-800/30 p-3 hover:bg-slate-700/30 transition-colors"
+            >
+              <div className="text-lg sm:text-xl text-slate-100">
+                {item.text}
+              </div>
+              <div className="text-xs sm:text-sm text-slate-400">
+                {item.translation}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Detailed Cards */}
@@ -221,7 +126,7 @@ const LessonDetails = ({
         <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide">
           Vocabulary Details
         </h2>
-        {lesson.items?.map((item, index) => (
+        {lesson.items.map((item, index) => (
           <DetailCard
             key={index}
             item={item}

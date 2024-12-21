@@ -114,7 +114,7 @@ const ThaiSyllables = () => {
         />
 
         <FlashCardModal 
-          current={gameState.current}
+          vocabItem={current}
           onNext={() => {
             gameState.addMoreSyllables();
             setDisplayTrigger(null);

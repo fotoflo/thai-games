@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useThaiSpeech } from "../../hooks/useThaiSpeech";
-import FlashCard from "./FlashCard";
+
 import ModalContainer from "../ui/ModalContainer";
+import MasteryControls from "./MasteryControls";
+import DetailCard from "./DetailCard";
 
 interface FlashCardModalProps {
-  current: any; // Replace with the appropriate type
+  vocabItem: any; // Replace with the appropriate type
   onNext: () => void;
   trigger: string;
   onClose: () => void;
 }
 
 const FlashCardModal: React.FC<FlashCardModalProps> = ({
-  current,
+  vocabItem,
   onNext,
   trigger,
   onClose,
@@ -30,7 +32,7 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
     }
   }, [trigger, onClose]);
 
-  const handleBackdropClick = (e) => {
+  const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -41,14 +43,18 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
   return (
     <ModalContainer title="Flash Card" onClose={onClose}>
       <div
-        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        className="fixed inset-0 flex flex-col justify-between bg-black bg-opacity-50 z-50"
         onClick={handleBackdropClick}
       >
-        <FlashCard
-          current={current}
-          isVisible={isVisible}
-          onSpeak={handleSpeak}
-        />
+        <div className="flex-grow flex items-center justify-center p-4">
+          <DetailCard
+            vocabItem={vocabItem}
+            showExamples={true}
+            onToggleExamples={() => {}}
+            onSpeak={handleSpeak}
+          />
+        </div>
+        <MasteryControls onRatingSelect={onNext} className="mb-4" />
       </div>
     </ModalContainer>
   );

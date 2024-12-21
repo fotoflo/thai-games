@@ -1,74 +1,98 @@
 {
   "lessonName": "Reading Syllables 2",
+  "lessonDescription": "This lesson covers more basic syllables in Thai, introducing new consonants while reinforcing previously learned patterns.",
+  "lessonLevel": "beginner",
+  "lessonType": "reading",
+  "tags": ["syllables", "consonants", "vowels", "basic"],
+  "difficulty": 1,
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "Thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
-    "มี",
-    "มู",
-    "มา",
-    "มอ",
-    "นี",
-    "นู",
-    "นา",
-    "นอ",
-    "งี",
-    "งู",
-    "งา",
-    "งอ",
-    "วี",
-    "วู",
-    "วา",
-    "วอ",
-    "ลี",
-    "ลู",
-    "ลา",
-    "ลอ",
-    "รี",
-    "รู",
-    "รา",
-    "รอ",
-    "ยี",
-    "ยู",
-    "ยา",
-    "ยอ",
-    "พี",
-    "พู",
-    "พา",
-    "พอ",
-    "ที",
-    "ทู",
-    "ทา",
-    "ทอ",
-    "ชี",
-    "ชู",
-    "ชา",
-    "ชอ",
-    "คี",
-    "คู",
-    "คา",
-    "คอ",
-    "ฟี",
-    "ฟู",
-    "ฟา",
-    "ฟอ",
-    "ซี",
-    "ซู",
-    "ซา",
-    "ซอ",
-    "ฮี",
-    "ฮู",
-    "ฮา",
-    "ฮอ",
-    "มี",
-    "นู",
-    "วี",
-    "รู",
-    "ลา",
-    "งอ",
-    "นา",
-    "ยอ",
-    "วา",
-    "ยา",
-    "รอ",
-    "มา",
-    "งา"
+    {
+      "id": "item1",
+      "text": "มี",
+      "translation": "mee",
+      "romanization": "mii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "มี",
+          "translation": "mee",
+          "romanization": "mii"
+        }
+      ]
+    },
+    {
+      "id": "item2",
+      "text": "มู",
+      "translation": "moo",
+      "romanization": "muu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "มู",
+          "translation": "moo",
+          "romanization": "muu"
+        }
+      ]
+    },
+    {
+      "id": "item3",
+      "text": "มา",
+      "translation": "ma",
+      "romanization": "maa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "มา",
+          "translation": "ma",
+          "romanization": "maa"
+        }
+      ]
+    },
+    {
+      "id": "item4",
+      "text": "มอ",
+      "translation": "maw",
+      "romanization": "mɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "มอ",
+          "translation": "maw",
+          "romanization": "mɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item5",
+      "text": "นี",
+      "translation": "nee",
+      "romanization": "nii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "นี",
+          "translation": "nee",
+          "romanization": "nii"
+        }
+      ]
+    }
   ]
 }

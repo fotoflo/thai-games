@@ -2,34 +2,442 @@
   "lessonName": "Reading Syllables 1",
   "lessonDescription": "This lesson covers the basic syllables in the Thai language. Each syllable is represented by a single letter, and the lesson includes a mix of consonants and vowels.",
   "lessonLevel": "beginner",
+  "lessonType": "reading",
+  "tags": ["syllables", "consonants", "vowels", "basic"],
+  "difficulty": 1,
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "Thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
-    "พี",
-    "พู",
-    "พา",
-    "พอ",
-    "ที",
-    "ทู",
-    "ทา",
-    "ทอ",
-    "ชี",
-    "ชู",
-    "ชา",
-    "ชอ",
-    "คี",
-    "คู",
-    "คา",
-    "คอ",
-    "ฟี",
-    "ฟู",
-    "ฟา",
-    "ฟอ",
-    "ซี",
-    "ซู",
-    "ซา",
-    "ซอ",
-    "ฮี",
-    "ฮู",
-    "ฮา",
-    "ฮอ"
+    {
+      "id": "item1",
+      "text": "พี",
+      "translation": "pee",
+      "romanization": "phii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "พี",
+          "translation": "pee",
+          "romanization": "phii"
+        }
+      ]
+    },
+    {
+      "id": "item2",
+      "text": "พู",
+      "translation": "poo",
+      "romanization": "phuu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "พู",
+          "translation": "poo",
+          "romanization": "phuu"
+        }
+      ]
+    },
+    {
+      "id": "item3",
+      "text": "พา",
+      "translation": "pa",
+      "romanization": "phaa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "พา",
+          "translation": "pa",
+          "romanization": "phaa"
+        }
+      ]
+    },
+    {
+      "id": "item4",
+      "text": "พอ",
+      "translation": "paw",
+      "romanization": "phɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "พอ",
+          "translation": "paw",
+          "romanization": "phɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item5",
+      "text": "ที",
+      "translation": "tee",
+      "romanization": "thii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ที",
+          "translation": "tee",
+          "romanization": "thii"
+        }
+      ]
+    },
+    {
+      "id": "item6",
+      "text": "ทู",
+      "translation": "too",
+      "romanization": "thuu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ทู",
+          "translation": "too",
+          "romanization": "thuu"
+        }
+      ]
+    },
+    {
+      "id": "item7",
+      "text": "ทา",
+      "translation": "ta",
+      "romanization": "thaa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ทา",
+          "translation": "ta",
+          "romanization": "thaa"
+        }
+      ]
+    },
+    {
+      "id": "item8",
+      "text": "ทอ",
+      "translation": "taw",
+      "romanization": "thɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ทอ",
+          "translation": "taw",
+          "romanization": "thɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item9",
+      "text": "ชี",
+      "translation": "chee",
+      "romanization": "chii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ชี",
+          "translation": "chee",
+          "romanization": "chii"
+        }
+      ]
+    },
+    {
+      "id": "item10",
+      "text": "ชู",
+      "translation": "choo",
+      "romanization": "chuu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ชู",
+          "translation": "choo",
+          "romanization": "chuu"
+        }
+      ]
+    },
+    {
+      "id": "item11",
+      "text": "ชา",
+      "translation": "cha",
+      "romanization": "chaa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ชา",
+          "translation": "cha",
+          "romanization": "chaa"
+        }
+      ]
+    },
+    {
+      "id": "item12",
+      "text": "ชอ",
+      "translation": "chaw",
+      "romanization": "chɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ชอ",
+          "translation": "chaw",
+          "romanization": "chɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item13",
+      "text": "คี",
+      "translation": "kee",
+      "romanization": "khii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "คี",
+          "translation": "kee",
+          "romanization": "khii"
+        }
+      ]
+    },
+    {
+      "id": "item14",
+      "text": "คู",
+      "translation": "koo",
+      "romanization": "khuu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "คู",
+          "translation": "koo",
+          "romanization": "khuu"
+        }
+      ]
+    },
+    {
+      "id": "item15",
+      "text": "คา",
+      "translation": "ka",
+      "romanization": "khaa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "คา",
+          "translation": "ka",
+          "romanization": "khaa"
+        }
+      ]
+    },
+    {
+      "id": "item16",
+      "text": "คอ",
+      "translation": "kaw",
+      "romanization": "khɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "คอ",
+          "translation": "kaw",
+          "romanization": "khɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item17",
+      "text": "ฟี",
+      "translation": "fee",
+      "romanization": "fii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฟี",
+          "translation": "fee",
+          "romanization": "fii"
+        }
+      ]
+    },
+    {
+      "id": "item18",
+      "text": "ฟู",
+      "translation": "foo",
+      "romanization": "fuu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฟู",
+          "translation": "foo",
+          "romanization": "fuu"
+        }
+      ]
+    },
+    {
+      "id": "item19",
+      "text": "ฟา",
+      "translation": "fa",
+      "romanization": "faa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฟา",
+          "translation": "fa",
+          "romanization": "faa"
+        }
+      ]
+    },
+    {
+      "id": "item20",
+      "text": "ฟอ",
+      "translation": "faw",
+      "romanization": "fɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฟอ",
+          "translation": "faw",
+          "romanization": "fɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item21",
+      "text": "ซี",
+      "translation": "see",
+      "romanization": "sii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ซี",
+          "translation": "see",
+          "romanization": "sii"
+        }
+      ]
+    },
+    {
+      "id": "item22",
+      "text": "ซู",
+      "translation": "soo",
+      "romanization": "suu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ซู",
+          "translation": "soo",
+          "romanization": "suu"
+        }
+      ]
+    },
+    {
+      "id": "item23",
+      "text": "ซา",
+      "translation": "sa",
+      "romanization": "saa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ซา",
+          "translation": "sa",
+          "romanization": "saa"
+        }
+      ]
+    },
+    {
+      "id": "item24",
+      "text": "ซอ",
+      "translation": "saw",
+      "romanization": "sɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ซอ",
+          "translation": "saw",
+          "romanization": "sɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item25",
+      "text": "ฮี",
+      "translation": "hee",
+      "romanization": "hii",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฮี",
+          "translation": "hee",
+          "romanization": "hii"
+        }
+      ]
+    },
+    {
+      "id": "item26",
+      "text": "ฮู",
+      "translation": "hoo",
+      "romanization": "huu",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฮู",
+          "translation": "hoo",
+          "romanization": "huu"
+        }
+      ]
+    },
+    {
+      "id": "item27",
+      "text": "ฮา",
+      "translation": "ha",
+      "romanization": "haa",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฮา",
+          "translation": "ha",
+          "romanization": "haa"
+        }
+      ]
+    },
+    {
+      "id": "item28",
+      "text": "ฮอ",
+      "translation": "haw",
+      "romanization": "hɔɔ",
+      "difficulty": 1,
+      "tags": ["basic"],
+      "examples": [
+        {
+          "text": "ฮอ",
+          "translation": "haw",
+          "romanization": "hɔɔ"
+        }
+      ]
+    }
   ]
 }

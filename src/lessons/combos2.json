@@ -1,55 +1,248 @@
 {
   "lessonName": "Syllable Combos 2",
+  "lessonDescription": "Practice reading and pronouncing Thai syllable combinations. Focus on consonants ร, ท, ม, น, ค, ว with vowels า, ี, ู, อ.",
+  "lessonLevel": "beginner",
+  "lessonType": "pronunciation",
+  "tags": ["pronunciation", "syllables", "reading"],
+  "difficulty": 2,
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "Thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
-    "รม",
-    "ทีวี",
-    "มาซี",
-    "รีรอ",
-    "มีนา",
-    "ราวี",
-    "ราคา",
-    "รอยา",
-    "นาวา",
-    "คาวี",
-    "นาคา",
-    "มีงู",
-    "พาซี",
-    "ทาคอ",
-    "ซูซอ",
-    "คอพี",
-    "ฟอซา",
-    "ฮูฟอ",
-    "พูซา",
-    "ซาคอ",
-    "พอที",
-    "คอซี",
-    "ฮาฮู",
-    "พอฮา",
-    "ซูคอ",
-    "ซาซี",
-    "ทีคา",
-    "คาคอ",
-    "ฟูฟา",
-    "ซอพี",
-    "คูทู",
-    "พามาซี",
-    "นามีงู",
-    "ราคายา",
-    "มีงูมา",
-    "พอทายา",
-    "พูยียามา",
-    "ทายาทีวี",
-    "ซีซูที",
-    "ซาคอพู",
-    "ฮูพาซี",
-    "ทาคอที",
-    "พาซีพี",
-    "พอซีพา",
-    "ฮีฟอซา",
-    "พอทีซี",
-    "พอฮูฮา",
-    "ซอพาที",
-    "ทาพอที",
-    "พอฮูคอ"
+    {
+      "id": "item1",
+      "text": "รม",
+      "translation": "rom",
+      "romanization": "rom",
+      "difficulty": 1,
+      "tags": ["short", "basic", "single-syllable"],
+      "examples": [
+        {
+          "text": "รม",
+          "translation": "rom",
+          "romanization": "rom"
+        }
+      ]
+    },
+    {
+      "id": "item2",
+      "text": "ทีวี",
+      "translation": "tee-vee",
+      "romanization": "tii-wii",
+      "difficulty": 1,
+      "tags": ["short", "basic", "loan-word"],
+      "examples": [
+        {
+          "text": "ทีวี",
+          "translation": "tee-vee",
+          "romanization": "tii-wii"
+        }
+      ]
+    },
+    {
+      "id": "item3",
+      "text": "มาซี",
+      "translation": "ma-see",
+      "romanization": "maa-sii",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "มาซี",
+          "translation": "ma-see",
+          "romanization": "maa-sii"
+        }
+      ]
+    },
+    {
+      "id": "item4",
+      "text": "รีรอ",
+      "translation": "ree-raw",
+      "romanization": "rii-rɔɔ",
+      "difficulty": 2,
+      "tags": ["short", "repetition"],
+      "examples": [
+        {
+          "text": "รีรอ",
+          "translation": "ree-raw",
+          "romanization": "rii-rɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item5",
+      "text": "มีนา",
+      "translation": "mee-na",
+      "romanization": "mii-naa",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "มีนา",
+          "translation": "mee-na",
+          "romanization": "mii-naa"
+        }
+      ]
+    },
+    {
+      "id": "item6",
+      "text": "ราวี",
+      "translation": "ra-wee",
+      "romanization": "raa-wii",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ราวี",
+          "translation": "ra-wee",
+          "romanization": "raa-wii"
+        }
+      ]
+    },
+    {
+      "id": "item7",
+      "text": "ราคา",
+      "translation": "ra-ka",
+      "romanization": "raa-kaa",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ราคา",
+          "translation": "ra-ka",
+          "romanization": "raa-kaa"
+        }
+      ]
+    },
+    {
+      "id": "item8",
+      "text": "รอยา",
+      "translation": "raw-ya",
+      "romanization": "rɔɔ-yaa",
+      "difficulty": 2,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "รอยา",
+          "translation": "raw-ya",
+          "romanization": "rɔɔ-yaa"
+        }
+      ]
+    },
+    {
+      "id": "item9",
+      "text": "นาวา",
+      "translation": "na-wa",
+      "romanization": "naa-waa",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "นาวา",
+          "translation": "na-wa",
+          "romanization": "naa-waa"
+        }
+      ]
+    },
+    {
+      "id": "item10",
+      "text": "นามีงู",
+      "translation": "na-mee-ngoo",
+      "romanization": "naa-mii-nguu",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "นามีงู",
+          "translation": "na-mee-ngoo",
+          "romanization": "naa-mii-nguu"
+        }
+      ]
+    },
+    {
+      "id": "item11",
+      "text": "ราคายา",
+      "translation": "ra-ka-ya",
+      "romanization": "raa-kaa-yaa",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ราคายา",
+          "translation": "ra-ka-ya",
+          "romanization": "raa-kaa-yaa"
+        }
+      ]
+    },
+    {
+      "id": "item12",
+      "text": "มีงูมา",
+      "translation": "mee-ngoo-ma",
+      "romanization": "mii-nguu-maa",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "มีงูมา",
+          "translation": "mee-ngoo-ma",
+          "romanization": "mii-nguu-maa"
+        }
+      ]
+    },
+    {
+      "id": "item13",
+      "text": "พอทายา",
+      "translation": "paw-ta-ya",
+      "romanization": "pɔɔ-taa-yaa",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "พอทายา",
+          "translation": "paw-ta-ya",
+          "romanization": "pɔɔ-taa-yaa"
+        }
+      ]
+    },
+    {
+      "id": "item14",
+      "text": "พูยียามา",
+      "translation": "poo-yee-ya-ma",
+      "romanization": "puu-yii-yaa-maa",
+      "difficulty": 4,
+      "tags": ["very-long", "complex"],
+      "examples": [
+        {
+          "text": "พูยียามา",
+          "translation": "poo-yee-ya-ma",
+          "romanization": "puu-yii-yaa-maa"
+        }
+      ]
+    },
+    {
+      "id": "item15",
+      "text": "ทายาทีวี",
+      "translation": "ta-ya-tee-vee",
+      "romanization": "taa-yaa-tii-wii",
+      "difficulty": 4,
+      "tags": ["very-long", "complex", "loan-word"],
+      "examples": [
+        {
+          "text": "ทายาทีวี",
+          "translation": "ta-ya-tee-vee",
+          "romanization": "taa-yaa-tii-wii"
+        }
+      ]
+    }
   ]
 }

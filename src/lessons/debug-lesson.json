@@ -1,21 +1,145 @@
 {
   "lessonName": "Debug Lesson",
+  "lessonDescription": "A test lesson with mixed item formats for debugging purposes.",
+  "lessonLevel": "beginner",
+  "lessonType": "test",
+  "tags": ["debug", "test"],
+  "difficulty": 1,
+  "languagePair": {
+    "target": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English",
+      "script": "Latin"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
-    "A1",
-    "A2",
-    "A3",
-    "A4",
-    "A5",
     {
+      "id": "item1",
+      "text": "A1",
+      "translation": "A1",
+      "romanization": "A1",
+      "difficulty": 1,
+      "tags": ["test", "simple"],
+      "examples": [
+        {
+          "text": "A1",
+          "translation": "A1",
+          "romanization": "A1"
+        }
+      ]
+    },
+    {
+      "id": "item2",
+      "text": "A2",
+      "translation": "A2",
+      "romanization": "A2",
+      "difficulty": 1,
+      "tags": ["test", "simple"],
+      "examples": [
+        {
+          "text": "A2",
+          "translation": "A2",
+          "romanization": "A2"
+        }
+      ]
+    },
+    {
+      "id": "item3",
+      "text": "A3",
+      "translation": "A3",
+      "romanization": "A3",
+      "difficulty": 1,
+      "tags": ["test", "simple"],
+      "examples": [
+        {
+          "text": "A3",
+          "translation": "A3",
+          "romanization": "A3"
+        }
+      ]
+    },
+    {
+      "id": "item4",
+      "text": "A4",
+      "translation": "A4",
+      "romanization": "A4",
+      "difficulty": 1,
+      "tags": ["test", "simple"],
+      "examples": [
+        {
+          "text": "A4",
+          "translation": "A4",
+          "romanization": "A4"
+        }
+      ]
+    },
+    {
+      "id": "item5",
+      "text": "A5",
+      "translation": "A5",
+      "romanization": "A5",
+      "difficulty": 1,
+      "tags": ["test", "simple"],
+      "examples": [
+        {
+          "text": "A5",
+          "translation": "A5",
+          "romanization": "A5"
+        }
+      ]
+    },
+    {
+      "id": "item6",
       "text": "B1",
       "translation": "Test Item 1",
+      "romanization": "B1",
+      "difficulty": 2,
+      "tags": ["test", "complex"],
+      "examples": [
+        {
+          "text": "B1",
+          "translation": "Test Item 1",
+          "romanization": "B1"
+        }
+      ],
       "notes": "This is a test item"
     },
     {
+      "id": "item7",
       "text": "B2",
       "translation": "Test Item 2",
+      "romanization": "B2",
+      "difficulty": 2,
+      "tags": ["test", "complex"],
+      "examples": [
+        {
+          "text": "B2",
+          "translation": "Test Item 2",
+          "romanization": "B2"
+        }
+      ],
       "notes": "This is another test item"
     },
-    "A6"
+    {
+      "id": "item8",
+      "text": "A6",
+      "translation": "A6",
+      "romanization": "A6",
+      "difficulty": 1,
+      "tags": ["test", "simple"],
+      "examples": [
+        {
+          "text": "A6",
+          "translation": "A6",
+          "romanization": "A6"
+        }
+      ]
+    }
   ]
 }

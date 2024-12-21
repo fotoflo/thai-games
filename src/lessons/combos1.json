@@ -1,32 +1,428 @@
 {
   "lessonName": "Syllable Combos 1",
+  "lessonDescription": "Practice reading and pronouncing common Thai syllable combinations. Focus on consonants พ, ท, ซ, ค, ฟ, ฮ with vowels า, ี, ู, อ.",
+  "lessonLevel": "beginner",
+  "lessonType": "pronunciation",
+  "tags": ["pronunciation", "syllables", "reading"],
+  "difficulty": 2,
+  "languagePair": {
+    "target": {
+      "code": "th",
+      "name": "Thai",
+      "nativeName": "ภาษาไทย",
+      "script": "Thai"
+    },
+    "native": {
+      "code": "en",
+      "name": "English",
+      "nativeName": "English"
+    }
+  },
   "items": [
-    "พาซี",
-    "ทาคอ",
-    "ซูซอ",
-    "คอพี",
-    "ฟอซา",
-    "ฮูฟอ",
-    "พาซี",
-    "พูซา",
-    "ซาคอ",
-    "พอที",
-    "คอซี",
-    "ฮาฮู",
-    "พอฮา",
-    "ซูคอ",
-    "ซาซี",
-    "ซีซูที",
-    "ซาคอพู",
-    "ฮูพาซี",
-    "ทาคอที",
-    "พาซีพี",
-    "พอซีพา",
-    "ฮีฟอซา",
-    "พอทีซี",
-    "พอฮูฮา",
-    "ซอพาที",
-    "ทาพอที",
-    "พอฮูคอ"
+    {
+      "id": "item1",
+      "text": "พาซี",
+      "translation": "pa-see",
+      "romanization": "paa-sii",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "พาซี",
+          "translation": "pa-see",
+          "romanization": "paa-sii"
+        }
+      ]
+    },
+    {
+      "id": "item2",
+      "text": "ทาคอ",
+      "translation": "ta-kaw",
+      "romanization": "taa-kɔɔ",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ทาคอ",
+          "translation": "ta-kaw",
+          "romanization": "taa-kɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item3",
+      "text": "ซูซอ",
+      "translation": "soo-saw",
+      "romanization": "suu-sɔɔ",
+      "difficulty": 2,
+      "tags": ["short", "repetition"],
+      "examples": [
+        {
+          "text": "ซูซอ",
+          "translation": "soo-saw",
+          "romanization": "suu-sɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item4",
+      "text": "คอพี",
+      "translation": "kaw-pee",
+      "romanization": "kɔɔ-pii",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "คอพี",
+          "translation": "kaw-pee",
+          "romanization": "kɔɔ-pii"
+        }
+      ]
+    },
+    {
+      "id": "item5",
+      "text": "ฟอซา",
+      "translation": "faw-sa",
+      "romanization": "fɔɔ-saa",
+      "difficulty": 2,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ฟอซา",
+          "translation": "faw-sa",
+          "romanization": "fɔɔ-saa"
+        }
+      ]
+    },
+    {
+      "id": "item6",
+      "text": "ฮูฟอ",
+      "translation": "hoo-faw",
+      "romanization": "huu-fɔɔ",
+      "difficulty": 2,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ฮูฟอ",
+          "translation": "hoo-faw",
+          "romanization": "huu-fɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item7",
+      "text": "พาซี",
+      "translation": "pa-see",
+      "romanization": "paa-sii",
+      "difficulty": 1,
+      "tags": ["short", "basic", "repeat"],
+      "examples": [
+        {
+          "text": "พาซี",
+          "translation": "pa-see",
+          "romanization": "paa-sii"
+        }
+      ]
+    },
+    {
+      "id": "item8",
+      "text": "พูซา",
+      "translation": "poo-sa",
+      "romanization": "puu-saa",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "พูซา",
+          "translation": "poo-sa",
+          "romanization": "puu-saa"
+        }
+      ]
+    },
+    {
+      "id": "item9",
+      "text": "ซาคอ",
+      "translation": "sa-kaw",
+      "romanization": "saa-kɔɔ",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ซาคอ",
+          "translation": "sa-kaw",
+          "romanization": "saa-kɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item10",
+      "text": "พอที",
+      "translation": "paw-tee",
+      "romanization": "pɔɔ-tii",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "พอที",
+          "translation": "paw-tee",
+          "romanization": "pɔɔ-tii"
+        }
+      ]
+    },
+    {
+      "id": "item11",
+      "text": "คอซี",
+      "translation": "kaw-see",
+      "romanization": "kɔɔ-sii",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "คอซี",
+          "translation": "kaw-see",
+          "romanization": "kɔɔ-sii"
+        }
+      ]
+    },
+    {
+      "id": "item12",
+      "text": "ฮาฮู",
+      "translation": "ha-hoo",
+      "romanization": "haa-huu",
+      "difficulty": 2,
+      "tags": ["short", "repetition"],
+      "examples": [
+        {
+          "text": "ฮาฮู",
+          "translation": "ha-hoo",
+          "romanization": "haa-huu"
+        }
+      ]
+    },
+    {
+      "id": "item13",
+      "text": "พอฮา",
+      "translation": "paw-ha",
+      "romanization": "pɔɔ-haa",
+      "difficulty": 1,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "พอฮา",
+          "translation": "paw-ha",
+          "romanization": "pɔɔ-haa"
+        }
+      ]
+    },
+    {
+      "id": "item14",
+      "text": "ซูคอ",
+      "translation": "soo-kaw",
+      "romanization": "suu-kɔɔ",
+      "difficulty": 2,
+      "tags": ["short", "basic"],
+      "examples": [
+        {
+          "text": "ซูคอ",
+          "translation": "soo-kaw",
+          "romanization": "suu-kɔɔ"
+        }
+      ]
+    },
+    {
+      "id": "item15",
+      "text": "ซาซี",
+      "translation": "sa-see",
+      "romanization": "saa-sii",
+      "difficulty": 2,
+      "tags": ["short", "repetition"],
+      "examples": [
+        {
+          "text": "ซาซี",
+          "translation": "sa-see",
+          "romanization": "saa-sii"
+        }
+      ]
+    },
+    {
+      "id": "item16",
+      "text": "ซีซูที",
+      "translation": "see-soo-tee",
+      "romanization": "sii-suu-tii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ซีซูที",
+          "translation": "see-soo-tee",
+          "romanization": "sii-suu-tii"
+        }
+      ]
+    },
+    {
+      "id": "item17",
+      "text": "ซาคอพู",
+      "translation": "sa-kaw-poo",
+      "romanization": "saa-kɔɔ-puu",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ซาคอพู",
+          "translation": "sa-kaw-poo",
+          "romanization": "saa-kɔɔ-puu"
+        }
+      ]
+    },
+    {
+      "id": "item18",
+      "text": "ฮูพาซี",
+      "translation": "hoo-pa-see",
+      "romanization": "huu-paa-sii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ฮูพาซี",
+          "translation": "hoo-pa-see",
+          "romanization": "huu-paa-sii"
+        }
+      ]
+    },
+    {
+      "id": "item19",
+      "text": "ทาคอที",
+      "translation": "ta-kaw-tee",
+      "romanization": "taa-kɔɔ-tii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ทาคอที",
+          "translation": "ta-kaw-tee",
+          "romanization": "taa-kɔɔ-tii"
+        }
+      ]
+    },
+    {
+      "id": "item20",
+      "text": "พาซีพี",
+      "translation": "pa-see-pee",
+      "romanization": "paa-sii-pii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "พาซีพี",
+          "translation": "pa-see-pee",
+          "romanization": "paa-sii-pii"
+        }
+      ]
+    },
+    {
+      "id": "item21",
+      "text": "พอซีพา",
+      "translation": "paw-see-pa",
+      "romanization": "pɔɔ-sii-paa",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "พอซีพา",
+          "translation": "paw-see-pa",
+          "romanization": "pɔɔ-sii-paa"
+        }
+      ]
+    },
+    {
+      "id": "item22",
+      "text": "ฮีฟอซา",
+      "translation": "hee-faw-sa",
+      "romanization": "hii-fɔɔ-saa",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ฮีฟอซา",
+          "translation": "hee-faw-sa",
+          "romanization": "hii-fɔɔ-saa"
+        }
+      ]
+    },
+    {
+      "id": "item23",
+      "text": "พอทีซี",
+      "translation": "paw-tee-see",
+      "romanization": "pɔɔ-tii-sii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "พอทีซี",
+          "translation": "paw-tee-see",
+          "romanization": "pɔɔ-tii-sii"
+        }
+      ]
+    },
+    {
+      "id": "item24",
+      "text": "พอฮูฮา",
+      "translation": "paw-hoo-ha",
+      "romanization": "pɔɔ-huu-haa",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "พอฮูฮา",
+          "translation": "paw-hoo-ha",
+          "romanization": "pɔɔ-huu-haa"
+        }
+      ]
+    },
+    {
+      "id": "item25",
+      "text": "ซอพาที",
+      "translation": "saw-pa-tee",
+      "romanization": "sɔɔ-paa-tii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ซอพาที",
+          "translation": "saw-pa-tee",
+          "romanization": "sɔɔ-paa-tii"
+        }
+      ]
+    },
+    {
+      "id": "item26",
+      "text": "ทาพอที",
+      "translation": "ta-paw-tee",
+      "romanization": "taa-pɔɔ-tii",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "ทาพอที",
+          "translation": "ta-paw-tee",
+          "romanization": "taa-pɔɔ-tii"
+        }
+      ]
+    },
+    {
+      "id": "item27",
+      "text": "พอฮูคอ",
+      "translation": "paw-hoo-kaw",
+      "romanization": "pɔɔ-huu-kɔɔ",
+      "difficulty": 3,
+      "tags": ["long", "complex"],
+      "examples": [
+        {
+          "text": "พอฮูคอ",
+          "translation": "paw-hoo-kaw",
+          "romanization": "pɔɔ-huu-kɔɔ"
+        }
+      ]
+    }
   ]
 }
