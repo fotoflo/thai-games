@@ -9,7 +9,7 @@ import {
 } from "../../types/lessons";
 
 type LessonStatesRecord = Record<number, LessonState>;
-type ProgressionMode = "firstPass" | "spacedRepetition" | "random";
+type ProgressionMode = "firstPass" | "spacedRepetition" | "test";
 
 interface UseLessonState {
   currentLesson: number;
@@ -193,27 +193,42 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
 
   const handleFirstPassChoice = useCallback(
     (itemId: string, choice: "skip" | "mastered" | "practice") => {
-      switch (choice) {
-        case "mastered":
-          updateItemState(itemId, { mastery: 5 });
-          break;
-        case "practice":
-          updateItemState(itemId, { mastery: 1 });
-          updateLessonState(currentLesson, {
-            workingList: [...lessonStates[currentLesson].workingList, itemId],
-          });
-          break;
-        case "skip":
-          updateItemState(itemId, { lastSeen: Date.now() });
-          break;
-      }
+      const timestamp = Date.now();
+
+      setLessonStates((prev) => ({
+        ...prev,
+        [currentLesson]: {
+          ...prev[currentLesson],
+          itemStates: {
+            ...prev[currentLesson]?.itemStates,
+            [itemId]: {
+              ...prev[currentLesson]?.itemStates?.[itemId],
+              lastStudied: timestamp,
+              mastery:
+                choice === "mastered" ? 5 : choice === "practice" ? 1 : 0,
+              status: choice,
+            },
+          },
+        },
+      }));
     },
-    [currentLesson, updateItemState, updateLessonState]
+    [currentLesson, setLessonStates]
+  );
+
+  const setCurrentLessonAndInit = useCallback(
+    (newLesson: number) => {
+      setCurrentLesson(newLesson);
+      updateLessonState(newLesson, {
+        progressionMode: "firstPass",
+        lastAddedIndex: -1,
+      });
+    },
+    [setCurrentLesson, updateLessonState]
   );
 
   return {
     currentLesson,
-    setCurrentLesson,
+    setCurrentLesson: setCurrentLessonAndInit,
     lessonStates,
     updateLessonState,
     getLessonProgress,

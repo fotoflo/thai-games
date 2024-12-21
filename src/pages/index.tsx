@@ -35,29 +35,29 @@ const IndexPage: React.FC = () => {
     settings,
     updateSettings,
     updateProfile,
+    invertTranslation,
+    toggleInvertTranslation,
     workingSet,
     activeVocabItem,
     setActiveVocabItem,
-    totalLessons,
-    rateMastery,
     addMoreItems,
     nextItem,
+    rateMastery,
     lessons,
-    invertTranslation,
-    toggleInvertTranslation,
-  } = gameState;
-
-  const {
+    totalLessons,
     currentLesson,
     setCurrentLesson,
+    progressionMode,
+    setProgressionMode,
+    lessonStates,
     problemList,
     possibleProblemList,
     workingList,
     reportProblem,
     getCurrentProgress,
-    progressionMode,
-    setProgressionMode,
-  } = gameState.lessonState;
+    lessonSubset,
+    currentItem,
+  } = gameState;
 
   console.log("Render IndexPage:", { currentLesson, totalLessons });
 
@@ -103,6 +103,11 @@ const IndexPage: React.FC = () => {
     setCurrentLesson(index);
   };
 
+  const displayItem =
+    progressionMode === "firstPass"
+      ? currentItem
+      : activeVocabItem?.vocabularyItem;
+
   return (
     <>
       <WelcomeModal
@@ -113,33 +118,37 @@ const IndexPage: React.FC = () => {
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SettingsHamburger onClick={openSettings} />
 
-        {activeVocabItem && (
+        {displayItem ? (
           <ItemDisplay
-            vocabItem={activeVocabItem?.vocabularyItem}
+            vocabItem={displayItem}
             iconSize={52}
             textSize="text-6xl"
             className="flex items-center justify-center mb-10"
             speakOnUnmount={true}
             invertTranslation={invertTranslation}
           />
-        )}
-        {!activeVocabItem && (
+        ) : (
           <div className="flex items-center justify-center mb-10">
             <p className="text-2xl text-gray-500">
-              No item selected. Please select a lesson to study.
+              {progressionMode === "firstPass" &&
+              lessonSubset.unseenItems.length === 0
+                ? "All items have been reviewed!"
+                : "No item selected. Please select a lesson to study."}
             </p>
           </div>
         )}
 
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
-          current={activeVocabItem}
+          current={displayItem}
         />
 
         <FlashCardModal
-          vocabItem={activeVocabItem?.vocabularyItem}
+          vocabItem={displayItem}
           onNext={() => {
-            gameState.addMoreItems();
+            if (progressionMode !== "firstPass") {
+              gameState.addMoreItems();
+            }
             setDisplayTrigger(null);
           }}
           trigger={displayTrigger}
@@ -149,7 +158,9 @@ const IndexPage: React.FC = () => {
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <LessonProgress
             workingSetLength={workingSet.length}
-            lessonState={gameState.lessonState.lessonStates[currentLesson]}
+            lessonState={lessonStates[currentLesson]}
+            lessonSubset={lessonSubset}
+            className="mb-4"
           />
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
@@ -158,13 +169,8 @@ const IndexPage: React.FC = () => {
             onRatingSelect={handleRateMastery}
             mode={progressionMode}
             onFirstPassChoice={(choice) => {
-              if (choice === "mastered") {
-                handleRateMastery(5);
-              } else if (choice === "practice") {
-                handleRateMastery(1);
-              } else {
-                nextItem();
-              }
+              if (!currentItem) return;
+              gameState.handleFirstPassChoice(currentItem.id, choice);
             }}
             className="mb-10 mt-10"
           />
@@ -176,6 +182,8 @@ const IndexPage: React.FC = () => {
             selectedItem={activeVocabItem}
             onCardSelect={handleCardSelect}
             addMoreItems={addMoreItems}
+            progressionMode={progressionMode}
+            currentLesson={currentLesson}
           />
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />

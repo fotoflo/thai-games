@@ -5,83 +5,95 @@ import { useGameSettings } from "./game/useGameSettings";
 import { useLessonState } from "./game/useLessonState";
 import { useWorkingSet } from "./game/useWorkingSet";
 
-type ProgressionMode = "firstPass" | "spacedRepetition" | "test";
-
-interface UseReadThaiGameState {
-  // Game Settings
-  settings: GameSettings;
-  updateSettings: (updates: Partial<GameSettings>) => void;
-  updateProfile: (updates: Partial<PlayerProfile>) => void;
-  invertTranslation: boolean;
-  toggleInvertTranslation: () => void;
-
-  // Active Item
-  activeVocabItem: WorkingSetItem | null;
-  setActiveVocabItem: (item: WorkingSetItem | null) => void;
-
-  // Working Set
-  workingSet: WorkingSetItem[];
-  addMoreItems: (count?: number) => void;
-  nextItem: () => void;
-  rateMastery: (rating: number, speakFunction?: Function) => Promise<void>;
-
-  // Lesson Data
-  lessons: Lesson[];
-  totalLessons: number;
-
-  // Lesson State
-  lessonState: {
-    currentLesson: number;
-    setCurrentLesson: (lessonIndex: number) => void;
-    problemList: string[];
-    possibleProblemList: string[];
-    workingList: string[];
-    reportProblem: (type: "problem" | "possible") => void;
-    getCurrentProgress: () => GameProgress;
-    progressionMode: ProgressionMode;
-    setProgressionMode: (mode: ProgressionMode) => void;
-  };
-}
-
-export const useReadThaiGameState = (): UseReadThaiGameState => {
+export const useReadThaiGameState = () => {
   const gameSettings = useGameSettings();
   const lessonState = useLessonState(lessons);
-  const workingSetState = useWorkingSet();
+  const workingSet = useWorkingSet({
+    currentLesson: lessonState.currentLesson,
+    lessons,
+    progressionMode: lessonState.progressionMode,
+  });
 
-  const addMoreItems = useCallback(
-    (count: number = 5) => {
-      const newItems = lessonState.getWorkingSetItems(count);
-      workingSetState.addItems(newItems);
-    },
-    [lessonState, workingSetState]
-  );
+  // Handle first pass choices
+  const handleFirstPassChoice = useCallback(
+    (itemId: string, choice: "skip" | "mastered" | "practice") => {
+      // Update lesson state
+      lessonState.handleFirstPassChoice(itemId, choice);
 
-  const rateMastery = useCallback(
-    async (rating: number, speakFunction?: Function) => {
-      if (!workingSetState.activeVocabItem) return;
-
-      lessonState.updateItemState(workingSetState.activeVocabItem.id, {
-        mastery: rating,
-        lastStudied: Date.now(),
-      });
-
-      if (speakFunction && gameSettings.settings.audio.enabled) {
-        await speakFunction();
+      // Update working set state based on choice
+      if (choice === "practice") {
+        workingSet.markForPractice(itemId);
+      } else if (choice === "mastered") {
+        workingSet.markAsMastered(itemId);
+      } else if (choice === "skip") {
+        workingSet.markAsSkipped(itemId);
       }
 
-      workingSetState.nextItem();
-      gameSettings.updateProfile({ lastActive: Date.now() });
+      // If it's a practice item, add it to the working set
+      if (choice === "practice") {
+        const item = lessons[lessonState.currentLesson].items.find(
+          (i) => i.id === itemId
+        );
+        if (item && !workingSet.isWorkingSetFull) {
+          workingSet.addToWorkingSet([
+            {
+              id: itemId,
+              mastery: 1,
+              vocabularyItem: item,
+            },
+          ]);
+        }
+      }
     },
-    [workingSetState, lessonState, gameSettings]
+    [lessonState, workingSet, lessons]
+  );
+
+  // Handle progression mode changes
+  const handleProgressionModeChange = useCallback(
+    (mode: "firstPass" | "spacedRepetition" | "test") => {
+      lessonState.setProgressionMode(mode);
+
+      if (mode === "firstPass") {
+        workingSet.loadFirstPassItems();
+      } else if (mode === "spacedRepetition") {
+        // Refresh working set from practice items
+        workingSet.refreshWorkingSet();
+      } else if (mode === "test") {
+        // Clear working set in test mode
+        workingSet.clearWorkingSet();
+      }
+    },
+    [lessonState, workingSet]
   );
 
   return {
+    // Game settings
     ...gameSettings,
-    ...workingSetState,
-    addMoreItems,
-    rateMastery,
+
+    // Lesson state
+    currentLesson: lessonState.currentLesson,
+    setCurrentLesson: lessonState.setCurrentLesson,
+    progressionMode: lessonState.progressionMode,
+    setProgressionMode: handleProgressionModeChange,
+    lessonStates: lessonState.lessonStates,
+
+    // Working set
+    workingSet: workingSet.workingSet,
+    activeVocabItem: workingSet.activeVocabItem,
+    currentItem: workingSet.currentItem,
+    setActiveVocabItem: workingSet.setActiveVocabItem,
+    addMoreItems: workingSet.addMoreItems,
+    nextItem: workingSet.nextItem,
+
+    // Combined operations
+    handleFirstPassChoice,
+
+    // Progress tracking
+    lessonProgress: lessonState.getLessonProgress(lessonState.currentLesson),
+    lessonSubset: workingSet.lessonSubset,
+
+    // Lesson data
     lessons,
     totalLessons: lessons.length,
-    lessonState,
   };
 };

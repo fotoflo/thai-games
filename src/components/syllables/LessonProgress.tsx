@@ -1,26 +1,32 @@
 import React from "react";
 import { LessonState } from "../../types/lessons";
+import { LessonSubset } from "../../hooks/game/useWorkingSet";
 
 interface LessonProgressProps {
   workingSetLength: number;
   lessonState: LessonState;
+  lessonSubset: LessonSubset;
   className?: string;
 }
 
 const LessonProgress: React.FC<LessonProgressProps> = ({
   workingSetLength,
   lessonState,
+  lessonSubset = {
+    unseenItems: [],
+    currentItem: null,
+    practiceItems: [],
+    masteredItems: [],
+    skippedItems: [],
+  },
   className = "",
 }) => {
   const { itemStates = {} } = lessonState;
-
-  const masteredCount = Object.values(itemStates).filter(
-    (state) => state.mastery === 5
-  ).length;
-
-  const skippedCount = Object.values(itemStates).filter(
-    (state) => state.lastSeen && state.mastery === 0
-  ).length;
+  const {
+    unseenItems = [],
+    masteredItems = [],
+    skippedItems = [],
+  } = lessonSubset;
 
   return (
     <div className={`text-xs text-gray-500 mb-2 px-2 ${className}`}>
@@ -29,10 +35,14 @@ const LessonProgress: React.FC<LessonProgressProps> = ({
           <span className="text-blue-400">Practice:</span> {workingSetLength}
         </div>
         <div>
-          <span className="text-purple-400">Know It:</span> {masteredCount}
+          <span className="text-purple-400">Know It:</span>{" "}
+          {masteredItems.length}
         </div>
         <div>
-          <span className="text-gray-400">Skipped:</span> {skippedCount}
+          <span className="text-gray-400">Skipped:</span> {skippedItems.length}
+        </div>
+        <div>
+          <span className="text-yellow-400">Unseen:</span> {unseenItems.length}
         </div>
       </div>
     </div>
