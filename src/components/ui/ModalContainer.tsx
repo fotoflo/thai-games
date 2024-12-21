@@ -9,6 +9,7 @@ interface ModalContainerProps {
   showClose?: boolean;
   bottomButtons?: ReactNode;
   showHeader?: boolean;
+  gradientColor?: string;
 }
 
 const ModalContainer: React.FC<ModalContainerProps> = ({
@@ -19,6 +20,7 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
   showClose = true,
   bottomButtons,
   showHeader = true,
+  gradientColor = "from-emerald-600/20",
 }) => {
   // Close modal on Escape key press
   useEffect(() => {
@@ -51,7 +53,9 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
       >
         {showHeader && title && (
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-800/50 to-transparent -z-10" />
+            <div
+              className={`absolute inset-0 bg-gradient-to-b ${gradientColor} to-transparent -z-10`}
+            />
             <div className="px-4 py-6">
               <div className="flex items-start justify-between">
                 <h2 className="text-2xl font-semibold">{title}</h2>

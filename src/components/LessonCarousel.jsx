@@ -23,7 +23,9 @@ const LessonCarousel = ({
             <>
               <button
                 key={currentLesson}
-                onClick={() => setCurrentLesson(currentLesson)}
+                onClick={() => {
+                  onViewDetails(lessons[currentLesson], currentLesson); // Show lesson details
+                }}
                 className={`px-3 py-2 rounded-md transition-colors bg-blue-600 text-white`}
               >
                 {lessons[currentLesson].lessonName}

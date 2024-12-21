@@ -21,7 +21,7 @@ const ThaiSyllables = () => {
   const [displayTrigger, setDisplayTrigger] = useState(null); // 'speak' | 'mastery' | null
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false); // State for SettingsModalContainer
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [lessonDetailsSelectedLesson, setLessonDetailsSelectedLesson] = useState(null);
 
   const {
     currentLesson,
@@ -64,18 +64,9 @@ const ThaiSyllables = () => {
     }
   };
 
-  const handleMastery = (level) => {
-    gameState.rateMastery(level);
-    setDisplayTrigger('mastery');
-  };
-
   if (!current) {
     addMoreSyllables(5);
   }
-
-  // Get the index of the current syllable in the original syllables array
-  const currentIndexInJson = getCurrentProgress().currentIndex;
-  const totalSyllables = getCurrentProgress().totalSyllables;
 
   const openSettings = () => {
     setShowSettingsContainer(true); // Show the SettingsModalContainer
@@ -86,7 +77,7 @@ const ThaiSyllables = () => {
   };
 
   const handleViewLessonDetails = (lesson, index) => {
-    setSelectedLesson({ lesson, index });
+    setLessonDetailsSelectedLesson({ lesson, index });
   };
 
   const handleStudyLesson = (index) => {
@@ -180,12 +171,12 @@ const ThaiSyllables = () => {
         {showSettingsContainer && <SettingsModalContainer onClose={closeSettings} />}
         
         {/* Add LessonDetails as a modal overlay */}
-        {selectedLesson && (
+        {lessonDetailsSelectedLesson && (
           <div className="fixed inset-0 z-50">
             <LessonDetails 
-              lesson={selectedLesson.lesson}
-              lessonIndex={selectedLesson.index}
-              onClose={() => setSelectedLesson(null)}
+              lesson={lessonDetailsSelectedLesson.lesson}
+              lessonIndex={lessonDetailsSelectedLesson.index}
+              onClose={() => setLessonDetailsSelectedLesson(null)}
               onStudyLesson={handleStudyLesson}
             />
           </div>

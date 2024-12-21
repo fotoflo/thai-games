@@ -26,40 +26,37 @@ const LessonHeader = ({
   lesson: Lesson;
   onClose: () => void;
 }) => (
-  <div className="relative">
-    <div className="absolute inset-0 bg-gradient-to-b from-emerald-600/20 to-transparent -z-10" />
-    <div className="px-4 py-6 space-y-4">
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4 text-emerald-500" />
-            <span className="text-sm font-medium text-emerald-500">
-              {lesson.lessonType}
-            </span>
-          </div>
-          <h1 className="text-2xl font-semibold">{lesson.lessonName}</h1>
+  <div className="px-4 py-6 space-y-4">
+    <div className="flex items-start justify-between">
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <BookOpen className="w-4 h-4 text-emerald-500" />
+          <span className="text-sm font-medium text-emerald-500">
+            {lesson.lessonType}
+          </span>
         </div>
-        <button
-          onClick={onClose}
-          className="p-2 hover:bg-slate-800/50 rounded-lg"
-        >
-          <X className="w-5 h-5" />
-        </button>
+        <h1 className="text-2xl font-semibold">{lesson.lessonName}</h1>
       </div>
+      <button
+        onClick={onClose}
+        className="p-2 hover:bg-slate-800/50 rounded-lg"
+      >
+        <X className="w-5 h-5" />
+      </button>
+    </div>
 
-      <p className="text-sm text-slate-300 leading-relaxed">
-        {lesson.lessonDescription}
-      </p>
+    <p className="text-sm text-slate-300 leading-relaxed">
+      {lesson.lessonDescription}
+    </p>
 
-      <div className="flex flex-wrap gap-2">
-        <span className="px-3 py-1.5 bg-slate-800/50 rounded-full text-sm inline-flex items-center gap-2">
-          <Globe className="w-3.5 h-3.5" />
-          {lesson.languagePair?.target?.name}
-        </span>
-        <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm">
-          {lesson.lessonLevel}
-        </span>
-      </div>
+    <div className="flex flex-wrap gap-2">
+      <span className="px-3 py-1.5 bg-slate-800/50 rounded-full text-sm inline-flex items-center gap-2">
+        <Globe className="w-3.5 h-3.5" />
+        {lesson.languagePair?.target?.name}
+      </span>
+      <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm">
+        {lesson.lessonLevel}
+      </span>
     </div>
   </div>
 );
@@ -211,6 +208,7 @@ const LessonDetails = ({
       onClose={onClose}
       showHeader={false}
       bottomButtons={studyButton}
+      gradientColor="from-emerald-600/20"
     >
       <LessonHeader lesson={lesson} onClose={onClose} />
 

@@ -5,8 +5,8 @@ import ModalContainer from './ui/ModalContainer';
 
 const LessonListScreen = ({ onClose, lessons, setCurrentLesson, onViewDetails }) => {
   const handleLessonClick = (index) => {
-    setCurrentLesson(index);
-    onClose();
+    setCurrentLesson(index); // Set the current lesson
+    onClose(); // Close the modal
   };
 
   return (
@@ -21,6 +21,7 @@ const LessonListScreen = ({ onClose, lessons, setCurrentLesson, onViewDetails })
             <div 
               key={lesson.id || index} 
               className="bg-slate-800/30 rounded-xl overflow-hidden border border-slate-700/50"
+              onClick={() => handleLessonClick(index)} // Handle lesson click
             >
               <div className="p-4 space-y-3">
                 <div className="flex items-start justify-between gap-4">
@@ -50,9 +51,9 @@ const LessonListScreen = ({ onClose, lessons, setCurrentLesson, onViewDetails })
 
                   <button 
                     onClick={(e) => {
-                      e.stopPropagation();
-                      onViewDetails(lesson, index);
-                      onClose();
+                      e.stopPropagation(); // Prevent the click from bubbling up
+                      onViewDetails(lesson, index); // Call onViewDetails to show lesson details
+                      onClose(); // Close the modal
                     }}
                     className="px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-200 
                              rounded-lg text-sm transition-colors"
