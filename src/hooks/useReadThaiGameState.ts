@@ -5,6 +5,8 @@ import { useGameSettings } from "./game/useGameSettings";
 import { useLessonState } from "./game/useLessonState";
 import { useWorkingSet } from "./game/useWorkingSet";
 
+type ProgressionMode = "firstPass" | "spacedRepetition" | "test";
+
 interface UseReadThaiGameState {
   // Game Settings
   settings: GameSettings;
@@ -36,10 +38,8 @@ interface UseReadThaiGameState {
     workingList: string[];
     reportProblem: (type: "problem" | "possible") => void;
     getCurrentProgress: () => GameProgress;
-    progressionMode: "firstPass" | "spacedRepetition" | "random";
-    setProgressionMode: (
-      mode: "firstPass" | "spacedRepetition" | "random"
-    ) => void;
+    progressionMode: ProgressionMode;
+    setProgressionMode: (mode: ProgressionMode) => void;
   };
 }
 

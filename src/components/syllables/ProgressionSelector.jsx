@@ -26,15 +26,15 @@ const ProgressionSelector = ({ progressionMode, onModeChange }) => {
         Practice Set
       </button>
       <button
-        onClick={() => onModeChange('random')}
+        onClick={() => onModeChange('test')}
         className={`px-4 py-2 rounded-lg transition-colors ${
-          progressionMode === 'random'
+          progressionMode === 'test'
             ? 'bg-blue-600 text-white'
             : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
         }`}
-        disabled={progressionMode === 'random'}
+        disabled={progressionMode === 'test'}
       >
-        Random
+        Test
       </button>
     </div>
   );

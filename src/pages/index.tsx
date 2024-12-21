@@ -14,6 +14,7 @@ import Divider from "../components/ui/divider";
 import LessonDetails from "../components/syllables/LessonDetailScreen";
 import { WorkingSetItem, Lesson } from "../types/lessons";
 import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
+import LessonProgress from "../components/syllables/LessonProgress";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
@@ -135,10 +136,6 @@ const IndexPage: React.FC = () => {
           current={activeVocabItem}
         />
 
-        {/* <pre style={{ fontSize: "small" }}>
-          {JSON.stringify(activeItem || "", null, 2)}
-        </pre> */}
-
         <FlashCardModal
           vocabItem={activeVocabItem?.vocabularyItem}
           onNext={() => {
@@ -150,11 +147,26 @@ const IndexPage: React.FC = () => {
         />
 
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
-          <Divider className="mb-10 -mx-4" borderClass="border-slate-700" />
+          <LessonProgress
+            workingSetLength={workingSet.length}
+            lessonState={gameState.lessonState.lessonStates[currentLesson]}
+          />
+
+          <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
           <MasteryControls
             onRatingSelect={handleRateMastery}
-            className="mb-10"
+            mode={progressionMode}
+            onFirstPassChoice={(choice) => {
+              if (choice === "mastered") {
+                handleRateMastery(5);
+              } else if (choice === "practice") {
+                handleRateMastery(1);
+              } else {
+                nextItem();
+              }
+            }}
+            className="mb-10 mt-10"
           />
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
