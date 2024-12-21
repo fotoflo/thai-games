@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { X, BookOpen, Globe } from "lucide-react";
 import { Lesson, VocabularyItem } from "@/types/lessons";
 import ModalContainer from "../ui/ModalContainer";
-import ItemDisplay from "./ItemDisplay";
 import DetailCard from "./DetailCard";
 
 interface LessonDetailsProps {

@@ -105,7 +105,7 @@ const ThaiSyllables: React.FC = () => {
         <SettingsHamburger onClick={openSettings} />
 
         <ItemDisplay
-          current={activeItem}
+          vocabItem={activeItem?.vocabularyItem}
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"

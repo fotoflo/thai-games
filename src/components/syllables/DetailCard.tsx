@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ItemDisplay from "./ItemDisplay";
-import { VocabularyItem } from "@/types/lessons";
+import { Example, VocabularyItem } from "@/types/lessons";
 
 const DetailCard = ({
   vocabItem,
@@ -17,7 +17,7 @@ const DetailCard = ({
   return (
     <div className="bg-slate-700/30 rounded-xl overflow-hidden">
       <div className="p-4 space-y-3">
-        <ItemDisplay current={vocabItem} textSize="text-3xl" iconSize={20} />
+        <ItemDisplay vocabItem={vocabItem} textSize="text-3xl" iconSize={20} />
         <div className="space-y-1">
           <div className="text-lg text-slate-300">
             translation: {vocabItem?.translation}
@@ -41,10 +41,10 @@ const DetailCard = ({
       {showExamples && vocabItem?.examples && (
         <div className="border-t border-slate-700/50">
           <div className="divide-y divide-slate-700/50">
-            {vocabItem?.examples.map((example, idx) => (
+            {vocabItem?.examples.map((example: Example, idx) => (
               <div key={idx} className="p-4 hover:bg-slate-700/20">
                 <ItemDisplay
-                  current={example}
+                  vocabItem={example}
                   textSize="text-lg"
                   iconSize={16}
                   className="mb-2 items-start"

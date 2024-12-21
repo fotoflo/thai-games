@@ -38,7 +38,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
             <div>
               <div className="text-white">Listen, Repeat and Recall</div>
               <ItemDisplay 
-                current={{ text: "สวัสดี" }} 
+                vocabItem={{ text: "สวัสดี" }} 
                 hasThai={true} 
                 textSize="text-3xl"
                 iconSize={28}
