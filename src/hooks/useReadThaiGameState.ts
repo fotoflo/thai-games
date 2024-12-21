@@ -13,35 +13,23 @@ import {
   ItemState,
 } from "../types/lessons";
 import { lessons } from "../lessons/LessonLoader";
-
-const DEFAULT_SETTINGS: GameSettings = {
-  invertTranslation: false,
-  showRomanization: true,
-  showExamples: true,
-  audio: {
-    enabled: true,
-    volume: 1.0,
-    autoPlay: false,
-  },
-  profile: {
-    id: "",
-    name: "Guest",
-    createdAt: Date.now(),
-    lastActive: Date.now(),
-  },
-};
+import { useGameSettings } from "./game/useGameSettings";
 
 type LessonStatesRecord = Record<number, LessonState>;
 
 export const useReadThaiGameState = () => {
+  const {
+    settings,
+    updateSettings,
+    updateProfile,
+    toggleInvertTranslation,
+    invertTranslation,
+  } = useGameSettings();
+
   // Core game state
   const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
   const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
   const [selectedItem, setSelectedItem] = useLocalStorage("selectedItem", null);
-  const [settings, setSettings] = useLocalStorage(
-    "gameSettings",
-    DEFAULT_SETTINGS
-  );
 
   // Initialize lesson states
   const initialLessonStates: LessonStatesRecord = lessons.reduce(
@@ -62,32 +50,6 @@ export const useReadThaiGameState = () => {
   const [lessonStates, setLessonStates] = useLocalStorage(
     "lessonStates",
     initialLessonStates
-  );
-
-  // Profile management
-  const updateProfile = useCallback(
-    (updates: Partial<PlayerProfile>): void => {
-      setSettings((prev: GameSettings) => ({
-        ...prev,
-        profile: {
-          ...prev.profile,
-          ...updates,
-          lastActive: Date.now(),
-        },
-      }));
-    },
-    [setSettings]
-  );
-
-  // Settings management
-  const updateSettings = useCallback(
-    (updates: Partial<Omit<GameSettings, "profile">>): void => {
-      setSettings((prev: GameSettings) => ({
-        ...prev,
-        ...updates,
-      }));
-    },
-    [setSettings]
   );
 
   const initializeWorkingSet = useCallback(
@@ -422,14 +384,6 @@ export const useReadThaiGameState = () => {
     }
   }, [workingSet.length, currentLesson, initializeWorkingSet]);
 
-  // Toggle invertTranslation setting
-  const toggleInvertTranslation = useCallback((): void => {
-    setSettings((prev: GameSettings) => ({
-      ...prev,
-      invertTranslation: !prev.invertTranslation,
-    }));
-  }, [setSettings]);
-
   return {
     currentLesson,
     setCurrentLesson: setCurrentLessonAndReset,
@@ -453,6 +407,6 @@ export const useReadThaiGameState = () => {
     possibleProblemList: lessonStates[currentLesson]?.possibleProblemList || [],
     workingList: lessonStates[currentLesson]?.workingList || [],
     toggleInvertTranslation,
-    invertTranslation: settings.invertTranslation,
+    invertTranslation,
   };
 };
