@@ -32,19 +32,13 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
     }
   }, [trigger, onClose]);
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   if (!trigger) return null;
 
   return (
     <ModalContainer title="Flash Card" onClose={onClose}>
       <div
         className="fixed inset-0 flex flex-col justify-between bg-black bg-opacity-50 z-50"
-        onClick={handleBackdropClick}
+        onClick={onClose}
       >
         <div className="flex-grow flex items-center justify-center p-4">
           <DetailCard
