@@ -42,7 +42,7 @@ const IndexPage: React.FC = () => {
     rateMastery,
     reportProblem,
     reportPossibleProblem,
-    addMoreItems: addMoreSyllables,
+    addMoreItems,
     getCurrentProgress,
     setProgressionMode,
     progressionMode,
@@ -71,12 +71,12 @@ const IndexPage: React.FC = () => {
       (s: WorkingSetItem) => s.id === item.id
     );
     if (targetIndex !== -1) {
-      rateMastery(0, null, targetIndex);
+      rateMastery(0);
     }
   };
 
   if (!activeItem) {
-    addMoreSyllables(5);
+    addMoreItems(5);
   }
 
   const openSettings = () => {
@@ -117,8 +117,6 @@ const IndexPage: React.FC = () => {
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
           current={activeItem}
-          invertTranslation={invertTranslation}
-          toggleInvertTranslation={toggleInvertTranslation}
         />
 
         {/* <pre style={{ fontSize: "small" }}>
@@ -128,7 +126,7 @@ const IndexPage: React.FC = () => {
         <FlashCardModal
           vocabItem={activeItem?.vocabularyItem}
           onNext={() => {
-            gameState.addMoreSyllables();
+            gameState.addMoreItems();
             setDisplayTrigger(null);
           }}
           trigger={displayTrigger}
@@ -149,7 +147,7 @@ const IndexPage: React.FC = () => {
             workingSet={workingSet}
             selectedItem={activeItem}
             onCardSelect={handleCardSelect}
-            addMoreSyllables={addMoreSyllables}
+            addMoreItems={addMoreItems}
           />
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />

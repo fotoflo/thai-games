@@ -8,7 +8,7 @@ import DetailCard from "./DetailCard";
 interface FlashCardModalProps {
   vocabItem: any; // Replace with the appropriate type
   onNext: () => void;
-  trigger: string;
+  trigger: string | null;
   onClose: () => void;
 }
 

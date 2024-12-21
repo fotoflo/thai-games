@@ -7,7 +7,7 @@ interface WorkingSetCardsProps {
   workingSet: WorkingSetItem[];
   selectedItem: WorkingSetItem | null;
   onCardSelect: (item: WorkingSetItem) => void;
-  addMoreSyllables: () => void;
+  addMoreItems: () => void;
 }
 
 const getTextSizeClass = (text: string): string => {
@@ -27,7 +27,7 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
   workingSet,
   selectedItem,
   onCardSelect,
-  addMoreSyllables,
+  addMoreItems,
 }) => {
   return (
     <div className="flex items-center justify-center gap-2 mb-4">
@@ -72,7 +72,7 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
         {workingSet.length < 5 && (
           <div className="ml-auto">
             <button
-              onClick={addMoreSyllables}
+              onClick={addMoreItems}
               className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[60px] h-[80px]"
               title="Add One More Item"
             >
