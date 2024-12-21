@@ -129,7 +129,6 @@ const LessonDetails = ({
   const [expandedItems, setExpandedItems] = useState(new Set());
 
   const handleSpeak = (text: string) => {
-    // Implement speech functionality
     console.log("Speaking:", text);
   };
 
@@ -145,42 +144,43 @@ const LessonDetails = ({
     });
   };
 
+  const studyButton = (
+    <button
+      onClick={() => {
+        onStudyLesson(lessonIndex);
+        onClose();
+      }}
+      className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+    >
+      <BookOpen className="w-5 h-5" />
+      Start Learning
+    </button>
+  );
+
   return (
-    <div className="fixed inset-0 bg-slate-900 text-white flex flex-col">
-      <div className="flex-1 overflow-y-auto">
-        <LessonHeader lesson={lesson} onClose={onClose} />
+    <ModalContainer
+      onClose={onClose}
+      showHeader={false}
+      bottomButtons={studyButton}
+    >
+      <LessonHeader lesson={lesson} onClose={onClose} />
 
-        {/* Detailed Cards */}
-        <div className="px-4 pb-4 space-y-4">
-          <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide">
-            Vocabulary Details
-          </h2>
-          {lesson.items?.map((item, index) => (
-            <DetailCard
-              key={index}
-              item={item}
-              showExamples={expandedItems.has(index)}
-              onToggleExamples={() => toggleExamples(index)}
-              onSpeak={handleSpeak}
-            />
-          ))}
-        </div>
+      {/* Detailed Cards */}
+      <div className="px-4 pb-4 space-y-4">
+        <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide">
+          Vocabulary Details
+        </h2>
+        {lesson.items?.map((item, index) => (
+          <DetailCard
+            key={index}
+            item={item}
+            showExamples={expandedItems.has(index)}
+            onToggleExamples={() => toggleExamples(index)}
+            onSpeak={handleSpeak}
+          />
+        ))}
       </div>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-slate-800">
-        <button
-          onClick={() => {
-            onStudyLesson(lessonIndex);
-            onClose();
-          }}
-          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
-        >
-          <BookOpen className="w-5 h-5" />
-          Start Learning
-        </button>
-      </div>
-    </div>
+    </ModalContainer>
   );
 };
 

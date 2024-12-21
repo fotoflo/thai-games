@@ -1,12 +1,14 @@
 import React, { ReactNode, useEffect } from "react";
+import { X } from "lucide-react";
 
 interface ModalContainerProps {
   children: ReactNode;
   onClose: () => void;
-  title: string;
+  title?: string;
   className?: string;
   showClose?: boolean;
   bottomButtons?: ReactNode;
+  showHeader?: boolean;
 }
 
 const ModalContainer: React.FC<ModalContainerProps> = ({
@@ -16,6 +18,7 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
   className = "",
   showClose = true,
   bottomButtons,
+  showHeader = true,
 }) => {
   // Close modal on Escape key press
   useEffect(() => {
@@ -39,32 +42,36 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
+      className="fixed inset-0 bg-black/70 z-50"
       onClick={handleBackdropClick}
     >
       <div
-        className={`bg-gray-800 p-4 xs:p-5 rounded-lg shadow-2xl max-w-md w-full h-[90vh] relative ${className}`}
+        className="fixed inset-0 bg-slate-900 text-white flex flex-col md:m-8 md:rounded-lg"
+        onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-2xl font-bold mb-4 xs:mb-6 text-white border-b border-gray-600 pb-3 flex justify-between items-center">
-          {title}
-          {showClose && (
-            <button
-              onClick={onClose}
-              className="text-slate-400 hover:text-slate-200 transition-colors text-base"
-            >
-              Close
-            </button>
-          )}
-        </h2>
+        {showHeader && title && (
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-800/50 to-transparent -z-10" />
+            <div className="px-4 py-6">
+              <div className="flex items-start justify-between">
+                <h2 className="text-2xl font-semibold">{title}</h2>
+                {showClose && (
+                  <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-slate-800/50 rounded-lg"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
-        <div className="h-[calc(100%-138px)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
-          {children}
-        </div>
+        <div className={`flex-1 overflow-y-auto ${className}`}>{children}</div>
 
         {bottomButtons && (
-          <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-4">
-            {bottomButtons}
-          </div>
+          <div className="p-4 border-t border-slate-800">{bottomButtons}</div>
         )}
       </div>
     </div>

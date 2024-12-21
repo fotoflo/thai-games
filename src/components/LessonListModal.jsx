@@ -1,4 +1,5 @@
 import React from 'react';
+import { BookOpen } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 
@@ -9,46 +10,60 @@ const LessonListModal = ({ onClose, lessons, setCurrentLesson, onViewDetails }) 
   };
 
   return (
-    <ModalContainer title="Choose a Lesson" onClose={onClose}>
-      <div className="grid grid-cols-1 gap-2 xs:gap-3">
-        {lessons.map((lesson, index) => (
-          <div 
-            key={lesson.id || index} 
-            className="bg-gray-700 p-2 xs:p-4 rounded-lg shadow-md border border-gray-600"
-          >
+    <ModalContainer 
+      title="Choose a Lesson" 
+      onClose={onClose}
+      showHeader={true}
+    >
+      <div className="px-4 pb-4 space-y-4">
+        <div className="grid grid-cols-1 gap-3">
+          {lessons.map((lesson, index) => (
             <div 
-              className="flex justify-between items-start mb-2 cursor-pointer" 
-              onClick={() => handleLessonClick(index)}
+              key={lesson.id || index} 
+              className="bg-slate-800/30 rounded-xl overflow-hidden border border-slate-700/50"
             >
-              <h3 className="text-white text-lg xs:text-xl font-semibold">{lesson.lessonName}</h3>
-              {lesson.lessonLevel && (
-                <span className="bg-blue-600 text-white text-xs xs:text-sm px-2 xs:px-3 py-1 rounded-full">
-                  {lesson.lessonLevel}
-                </span>
-              )}
-            </div>
-            
-            <p className="text-gray-300 mb-2 xs:mb-3">{lesson.lessonDescription}</p>
-            
-            <div className="flex items-center text-gray-400 text-xs xs:text-sm">
-              <LessonItemsIcon />
-              {lesson.items.length} items
-            </div>
+              <div className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-1 flex-1">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-emerald-500" />
+                      <span className="text-sm font-medium text-emerald-500">
+                        {lesson.lessonType}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-50">
+                      {lesson.lessonName}
+                    </h3>
+                  </div>
+                  <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm whitespace-nowrap">
+                    {lesson.lessonLevel}
+                  </span>
+                </div>
+                
+                <p className="text-sm text-slate-300">{lesson.lessonDescription}</p>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-slate-400 text-sm">
+                    <LessonItemsIcon />
+                    {lesson.items.length} items
+                  </div>
 
-            <button 
-              onClick={(e) => {
-                e.stopPropagation();
-                onViewDetails(lesson, index);
-                onClose();
-              }}
-              className="mt-2 xs:mt-4 w-full p-2 xs:p-2 bg-green-600 text-white rounded-lg font-semibold
-                       transition-colors duration-200 hover:bg-green-700
-                       focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-            >
-              Lesson Details
-            </button>
-          </div>
-        ))}
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onViewDetails(lesson, index);
+                      onClose();
+                    }}
+                    className="px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-200 
+                             rounded-lg text-sm transition-colors"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </ModalContainer>
   );
