@@ -64,7 +64,56 @@ const LessonHeader = ({
   </div>
 );
 
-const DetailCard = ({ item, showExamples, onToggleExamples, onSpeak }) => (
+interface VocabularyItem {
+  id?: string;
+  text: string;
+  translation: string;
+  romanization?: string;
+  examples?: Array<{
+    text: string;
+    translation: string;
+    romanization?: string;
+  }>;
+}
+
+interface VocabularyGridProps {
+  items: VocabularyItem[];
+}
+
+const VocabularyGrid: React.FC<VocabularyGridProps> = ({ items }) => (
+  <div className="px-4">
+    <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">
+      Vocabulary Overview
+    </h2>
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      {items.map((item, idx) => (
+        <div
+          key={idx}
+          className="bg-slate-800/30 p-3 hover:bg-slate-700/30 transition-colors"
+        >
+          <div className="text-lg sm:text-xl text-slate-100">{item.text}</div>
+          <div className="text-xs sm:text-sm text-slate-400">
+            {item.translation}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+interface DetailCardProps {
+  item: VocabularyItem;
+  showExamples: boolean;
+  onToggleExamples: () => void;
+  onSpeak: (text: string) => void;
+}
+
+const DetailCard: React.FC<DetailCardProps> = ({
+  item,
+  showExamples,
+  onToggleExamples,
+  onSpeak,
+}) => (
   <div className="bg-slate-800/30 rounded-xl overflow-hidden">
     <div className="p-4 space-y-3">
       <ItemDisplay
@@ -164,6 +213,11 @@ const LessonDetails = ({
       bottomButtons={studyButton}
     >
       <LessonHeader lesson={lesson} onClose={onClose} />
+
+      {/* Vocabulary Overview Grid */}
+      <div className="py-4">
+        <VocabularyGrid items={lesson.items} />
+      </div>
 
       {/* Detailed Cards */}
       <div className="px-4 pb-4 space-y-4">
