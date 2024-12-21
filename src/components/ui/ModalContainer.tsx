@@ -10,6 +10,7 @@ interface ModalContainerProps {
   bottomButtons?: ReactNode;
   showHeader?: boolean;
   gradientColor?: string;
+  headerContent?: ReactNode;
 }
 
 const ModalContainer: React.FC<ModalContainerProps> = ({
@@ -79,8 +80,15 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
           )}
         </div>
 
-        {/* Scrollable Content Section */}
-        <div className={`flex-1 overflow-y-auto relative ${className}`}>
+        {/* Scrollable Content Section with custom scrollbar */}
+        <div
+          className={`
+            flex-1 overflow-y-auto relative 
+            scrollbar-thin scrollbar-track-slate-800 
+            scrollbar-thumb-slate-600 hover:scrollbar-thumb-slate-500
+            ${className}
+          `}
+        >
           {children}
         </div>
 
