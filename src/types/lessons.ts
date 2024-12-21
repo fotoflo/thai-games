@@ -1,14 +1,3 @@
-export interface Lesson {
-  lessonName: string;
-  lessonDescription: string;
-  lessonLevel: "beginner" | "intermediate" | "advanced";
-  lessonType: string;
-  tags: string[];
-  difficulty: 1 | 2 | 3 | 4 | 5;
-  languagePair: LanguagePair;
-  items: VocabularyItem[];
-}
-
 export interface Language {
   code: string;
   name: string;
@@ -24,7 +13,6 @@ export interface LanguagePair {
   native: Language;
 }
 
-// Example and vocabulary types
 export interface Example {
   text: string;
   translation: string;
@@ -41,7 +29,18 @@ export interface VocabularyItem {
   examples: Example[];
 }
 
-// Lesson content types
+export interface Lesson {
+  lessonName: string;
+  lessonDescription: string;
+  lessonLevel: "beginner" | "intermediate" | "advanced";
+  lessonType: string;
+  tags: string[];
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  languagePair: LanguagePair;
+  items: VocabularyItem[];
+}
+
+// Game state types (not part of schema but needed for the app)
 export interface LessonItem {
   text: string;
   details?: {
