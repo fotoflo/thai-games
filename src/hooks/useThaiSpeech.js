@@ -153,6 +153,7 @@ if (typeof window !== "undefined") {
   ThaiSpeechController.initialize();
 }
 
+// TODO REFACTOR TO USE OBJECT PROPS
 export const useThaiSpeech = (
   speakOnMount = false,
   speakOnUnmount = false,

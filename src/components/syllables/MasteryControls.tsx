@@ -12,7 +12,7 @@ const MasteryControls = ({
     {
       level: 2,
       label: "Next",
-      color: "bg-blue-400 hover:bg-blue-300",
+      color: "bg-blue-600 hover:bg-blue-300",
       value: 3,
       icon: RefreshCcw,
     },
