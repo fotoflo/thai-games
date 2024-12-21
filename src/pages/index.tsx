@@ -6,7 +6,7 @@ import WelcomeModal from "../components/ReadThaiWelcomeModal";
 import FlashCardModal from "../components/syllables/FlashCardModal";
 import SettingsModalContainer from "../components/SettingsModalContainer";
 import WorkingSetCards from "../components/syllables/WorkingSetCards";
-import LessonCarousel from "../components/LessonCarousel";
+import LessonSelector from "../components/syllables/LessonSelector";
 import ProgressionSelector from "../components/syllables/ProgressionSelector";
 import ToggleInvertTranslationButton from "../components/syllables/ToggleInvertTranslationButton";
 import SettingsHamburger from "../components/ui/SettingsHamburger";
@@ -180,14 +180,16 @@ const IndexPage: React.FC = () => {
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
-          <div className="mt-4">
-            <LessonCarousel
+          <div className="">
+            <LessonSelector
               currentLesson={currentLesson}
               setCurrentLesson={setCurrentLesson}
               totalLessons={totalLessons}
               lessons={lessons}
               onViewDetails={handleViewLessonDetails}
             />
+
+            <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
             <ProgressionSelector
               progressionMode={progressionMode}

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import LessonListScreen from './LessonListScreen';
+import LessonListScreen from '../LessonListScreen';
 
-const LessonCarousel = ({ 
+const LessonSelector = ({ 
   currentLesson, 
   setCurrentLesson, 
   totalLessons, 
@@ -55,4 +55,4 @@ const LessonCarousel = ({
   );
 };
 
-export default LessonCarousel; 
+export default LessonSelector; 
