@@ -1,9 +1,9 @@
-import { useEffect, useCallback } from "react";
-import useLocalStorage from "./useLocalStorage";
-import { WorkingSetItem, SpeakFunctionParams, Lesson } from "../types/lessons";
+import { useCallback } from "react";
+import { WorkingSetItem, Lesson } from "../types/lessons";
 import { lessons } from "../lessons/LessonLoader";
 import { useGameSettings } from "./game/useGameSettings";
 import { useLessonState } from "./game/useLessonState";
+import { useWorkingSet } from "./game/useWorkingSet";
 
 interface UseReadThaiGameState {
   // Game Settings
@@ -46,30 +46,21 @@ interface UseReadThaiGameState {
 export const useReadThaiGameState = (): UseReadThaiGameState => {
   const gameSettings = useGameSettings();
   const lessonState = useLessonState(lessons);
-
-  const nextItem = useCallback(() => {
-    if (!lessonState.activeVocabItem || lessonState.workingSet.length === 0)
-      return;
-
-    const currentIndex = lessonState.workingSet.findIndex(
-      (item) => item.id === lessonState.activeVocabItem.id
-    );
-    const nextIndex = (currentIndex + 1) % lessonState.workingSet.length;
-    lessonState.setActiveVocabItem(lessonState.workingSet[nextIndex]);
-  }, [lessonState]);
+  const workingSetState = useWorkingSet();
 
   const addMoreItems = useCallback(
     (count: number = 5) => {
-      lessonState.getWorkingSetItems(count);
+      const newItems = lessonState.getWorkingSetItems(count);
+      workingSetState.addItems(newItems);
     },
-    [lessonState]
+    [lessonState, workingSetState]
   );
 
   const rateMastery = useCallback(
     async (rating: number, speakFunction?: Function) => {
-      if (!lessonState.activeVocabItem) return;
+      if (!workingSetState.activeVocabItem) return;
 
-      lessonState.updateItemState(lessonState.activeVocabItem.id, {
+      lessonState.updateItemState(workingSetState.activeVocabItem.id, {
         mastery: rating,
         lastStudied: Date.now(),
       });
@@ -78,19 +69,16 @@ export const useReadThaiGameState = (): UseReadThaiGameState => {
         await speakFunction();
       }
 
-      nextItem();
+      workingSetState.nextItem();
       gameSettings.updateProfile({ lastActive: Date.now() });
     },
-    [lessonState, gameSettings, nextItem]
+    [workingSetState, lessonState, gameSettings]
   );
 
   return {
     ...gameSettings,
-    activeVocabItem: lessonState.activeVocabItem,
-    setActiveVocabItem: lessonState.setActiveVocabItem,
-    workingSet: lessonState.workingSet,
+    ...workingSetState,
     addMoreItems,
-    nextItem,
     rateMastery,
     lessons,
     totalLessons: lessons.length,

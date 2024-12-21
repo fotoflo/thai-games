@@ -1,6 +1,5 @@
 import { useCallback } from "react";
 import useLocalStorage from "../useLocalStorage";
-import { lessons } from "../../lessons/LessonLoader";
 import {
   LessonState,
   LessonProgress,
@@ -30,10 +29,10 @@ interface UseLessonState {
   progressionMode: ProgressionMode;
   setProgressionMode: (mode: ProgressionMode) => void;
   getWorkingSetItems: (count: number) => WorkingSetItem[];
-  activeVocabItem: WorkingSetItem | null;
-  setActiveVocabItem: (item: WorkingSetItem | null) => void;
-  workingSet: WorkingSetItem[];
-  setWorkingSet: (items: WorkingSetItem[]) => void;
+  handleFirstPassChoice: (
+    itemId: string,
+    choice: "skip" | "mastered" | "practice"
+  ) => void;
 }
 
 const createInitialLessonState = (): LessonState => ({
@@ -51,12 +50,6 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
     "lessonStates",
     createInitialLessonStates(lessons)
   );
-  const [workingSet, setWorkingSet] = useLocalStorage<WorkingSetItem[]>(
-    "workingSet",
-    []
-  );
-  const [activeVocabItem, setActiveVocabItem] =
-    useLocalStorage<WorkingSetItem | null>("activeVocabItem", null);
 
   const setProgressionMode = useCallback(
     (mode: ProgressionMode) => {
@@ -111,14 +104,10 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
         updateLessonState(currentLesson, {
           lastAddedIndex: startIndex + itemsToAdd - 1,
         });
-        setWorkingSet(newItems);
-        if (newItems.length > 0 && !activeVocabItem) {
-          setActiveVocabItem(newItems[0]);
-        }
         return newItems;
       }
     },
-    [currentLesson, lessonStates, lessons, setWorkingSet, setActiveVocabItem]
+    [currentLesson, lessonStates, lessons, setProgressionMode]
   );
 
   const updateLessonState = useCallback(
@@ -202,6 +191,26 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
     [currentLesson, setLessonStates]
   );
 
+  const handleFirstPassChoice = useCallback(
+    (itemId: string, choice: "skip" | "mastered" | "practice") => {
+      switch (choice) {
+        case "mastered":
+          updateItemState(itemId, { mastery: 5 });
+          break;
+        case "practice":
+          updateItemState(itemId, { mastery: 1 });
+          updateLessonState(currentLesson, {
+            workingList: [...lessonStates[currentLesson].workingList, itemId],
+          });
+          break;
+        case "skip":
+          updateItemState(itemId, { lastSeen: Date.now() });
+          break;
+      }
+    },
+    [currentLesson, updateItemState, updateLessonState]
+  );
+
   return {
     currentLesson,
     setCurrentLesson,
@@ -218,10 +227,7 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
       lessonStates[currentLesson]?.progressionMode || "firstPass",
     setProgressionMode,
     getWorkingSetItems,
-    activeVocabItem,
-    setActiveVocabItem,
-    workingSet,
-    setWorkingSet,
+    handleFirstPassChoice,
   };
 };
 
