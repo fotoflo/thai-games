@@ -1,6 +1,6 @@
 import React from "react";
 
-const SettingsHamburger = ({ onClick }) => {
+const SettingsHamburger = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
       onClick={onClick}

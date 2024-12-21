@@ -43,17 +43,11 @@ export interface Lesson {
 // Game state types (not part of schema but needed for the app)
 export interface LessonItem {
   text: string;
-  details?: {
-    translation?: string;
-    romanization?: string;
-    [key: string]: any;
-  };
 }
 
 export interface WorkingSetItem {
   text: string;
   mastery: number;
-  details: LessonItem["details"] | null;
 }
 
 export interface ItemState {

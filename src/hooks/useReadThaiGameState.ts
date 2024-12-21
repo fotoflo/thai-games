@@ -10,6 +10,7 @@ import {
   GameSettings,
   PlayerProfile,
   SpeakFunctionParams,
+  ItemState,
 } from "../types/lessons";
 import { lessons } from "../lessons/LessonLoader";
 
@@ -34,17 +35,10 @@ type LessonStatesRecord = Record<number, LessonState>;
 
 export const useReadThaiGameState = () => {
   // Core game state
-  const [currentLesson, setCurrentLesson] = useLocalStorage<number>(
-    "currentLesson",
-    0
-  );
-  const [workingSet, setWorkingSet] = useLocalStorage<WorkingSetItem[]>(
-    "workingSet",
-    []
-  );
-  const [selectedItem, setSelectedItem] =
-    useLocalStorage<WorkingSetItem | null>("selectedItem", null);
-  const [settings, setSettings] = useLocalStorage<GameSettings>(
+  const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
+  const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
+  const [selectedItem, setSelectedItem] = useLocalStorage("selectedItem", null);
+  const [settings, setSettings] = useLocalStorage(
     "gameSettings",
     DEFAULT_SETTINGS
   );
@@ -65,7 +59,7 @@ export const useReadThaiGameState = () => {
     {} as LessonStatesRecord
   );
 
-  const [lessonStates, setLessonStates] = useLocalStorage<LessonStatesRecord>(
+  const [lessonStates, setLessonStates] = useLocalStorage(
     "lessonStates",
     initialLessonStates
   );
@@ -73,7 +67,7 @@ export const useReadThaiGameState = () => {
   // Profile management
   const updateProfile = useCallback(
     (updates: Partial<PlayerProfile>): void => {
-      setSettings((prev) => ({
+      setSettings((prev: GameSettings) => ({
         ...prev,
         profile: {
           ...prev.profile,
@@ -88,7 +82,7 @@ export const useReadThaiGameState = () => {
   // Settings management
   const updateSettings = useCallback(
     (updates: Partial<Omit<GameSettings, "profile">>): void => {
-      setSettings((prev) => ({
+      setSettings((prev: GameSettings) => ({
         ...prev,
         ...updates,
       }));
@@ -130,6 +124,7 @@ export const useReadThaiGameState = () => {
               id: randomItem.id,
               mastery: currentState?.itemStates[randomItem.id]?.mastery || 1,
               vocabularyItem: randomItem,
+              text: randomItem.text,
             };
           });
 
@@ -156,7 +151,7 @@ export const useReadThaiGameState = () => {
         setWorkingSet(selectedItems);
         setSelectedItem(selectedItems[0]);
 
-        setLessonStates((prev) => ({
+        setLessonStates((prev: LessonStatesRecord) => ({
           ...prev,
           [lessonIndex]: {
             ...prev[lessonIndex],
@@ -190,7 +185,7 @@ export const useReadThaiGameState = () => {
       if (mode === "random") {
         const availableItems = currentLessonItems.filter(
           (item) =>
-            !workingSet.some((w) => w.id === item.id) &&
+            !workingSet.some((w: WorkingSetItem) => w.id === item.id) &&
             lessonStates[currentLesson]?.itemStates[item.id]?.mastery !== 5
         );
 
@@ -200,6 +195,7 @@ export const useReadThaiGameState = () => {
           const newItem = availableItems[randomIndex];
           newItems.push({
             id: newItem.id,
+            text: newItem.text,
             mastery: 1,
             vocabularyItem: newItem,
           });
@@ -207,7 +203,7 @@ export const useReadThaiGameState = () => {
         }
 
         if (newItems.length > 0) {
-          setWorkingSet((prev) => [...newItems, ...prev]);
+          setWorkingSet((prev: WorkingSetItem[]) => [...newItems, ...prev]);
           setSelectedItem(newItems[0]);
         }
       } else {
@@ -228,14 +224,15 @@ export const useReadThaiGameState = () => {
             id: newItem.id,
             mastery: 1,
             vocabularyItem: newItem,
+            text: newItem.text,
           });
         }
 
         if (newItems.length > 0) {
-          setWorkingSet((prev) => [...newItems, ...prev]);
+          setWorkingSet((prev: WorkingSetItem[]) => [...newItems, ...prev]);
           setSelectedItem(newItems[0]);
 
-          setLessonStates((prev) => ({
+          setLessonStates((prev: LessonStatesRecord) => ({
             ...prev,
             [currentLesson]: {
               ...prev[currentLesson],
@@ -266,7 +263,7 @@ export const useReadThaiGameState = () => {
 
   const setProgressionMode = useCallback(
     (newMode: LessonState["progressionMode"]): void => {
-      setLessonStates((prev) => ({
+      setLessonStates((prev: LessonStatesRecord) => ({
         ...prev,
         [currentLesson]: {
           ...prev[currentLesson],
@@ -310,7 +307,7 @@ export const useReadThaiGameState = () => {
         }
       }
 
-      setLessonStates((prev) => ({
+      setLessonStates((prev: LessonStatesRecord) => ({
         ...prev,
         [currentLesson]: {
           ...prev[currentLesson],
@@ -329,7 +326,7 @@ export const useReadThaiGameState = () => {
         },
       }));
 
-      const updated = workingSet.map((item) =>
+      const updated = workingSet.map((item: WorkingSetItem) =>
         item.id === selectedItem.id ? { ...item, mastery: rating } : item
       );
 
@@ -370,7 +367,7 @@ export const useReadThaiGameState = () => {
     (type: "problem" | "possible" = "problem"): void => {
       if (!selectedItem) return;
 
-      setLessonStates((prev) => ({
+      setLessonStates((prev: LessonStatesRecord) => ({
         ...prev,
         [currentLesson]: {
           ...prev[currentLesson],
@@ -403,10 +400,11 @@ export const useReadThaiGameState = () => {
 
   const getLessonProgress = useCallback(
     (lessonIndex: number): LessonProgress => {
-      const states = lessonStates[lessonIndex]?.itemStates || {};
-      const totalItems = lessons[lessonIndex].items.length;
-      const masteredItems = Object.values(states).filter(
-        (state) => state.mastery === 5
+      const states: Record<string, ItemState> =
+        lessonStates[lessonIndex]?.itemStates || {};
+      const totalItems: number = lessons[lessonIndex].items.length;
+      const masteredItems: number = Object.values(states).filter(
+        (state: ItemState) => state.mastery === 5
       ).length;
 
       return {
@@ -415,7 +413,7 @@ export const useReadThaiGameState = () => {
         inProgress: Object.keys(states).length - masteredItems,
       };
     },
-    [lessonStates]
+    [lessonStates, lessons]
   );
 
   useEffect(() => {
@@ -426,7 +424,7 @@ export const useReadThaiGameState = () => {
 
   // Toggle invertTranslation setting
   const toggleInvertTranslation = useCallback((): void => {
-    setSettings((prev) => ({
+    setSettings((prev: GameSettings) => ({
       ...prev,
       invertTranslation: !prev.invertTranslation,
     }));

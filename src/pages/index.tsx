@@ -3,7 +3,6 @@ import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import ItemDisplay from "../components/syllables/ItemDisplay";
 import MasteryControls from "../components/syllables/MasteryControls";
 import WelcomeModal from "../components/ReadThaiWelcomeModal";
-import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
 import FlashCardModal from "../components/syllables/FlashCardModal";
 import SettingsModalContainer from "../components/SettingsModalContainer";
 import WorkingSetCards from "../components/syllables/WorkingSetCards";
@@ -12,9 +11,9 @@ import ProgressionSelector from "../components/syllables/ProgressionSelector";
 import ToggleInvertTranslationButton from "../components/syllables/ToggleInvertTranslationButton";
 import SettingsHamburger from "../components/ui/SettingsHamburger";
 import Divider from "../components/ui/divider";
-import SettingsMenuButton from "../components/SettingsMenuButton";
 import LessonDetails from "../components/syllables/LessonDetailScreen";
 import { WorkingSetItem, Lesson } from "../types/lessons";
+import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
@@ -23,7 +22,7 @@ interface LessonDetailsSelection {
 
 type DisplayTrigger = "speak" | "mastery" | "CheckTranslationButton" | null;
 
-const ThaiSyllables: React.FC = () => {
+const IndexPage: React.FC = () => {
   const gameState = useReadThaiGameState();
   const [displayTrigger, setDisplayTrigger] = useState<DisplayTrigger>(null);
   const [showWelcome, setShowWelcome] = useState(true);
@@ -52,10 +51,10 @@ const ThaiSyllables: React.FC = () => {
     toggleInvertTranslation,
   } = gameState;
 
-  console.log("Render ThaiSyllables:", { currentLesson, totalLessons });
+  console.log("Render IndexPage:", { currentLesson, totalLessons });
 
   const handleRateMastery = async (rating: number) => {
-    const button = (event.target as Element).closest("button");
+    const button = (event?.target as Element).closest("button");
     if (button) {
       button.classList.add("clicked");
 
@@ -68,7 +67,9 @@ const ThaiSyllables: React.FC = () => {
   };
 
   const handleCardSelect = (item: WorkingSetItem) => {
-    const targetIndex = workingSet.findIndex((s) => s.id === item.id);
+    const targetIndex = workingSet.findIndex(
+      (s: WorkingSetItem) => s.id === item.id
+    );
     if (targetIndex !== -1) {
       rateMastery(0, null, targetIndex);
     }
@@ -193,4 +194,4 @@ const ThaiSyllables: React.FC = () => {
   );
 };
 
-export default ThaiSyllables;
+export default IndexPage;
