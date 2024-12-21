@@ -129,7 +129,7 @@ const LessonDetails = ({
         {lesson.items.map((item, index) => (
           <DetailCard
             key={index}
-            item={item}
+            vocabItem={item}
             showExamples={expandedItems.has(index)}
             onToggleExamples={() => toggleExamples(index)}
             onSpeak={handleSpeak}

@@ -70,6 +70,13 @@ export interface LessonState {
   workingList: string[];
 }
 
+// Simplified working set item that references the original vocabulary item
+export interface WorkingSetItem {
+  id: string; // References VocabularyItem.id
+  mastery: number;
+  vocabularyItem: VocabularyItem; // Store the full vocabulary item
+}
+
 export interface GameProgress {
   currentIndex: number;
   totalItems: number;
@@ -79,4 +86,37 @@ export interface LessonProgress {
   total: number;
   mastered: number;
   inProgress: number;
+}
+
+// Player profile
+export interface PlayerProfile {
+  id: string;
+  name: string;
+  age?: number;
+  gender?: "male" | "female" | "other" | "prefer-not-to-say";
+  nativeLanguage?: string;
+  learningGoals?: string[];
+  createdAt: number;
+  lastActive: number;
+}
+
+// Configuration types
+export interface GameSettings {
+  invertTranslation: boolean;
+  showRomanization: boolean;
+  showExamples: boolean;
+  audio: {
+    enabled: boolean;
+    volume: number;
+    autoPlay: boolean;
+  };
+  profile: PlayerProfile;
+}
+
+// Speech function parameters
+export interface SpeakFunctionParams {
+  item: WorkingSetItem;
+  setSpeaking: () => void;
+  setError: () => void;
+  onEnd: () => void;
 }

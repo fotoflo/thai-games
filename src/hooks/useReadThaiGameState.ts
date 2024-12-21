@@ -1,73 +1,56 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import useLocalStorage from "./useLocalStorage";
 import {
   Lesson,
-  LessonItem,
+  VocabularyItem,
   WorkingSetItem,
   LessonState,
   GameProgress,
   LessonProgress,
+  GameSettings,
+  PlayerProfile,
+  SpeakFunctionParams,
 } from "../types/lessons";
+import { lessons } from "../lessons/LessonLoader";
 
-// Import lesson data
-import numbersLesson from "../lessons/numbers.json";
-import syllables1Data from "../lessons/syllables1.json";
-import syllables2Data from "../lessons/syllables2.json";
-import combos1Data from "../lessons/combos1.json";
-import combos2Data from "../lessons/combos2.json";
-import words1Data from "../lessons/words1.json";
-import verbsData from "../lessons/verbs.json";
-import languageLearning2Data from "../lessons/language-learning-2.json";
-import food1Data from "../lessons/food1.json";
-import food2VegData from "../lessons/food2veg.json";
-import atTheRestrauntData from "../lessons/at-the-restraunt.json";
-import languageLearningData from "../lessons/language-learning.json";
-import lessonForKids1Data from "../lessons/lesson-for-kids1.json";
-import greetingsData from "../lessons/greetings.json";
-import envirenmentalSignsData from "../lessons/envirenmental-signs.json";
-import atTheBarData from "../lessons/at-the-bar.json";
-import pronunciationAndSpellingData from "../lessons/pronounciation-and-spelling.json";
+const DEFAULT_SETTINGS: GameSettings = {
+  invertTranslation: false,
+  showRomanization: true,
+  showExamples: true,
+  audio: {
+    enabled: true,
+    volume: 1.0,
+    autoPlay: false,
+  },
+  profile: {
+    id: "",
+    name: "Guest",
+    createdAt: Date.now(),
+    lastActive: Date.now(),
+  },
+};
 
-interface SpeakFunctionParams {
-  current: WorkingSetItem;
-  setSpeaking: () => void;
-  setError: () => void;
-  onEnd: () => void;
-}
+type LessonStatesRecord = Record<number, LessonState>;
 
 export const useReadThaiGameState = () => {
-  const lessons: Lesson[] = [
-    words1Data,
-    numbersLesson,
-    lessonForKids1Data,
-    verbsData,
-    syllables1Data,
-    combos1Data,
-    syllables2Data,
-    combos2Data,
-    languageLearning2Data,
-    food1Data,
-    food2VegData,
-    atTheRestrauntData,
-    languageLearningData,
-    greetingsData,
-    envirenmentalSignsData,
-    pronunciationAndSpellingData,
-  ];
-
-  const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
-  const [workingSet, setWorkingSet] = useLocalStorage("workingSet", []);
-  const [current, setCurrent] = useLocalStorage("current", null);
-  const [invertTranslation, setInvertTranslation] = useLocalStorage<boolean>(
-    "invertTranslation",
-    false
+  // Core game state
+  const [currentLesson, setCurrentLesson] = useLocalStorage<number>(
+    "currentLesson",
+    0
+  );
+  const [workingSet, setWorkingSet] = useLocalStorage<WorkingSetItem[]>(
+    "workingSet",
+    []
+  );
+  const [selectedItem, setSelectedItem] =
+    useLocalStorage<WorkingSetItem | null>("selectedItem", null);
+  const [settings, setSettings] = useLocalStorage<GameSettings>(
+    "gameSettings",
+    DEFAULT_SETTINGS
   );
 
-  const toggleInvertTranslation = (): void => {
-    setInvertTranslation((prevState) => !prevState);
-  };
-
-  const initialLessonStates: Record<number, LessonState> = lessons.reduce(
+  // Initialize lesson states
+  const initialLessonStates: LessonStatesRecord = lessons.reduce(
     (acc, _, index) => {
       acc[index] = {
         progressionMode: "progression",
@@ -79,371 +62,399 @@ export const useReadThaiGameState = () => {
       };
       return acc;
     },
-    {} as Record<number, LessonState>
+    {} as LessonStatesRecord
   );
 
-  const [lessonStates, setLessonStates] = useLocalStorage(
+  const [lessonStates, setLessonStates] = useLocalStorage<LessonStatesRecord>(
     "lessonStates",
     initialLessonStates
   );
 
-  const setCurrentLessonAndReset = (newLesson: number): void => {
-    setCurrentLesson(newLesson);
-    initializeWorkingSet(newLesson);
-  };
+  // Profile management
+  const updateProfile = useCallback(
+    (updates: Partial<PlayerProfile>): void => {
+      setSettings((prev) => ({
+        ...prev,
+        profile: {
+          ...prev.profile,
+          ...updates,
+          lastActive: Date.now(),
+        },
+      }));
+    },
+    [setSettings]
+  );
 
-  const totalLessons = lessons.length;
+  // Settings management
+  const updateSettings = useCallback(
+    (updates: Partial<Omit<GameSettings, "profile">>): void => {
+      setSettings((prev) => ({
+        ...prev,
+        ...updates,
+      }));
+    },
+    [setSettings]
+  );
 
-  const getItemText = (item: string | LessonItem): string => {
-    return typeof item === "string" ? item : item?.text;
-  };
+  const initializeWorkingSet = useCallback(
+    (lessonIndex: number = 0): void => {
+      if (!lessons[lessonIndex]) {
+        console.error(`Lesson ${lessonIndex} is undefined`);
+        return;
+      }
 
-  const initializeWorkingSet = (lessonIndex: number): void => {
-    if (!lessons[lessonIndex]) {
-      console.error(`Lesson ${lessonIndex} is undefined`);
-      return;
-    }
+      const currentState = lessonStates[lessonIndex];
+      const mode = currentState?.progressionMode || "progression";
+      const MAX_WORKING_SET_SIZE = 5;
 
-    const currentState = lessonStates[lessonIndex];
-    const mode = currentState?.progressionMode || "progression";
+      if (mode === "random") {
+        const availableItems = lessons[lessonIndex].items.filter(
+          (item) => currentState?.itemStates[item.id]?.mastery !== 5
+        );
 
-    if (mode === "random") {
-      const availableItems = lessons[lessonIndex].items.filter((item) => {
-        const itemText = getItemText(item);
-        return currentState?.itemStates[itemText]?.mastery !== 5;
-      });
+        if (availableItems.length === 0) {
+          console.log("All items mastered in random mode");
+          return;
+        }
 
-      const randomWorkingSet: WorkingSetItem[] = Array(5)
-        .fill(null)
-        .map(() => {
+        const randomWorkingSet: WorkingSetItem[] = Array(
+          Math.min(MAX_WORKING_SET_SIZE, availableItems.length)
+        )
+          .fill(null)
+          .map(() => {
+            const randomIndex = Math.floor(
+              Math.random() * availableItems.length
+            );
+            const randomItem = availableItems[randomIndex];
+            return {
+              id: randomItem.id,
+              mastery: currentState?.itemStates[randomItem.id]?.mastery || 1,
+              vocabularyItem: randomItem,
+            };
+          });
+
+        setWorkingSet(randomWorkingSet);
+        setSelectedItem(randomWorkingSet[0]);
+      } else {
+        const startIndex = currentState?.lastAddedIndex + 1 || 0;
+        const remainingItems = lessons[lessonIndex].items.length - startIndex;
+        const itemsToAdd = Math.min(MAX_WORKING_SET_SIZE, remainingItems);
+
+        if (itemsToAdd <= 0) {
+          setProgressionMode("random");
+          return;
+        }
+
+        const selectedItems = lessons[lessonIndex].items
+          .slice(startIndex, startIndex + itemsToAdd)
+          .map((item) => ({
+            id: item.id,
+            mastery: currentState?.itemStates[item.id]?.mastery || 1,
+            vocabularyItem: item,
+          }));
+
+        setWorkingSet(selectedItems);
+        setSelectedItem(selectedItems[0]);
+
+        setLessonStates((prev) => ({
+          ...prev,
+          [lessonIndex]: {
+            ...prev[lessonIndex],
+            lastAddedIndex: startIndex + itemsToAdd - 1,
+          },
+        }));
+      }
+    },
+    [lessonStates, setWorkingSet, setSelectedItem, setLessonStates]
+  );
+
+  const setCurrentLessonAndReset = useCallback(
+    (newLesson: number): void => {
+      if (newLesson < 0 || newLesson >= lessons.length) {
+        console.error(`Invalid lesson index: ${newLesson}`);
+        return;
+      }
+      setCurrentLesson(newLesson);
+      initializeWorkingSet(newLesson);
+      updateProfile({ lastActive: Date.now() });
+    },
+    [setCurrentLesson, initializeWorkingSet, updateProfile]
+  );
+
+  const addMoreItems = useCallback(
+    (count: number = 1): void => {
+      const currentLessonItems = lessons[currentLesson].items;
+      const mode =
+        lessonStates[currentLesson]?.progressionMode || "progression";
+
+      if (mode === "random") {
+        const availableItems = currentLessonItems.filter(
+          (item) =>
+            !workingSet.some((w) => w.id === item.id) &&
+            lessonStates[currentLesson]?.itemStates[item.id]?.mastery !== 5
+        );
+
+        const newItems: WorkingSetItem[] = [];
+        for (let i = 0; i < count && availableItems.length > 0; i++) {
           const randomIndex = Math.floor(Math.random() * availableItems.length);
-          const randomItem = availableItems[randomIndex];
-          const itemText = getItemText(randomItem);
-          return {
-            text: itemText,
-            mastery: currentState?.itemStates[itemText]?.mastery || 1,
-            details: typeof randomItem === "object" ? randomItem : null,
-          };
-        });
+          const newItem = availableItems[randomIndex];
+          newItems.push({
+            id: newItem.id,
+            mastery: 1,
+            vocabularyItem: newItem,
+          });
+          availableItems.splice(randomIndex, 1);
+        }
 
-      setWorkingSet(randomWorkingSet);
-      setCurrent(randomWorkingSet[0]);
-    } else {
-      const startIndex = currentState?.lastAddedIndex + 1 || 0;
-      const selectedItems = lessons[lessonIndex].items
-        .slice(startIndex, startIndex + 5)
-        .map((item) => {
-          const itemText = getItemText(item);
-          return {
-            text: itemText,
-            mastery: currentState?.itemStates[itemText]?.mastery || 1,
-            details: typeof item === "object" ? item : null,
-          };
-        });
+        if (newItems.length > 0) {
+          setWorkingSet((prev) => [...newItems, ...prev]);
+          setSelectedItem(newItems[0]);
+        }
+      } else {
+        const lastIndex = lessonStates[currentLesson]?.lastAddedIndex || -1;
+        const remainingItems = currentLessonItems.length - (lastIndex + 1);
+        const itemsToAdd = Math.min(count, remainingItems);
 
-      setWorkingSet(selectedItems);
-      setCurrent(selectedItems[0]);
+        if (itemsToAdd <= 0) {
+          setProgressionMode("random");
+          return;
+        }
+
+        const newItems: WorkingSetItem[] = [];
+        for (let i = 0; i < itemsToAdd; i++) {
+          const index = lastIndex + 1 + i;
+          const newItem = currentLessonItems[index];
+          newItems.push({
+            id: newItem.id,
+            mastery: 1,
+            vocabularyItem: newItem,
+          });
+        }
+
+        if (newItems.length > 0) {
+          setWorkingSet((prev) => [...newItems, ...prev]);
+          setSelectedItem(newItems[0]);
+
+          setLessonStates((prev) => ({
+            ...prev,
+            [currentLesson]: {
+              ...prev[currentLesson],
+              lastAddedIndex: lastIndex + itemsToAdd,
+              itemStates: {
+                ...prev[currentLesson].itemStates,
+                ...Object.fromEntries(
+                  newItems.map((item) => [
+                    item.id,
+                    { mastery: 1, lastStudied: Date.now() },
+                  ])
+                ),
+              },
+            },
+          }));
+        }
+      }
+    },
+    [
+      currentLesson,
+      lessonStates,
+      workingSet,
+      setWorkingSet,
+      setSelectedItem,
+      setLessonStates,
+    ]
+  );
+
+  const setProgressionMode = useCallback(
+    (newMode: LessonState["progressionMode"]): void => {
+      setLessonStates((prev) => ({
+        ...prev,
+        [currentLesson]: {
+          ...prev[currentLesson],
+          progressionMode: newMode,
+        },
+      }));
+
+      initializeWorkingSet(currentLesson);
+      updateProfile({ lastActive: Date.now() });
+    },
+    [currentLesson, setLessonStates, initializeWorkingSet, updateProfile]
+  );
+
+  const nextItem = useCallback((): void => {
+    if (!selectedItem || workingSet.length === 0) return;
+
+    const nextIndex =
+      (workingSet.indexOf(selectedItem) + 1) % workingSet.length;
+    setSelectedItem(workingSet[nextIndex]);
+  }, [selectedItem, workingSet, setSelectedItem]);
+
+  const rateMastery = useCallback(
+    async (
+      rating: number,
+      speakFunction?: (params: SpeakFunctionParams) => void
+    ): Promise<void> => {
+      if (!selectedItem) return;
+
+      if (speakFunction && settings.audio.enabled) {
+        try {
+          await new Promise<void>((resolve, reject) => {
+            speakFunction({
+              item: selectedItem,
+              setSpeaking: () => {},
+              setError: () => reject(new Error("Speech failed")),
+              onEnd: resolve,
+            });
+          });
+        } catch (error) {
+          console.error("Speech error:", error);
+        }
+      }
 
       setLessonStates((prev) => ({
         ...prev,
-        [lessonIndex]: {
-          ...prev[lessonIndex],
-          lastAddedIndex: startIndex + 4,
+        [currentLesson]: {
+          ...prev[currentLesson],
+          itemStates: {
+            ...prev[currentLesson].itemStates,
+            [selectedItem.id]: {
+              mastery: rating,
+              lastStudied: Date.now(),
+            },
+          },
+          workingList: !prev[currentLesson].workingList.includes(
+            selectedItem.id
+          )
+            ? [...prev[currentLesson].workingList, selectedItem.id]
+            : prev[currentLesson].workingList,
         },
       }));
-    }
-  };
+
+      const updated = workingSet.map((item) =>
+        item.id === selectedItem.id ? { ...item, mastery: rating } : item
+      );
+
+      if (rating === 5) {
+        const currentIndex = workingSet.indexOf(selectedItem);
+        updated.splice(currentIndex, 1);
+
+        if (updated.length > 0) {
+          setSelectedItem(updated[0]);
+        } else {
+          setSelectedItem(null);
+          setWorkingSet([]);
+          addMoreItems(5);
+        }
+      } else {
+        const nextIndex =
+          (workingSet.indexOf(selectedItem) + 1) % workingSet.length;
+        setSelectedItem(updated[nextIndex]);
+      }
+
+      setWorkingSet(updated);
+      updateProfile({ lastActive: Date.now() });
+    },
+    [
+      selectedItem,
+      currentLesson,
+      workingSet,
+      settings.audio.enabled,
+      setLessonStates,
+      setWorkingSet,
+      setSelectedItem,
+      addMoreItems,
+      updateProfile,
+    ]
+  );
+
+  const reportProblem = useCallback(
+    (type: "problem" | "possible" = "problem"): void => {
+      if (!selectedItem) return;
+
+      setLessonStates((prev) => ({
+        ...prev,
+        [currentLesson]: {
+          ...prev[currentLesson],
+          [type === "problem" ? "problemList" : "possibleProblemList"]: [
+            ...prev[currentLesson][
+              type === "problem" ? "problemList" : "possibleProblemList"
+            ],
+            selectedItem.id,
+          ],
+        },
+      }));
+
+      nextItem();
+      updateProfile({ lastActive: Date.now() });
+    },
+    [selectedItem, currentLesson, setLessonStates, nextItem, updateProfile]
+  );
+
+  const getCurrentProgress = useCallback(
+    (): GameProgress => ({
+      currentIndex: selectedItem
+        ? lessons[currentLesson].items.findIndex(
+            (item) => item.id === selectedItem.id
+          ) + 1
+        : 0,
+      totalItems: lessons[currentLesson].items.length,
+    }),
+    [currentLesson, selectedItem]
+  );
+
+  const getLessonProgress = useCallback(
+    (lessonIndex: number): LessonProgress => {
+      const states = lessonStates[lessonIndex]?.itemStates || {};
+      const totalItems = lessons[lessonIndex].items.length;
+      const masteredItems = Object.values(states).filter(
+        (state) => state.mastery === 5
+      ).length;
+
+      return {
+        total: totalItems,
+        mastered: masteredItems,
+        inProgress: Object.keys(states).length - masteredItems,
+      };
+    },
+    [lessonStates]
+  );
 
   useEffect(() => {
     if (workingSet.length === 0) {
       initializeWorkingSet(currentLesson);
     }
-  }, []);
+  }, [workingSet.length, currentLesson, initializeWorkingSet]);
 
-  const getRandomUnusedIndex = (): number => {
-    const currentLessonItems = lessons[currentLesson - 1].items;
-    const used = lessonStates[currentLesson - 1]?.itemStates || {};
-
-    if (Object.keys(used).length >= currentLessonItems.length) {
-      setLessonStates((prev) => ({
-        ...prev,
-        [currentLesson - 1]: {
-          ...prev[currentLesson - 1],
-          itemStates: {},
-        },
-      }));
-      return Math.floor(Math.random() * currentLessonItems.length);
-    }
-
-    let randomIndex: number;
-    do {
-      randomIndex = Math.floor(Math.random() * currentLessonItems.length);
-    } while (Object.keys(used).includes(currentLessonItems[randomIndex].text));
-
-    setLessonStates((prev) => ({
+  // Toggle invertTranslation setting
+  const toggleInvertTranslation = useCallback((): void => {
+    setSettings((prev) => ({
       ...prev,
-      [currentLesson - 1]: {
-        ...prev[currentLesson - 1],
-        itemStates: {
-          ...prev[currentLesson - 1].itemStates,
-          [currentLessonItems[randomIndex].text]: {
-            mastery: 1,
-            lastStudied: Date.now(),
-          },
-        },
-      },
+      invertTranslation: !prev.invertTranslation,
     }));
-
-    return randomIndex;
-  };
-
-  const addMoreSyllables = (count: number = 1): void => {
-    const currentLessonItems = lessons[currentLesson].items;
-    const mode = lessonStates[currentLesson]?.progressionMode || "progression";
-
-    if (mode === "random") {
-      for (let i = 0; i < count; i++) {
-        const randomIndex = Math.floor(
-          Math.random() * currentLessonItems.length
-        );
-        const newItem = currentLessonItems[randomIndex];
-        const newItemObj: WorkingSetItem = {
-          text: getItemText(newItem),
-          mastery: 1,
-          details: typeof newItem === "object" ? newItem : null,
-        };
-        setWorkingSet((prev) => [newItemObj, ...prev]);
-        setCurrent(newItemObj);
-      }
-    } else {
-      const lastIndex = lessonStates[currentLesson]?.lastAddedIndex || -1;
-      if (lastIndex + count >= currentLessonItems.length - 1) {
-        setLessonStates((prev) => ({
-          ...prev,
-          [currentLesson]: {
-            ...prev[currentLesson],
-            progressionMode: "random",
-            itemStates: {},
-          },
-        }));
-        return;
-      }
-
-      const newItems: WorkingSetItem[] = [];
-      for (let i = 0; i < count; i++) {
-        const index = lastIndex + 1 + i;
-        if (index < currentLessonItems.length) {
-          const newItem = currentLessonItems[index];
-          const newItemObj: WorkingSetItem = {
-            text: getItemText(newItem),
-            mastery: 1,
-            details: typeof newItem === "object" ? newItem : null,
-          };
-          newItems.push(newItemObj);
-        }
-      }
-
-      if (newItems.length > 0) {
-        setWorkingSet((prev) => [...newItems, ...prev]);
-        setCurrent(newItems[0]);
-
-        setLessonStates((prev) => ({
-          ...prev,
-          [currentLesson]: {
-            ...prev[currentLesson],
-            lastAddedIndex: lastIndex + newItems.length,
-            itemStates: {
-              ...prev[currentLesson].itemStates,
-              ...Object.fromEntries(
-                newItems.map((item) => [
-                  item.text,
-                  { mastery: 1, lastStudied: Date.now() },
-                ])
-              ),
-            },
-          },
-        }));
-      }
-    }
-  };
-
-  const rateMastery = async (
-    rating: number,
-    speakFunction?: (params: SpeakFunctionParams) => void,
-    targetIndex: number | null = null
-  ): Promise<void> => {
-    if (!current) return;
-
-    if (targetIndex !== null) {
-      const targetCard = workingSet[targetIndex];
-      if (targetCard) {
-        setCurrent(targetCard);
-      }
-      return;
-    }
-
-    if (speakFunction) {
-      await new Promise<void>((resolve) => {
-        speakFunction({
-          current,
-          setSpeaking: () => {},
-          setError: () => {},
-          onEnd: resolve,
-        });
-      });
-    }
-
-    setLessonStates((prev) => ({
-      ...prev,
-      [currentLesson]: {
-        ...prev[currentLesson],
-        itemStates: {
-          ...prev[currentLesson].itemStates,
-          [current.text]: {
-            mastery: rating,
-            lastStudied: Date.now(),
-          },
-        },
-        workingList: !prev[currentLesson].workingList.includes(current.text)
-          ? [...prev[currentLesson].workingList, current.text]
-          : prev[currentLesson].workingList,
-      },
-    }));
-
-    const updated = workingSet.map((s) =>
-      s.text === current.text ? { ...s, mastery: rating } : s
-    );
-
-    if (rating === 5) {
-      const currentIndex = workingSet.indexOf(current);
-      updated.splice(currentIndex, 1);
-
-      if (updated.length > 0) {
-        setCurrent(updated[0]);
-      } else {
-        setCurrent(null);
-        setWorkingSet([]);
-      }
-    } else {
-      const nextIndex = (workingSet.indexOf(current) + 1) % workingSet.length;
-      setCurrent(updated[nextIndex]);
-    }
-
-    setWorkingSet(updated);
-  };
-
-  const reportProblem = (): void => {
-    if (current) {
-      setLessonStates((prev) => ({
-        ...prev,
-        [currentLesson]: {
-          ...prev[currentLesson],
-          problemList: [...prev[currentLesson].problemList, current.text],
-        },
-      }));
-      nextSyllable();
-    }
-  };
-
-  const reportPossibleProblem = (): void => {
-    if (current) {
-      setLessonStates((prev) => ({
-        ...prev,
-        [currentLesson]: {
-          ...prev[currentLesson],
-          possibleProblemList: [
-            ...prev[currentLesson].possibleProblemList,
-            current.text,
-          ],
-        },
-      }));
-      nextSyllable();
-    }
-  };
-
-  const nextSyllable = (): void => {
-    const nextIndex = (workingSet.indexOf(current!) + 1) % workingSet.length;
-    setCurrent(workingSet[nextIndex]);
-  };
-
-  const getCurrentProgress = (): GameProgress => ({
-    currentIndex: current
-      ? lessons[currentLesson].items.findIndex(
-          (item) => getItemText(item) === current.text
-        ) + 1
-      : 0,
-    totalItems: lessons[currentLesson].items.length,
-  });
-
-  const setProgressionMode = (
-    newMode: LessonState["progressionMode"]
-  ): LessonState["progressionMode"] => {
-    setLessonStates((prev) => ({
-      ...prev,
-      [currentLesson]: {
-        ...prev[currentLesson],
-        progressionMode: newMode,
-      },
-    }));
-
-    if (newMode === "random") {
-      const currentLessonItems = lessons[currentLesson].items;
-      const randomWorkingSet = Array(5)
-        .fill(null)
-        .map(() => {
-          const randomIndex = Math.floor(
-            Math.random() * currentLessonItems.length
-          );
-          const randomItem = currentLessonItems[randomIndex];
-          return {
-            text: getItemText(randomItem),
-            mastery: 1,
-            details: typeof randomItem === "object" ? randomItem : null,
-          };
-        });
-
-      setWorkingSet(randomWorkingSet);
-      setCurrent(randomWorkingSet[0]);
-    } else {
-      initializeWorkingSet(currentLesson);
-    }
-
-    return newMode;
-  };
-
-  const getLessonProgress = (lessonIndex: number): LessonProgress => {
-    const states = lessonStates[lessonIndex]?.itemStates || {};
-    const totalItems = lessons[lessonIndex].items.length;
-    const masteredItems = Object.values(states).filter(
-      (state) => state.mastery === 5
-    ).length;
-
-    return {
-      total: totalItems,
-      mastered: masteredItems,
-      inProgress: Object.keys(states).length - masteredItems,
-    };
-  };
+  }, [setSettings]);
 
   return {
     currentLesson,
     setCurrentLesson: setCurrentLessonAndReset,
-    totalLessons,
     workingSet,
-    current,
-    problemList: lessonStates[currentLesson]?.problemList || [],
-    possibleProblemList: lessonStates[currentLesson]?.possibleProblemList || [],
-    workingList: lessonStates[currentLesson]?.workingList || [],
+    selectedItem, // renamed from current
+    totalLessons: lessons.length,
     rateMastery,
-    reportProblem,
-    reportPossibleProblem,
-    addMoreSyllables,
+    reportProblem: () => reportProblem("problem"),
+    reportPossibleProblem: () => reportProblem("possible"),
+    addMoreItems,
+    nextItem,
     getCurrentProgress,
+    getLessonProgress,
+    settings,
+    updateSettings,
+    updateProfile,
     setProgressionMode,
     progressionMode: lessonStates[currentLesson]?.progressionMode,
     lessons,
-    getLessonProgress,
-    invertTranslation,
+    problemList: lessonStates[currentLesson]?.problemList || [],
+    possibleProblemList: lessonStates[currentLesson]?.possibleProblemList || [],
+    workingList: lessonStates[currentLesson]?.workingList || [],
     toggleInvertTranslation,
+    invertTranslation: settings.invertTranslation,
   };
 };
