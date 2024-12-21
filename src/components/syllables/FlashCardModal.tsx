@@ -46,6 +46,7 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
             showExamples={true}
             onToggleExamples={() => {}}
             onSpeak={handleSpeak}
+            size="xl"
           />
         </div>
         <MasteryControls onRatingSelect={onNext} className="mb-4" />
