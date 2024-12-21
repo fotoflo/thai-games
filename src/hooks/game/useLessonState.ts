@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import useLocalStorage from "../useLocalStorage";
 import {
   LessonState,
@@ -45,7 +45,18 @@ const createInitialLessonState = (): LessonState => ({
 });
 
 export const useLessonState = (lessons: Lesson[]): UseLessonState => {
-  const [currentLesson, setCurrentLesson] = useLocalStorage("currentLesson", 0);
+  const initialLesson = lessons.length > 0 ? 0 : -1;
+  const [currentLesson, setCurrentLesson] = useLocalStorage(
+    "currentLesson",
+    initialLesson
+  );
+
+  useEffect(() => {
+    if (currentLesson >= lessons.length || currentLesson < 0) {
+      setCurrentLesson(initialLesson);
+    }
+  }, [currentLesson, lessons.length]);
+
   const [lessonStates, setLessonStates] = useLocalStorage<LessonStatesRecord>(
     "lessonStates",
     createInitialLessonStates(lessons)
@@ -145,6 +156,14 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
 
   const getLessonProgress = useCallback(
     (lessonIndex: number): LessonProgress => {
+      if (lessonIndex < 0 || !lessons[lessonIndex]) {
+        return {
+          total: 0,
+          mastered: 0,
+          inProgress: 0,
+        };
+      }
+
       const states: Record<string, ItemState> =
         lessonStates[lessonIndex]?.itemStates || {};
       const totalItems: number = lessons[lessonIndex].items.length;
@@ -158,7 +177,7 @@ export const useLessonState = (lessons: Lesson[]): UseLessonState => {
         inProgress: Object.keys(states).length - masteredItems,
       };
     },
-    [lessonStates]
+    [lessonStates, lessons]
   );
 
   const getCurrentProgress = useCallback(

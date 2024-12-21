@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { Lesson } from "../types/lessons";
 
 // Import all lesson files
@@ -20,57 +21,115 @@ import syllables2 from "./syllables2.json";
 import verbs from "./verbs.json";
 import words1 from "./words1.json";
 
-// Move validation logic to a separate file if needed
-export const validateLesson = (lesson: any): lesson is Lesson => {
-  if (!lesson) return false;
+// Define Zod schemas
+const LanguagePairSchema = z.object({
+  target: z.object({
+    code: z.string(),
+  }),
+  native: z.object({
+    code: z.string(),
+  }),
+});
 
+const LessonItemSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  translation: z.string(),
+  tags: z.array(z.string()),
+  examples: z.array(
+    z.object({
+      text: z.string(),
+      translation: z.string(),
+      romanization: z.string(),
+    })
+  ),
+  notes: z.string().optional(),
+  pronunciation: z.string().optional(),
+});
+
+const LessonSchema = z.object({
+  lessonName: z.string(),
+  lessonDescription: z.string(),
+  lessonLevel: z.enum(["beginner", "intermediate", "advanced"]),
+  lessonType: z.string(),
+  tags: z.array(z.string()).optional(),
+  difficulty: z.number().int().min(1).max(5),
+  languagePair: LanguagePairSchema,
+  items: z.array(LessonItemSchema),
+});
+
+// Type inference from schema
+type ZodLesson = z.infer<typeof LessonSchema>;
+
+// Updated validation function with detailed error reporting
+export const validateLesson = (lesson: unknown): lesson is Lesson => {
   try {
-    // Basic structure validation
-    if (!lesson.lessonName || typeof lesson.lessonName !== "string")
-      return false;
-    if (
-      !lesson.lessonDescription ||
-      typeof lesson.lessonDescription !== "string"
-    )
-      return false;
-    if (
-      !lesson.lessonLevel ||
-      !["beginner", "intermediate", "advanced"].includes(lesson.lessonLevel)
-    )
-      return false;
-    if (!lesson.lessonType || typeof lesson.lessonType !== "string")
-      return false;
-    if (!Array.isArray(lesson.tags)) return false;
-    if (
-      typeof lesson.difficulty !== "number" ||
-      ![1, 2, 3, 4, 5].includes(lesson.difficulty)
-    )
-      return false;
+    const result = LessonSchema.safeParse(lesson);
 
-    // Language pair validation
-    if (
-      !lesson.languagePair?.target?.code ||
-      !lesson.languagePair?.native?.code
-    )
+    if (!result.success) {
+      console.error(
+        `Validation error in lesson: ${(lesson as any)?.lessonName}`
+      );
+      console.error("Validation errors:");
+      result.error.issues.forEach((issue) => {
+        console.error(`- Path: ${issue.path.join(".")}`);
+        console.error(`  Error: ${issue.message}`);
+      });
       return false;
+    }
 
-    // Items validation
-    if (!Array.isArray(lesson.items)) return false;
-
-    // Validate each item has required fields
-    return lesson.items.every(
-      (item: any) =>
-        item &&
-        typeof item.id === "string" &&
-        typeof item.text === "string" &&
-        typeof item.translation === "string" &&
-        Array.isArray(item.tags) &&
-        Array.isArray(item.examples)
-    );
+    return true;
   } catch (error) {
-    console.error(`Validation error in lesson: ${lesson?.lessonName}`, error);
+    console.error(
+      `Unexpected error validating lesson: ${(lesson as any)?.lessonName}`,
+      error
+    );
     return false;
   }
+};
+
+// Load and validate lessons with better error reporting
+export const loadLessons = (): Lesson[] => {
+  const validLessons: Lesson[] = [];
+  const errors: { lessonName: string; errors: string[] }[] = [];
+
+  allLessons.forEach((lesson) => {
+    try {
+      const result = LessonSchema.safeParse(lesson);
+
+      if (result.success) {
+        validLessons.push(lesson as Lesson);
+      } else {
+        errors.push({
+          lessonName: (lesson as any)?.lessonName || "Unknown Lesson",
+          errors: result.error.issues.map(
+            (issue) => `${issue.path.join(".")}: ${issue.message}`
+          ),
+        });
+      }
+    } catch (error) {
+      errors.push({
+        lessonName: (lesson as any)?.lessonName || "Unknown Lesson",
+        errors: [(error as Error).message],
+      });
+    }
+  });
+
+  // Log validation summary
+  if (errors.length > 0) {
+    console.error("\nLesson Validation Errors:");
+    errors.forEach(({ lessonName, errors }) => {
+      console.error(`\n${lessonName}:`);
+      errors.forEach((error) => console.error(`- ${error}`));
+    });
+    console.warn(
+      `\nLoaded ${validLessons.length} out of ${allLessons.length} lessons.`
+    );
+  } else {
+    console.log(`Successfully loaded all ${validLessons.length} lessons.`);
+  }
+
+  return validLessons;
 };
 
 // Array of all lesson data
@@ -94,25 +153,6 @@ const allLessons = [
   verbs,
   words1,
 ];
-
-// Validate and load lessons
-export const loadLessons = (): Lesson[] => {
-  const validLessons = allLessons.filter((lesson): lesson is Lesson => {
-    const isValid = validateLesson(lesson);
-    if (!isValid) {
-      console.error(`Invalid lesson data found: ${lesson?.lessonName}`);
-    }
-    return isValid;
-  });
-
-  if (validLessons.length !== allLessons.length) {
-    console.warn(
-      `Some lessons failed validation. Loaded ${validLessons.length} out of ${allLessons.length} lessons.`
-    );
-  }
-
-  return validLessons;
-};
 
 // Export lessons array directly
 export const lessons = loadLessons();

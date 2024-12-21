@@ -1,5 +1,10 @@
 {
   "lessonName": "First Words",
+  "lessonDescription": "Essential Thai vocabulary for beginners, covering basic greetings, polite expressions, and common descriptive words",
+  "lessonLevel": "beginner",
+  "lessonType": "vocabulary",
+  "tags": ["basics", "greetings", "everyday-phrases", "adjectives"],
+  "difficulty": 1,
   "languagePair": {
     "target": {
       "code": "th",
