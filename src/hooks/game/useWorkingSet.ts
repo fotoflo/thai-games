@@ -30,11 +30,6 @@ interface UseWorkingSet {
   // Lesson subset tracking
   lessonSubset: LessonSubset;
 
-  // Lesson subset operations
-  markForPractice: (itemId: string) => void;
-  markAsMastered: (itemId: string) => void;
-  markAsSkipped: (itemId: string) => void;
-
   // Working set management
   refreshWorkingSet: () => void; // Fills working set from practice items
   isWorkingSetFull: boolean;
@@ -45,10 +40,7 @@ interface UseWorkingSet {
   loadFirstPassItems: () => void;
 
   // Add this function inside the useWorkingSet hook
-  handleFirstPassChoice: (
-    itemId: string,
-    choice: "skip" | "mastered" | "practice"
-  ) => void;
+  handleFirstPassChoice: (choice: "skip" | "mastered" | "practice") => void;
 }
 
 export const useWorkingSet = ({
@@ -108,9 +100,8 @@ export const useWorkingSet = ({
         ...prev,
         practiceItems: [...prev.practiceItems, itemId],
       }));
-      showNextItem();
     },
-    [setLessonSubset, showNextItem]
+    [setLessonSubset]
   );
 
   const markAsMastered = useCallback(
@@ -119,9 +110,8 @@ export const useWorkingSet = ({
         ...prev,
         masteredItems: [...prev.masteredItems, itemId],
       }));
-      showNextItem();
     },
-    [setLessonSubset, showNextItem]
+    [setLessonSubset]
   );
 
   const markAsSkipped = useCallback(
@@ -130,9 +120,8 @@ export const useWorkingSet = ({
         ...prev,
         skippedItems: [...prev.skippedItems, itemId],
       }));
-      showNextItem();
     },
-    [setLessonSubset, showNextItem]
+    [setLessonSubset]
   );
 
   const addToWorkingSet = useCallback(
@@ -371,8 +360,11 @@ export const useWorkingSet = ({
           markForPractice(activeVocabItem.id);
           break;
         default:
-          break;
+          return;
       }
+
+      // Call showNextItem after marking the item
+      showNextItem();
     },
     [
       activeVocabItem,

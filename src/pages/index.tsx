@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from "react";
+import React, { useState } from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import ItemDisplay from "../components/syllables/ItemDisplay";
 import MasteryControls from "../components/syllables/MasteryControls";
@@ -24,75 +24,50 @@ interface LessonDetailsSelection {
 type DisplayTrigger = "speak" | "mastery" | "CheckTranslationButton" | null;
 
 const IndexPage: React.FC = () => {
-  const gameState = useReadThaiGameState();
+  const {
+    // Game settings
+    settings,
+    invertTranslation,
+    toggleInvertTranslation,
+
+    // Working set state
+    workingSet,
+    activeVocabItem,
+    setActiveVocabItem,
+    addMoreItems,
+
+    // Lesson management
+    lessons,
+    totalLessons,
+    currentLesson,
+    setCurrentLesson,
+
+    // Progression
+    progressionMode,
+    setProgressionMode,
+    handleFirstPassChoice,
+
+    // Progress tracking
+    lessonSubset,
+  } = useReadThaiGameState();
+
   const [displayTrigger, setDisplayTrigger] = useState<DisplayTrigger>(null);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false);
   const [lessonDetailsSelectedLesson, setLessonDetailsSelectedLesson] =
     useState<LessonDetailsSelection | null>(null);
 
-  const {
-    settings,
-    updateSettings,
-    updateProfile,
-    invertTranslation,
-    toggleInvertTranslation,
-    workingSet,
-    activeVocabItem,
-    setActiveVocabItem,
-    addMoreItems,
-    nextItem,
-    rateMastery,
-    lessons,
-    totalLessons,
-    currentLesson,
-    setCurrentLesson,
-    progressionMode,
-    setProgressionMode,
-    lessonStates,
-    problemList,
-    possibleProblemList,
-    workingList,
-    reportProblem,
-    getCurrentProgress,
-    lessonSubset,
-  } = gameState;
-
-  console.log("Render IndexPage:", { currentLesson, totalLessons });
-
-  const handleRateMastery = async (rating: number) => {
-    const button = (event?.target as Element).closest("button");
-    if (button) {
-      button.classList.add("clicked");
-
-      setTimeout(() => {
-        button.classList.remove("clicked");
-      }, 1000);
-    }
-
-    await rateMastery(rating);
-  };
-
-  const handleCardSelect = (item: WorkingSetItem) => {
-    const targetIndex = workingSet.findIndex(
-      (s: WorkingSetItem) => s.id === item.id
-    );
-    if (targetIndex !== -1) {
-      rateMastery(0);
-    }
-  };
-
+  // Load more items if needed
   if (!activeVocabItem) {
     addMoreItems(5);
   }
 
-  const openSettings = () => {
-    setShowSettingsContainer(true);
+  const handleCardSelect = (item: WorkingSetItem) => {
+    setActiveVocabItem(item);
   };
 
-  const closeSettings = () => {
-    setShowSettingsContainer(false);
-  };
+  const openSettings = () => setShowSettingsContainer(true);
+  const closeSettings = () => setShowSettingsContainer(false);
 
   const handleViewLessonDetails = (lesson: Lesson, index: number) => {
     setLessonDetailsSelectedLesson({ lesson, index });
@@ -113,6 +88,8 @@ const IndexPage: React.FC = () => {
 
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SettingsHamburger onClick={openSettings} />
+
+        {/* Active Item Display */}
         {activeVocabItem ? (
           <ItemDisplay
             vocabItem={activeVocabItem.vocabularyItem}
@@ -133,8 +110,6 @@ const IndexPage: React.FC = () => {
           </div>
         )}
 
-        {/* {<pre>active {JSON.stringify(activeVocabItem, null, 2)}</pre>} */}
-
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
           current={displayItem}
@@ -144,14 +119,16 @@ const IndexPage: React.FC = () => {
           vocabItem={displayItem}
           onNext={() => {
             if (progressionMode !== "firstPass") {
-              gameState.addMoreItems();
+              addMoreItems();
             }
             setDisplayTrigger(null);
           }}
           trigger={displayTrigger}
           onClose={() => setDisplayTrigger(null)}
         />
+
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
+          {/* Progress Display */}
           <LessonProgress
             workingSetLength={workingSet.length}
             lessonSubset={lessonSubset}
@@ -160,18 +137,19 @@ const IndexPage: React.FC = () => {
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
+          {/* Mastery Controls */}
           <MasteryControls
-            onRatingSelect={handleRateMastery}
-            mode={progressionMode}
-            onFirstPassChoice={(choice) => {
-              if (!displayItem) return;
-              gameState.handleFirstPassChoice(displayItem.id, choice);
+            onRatingSelect={() => {
+              /* Remove handleRateMastery as it's not needed */
             }}
+            mode={progressionMode}
+            onFirstPassChoice={handleFirstPassChoice}
             className="mb-10 mt-10"
           />
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
+          {/* Working Set Display */}
           <WorkingSetCards
             workingSet={workingSet}
             selectedItem={activeVocabItem}
@@ -183,6 +161,7 @@ const IndexPage: React.FC = () => {
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
+          {/* Lesson Selection */}
           <div className="">
             <LessonSelector
               currentLesson={currentLesson}
@@ -205,6 +184,8 @@ const IndexPage: React.FC = () => {
             />
           </div>
         </div>
+
+        {/* Modals */}
         {showSettingsContainer && (
           <SettingsModalContainer onClose={closeSettings} />
         )}
