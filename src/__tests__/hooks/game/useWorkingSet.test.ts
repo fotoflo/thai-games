@@ -18,78 +18,164 @@ const setupFirstPassMock = () => {
 
 describe("useWorkingSet", () => {
   beforeEach(() => {
-    // Clear localStorage before each test
     window.localStorage.clear();
   });
 
-  it("should load first pass items from debug lesson", () => {
-    const { result } = setupFirstPassMock();
+  describe("Initial State", () => {
+    it("should initialize with empty working set", () => {
+      const { result } = setupFirstPassMock();
+      expect(result.current.workingSet).toHaveLength(0);
+    });
 
-    // Debug lesson has 8 items
-    expect(result.current.lessonSubset.unseenItems).toHaveLength(7);
-    expect(result.current.lessonSubset.unseenItems).toContain("item2");
-    expect(result.current.lessonSubset.unseenItems).toContain("item8");
-  });
+    it("should load first pass items from debug lesson", () => {
+      const { result } = setupFirstPassMock();
+      expect(result.current.lessonSubset.unseenItems).toHaveLength(7);
+      expect(result.current.lessonSubset.unseenItems).toContain("item2");
+      expect(result.current.lessonSubset.unseenItems).not.toContain("item1");
+    });
 
-  it("should set activeVocabItem to item1 on first load", () => {
-    const { result } = setupFirstPassMock();
-
-    // After loading first pass items, the activeVocabItem should be set to the first item
-    expect(result.current.activeVocabItem).toEqual({
-      id: "item1",
-      mastery: 0,
-      vocabularyItem: {
+    it("should set first item as active on load", () => {
+      const { result } = setupFirstPassMock();
+      expect(result.current.activeVocabItem).toEqual({
         id: "item1",
-        text: "A1",
-        translation: "A1",
-        romanization: "A1",
-        difficulty: 1,
-        tags: ["test", "simple"],
-        examples: [
-          {
-            text: "A1",
-            translation: "A1",
-            romanization: "A1",
-          },
-        ],
-      },
+        mastery: 0,
+        vocabularyItem: expect.objectContaining({
+          id: "item1",
+          text: "A1",
+          translation: "A1",
+        }),
+      });
     });
   });
 
-  it("should handle skip functionality", () => {
-    const { result } = setupFirstPassMock();
+  describe("First Pass Choices", () => {
+    it("should handle skip choice", () => {
+      const { result } = setupFirstPassMock();
 
-    // Simulate skipping the active vocab item
-    act(() => {
-      result.current.handleFirstPassChoice("skip");
+      act(() => {
+        result.current.handleFirstPassChoice("skip");
+      });
+
+      expect(result.current.lessonSubset.skippedItems).toContain("item1");
+      expect(result.current.activeVocabItem?.id).toBe("item2");
+      expect(result.current.lessonSubset.unseenItems).not.toContain("item2");
     });
 
-    // Check that the skipped item is in the skippedItems array
-    expect(result.current.lessonSubset.skippedItems).toContain("item1");
-    expect(result.current.activeVocabItem.id).toContain("item2");
+    it("should handle practice choice", () => {
+      const { result } = setupFirstPassMock();
+
+      act(() => {
+        result.current.handleFirstPassChoice("practice");
+      });
+
+      expect(result.current.lessonSubset.practiceItems).toContain("item1");
+      expect(result.current.activeVocabItem?.id).toBe("item2");
+      expect(result.current.lessonSubset.unseenItems).not.toContain("item2");
+    });
+
+    it("should handle mastered choice", () => {
+      const { result } = setupFirstPassMock();
+
+      act(() => {
+        result.current.handleFirstPassChoice("mastered");
+      });
+
+      expect(result.current.lessonSubset.masteredItems).toContain("item1");
+      expect(result.current.activeVocabItem?.id).toBe("item2");
+      expect(result.current.lessonSubset.unseenItems).not.toContain("item2");
+    });
+
+    it("should set activeVocabItem to null when all items are processed", () => {
+      const { result } = setupFirstPassMock();
+
+      // Process all items
+      act(() => {
+        for (let i = 0; i < 8; i++) {
+          result.current.handleFirstPassChoice("mastered");
+        }
+      });
+
+      expect(result.current.activeVocabItem).toBeNull();
+      expect(result.current.lessonSubset.unseenItems).toHaveLength(0);
+    });
   });
-  it("should handle practice functionality", () => {
-    const { result } = setupFirstPassMock();
 
-    // Simulate skipping the active vocab item
-    act(() => {
-      result.current.handleFirstPassChoice("practice");
+  describe("Lesson Changes", () => {
+    it("should reset state when changing lessons", () => {
+      const { rerender } = renderHook((props) => useWorkingSet(props), {
+        initialProps: {
+          currentLesson: 0,
+          lessons: mockLessons,
+          progressionMode: "firstPass",
+        },
+      });
+
+      // Change lesson
+      rerender({
+        currentLesson: 1,
+        lessons: mockLessons,
+        progressionMode: "firstPass",
+      });
+
+      // Should reset to initial state
+      expect(result.current.workingSet).toHaveLength(0);
+      expect(result.current.lessonSubset).toEqual({
+        unseenItems: [],
+        practiceItems: [],
+        masteredItems: [],
+        skippedItems: [],
+      });
     });
-
-    // Check that the skipped item is in the skippedItems array
-    expect(result.current.lessonSubset.practiceItems).toContain("item1");
-    expect(result.current.activeVocabItem.id).toContain("item2");
   });
-  it("should handle mastered functionality", () => {
-    const { result } = setupFirstPassMock();
 
-    // Simulate skipping the active vocab item
-    act(() => {
-      result.current.handleFirstPassChoice("mastered");
+  describe("Working Set Management", () => {
+    it("should add items to working set", () => {
+      const { result } = setupFirstPassMock();
+
+      act(() => {
+        result.current.addMoreItems(3);
+      });
+
+      expect(result.current.workingSet.length).toBeGreaterThan(0);
+      expect(result.current.workingSet.length).toBeLessThanOrEqual(3);
     });
 
-    // Check that the skipped item is in the skippedItems array
-    expect(result.current.lessonSubset.masteredItems).toContain("item1");
-    expect(result.current.activeVocabItem.id).toContain("item2");
+    it("should respect maximum working set size", () => {
+      const { result } = setupFirstPassMock();
+
+      act(() => {
+        result.current.addMoreItems(10);
+      });
+
+      expect(result.current.workingSet.length).toBeLessThanOrEqual(7);
+    });
+
+    it("should clear working set", () => {
+      const { result } = setupFirstPassMock();
+
+      act(() => {
+        result.current.addMoreItems(3);
+        result.current.clearWorkingSet();
+      });
+
+      expect(result.current.workingSet).toHaveLength(0);
+    });
+  });
+
+  describe("Local Storage Persistence", () => {
+    it("should persist state to localStorage", () => {
+      const { result } = setupFirstPassMock();
+
+      act(() => {
+        result.current.handleFirstPassChoice("practice");
+      });
+
+      // Create a new hook instance
+      const { result: newResult } = setupFirstPassMock();
+
+      // State should be preserved
+      expect(newResult.current.lessonSubset.practiceItems).toContain("item1");
+      expect(newResult.current.activeVocabItem?.id).toBe("item2");
+    });
   });
 });
