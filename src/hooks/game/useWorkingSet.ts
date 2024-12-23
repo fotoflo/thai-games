@@ -43,6 +43,12 @@ interface UseWorkingSet {
 
   // Add a method specifically for loading first pass items
   loadFirstPassItems: () => void;
+
+  // Add this function inside the useWorkingSet hook
+  handleFirstPassChoice: (
+    itemId: string,
+    choice: "skip" | "mastered" | "practice"
+  ) => void;
 }
 
 export const useWorkingSet = ({
@@ -74,13 +80,26 @@ export const useWorkingSet = ({
     setLessonSubset((prev) => {
       if (prev.unseenItems.length === 0) return prev;
 
-      const [nextItem, ...remainingUnseen] = prev.unseenItems;
+      const [nextItemId, ...remainingUnseen] = prev.unseenItems;
+
+      // Find the next item in the lesson
+      const nextItem = lessons[currentLesson].items.find(
+        (item) => item.id === nextItemId
+      );
+      if (nextItem) {
+        setActiveVocabItem({
+          id: nextItem.id,
+          mastery: 0,
+          vocabularyItem: nextItem,
+        });
+      }
+
       return {
         ...prev,
         unseenItems: remainingUnseen,
       };
     });
-  }, [setLessonSubset]);
+  }, [setLessonSubset, lessons, currentLesson, setActiveVocabItem]);
 
   // Now define the functions that use showNextItem
   const markForPractice = useCallback(
@@ -118,7 +137,6 @@ export const useWorkingSet = ({
 
   const addToWorkingSet = useCallback(
     (items: WorkingSetItem[]) => {
-      console.log("Adding to working set:", items);
       setWorkingSet((prev) => {
         const newSet = [...prev, ...items];
         // Keep working set size manageable (4-7 items)
@@ -127,7 +145,6 @@ export const useWorkingSet = ({
 
       // Always set the active item if we don't have one and we're adding items
       if (!activeVocabItem && items.length > 0) {
-        console.log("Setting active item in addToWorkingSet:", items[0]);
         setActiveVocabItem(items[0]);
       }
     },
@@ -277,10 +294,8 @@ export const useWorkingSet = ({
 
   // Load items when lesson changes
   useEffect(() => {
-    console.log("Lesson changed to:", currentLesson);
     if (currentLesson >= 0 && lessons[currentLesson]) {
       const lessonItems = lessons[currentLesson].items;
-      console.log("Loading items for lesson:", lessonItems);
 
       // Reset lesson subset with all items as unseen
       setLessonSubset({
@@ -337,6 +352,37 @@ export const useWorkingSet = ({
     }
   }, [currentLesson, progressionMode]); // Remove loadFirstPassItems from dependencies
 
+  // Add this function inside the useWorkingSet hook
+  const handleFirstPassChoice = useCallback(
+    (choice: "skip" | "mastered" | "practice") => {
+      if (!activeVocabItem) {
+        console.warn("No active vocabulary item found");
+        return;
+      }
+
+      switch (choice) {
+        case "skip":
+          markAsSkipped(activeVocabItem.id);
+          break;
+        case "mastered":
+          markAsMastered(activeVocabItem.id);
+          break;
+        case "practice":
+          markForPractice(activeVocabItem.id);
+          break;
+        default:
+          break;
+      }
+    },
+    [
+      activeVocabItem,
+      markAsSkipped,
+      markAsMastered,
+      markForPractice,
+      showNextItem,
+    ]
+  );
+
   // ... other methods
 
   return {
@@ -365,5 +411,8 @@ export const useWorkingSet = ({
 
     // Add a method specifically for loading first pass items
     loadFirstPassItems,
+
+    // Add this function inside the useWorkingSet hook
+    handleFirstPassChoice,
   };
 };

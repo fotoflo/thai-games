@@ -1,4 +1,5 @@
 import { renderHook } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 import { useWorkingSet } from "../../../hooks/game/useWorkingSet";
 import debugLesson from "../../../lessons/debug-lesson.json";
 
@@ -26,7 +27,7 @@ describe("useWorkingSet", () => {
     expect(result.current.lessonSubset.unseenItems).toContain("item8");
   });
 
-  it("should set activeVocabItem on first load", () => {
+  it("should set activeVocabItem to item1 on first load", () => {
     const { result } = renderHook(() =>
       useWorkingSet({
         currentLesson: 0,
@@ -34,7 +35,6 @@ describe("useWorkingSet", () => {
         progressionMode: "firstPass",
       })
     );
-
     // After loading first pass items, the activeVocabItem should be set to the first item
     expect(result.current.activeVocabItem).toEqual({
       id: "item1",
@@ -55,5 +55,24 @@ describe("useWorkingSet", () => {
         ],
       },
     });
+  });
+
+  it("should handle skip functionality", () => {
+    const { result } = renderHook(() =>
+      useWorkingSet({
+        currentLesson: 0,
+        lessons: mockLessons,
+        progressionMode: "firstPass",
+      })
+    );
+
+    // Simulate skipping the active vocab item
+    act(() => {
+      result.current.handleFirstPassChoice("skip");
+    });
+
+    // Check that the skipped item is in the skippedItems array
+    expect(result.current.lessonSubset.skippedItems).toContain("item1");
+    expect(result.current.activeVocabItem.id).toContain("item2");
   });
 });
