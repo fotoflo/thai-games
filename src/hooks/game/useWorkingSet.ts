@@ -10,7 +10,6 @@ interface UseWorkingSetProps {
 
 interface LessonSubset {
   unseenItems: string[]; // IDs of items not yet shown to user
-  currentItem: string | null; // ID of item currently being shown
   practiceItems: string[]; // IDs of items marked for practice
   masteredItems: string[]; // IDs of items marked as "know it"
   skippedItems: string[]; // IDs of items that were skipped
@@ -44,8 +43,6 @@ interface UseWorkingSet {
 
   // Add a method specifically for loading first pass items
   loadFirstPassItems: () => void;
-
-  currentItem: LessonItem | null;
 }
 
 export const useWorkingSet = ({
@@ -66,7 +63,6 @@ export const useWorkingSet = ({
     "lessonSubset",
     {
       unseenItems: [],
-      currentItem: null,
       practiceItems: [],
       masteredItems: [],
       skippedItems: [],
@@ -82,7 +78,6 @@ export const useWorkingSet = ({
       return {
         ...prev,
         unseenItems: remainingUnseen,
-        currentItem: nextItem,
       };
     });
   }, [setLessonSubset]);
@@ -93,7 +88,6 @@ export const useWorkingSet = ({
       setLessonSubset((prev) => ({
         ...prev,
         practiceItems: [...prev.practiceItems, itemId],
-        currentItem: null,
       }));
       showNextItem();
     },
@@ -105,7 +99,6 @@ export const useWorkingSet = ({
       setLessonSubset((prev) => ({
         ...prev,
         masteredItems: [...prev.masteredItems, itemId],
-        currentItem: null,
       }));
       showNextItem();
     },
@@ -117,7 +110,6 @@ export const useWorkingSet = ({
       setLessonSubset((prev) => ({
         ...prev,
         skippedItems: [...prev.skippedItems, itemId],
-        currentItem: null,
       }));
       showNextItem();
     },
@@ -248,14 +240,16 @@ export const useWorkingSet = ({
 
   // Add a method specifically for loading first pass items
   const loadFirstPassItems = useCallback(() => {
-    if (!currentLesson || !lessons[currentLesson]) return;
+    if (currentLesson < 0 || !lessons[currentLesson]) return;
 
     const lessonItems = lessons[currentLesson].items;
 
+    // Ensure unseenItems includes all items from the lesson
+    const unseenItemIds = lessonItems.map((item) => item.id);
+
     setLessonSubset((prev) => ({
       ...prev,
-      unseenItems: lessonItems.map((item) => item.id),
-      currentItem: null,
+      unseenItems: unseenItemIds,
       practiceItems: [],
       masteredItems: [],
       skippedItems: [],
@@ -263,7 +257,23 @@ export const useWorkingSet = ({
 
     // Show first item
     showNextItem();
-  }, [currentLesson, lessons, setLessonSubset]);
+
+    // Set the active vocab item to the first unseen item
+    if (lessonItems.length > 0) {
+      const firstItem = lessonItems[0];
+      setActiveVocabItem({
+        id: firstItem.id,
+        mastery: 0,
+        vocabularyItem: firstItem,
+      });
+    }
+  }, [
+    currentLesson,
+    lessons,
+    setLessonSubset,
+    setActiveVocabItem,
+    showNextItem,
+  ]);
 
   // Load items when lesson changes
   useEffect(() => {
@@ -275,18 +285,31 @@ export const useWorkingSet = ({
       // Reset lesson subset with all items as unseen
       setLessonSubset({
         unseenItems: lessonItems.map((item) => item.id),
-        currentItem: null,
         practiceItems: [],
         masteredItems: [],
         skippedItems: [],
       });
 
+      // Set the active vocab item to the first item
+      if (lessonItems.length > 0) {
+        const firstItem = lessonItems[0];
+        setActiveVocabItem({
+          id: firstItem.id,
+          mastery: 0,
+          vocabularyItem: firstItem,
+        });
+      }
+
       // Show first item
-      setTimeout(() => {
-        showNextItem();
-      }, 0);
+      showNextItem();
     }
-  }, [currentLesson, lessons]);
+  }, [
+    currentLesson,
+    lessons,
+    setLessonSubset,
+    setActiveVocabItem,
+    showNextItem,
+  ]);
 
   // Add a ref to track if we've loaded items for this lesson
   const hasLoadedRef = useRef<{
@@ -330,11 +353,6 @@ export const useWorkingSet = ({
 
     // Lesson subset state and operations
     lessonSubset,
-    currentItem: lessonSubset.currentItem
-      ? lessons[currentLesson]?.items.find(
-          (item) => item.id === lessonSubset.currentItem
-        )
-      : null,
     markForPractice,
     markAsMastered,
     markAsSkipped,

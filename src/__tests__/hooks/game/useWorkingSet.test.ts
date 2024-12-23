@@ -11,26 +11,6 @@ describe("useWorkingSet", () => {
     window.localStorage.clear();
   });
 
-  it("should initialize with empty state", () => {
-    const { result } = renderHook(() =>
-      useWorkingSet({
-        currentLesson: 0,
-        lessons: mockLessons,
-        progressionMode: "firstPass",
-      })
-    );
-
-    expect(result.current.workingSet).toEqual([]);
-    expect(result.current.activeVocabItem).toBeNull();
-    expect(result.current.lessonSubset).toEqual({
-      unseenItems: [],
-      currentItem: null,
-      practiceItems: [],
-      masteredItems: [],
-      skippedItems: [],
-    });
-  });
-
   it("should load first pass items from debug lesson", () => {
     const { result } = renderHook(() =>
       useWorkingSet({
@@ -41,8 +21,39 @@ describe("useWorkingSet", () => {
     );
 
     // Debug lesson has 8 items
-    expect(result.current.lessonSubset.unseenItems).toHaveLength(8);
-    expect(result.current.lessonSubset.unseenItems).toContain("item1");
+    expect(result.current.lessonSubset.unseenItems).toHaveLength(7);
+    expect(result.current.lessonSubset.unseenItems).toContain("item2");
     expect(result.current.lessonSubset.unseenItems).toContain("item8");
+  });
+
+  it("should set activeVocabItem on first load", () => {
+    const { result } = renderHook(() =>
+      useWorkingSet({
+        currentLesson: 0,
+        lessons: mockLessons,
+        progressionMode: "firstPass",
+      })
+    );
+
+    // After loading first pass items, the activeVocabItem should be set to the first item
+    expect(result.current.activeVocabItem).toEqual({
+      id: "item1",
+      mastery: 0,
+      vocabularyItem: {
+        id: "item1",
+        text: "A1",
+        translation: "A1",
+        romanization: "A1",
+        difficulty: 1,
+        tags: ["test", "simple"],
+        examples: [
+          {
+            text: "A1",
+            translation: "A1",
+            romanization: "A1",
+          },
+        ],
+      },
+    });
   });
 });

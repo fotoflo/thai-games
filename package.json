@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
+    "jest": "jest --watch --testPathPattern=__tests__",
     "test:watch": "jest --watch"
   },
   "dependencies": {

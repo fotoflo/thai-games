@@ -56,7 +56,6 @@ const IndexPage: React.FC = () => {
     reportProblem,
     getCurrentProgress,
     lessonSubset,
-    currentItem,
   } = gameState;
 
   console.log("Render IndexPage:", { currentLesson, totalLessons });
@@ -103,10 +102,7 @@ const IndexPage: React.FC = () => {
     setCurrentLesson(index);
   };
 
-  const displayItem =
-    progressionMode === "firstPass"
-      ? currentItem
-      : activeVocabItem?.vocabularyItem;
+  const displayItem = activeVocabItem?.vocabularyItem;
 
   return (
     <>
@@ -117,14 +113,13 @@ const IndexPage: React.FC = () => {
 
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SettingsHamburger onClick={openSettings} />
-
-        {displayItem ? (
+        {activeVocabItem ? (
           <ItemDisplay
-            vocabItem={displayItem}
+            vocabItem={activeVocabItem.vocabularyItem}
             iconSize={52}
             textSize="text-6xl"
             className="flex items-center justify-center mb-10"
-            speakOnUnmount={true}
+            speakOnUnmount={false}
             invertTranslation={invertTranslation}
           />
         ) : (
@@ -137,6 +132,8 @@ const IndexPage: React.FC = () => {
             </p>
           </div>
         )}
+
+        {/* {<pre>active {JSON.stringify(activeVocabItem, null, 2)}</pre>} */}
 
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
@@ -154,7 +151,6 @@ const IndexPage: React.FC = () => {
           trigger={displayTrigger}
           onClose={() => setDisplayTrigger(null)}
         />
-
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <LessonProgress
             workingSetLength={workingSet.length}
@@ -168,8 +164,8 @@ const IndexPage: React.FC = () => {
             onRatingSelect={handleRateMastery}
             mode={progressionMode}
             onFirstPassChoice={(choice) => {
-              if (!currentItem) return;
-              gameState.handleFirstPassChoice(currentItem.id, choice);
+              if (!displayItem) return;
+              gameState.handleFirstPassChoice(displayItem.id, choice);
             }}
             className="mb-10 mt-10"
           />
@@ -209,11 +205,9 @@ const IndexPage: React.FC = () => {
             />
           </div>
         </div>
-
         {showSettingsContainer && (
           <SettingsModalContainer onClose={closeSettings} />
         )}
-
         {lessonDetailsSelectedLesson && (
           <div className="fixed inset-0 z-50">
             <LessonDetails
