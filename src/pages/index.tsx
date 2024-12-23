@@ -158,7 +158,6 @@ const IndexPage: React.FC = () => {
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <LessonProgress
             workingSetLength={workingSet.length}
-            lessonState={lessonStates[currentLesson]}
             lessonSubset={lessonSubset}
             className="mb-4"
           />
