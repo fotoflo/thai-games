@@ -67,31 +67,34 @@ export const useWorkingSet = ({
     }
   );
 
+  // Add this ref to track loading state
+  const hasLoadedRef = useRef<{
+    lesson: number;
+    mode: "firstPass" | "spacedRepetition" | "test";
+  }>({
+    lesson: -1,
+    mode: "firstPass",
+  });
+
   // Define showNextItem first since other functions depend on it
   const showNextItem = useCallback(() => {
-    setLessonSubset((prev) => {
-      if (prev.unseenItems.length === 0) return prev;
+    if (lessonSubset.unseenItems.length === 0) return;
 
-      const [nextItemId, ...remainingUnseen] = prev.unseenItems;
+    const nextItemId = lessonSubset.unseenItems[0];
+    if (!nextItemId) return;
 
-      // Find the next item in the lesson
-      const nextItem = lessons[currentLesson].items.find(
-        (item) => item.id === nextItemId
-      );
-      if (nextItem) {
-        setActiveVocabItem({
-          id: nextItem.id,
-          mastery: 0,
-          vocabularyItem: nextItem,
-        });
-      }
-
-      return {
-        ...prev,
-        unseenItems: remainingUnseen,
-      };
-    });
-  }, [setLessonSubset, lessons, currentLesson, setActiveVocabItem]);
+    // Find the next item in the lesson
+    const nextItem = lessons[currentLesson].items.find(
+      (item) => item.id === nextItemId
+    );
+    if (nextItem) {
+      setActiveVocabItem({
+        id: nextItem.id,
+        mastery: 0,
+        vocabularyItem: nextItem,
+      });
+    }
+  }, [lessonSubset.unseenItems, lessons, currentLesson, setActiveVocabItem]);
 
   // Now define the functions that use showNextItem
   const markForPractice = useCallback(
@@ -244,104 +247,55 @@ export const useWorkingSet = ({
     [workingSet, lessonSubset, currentLesson, lessons, addToWorkingSet]
   );
 
-  // Add a method specifically for loading first pass items
+  // Add an initialization effect
+  useEffect(() => {
+    if (
+      progressionMode === "firstPass" &&
+      currentLesson >= 0 &&
+      lessons[currentLesson]
+    ) {
+      loadFirstPassItems();
+    }
+  }, []); // Run only once on mount
+
+  // Update loadFirstPassItems to be more robust
   const loadFirstPassItems = useCallback(() => {
     if (currentLesson < 0 || !lessons[currentLesson]) return;
 
     const lessonItems = lessons[currentLesson].items;
+    if (lessonItems.length === 0) return;
 
-    // Ensure unseenItems includes all items from the lesson
-    const unseenItemIds = lessonItems.map((item) => item.id);
+    // Always set the first item as active immediately
+    const [firstItem, ...restItems] = lessonItems;
 
-    setLessonSubset((prev) => ({
-      ...prev,
-      unseenItems: unseenItemIds,
+    // Set both states together to prevent flashing
+    setActiveVocabItem({
+      id: firstItem.id,
+      mastery: 0,
+      vocabularyItem: firstItem,
+    });
+
+    setLessonSubset({
+      unseenItems: restItems.map((item) => item.id),
       practiceItems: [],
       masteredItems: [],
       skippedItems: [],
-    }));
+    });
 
-    // Show first item
-    showNextItem();
-
-    // Set the active vocab item to the first unseen item
-    if (lessonItems.length > 0) {
-      const firstItem = lessonItems[0];
-      setActiveVocabItem({
-        id: firstItem.id,
-        mastery: 0,
-        vocabularyItem: firstItem,
-      });
-    }
+    // Update the loaded ref
+    hasLoadedRef.current = {
+      lesson: currentLesson,
+      mode: progressionMode,
+    };
   }, [
     currentLesson,
     lessons,
-    setLessonSubset,
+    progressionMode,
     setActiveVocabItem,
-    showNextItem,
+    setLessonSubset,
   ]);
 
-  // Load items when lesson changes
-  useEffect(() => {
-    if (currentLesson >= 0 && lessons[currentLesson]) {
-      const lessonItems = lessons[currentLesson].items;
-
-      // Reset lesson subset with all items as unseen
-      setLessonSubset({
-        unseenItems: lessonItems.map((item) => item.id),
-        practiceItems: [],
-        masteredItems: [],
-        skippedItems: [],
-      });
-
-      // Set the active vocab item to the first item
-      if (lessonItems.length > 0) {
-        const firstItem = lessonItems[0];
-        setActiveVocabItem({
-          id: firstItem.id,
-          mastery: 0,
-          vocabularyItem: firstItem,
-        });
-      }
-
-      // Show first item
-      showNextItem();
-    }
-  }, [
-    currentLesson,
-    lessons,
-    setLessonSubset,
-    setActiveVocabItem,
-    showNextItem,
-  ]);
-
-  // Add a ref to track if we've loaded items for this lesson
-  const hasLoadedRef = useRef<{
-    lesson: number;
-    mode: string;
-  }>({ lesson: -1, mode: "" });
-
-  useEffect(() => {
-    // Only load first pass items if:
-    // 1. We're in firstPass mode
-    // 2. We haven't already loaded items for this lesson/mode combination
-    // 3. We have a valid lesson
-    if (
-      progressionMode === "firstPass" &&
-      (hasLoadedRef.current.lesson !== currentLesson ||
-        hasLoadedRef.current.mode !== progressionMode) &&
-      currentLesson >= 0 &&
-      lessons[currentLesson]
-    ) {
-      hasLoadedRef.current = {
-        lesson: currentLesson,
-        mode: progressionMode,
-      };
-      loadFirstPassItems();
-    }
-  }, [currentLesson, progressionMode]); // Remove loadFirstPassItems from dependencies
-
-  // Add this function inside the useWorkingSet hook
+  // Update handleFirstPassChoice to be more reliable
   const handleFirstPassChoice = useCallback(
     (choice: "skip" | "mastered" | "practice") => {
       if (!activeVocabItem) {
@@ -349,29 +303,50 @@ export const useWorkingSet = ({
         return;
       }
 
-      switch (choice) {
-        case "skip":
-          markAsSkipped(activeVocabItem.id);
-          break;
-        case "mastered":
-          markAsMastered(activeVocabItem.id);
-          break;
-        case "practice":
-          markForPractice(activeVocabItem.id);
-          break;
-        default:
-          return;
-      }
+      const currentId = activeVocabItem.id;
+      const [nextItemId, ...remainingUnseen] = lessonSubset.unseenItems;
 
-      // Call showNextItem after marking the item
-      showNextItem();
+      // Find the next item before updating state
+      const nextItem = nextItemId
+        ? lessons[currentLesson].items.find((item) => item.id === nextItemId)
+        : null;
+
+      // Update both states together
+      setLessonSubset((prev) => {
+        const newState = { ...prev };
+        switch (choice) {
+          case "skip":
+            newState.skippedItems = [...prev.skippedItems, currentId];
+            break;
+          case "mastered":
+            newState.masteredItems = [...prev.masteredItems, currentId];
+            break;
+          case "practice":
+            newState.practiceItems = [...prev.practiceItems, currentId];
+            break;
+        }
+        newState.unseenItems = remainingUnseen;
+        return newState;
+      });
+
+      // Set next item if available
+      if (nextItem) {
+        setActiveVocabItem({
+          id: nextItem.id,
+          mastery: 0,
+          vocabularyItem: nextItem,
+        });
+      } else {
+        setActiveVocabItem(null); // Clear active item if we're done
+      }
     },
     [
       activeVocabItem,
-      markAsSkipped,
-      markAsMastered,
-      markForPractice,
-      showNextItem,
+      lessonSubset.unseenItems,
+      lessons,
+      currentLesson,
+      setLessonSubset,
+      setActiveVocabItem,
     ]
   );
 

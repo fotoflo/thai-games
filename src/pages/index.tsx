@@ -159,6 +159,8 @@ const IndexPage: React.FC = () => {
             currentLesson={currentLesson}
           />
 
+          <pre>{JSON.stringify(activeVocabItem, null, 2)}</pre>
+
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
           {/* Lesson Selection */}
