@@ -128,23 +128,18 @@ const IndexPage: React.FC = () => {
         />
 
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
-          {/* Progress Display */}
-          <LessonProgress
-            workingSetLength={workingSet.length}
-            lessonSubset={lessonSubset}
-            className="mb-4"
-          />
-
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
           {/* Mastery Controls */}
           <MasteryControls
+            workingSet={workingSet}
+            lessonSubset={lessonSubset}
             onRatingSelect={() => {
               /* Remove handleRateMastery as it's not needed */
             }}
             mode={progressionMode}
             onFirstPassChoice={handleFirstPassChoice}
-            className="mb-10 mt-10"
+            className="mb-10"
           />
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
@@ -157,9 +152,10 @@ const IndexPage: React.FC = () => {
             addMoreItems={addMoreItems}
             progressionMode={progressionMode}
             currentLesson={currentLesson}
+            lessonSubset={lessonSubset}
           />
 
-          <pre>{JSON.stringify(activeVocabItem, null, 2)}</pre>
+          <pre>{false && JSON.stringify(activeVocabItem, null, 2)}</pre>
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 

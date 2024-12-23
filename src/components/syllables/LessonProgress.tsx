@@ -32,15 +32,15 @@ const LessonProgress: React.FC<LessonProgressProps> = ({
     <div className={`text-xs text-gray-500 mb-2 px-2 ${className}`}>
       <div className="flex justify-between gap-4">
         <div>
+          <span className="text-gray-400">Skipped:</span>{" "}
+          {lessonSubset.skippedItems.length}
+        </div>
+        <div>
           <span className="text-blue-400">Practice:</span> {workingSetLength}
         </div>
         <div>
           <span className="text-purple-400">Know It:</span>{" "}
           {lessonSubset.masteredItems.length}
-        </div>
-        <div>
-          <span className="text-gray-400">Skipped:</span>{" "}
-          {lessonSubset.skippedItems.length}
         </div>
         <div>
           <span className="text-yellow-400">Unseen:</span>{" "}

@@ -8,6 +8,11 @@ interface WorkingSetCardsProps {
   selectedItem: WorkingSetItem | null;
   onCardSelect: (item: WorkingSetItem) => void;
   addMoreItems: () => void;
+  progressionMode: string;
+  currentLesson: number;
+  lessonSubset: {
+    practiceItems: string[];
+  };
 }
 
 const getTextSizeClass = (text: string): string => {
@@ -28,58 +33,71 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
   selectedItem,
   onCardSelect,
   addMoreItems,
+  progressionMode,
+  currentLesson,
+  lessonSubset,
 }) => {
   return (
-    <div className="flex items-center justify-center gap-2 mb-4">
-      <div className="flex gap-2 flex-wrap justify-center">
-        {workingSet.map((item) => {
-          const text = item.vocabularyItem.text;
-          if (!text) return null;
+    <div className="flex flex-col relative">
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="flex gap-2 flex-wrap justify-center">
+          {workingSet.map((item) => {
+            const text = item.vocabularyItem.text;
+            if (!text) return null;
 
-          const phoneticText = thaiToIPA(text);
-          return (
-            <div
-              key={item.id}
-              className={`
-                text-center p-2 rounded cursor-pointer w-[60px] h-[80px]
-                ${item.id === selectedItem?.id ? "bg-blue-700" : "bg-gray-800"}
-                hover:bg-blue-600 transition-colors
-                flex flex-col justify-center
-              `}
-              onClick={() => onCardSelect(item)}
-              role="button"
-              tabIndex={0}
-            >
+            const phoneticText = thaiToIPA(text);
+            return (
               <div
-                className={`text-white ${getTextSizeClass(text)} leading-tight`}
+                key={item.id}
+                className={`
+                  text-center p-2 rounded cursor-pointer w-[60px] h-[80px]
+                  ${
+                    item.id === selectedItem?.id ? "bg-blue-700" : "bg-gray-800"
+                  }
+                  hover:bg-blue-600 transition-colors
+                  flex flex-col justify-center
+                `}
+                onClick={() => onCardSelect(item)}
+                role="button"
+                tabIndex={0}
               >
-                {text}
+                <div
+                  className={`text-white ${getTextSizeClass(
+                    text
+                  )} leading-tight`}
+                >
+                  {text}
+                </div>
+                <div
+                  className={`text-gray-400 ${getPhoneticSizeClass(
+                    phoneticText
+                  )} leading-tight`}
+                >
+                  [
+                  {phoneticText.length > 10
+                    ? `${phoneticText.substring(0, 10)}...`
+                    : phoneticText}
+                  ]
+                </div>
               </div>
-              <div
-                className={`text-gray-400 ${getPhoneticSizeClass(
-                  phoneticText
-                )} leading-tight`}
+            );
+          })}
+          {workingSet.length < 5 && (
+            <div className="ml-auto">
+              <button
+                onClick={addMoreItems}
+                className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[60px] h-[80px]"
+                title="Add One More Item"
               >
-                [
-                {phoneticText.length > 10
-                  ? `${phoneticText.substring(0, 10)}...`
-                  : phoneticText}
-                ]
-              </div>
+                <PlusCircle size={24} className="text-white" />
+              </button>
             </div>
-          );
-        })}
-        {workingSet.length < 5 && (
-          <div className="ml-auto">
-            <button
-              onClick={addMoreItems}
-              className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[60px] h-[80px]"
-              title="Add One More Item"
-            >
-              <PlusCircle size={24} className="text-white" />
-            </button>
-          </div>
-        )}
+          )}
+        </div>
+      </div>
+      <div className="absolute bottom-0 right-0 text-xs text-gray-400">
+        PracticeSet: {lessonSubset.practiceItems.length}, WorkingSet:{" "}
+        {workingSet.length}
       </div>
     </div>
   );

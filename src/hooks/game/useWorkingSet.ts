@@ -8,14 +8,14 @@ interface UseWorkingSetProps {
   progressionMode: "firstPass" | "spacedRepetition" | "test";
 }
 
-interface LessonSubset {
+export interface LessonSubset {
   unseenItems: string[]; // IDs of items not yet shown to user
   practiceItems: string[]; // IDs of items marked for practice
   masteredItems: string[]; // IDs of items marked as "know it"
   skippedItems: string[]; // IDs of items that were skipped
 }
 
-interface UseWorkingSet {
+export interface UseWorkingSet {
   // Current active practice set (4-7 items)
   workingSet: WorkingSetItem[];
   activeVocabItem: WorkingSetItem | null;
@@ -323,6 +323,14 @@ export const useWorkingSet = ({
             break;
           case "practice":
             newState.practiceItems = [...prev.practiceItems, currentId];
+            // Add the current item to working set when marked for practice
+            addToWorkingSet([
+              {
+                id: currentId,
+                mastery: 0,
+                vocabularyItem: activeVocabItem.vocabularyItem,
+              },
+            ]);
             break;
         }
         newState.unseenItems = remainingUnseen;
@@ -347,6 +355,7 @@ export const useWorkingSet = ({
       currentLesson,
       setLessonSubset,
       setActiveVocabItem,
+      addToWorkingSet,
     ]
   );
 
