@@ -5,11 +5,8 @@ import { useWorkingSet } from "./game/useWorkingSet";
 export const useReadThaiGameState = () => {
   const gameSettings = useGameSettings();
   const lessonState = useLessons();
-  const workingSet = useWorkingSet({
-    currentLesson: lessonState.currentLesson,
-    lessons: lessonState.lessons,
-    progressionMode: lessonState.progressionMode,
-  });
+
+  const workingSet = useWorkingSet();
 
   return {
     // Game settings
@@ -24,11 +21,11 @@ export const useReadThaiGameState = () => {
     // Working set
     workingSet: workingSet.workingSet,
     activeVocabItem: workingSet.activeVocabItem,
-    currentItem: workingSet.currentItem,
     setActiveVocabItem: workingSet.setActiveVocabItem,
-    addMoreItems: workingSet.addMoreItems,
-    nextItem: workingSet.nextItem,
-    handleFirstPassChoice: workingSet.handleFirstPassChoice,
+    addToWorkingSet: workingSet.addToWorkingSet,
+    removeFromWorkingSet: workingSet.removeFromWorkingSet,
+    clearWorkingSet: workingSet.clearWorkingSet,
+    loadFirstPassItems: workingSet.loadFirstPassItems,
 
     // Lesson data
     lessons: lessonState.lessons,

@@ -15,6 +15,7 @@ import LessonDetails from "../components/syllables/LessonDetailScreen";
 import { WorkingSetItem, Lesson } from "../types/lessons";
 import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
 import LessonProgress from "../components/syllables/LessonProgress";
+import { useWorkingSet } from "../hooks/game/useWorkingSet";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
@@ -33,8 +34,10 @@ const IndexPage: React.FC = () => {
     // Working set state
     workingSet,
     activeVocabItem,
+    addToWorkingSet,
+    removeFromWorkingSet,
+    clearWorkingSet,
     setActiveVocabItem,
-    addMoreItems,
 
     // Lesson management
     lessons,
@@ -59,7 +62,7 @@ const IndexPage: React.FC = () => {
 
   // Load more items if needed
   if (!activeVocabItem) {
-    addMoreItems(5);
+    addToWorkingSet(5);
   }
 
   const handleCardSelect = (item: WorkingSetItem) => {
@@ -119,7 +122,7 @@ const IndexPage: React.FC = () => {
           vocabItem={displayItem}
           onNext={() => {
             if (progressionMode !== "firstPass") {
-              addMoreItems();
+              addToWorkingSet();
             }
             setDisplayTrigger(null);
           }}
@@ -149,10 +152,11 @@ const IndexPage: React.FC = () => {
             workingSet={workingSet}
             selectedItem={activeVocabItem}
             onCardSelect={handleCardSelect}
-            addMoreItems={addMoreItems}
+            addMoreItems={addToWorkingSet}
             progressionMode={progressionMode}
             currentLesson={currentLesson}
             lessonSubset={lessonSubset}
+            removeFromWorkingSet={removeFromWorkingSet}
           />
 
           <pre>{false && JSON.stringify(activeVocabItem, null, 2)}</pre>
