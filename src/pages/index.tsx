@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import ItemDisplay from "../components/syllables/ItemDisplay";
 import MasteryControls from "../components/syllables/MasteryControls";
@@ -57,10 +57,12 @@ const IndexPage: React.FC = () => {
   const [lessonDetailsSelectedLesson, setLessonDetailsSelectedLesson] =
     useState<LessonDetailsSelection | null>(null);
 
-  // Load more items if needed
-  if (!activeVocabItem) {
-    addMoreItems(5);
-  }
+  // Move the addMoreItems logic into useEffect
+  useEffect(() => {
+    if (!activeVocabItem && currentLesson >= 0) {
+      addMoreItems(5);
+    }
+  }, [activeVocabItem, currentLesson, addMoreItems]);
 
   const handleCardSelect = (item: WorkingSetItem) => {
     setActiveVocabItem(item);
