@@ -12,7 +12,7 @@ interface LessonSubset {
 
 interface MasteryControlsProps {
   onRatingSelect: (value: number) => void;
-  onFirstPassChoice?: (choice: "skip" | "mastered" | "practice") => void;
+  onFirstPassChoice?: (choice: "mastered" | "practice" | "skip") => void;
   mode: ProgressionMode;
   className?: string;
   lessonSubset: LessonSubset;

@@ -1,13 +1,11 @@
 import { useCallback, useState } from "react";
 import useLocalStorage from "../useLocalStorage";
-import { LessonItem, Lesson, RecallCategory } from "../../types/lessons";
-
-export interface WorkingSetItem {
-  id: string;
-  mastery: number;
-  vocabularyItem: LessonItem;
-  lastReviewed?: Date;
-}
+import {
+  LessonItem,
+  Lesson,
+  RecallCategory,
+  WorkingSetItem,
+} from "../../types/lessons";
 
 interface LessonSubset {
   unseenItems: string[];

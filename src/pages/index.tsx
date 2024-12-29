@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import ItemDisplay from "../components/syllables/ItemDisplay";
 import MasteryControls from "../components/syllables/MasteryControls";
@@ -12,9 +12,8 @@ import ToggleInvertTranslationButton from "../components/syllables/ToggleInvertT
 import SettingsHamburger from "../components/ui/SettingsHamburger";
 import Divider from "../components/ui/divider";
 import LessonDetails from "../components/syllables/LessonDetailScreen";
-import { WorkingSetItem, Lesson } from "../types/lessons";
+import { Lesson, RecallCategory, WorkingSetItem } from "../types/lessons";
 import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
-import LessonProgress from "../components/syllables/LessonProgress";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
@@ -26,7 +25,6 @@ type DisplayTrigger = "speak" | "mastery" | "CheckTranslationButton" | null;
 const IndexPage: React.FC = () => {
   const {
     // Game settings
-    settings,
     invertTranslation,
     toggleInvertTranslation,
 
@@ -64,9 +62,12 @@ const IndexPage: React.FC = () => {
     }
   }, [activeVocabItem, currentLesson, addMoreItems]);
 
-  const handleCardSelect = (item: WorkingSetItem) => {
-    setActiveVocabItem(item);
-  };
+  const handleCardSelect = useCallback(
+    (item: WorkingSetItem) => {
+      setActiveVocabItem(item);
+    },
+    [setActiveVocabItem]
+  );
 
   const openSettings = () => setShowSettingsContainer(true);
   const closeSettings = () => setShowSettingsContainer(false);
@@ -81,6 +82,19 @@ const IndexPage: React.FC = () => {
 
   const displayItem = activeVocabItem?.vocabularyItem;
 
+  if (!displayItem) {
+    return (
+      <div className="flex items-center justify-center mb-10">
+        <p className="text-2xl text-gray-500">
+          {progressionMode === "firstPass" &&
+          lessonSubset.unseenItems.length === 0
+            ? "All items have been reviewed!"
+            : "No item selected. Please select a lesson to study."}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <>
       <WelcomeModal
@@ -92,25 +106,14 @@ const IndexPage: React.FC = () => {
         <SettingsHamburger onClick={openSettings} />
 
         {/* Active Item Display */}
-        {activeVocabItem ? (
-          <ItemDisplay
-            vocabItem={activeVocabItem.vocabularyItem}
-            iconSize={52}
-            textSize="text-6xl"
-            className="flex items-center justify-center mb-10"
-            speakOnUnmount={false}
-            invertTranslation={invertTranslation}
-          />
-        ) : (
-          <div className="flex items-center justify-center mb-10">
-            <p className="text-2xl text-gray-500">
-              {progressionMode === "firstPass" &&
-              lessonSubset.unseenItems.length === 0
-                ? "All items have been reviewed!"
-                : "No item selected. Please select a lesson to study."}
-            </p>
-          </div>
-        )}
+        <ItemDisplay
+          vocabItem={displayItem}
+          iconSize={52}
+          textSize="text-6xl"
+          className="flex items-center justify-center mb-10"
+          speakOnUnmount={false}
+          invertTranslation={invertTranslation}
+        />
 
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
@@ -127,6 +130,16 @@ const IndexPage: React.FC = () => {
           }}
           trigger={displayTrigger}
           onClose={() => setDisplayTrigger(null)}
+          mode={progressionMode}
+          lessonSubset={lessonSubset}
+          onFirstPassChoice={(choice) => {
+            if (activeVocabItem) {
+              handleFirstPassChoice(
+                activeVocabItem.id,
+                choice as RecallCategory
+              );
+            }
+          }}
         />
 
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
@@ -134,13 +147,21 @@ const IndexPage: React.FC = () => {
 
           {/* Mastery Controls */}
           <MasteryControls
-            workingSet={workingSet}
             lessonSubset={lessonSubset}
             onRatingSelect={() => {
-              /* Remove handleRateMastery as it's not needed */
+              if (progressionMode !== "firstPass") {
+                addMoreItems();
+              }
             }}
             mode={progressionMode}
-            onFirstPassChoice={handleFirstPassChoice}
+            onFirstPassChoice={(choice) => {
+              if (activeVocabItem) {
+                handleFirstPassChoice(
+                  activeVocabItem.id,
+                  choice as RecallCategory
+                );
+              }
+            }}
             className="mb-10"
           />
 
@@ -148,12 +169,20 @@ const IndexPage: React.FC = () => {
 
           {/* Working Set Display */}
           <WorkingSetCards
-            workingSet={workingSet}
-            selectedItem={activeVocabItem}
+            workingSet={workingSet.map((item) => ({
+              ...item,
+              lastReviewed: item.lastReviewed || new Date(),
+            }))}
+            selectedItem={
+              activeVocabItem
+                ? {
+                    ...activeVocabItem,
+                    lastReviewed: activeVocabItem.lastReviewed || new Date(),
+                  }
+                : null
+            }
             onCardSelect={handleCardSelect}
             addMoreItems={addMoreItems}
-            progressionMode={progressionMode}
-            currentLesson={currentLesson}
             lessonSubset={lessonSubset}
           />
 

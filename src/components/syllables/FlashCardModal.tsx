@@ -11,6 +11,14 @@ interface FlashCardModalProps {
   onNext: () => void;
   trigger: string | null;
   onClose: () => void;
+  mode: "firstPass" | "spacedRepetition" | "test";
+  lessonSubset: {
+    unseenItems: string[];
+    practiceItems: string[];
+    masteredItems: string[];
+    skippedItems: string[];
+  };
+  onFirstPassChoice?: (choice: "mastered" | "practice" | "skip") => void;
 }
 
 const FlashCardModal: React.FC<FlashCardModalProps> = ({
@@ -18,6 +26,9 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
   onNext,
   trigger,
   onClose,
+  mode,
+  lessonSubset,
+  onFirstPassChoice,
 }) => {
   const { handleSpeak } = useThaiSpeech(false, false);
 
@@ -49,15 +60,14 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
         </div>
         <MasteryControls
           onRatingSelect={onNext}
-          className="mb-4"
-          mode="spacedRepetition"
-          workingSet={[]}
-          lessonSubset={{
-            unseenItems: [],
-            practiceItems: [],
-            masteredItems: [],
-            skippedItems: [],
+          onFirstPassChoice={(choice) => {
+            if (onFirstPassChoice) {
+              onFirstPassChoice(choice);
+            }
           }}
+          className="mb-4"
+          mode={mode}
+          lessonSubset={lessonSubset}
         />
       </div>
     </ModalContainer>
