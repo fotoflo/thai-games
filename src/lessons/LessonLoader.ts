@@ -14,7 +14,6 @@ import greetings from "./greetings.json";
 import languageLearning2 from "./language-learning-2.json";
 import languageLearning from "./language-learning.json";
 import lessonForKids1 from "./lesson-for-kids1.json";
-import numbers from "./numbers.json";
 import pronunciationAndSpelling from "./pronunciation-and-spelling.json";
 import syllables1 from "./syllables1.json";
 import syllables2 from "./syllables2.json";
@@ -67,20 +66,18 @@ export const validateLesson = (lesson: unknown): lesson is Lesson => {
     const result = LessonSchema.safeParse(lesson);
 
     if (!result.success) {
-      console.error(
-        `Validation error in lesson: ${(lesson as any)?.lessonName}`
-      );
-      console.error("Validation errors:");
+      console.log(`Validation error in lesson: ${(lesson as any)?.lessonName}`);
+      console.log("Validation errors:");
       result.error.issues.forEach((issue) => {
-        console.error(`- Path: ${issue.path.join(".")}`);
-        console.error(`  Error: ${issue.message}`);
+        console.log(`- Path: ${issue.path.join(".")}`);
+        console.log(`  Error: ${issue.message}`);
       });
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error(
+    console.log(
       `Unexpected error validating lesson: ${(lesson as any)?.lessonName}`,
       error
     );
@@ -94,39 +91,30 @@ export const loadLessons = (): Lesson[] => {
   const errors: { lessonName: string; errors: string[] }[] = [];
 
   allLessons.forEach((lesson) => {
-    try {
-      const result = LessonSchema.safeParse(lesson);
+    const result = LessonSchema.safeParse(lesson);
 
-      if (result.success) {
-        validLessons.push(lesson as Lesson);
-      } else {
-        errors.push({
-          lessonName: (lesson as any)?.lessonName || "Unknown Lesson",
-          errors: result.error.issues.map(
-            (issue) => `${issue.path.join(".")}: ${issue.message}`
-          ),
-        });
-      }
-    } catch (error) {
+    if (result.success) {
+      validLessons.push(result.data);
+    } else {
       errors.push({
         lessonName: (lesson as any)?.lessonName || "Unknown Lesson",
-        errors: [(error as Error).message],
+        errors: result.error.issues.map(
+          (issue) => `${issue.path.join(".")}: ${issue.message}`
+        ),
       });
     }
   });
 
   // Log validation summary
   if (errors.length > 0) {
-    console.error("\nLesson Validation Errors:");
+    console.log("\nLesson Validation Errors:");
     errors.forEach(({ lessonName, errors }) => {
-      console.error(`\n${lessonName}:`);
-      errors.forEach((error) => console.error(`- ${error}`));
+      console.log(`\n${lessonName}:`);
+      // errors.forEach((error) => console.error(`- ${error}`));
     });
     console.warn(
       `\nLoaded ${validLessons.length} out of ${allLessons.length} lessons.`
     );
-  } else {
-    console.log(`Successfully loaded all ${validLessons.length} lessons.`);
   }
 
   return validLessons;
@@ -134,23 +122,11 @@ export const loadLessons = (): Lesson[] => {
 
 // Array of all lesson data
 const allLessons = [
-  atTheBar,
-  atTheRestraunt,
-  basicThai,
   combos1,
   combos2,
   envirenmentalSigns,
-  food1,
-  food2veg,
-  greetings,
-  languageLearning2,
-  languageLearning,
-  lessonForKids1,
-  numbers,
-  pronunciationAndSpelling,
   syllables1,
   syllables2,
-  verbs,
   words1,
 ];
 

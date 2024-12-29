@@ -1,101 +1,165 @@
-export interface Language {
-  code: string;
-  name: string;
-  nativeName: string;
-}
+// Basic Types
+export type InterleaveStrategy = "random" | "balanced" | "progressive";
+export type RecallCategory = "unseen" | "skipped" | "mastered" | "practice";
+export type ConfidenceLevel = 1 | 2 | 3 | 4 | 5;
+export type CardSource = "practice" | "mastered" | "unseen";
 
-export interface TargetLanguage extends Language {
-  script: string;
-}
+// Card Structure
+export type CardSide = {
+  markdown: string; // Can include text, images, audio via markdown syntax
+  metadata?: {
+    pronunciation?: string;
+    notes?: string;
+  };
+};
 
-export interface LanguagePair {
-  target: TargetLanguage;
-  native: Language;
-}
+// Practice Events and History
+export type PracticeEvent = {
+  timestamp: number;
+  result: RecallCategory;
+  timeSpent: number; // milliseconds
+  recalledSide: 0 | 1; // Index of the side being recalled
+  confidenceLevel: ConfidenceLevel;
+  isCorrect: boolean; // Self-reported accuracy
+  attemptCount: number; // Times seen in this session
+  sourceCategory: CardSource;
+};
 
-export interface Example {
-  text: string;
-  translation: string;
-  romanization: string;
-}
-
-export interface VocabularyItem {
+// Core Lesson Items
+export type LessonItem = {
   id: string;
-  text: string;
-  translation: string;
-  romanization: string;
-  difficulty?: number;
-  tags: string[];
-  examples: Example[];
-}
-
-export interface Lesson {
-  lessonName: string;
-  lessonDescription: string;
-  lessonLevel: "beginner" | "intermediate" | "advanced";
-  lessonType: string;
-  tags: string[];
-  difficulty: 1 | 2 | 3 | 4 | 5;
-  languagePair: LanguagePair;
-  items: VocabularyItem[];
-}
-
-// Game state types (not part of schema but needed for the app)
-export interface LessonItem {
-  text: string;
-}
-
-export interface WorkingSetItem {
-  text: string;
-  mastery: number;
-}
-
-export interface ItemState {
-  mastery: number;
-  lastStudied: number;
-}
-
-export interface LessonState {
-  progressionMode: "progression" | "random" | "discovery";
-  itemStates: Record<string, ItemState>;
-  lastAddedIndex: number;
-  problemList: string[];
-  possibleProblemList: string[];
-  workingList: string[];
-}
-
-// Simplified working set item that references the original vocabulary item
-export interface WorkingSetItem {
-  id: string; // References VocabularyItem.id
-  mastery: number;
-  vocabularyItem: VocabularyItem; // Store the full vocabulary item
-}
-
-export interface GameProgress {
-  currentIndex: number;
-  totalItems: number;
-}
-
-export interface LessonProgress {
-  total: number;
-  mastered: number;
-  inProgress: number;
-}
-
-// Player profile
-export interface PlayerProfile {
-  id: string;
-  name: string;
-  age?: number;
-  gender?: "male" | "female" | "other" | "prefer-not-to-say";
-  nativeLanguage?: string;
-  learningGoals?: string[];
+  sides: [CardSide, CardSide];
+  practiceHistory: PracticeEvent[];
+  recallCategory: RecallCategory;
   createdAt: number;
-  lastActive: number;
-}
+  updatedAt: number;
+  nextReviewDate?: Date;
+  tags: string[];
+  categories: string[]; // e.g. ['greetings', 'numbers', 'food']
+  topicId?: string; // For broader groupings
+  lastConfidenceLevel?: ConfidenceLevel;
+  intervalModifier: number; // For SRS algorithm
+};
 
-// Configuration types
-export interface GameSettings {
+// AI-Generated Study Materials
+export type StudyGuide = {
+  id: string;
+  lessonId: string;
+  outline: Array<{
+    fact: string;
+    importance: number;
+    relatedCards: string[]; // Card IDs
+  }>;
+  connections: Array<{
+    cards: string[]; // Card IDs
+    relationshipType: string;
+    description: string;
+  }>;
+  mnemonics: Array<{
+    cardIds: string[];
+    technique: string;
+    description: string;
+  }>;
+};
+
+// Source Content
+export type SourceMaterial = {
+  id: string;
+  type: "text" | "image" | "audio";
+  content: string; // Could be text or URL
+  processed: boolean;
+  extractedCards: string[]; // Card IDs
+  language?: string;
+  chapter?: string;
+  topic?: string;
+};
+
+// Lesson Metadata
+export type LessonMetadata = {
+  id: string;
+  name: string;
+  description: string;
+  categories: string[];
+  difficulty: "beginner" | "intermediate" | "advanced";
+  estimatedTime: number; // minutes
+  totalItems: number;
+  version: number; // For data migrations
+};
+
+// Progress Tracking
+export type LessonProgress = {
+  startedAt: number;
+  lastAccessedAt: number;
+  practiceSetIds: string[];
+  practiceSetMaxLength: number;
+  streakDays: number;
+  bestStreak: number;
+  totalTimeSpent: number;
+  accuracyRate: number;
+  recentlyShownCategories: Array<{
+    category: string;
+    timestamp: number;
+  }>;
+  stats: {
+    unseen: number;
+    skipped: number;
+    mastered: number;
+    practice: number;
+  };
+};
+
+// Main Game State
+export type GameState = {
+  // All available lessons (lazy loaded)
+  lessonData: {
+    [id: string]: {
+      metadata: LessonMetadata;
+      items?: LessonItem[]; // Optional until loaded
+      syncStatus?: "synced" | "pending" | "conflict";
+      studyGuide?: StudyGuide;
+      sourceMaterial?: SourceMaterial;
+    };
+  };
+
+  // Current active lesson state
+  currentLesson: {
+    id: string; // References lessonData
+    progress: LessonProgress;
+    items: LessonItem[];
+  } | null;
+
+  completedLessons: string[]; // Lesson IDs
+
+  interleavedSessions?: {
+    activeLessonIds: string[];
+    practiceSetIds: string[];
+    lastAccessed: number;
+  };
+
+  // Global settings
+  settings: {
+    defaultPracticeSetSize: number;
+    audioEnabled: boolean;
+    interleaving: {
+      enabled: boolean;
+      strategy: InterleaveStrategy;
+      minCategorySpacing: number; // Min cards between same category
+    };
+    srsSettings: {
+      baseInterval: number; // Base time between reviews
+      intervalModifier: number; // Global modifier for intervals
+      failureSetback: number; // How much to reduce interval on failure
+      masteredReviewFrequency?: number; // How often to show mastered cards
+    };
+    offlineMode: {
+      enabled: boolean;
+      maxCacheSize: number; // MB
+    };
+  };
+};
+
+// Game Settings
+export type GameSettings = {
   invertTranslation: boolean;
   showRomanization: boolean;
   showExamples: boolean;
@@ -105,12 +169,18 @@ export interface GameSettings {
     autoPlay: boolean;
   };
   profile: PlayerProfile;
-}
+};
 
-// Speech function parameters
-export interface SpeakFunctionParams {
-  item: WorkingSetItem;
-  setSpeaking: () => void;
-  setError: () => void;
-  onEnd: () => void;
-}
+export type PlayerProfile = {
+  id: string;
+  name: string;
+  createdAt: number;
+  lastActive: number;
+};
+
+// Lesson Type
+export type Lesson = {
+  id: string;
+  title: string;
+  items: LessonItem[];
+};

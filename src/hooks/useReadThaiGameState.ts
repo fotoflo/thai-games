@@ -1,6 +1,9 @@
+import { useCallback } from "react";
 import { useGameSettings } from "./game/useGameSettings";
 import { useLessons } from "./game/useLessons";
 import { useWorkingSet } from "./game/useWorkingSet";
+import { useFlashcardMachine } from "./useFlashcardMachine";
+import { RecallCategory, CardSource } from "../types/lessons";
 
 export const useReadThaiGameState = () => {
   const gameSettings = useGameSettings();
@@ -11,13 +14,11 @@ export const useReadThaiGameState = () => {
     progressionMode: lessonState.progressionMode,
   });
 
-<<<<<<< Updated upstream
-=======
-  const useFlashcardMachine = useFlashcardMachine();
+  const flashcardMachine = useFlashcardMachine();
 
   // Handle first pass choices
   const handleFirstPassChoice = useCallback(
-    (itemId: string, choice: "skip" | "mastered" | "practice") => {
+    (itemId: string, choice: RecallCategory) => {
       // Update lesson state
       lessonState.handleFirstPassChoice(itemId, choice);
 
@@ -26,13 +27,13 @@ export const useReadThaiGameState = () => {
         workingSet.markForPractice(itemId);
       } else if (choice === "mastered") {
         workingSet.markAsMastered(itemId);
-      } else if (choice === "skip") {
+      } else if (choice === "skipped") {
         workingSet.markAsSkipped(itemId);
       }
 
       // If it's a practice item, add it to the working set
       if (choice === "practice") {
-        const item = lessons[lessonState.currentLesson].items.find(
+        const item = lessonState.lessons[lessonState.currentLesson]?.items.find(
           (i) => i.id === itemId
         );
         if (item && !workingSet.isWorkingSetFull) {
@@ -41,12 +42,61 @@ export const useReadThaiGameState = () => {
               id: itemId,
               mastery: 1,
               vocabularyItem: item,
+              lastReviewed: new Date(),
             },
           ]);
         }
       }
+
+      // Update game state
+      flashcardMachine.updateGameState((draft) => {
+        if (!draft.currentLesson) return;
+        const card = draft.currentLesson.items.find((i) => i.id === itemId);
+        if (!card) return;
+
+        const oldCategory = card.recallCategory;
+        card.recallCategory = choice;
+
+        // Update stats based on the transition
+        if (choice === "practice") {
+          draft.currentLesson.progress.practiceSetIds.push(itemId);
+          draft.currentLesson.progress.stats.practice++;
+          draft.currentLesson.progress.stats.unseen--;
+        } else if (choice === "mastered") {
+          // Remove from practice set if it was there
+          draft.currentLesson.progress.practiceSetIds =
+            draft.currentLesson.progress.practiceSetIds.filter(
+              (id) => id !== itemId
+            );
+          draft.currentLesson.progress.stats.mastered++;
+
+          // Update stats based on previous category
+          if (oldCategory === "practice") {
+            draft.currentLesson.progress.stats.practice--;
+          } else if (oldCategory === "unseen") {
+            draft.currentLesson.progress.stats.unseen--;
+          }
+
+          card.practiceHistory.push({
+            timestamp: Date.now(),
+            result: choice,
+            timeSpent: 1000,
+            recalledSide: 0,
+            confidenceLevel: 5,
+            isCorrect: true,
+            attemptCount: 1,
+            sourceCategory:
+              oldCategory === "practice"
+                ? "practice"
+                : ("unseen" as CardSource),
+          });
+        } else if (choice === "skipped") {
+          draft.currentLesson.progress.stats.skipped++;
+          draft.currentLesson.progress.stats.unseen--;
+        }
+      });
     },
-    [lessonState, workingSet, lessons]
+    [lessonState, workingSet, flashcardMachine]
   );
 
   // Handle progression mode changes
@@ -67,7 +117,6 @@ export const useReadThaiGameState = () => {
     [lessonState, workingSet]
   );
 
->>>>>>> Stashed changes
   return {
     // Game settings
     ...gameSettings,
@@ -76,16 +125,20 @@ export const useReadThaiGameState = () => {
     currentLesson: lessonState.currentLesson,
     setCurrentLesson: lessonState.setCurrentLesson,
     progressionMode: lessonState.progressionMode,
-    setProgressionMode: lessonState.setProgressionMode,
+    setProgressionMode: handleProgressionModeChange,
 
     // Working set
     workingSet: workingSet.workingSet,
     activeVocabItem: workingSet.activeVocabItem,
-    currentItem: workingSet.currentItem,
-    setActiveVocabItem: workingSet.setActiveVocabItem,
+    currentItem: workingSet.activeVocabItem, // Alias for activeVocabItem
+    setActiveVocabItem: (item: typeof workingSet.activeVocabItem) => {
+      if (item) {
+        workingSet.addToWorkingSet([item]);
+      }
+    },
     addMoreItems: workingSet.addMoreItems,
     nextItem: workingSet.nextItem,
-    handleFirstPassChoice: workingSet.handleFirstPassChoice,
+    handleFirstPassChoice,
 
     // Lesson data
     lessons: lessonState.lessons,
@@ -93,5 +146,11 @@ export const useReadThaiGameState = () => {
 
     // Progress tracking
     lessonSubset: workingSet.lessonSubset,
+
+    // Game state
+    gameState: flashcardMachine.gameState,
+
+    // Update game state
+    updateGameState: flashcardMachine.updateGameState,
   };
 };
