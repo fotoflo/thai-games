@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useThaiSpeech } from "../../hooks/useThaiSpeech";
 
 import ModalContainer from "../ui/ModalContainer";
 import MasteryControls from "./MasteryControls";
 import DetailCard from "./DetailCard";
+import { LessonItem } from "../../types/lessons";
 
 interface FlashCardModalProps {
-  vocabItem: any; // Replace with the appropriate type
+  vocabItem: LessonItem;
   onNext: () => void;
   trigger: string | null;
   onClose: () => void;
@@ -18,13 +19,10 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
   trigger,
   onClose,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const { handleSpeak } = useThaiSpeech(false, false);
 
   useEffect(() => {
     if (trigger === "CheckTranslationButton") {
-      setIsVisible(true);
-    } else {
       const timer = setTimeout(() => {
         onClose();
       }, 2000);
@@ -49,7 +47,18 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
             size="xl"
           />
         </div>
-        <MasteryControls onRatingSelect={onNext} className="mb-4" />
+        <MasteryControls
+          onRatingSelect={onNext}
+          className="mb-4"
+          mode="spacedRepetition"
+          workingSet={[]}
+          lessonSubset={{
+            unseenItems: [],
+            practiceItems: [],
+            masteredItems: [],
+            skippedItems: [],
+          }}
+        />
       </div>
     </ModalContainer>
   );

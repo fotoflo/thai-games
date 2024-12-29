@@ -8,8 +8,6 @@ interface WorkingSetCardsProps {
   selectedItem: WorkingSetItem | null;
   onCardSelect: (item: WorkingSetItem) => void;
   addMoreItems: () => void;
-  progressionMode: string;
-  currentLesson: number;
   lessonSubset: {
     practiceItems: string[];
   };
@@ -33,8 +31,6 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
   selectedItem,
   onCardSelect,
   addMoreItems,
-  progressionMode,
-  currentLesson,
   lessonSubset,
 }) => {
   return (
@@ -42,7 +38,7 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 flex-wrap justify-center">
           {workingSet.map((item) => {
-            const text = item.vocabularyItem.text;
+            const text = item.vocabularyItem.sides[0].markdown;
             if (!text) return null;
 
             const phoneticText = thaiToIPA(text);
@@ -82,22 +78,15 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
               </div>
             );
           })}
-          {workingSet.length < 5 && (
-            <div className="ml-auto">
-              <button
-                onClick={addMoreItems}
-                className="flex flex-col items-center justify-center p-2 rounded bg-green-600 hover:bg-green-500 transition-colors cursor-pointer w-[60px] h-[80px]"
-                title="Add One More Item"
-              >
-                <PlusCircle size={24} className="text-white" />
-              </button>
-            </div>
+          {lessonSubset.practiceItems.length > 0 && (
+            <button
+              onClick={addMoreItems}
+              className="w-[60px] h-[80px] bg-gray-800 hover:bg-blue-600 transition-colors rounded flex items-center justify-center"
+            >
+              <PlusCircle className="text-gray-400" />
+            </button>
           )}
         </div>
-      </div>
-      <div className="absolute bottom-0 right-0 text-xs text-gray-400">
-        PracticeSet: {lessonSubset.practiceItems.length}, WorkingSet:{" "}
-        {workingSet.length}
       </div>
     </div>
   );

@@ -1,64 +1,78 @@
 import { z } from "zod";
 import { Lesson } from "../types/lessons";
 
-// Import all lesson files
-import atTheBar from "./at-the-bar.json";
-import atTheRestraunt from "./at-the-restraunt.json";
+// Import only the active lessons
 import basicThai from "./basic-thai.json";
-import combos1 from "./combos1.json";
-import combos2 from "./combos2.json";
-import envirenmentalSigns from "./envirenmental-signs.json";
-import food1 from "./food1.json";
-import food2veg from "./food2veg.json";
-import greetings from "./greetings.json";
-import languageLearning2 from "./language-learning-2.json";
-import languageLearning from "./language-learning.json";
-import lessonForKids1 from "./lesson-for-kids1.json";
-import pronunciationAndSpelling from "./pronunciation-and-spelling.json";
-import syllables1 from "./syllables1.json";
-import syllables2 from "./syllables2.json";
-import verbs from "./verbs.json";
 import words1 from "./words1.json";
 
+// Comment out unused lessons
+// import atTheBar from "./at-the-bar.json";
+// import atTheRestraunt from "./at-the-restraunt.json";
+// import combos1 from "./combos1.json";
+// import combos2 from "./combos2.json";
+// import envirenmentalSigns from "./envirenmental-signs.json";
+// import food1 from "./food1.json";
+// import food2veg from "./food2veg.json";
+// import greetings from "./greetings.json";
+// import languageLearning2 from "./language-learning-2.json";
+// import languageLearning from "./language-learning.json";
+// import lessonForKids1 from "./lesson-for-kids1.json";
+// import pronunciationAndSpelling from "./pronunciation-and-spelling.json";
+// import syllables1 from "./syllables1.json";
+// import syllables2 from "./syllables2.json";
+// import verbs from "./verbs.json";
+
 // Define Zod schemas
-const LanguagePairSchema = z.object({
-  target: z.object({
-    code: z.string(),
-  }),
-  native: z.object({
-    code: z.string(),
-  }),
+const CardSideSchema = z.object({
+  markdown: z.string(),
+  metadata: z
+    .object({
+      pronunciation: z.string().optional(),
+      notes: z.string().optional(),
+    })
+    .optional(),
+});
+
+const PracticeEventSchema = z.object({
+  timestamp: z.number(),
+  result: z.enum(["unseen", "skipped", "mastered", "practice"]),
+  timeSpent: z.number(),
+  recalledSide: z.union([z.literal(0), z.literal(1)]),
+  confidenceLevel: z.union([
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+    z.literal(5),
+  ]),
+  isCorrect: z.boolean(),
+  attemptCount: z.number(),
+  sourceCategory: z.enum(["practice", "mastered", "unseen"]),
 });
 
 const LessonItemSchema = z.object({
   id: z.string(),
-  text: z.string(),
-  translation: z.string(),
+  sides: z.tuple([CardSideSchema, CardSideSchema]),
+  practiceHistory: z.array(PracticeEventSchema),
+  recallCategory: z.enum(["unseen", "skipped", "mastered", "practice"]),
+  createdAt: z.number(),
+  updatedAt: z.number(),
   tags: z.array(z.string()),
-  examples: z.array(
-    z.object({
-      text: z.string(),
-      translation: z.string(),
-      romanization: z.string(),
-    })
-  ),
-  notes: z.string().optional(),
-  pronunciation: z.string().optional(),
+  categories: z.array(z.string()),
+  intervalModifier: z.number(),
 });
 
 const LessonSchema = z.object({
-  lessonName: z.string(),
-  lessonDescription: z.string(),
-  lessonLevel: z.enum(["beginner", "intermediate", "advanced"]),
-  lessonType: z.string(),
-  tags: z.array(z.string()).optional(),
-  difficulty: z.number().int().min(1).max(5),
-  languagePair: LanguagePairSchema,
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  categories: z.array(z.string()),
+  difficulty: z.enum(["beginner", "intermediate", "advanced"]),
+  estimatedTime: z.number(),
+  totalItems: z.number(),
+  version: z.number(),
   items: z.array(LessonItemSchema),
 });
-
-// Type inference from schema
-type ZodLesson = z.infer<typeof LessonSchema>;
 
 // Updated validation function with detailed error reporting
 export const validateLesson = (lesson: unknown): lesson is Lesson => {
@@ -66,7 +80,9 @@ export const validateLesson = (lesson: unknown): lesson is Lesson => {
     const result = LessonSchema.safeParse(lesson);
 
     if (!result.success) {
-      console.log(`Validation error in lesson: ${(lesson as any)?.lessonName}`);
+      console.log(
+        `Validation error in lesson: ${(lesson as { name?: string })?.name}`
+      );
       console.log("Validation errors:");
       result.error.issues.forEach((issue) => {
         console.log(`- Path: ${issue.path.join(".")}`);
@@ -78,7 +94,9 @@ export const validateLesson = (lesson: unknown): lesson is Lesson => {
     return true;
   } catch (error) {
     console.log(
-      `Unexpected error validating lesson: ${(lesson as any)?.lessonName}`,
+      `Unexpected error validating lesson: ${
+        (lesson as { name?: string })?.name
+      }`,
       error
     );
     return false;
@@ -97,7 +115,7 @@ export const loadLessons = (): Lesson[] => {
       validLessons.push(result.data);
     } else {
       errors.push({
-        lessonName: (lesson as any)?.lessonName || "Unknown Lesson",
+        lessonName: (lesson as { name?: string })?.name || "Unknown Lesson",
         errors: result.error.issues.map(
           (issue) => `${issue.path.join(".")}: ${issue.message}`
         ),
@@ -110,7 +128,7 @@ export const loadLessons = (): Lesson[] => {
     console.log("\nLesson Validation Errors:");
     errors.forEach(({ lessonName, errors }) => {
       console.log(`\n${lessonName}:`);
-      // errors.forEach((error) => console.error(`- ${error}`));
+      errors.forEach((error) => console.error(`- ${error}`));
     });
     console.warn(
       `\nLoaded ${validLessons.length} out of ${allLessons.length} lessons.`
@@ -121,27 +139,20 @@ export const loadLessons = (): Lesson[] => {
 };
 
 // Array of all lesson data
-const allLessons = [
-  combos1,
-  combos2,
-  envirenmentalSigns,
-  syllables1,
-  syllables2,
-  words1,
-];
+const allLessons = [words1, basicThai];
 
 // Export lessons array directly
 export const lessons = loadLessons();
 
 // Helper functions
 export const getLessonById = (id: string): Lesson | undefined =>
-  lessons.find((lesson) => lesson.lessonName === id);
+  lessons.find((lesson) => lesson.id === id);
 
-export const getLessonsByLevel = (level: Lesson["lessonLevel"]): Lesson[] =>
-  lessons.filter((lesson) => lesson.lessonLevel === level);
+export const getLessonsByLevel = (level: Lesson["difficulty"]): Lesson[] =>
+  lessons.filter((lesson) => lesson.difficulty === level);
 
 export const getLessonsByTag = (tag: string): Lesson[] =>
-  lessons.filter((lesson) => lesson.tags.includes(tag));
+  lessons.filter((lesson) => lesson.categories.includes(tag));
 
 export const getLessonsByDifficulty = (
   difficulty: Lesson["difficulty"]

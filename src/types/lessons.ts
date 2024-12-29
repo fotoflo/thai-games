@@ -33,12 +33,30 @@ export type LessonItem = {
   recallCategory: RecallCategory;
   createdAt: number;
   updatedAt: number;
-  nextReviewDate?: Date;
   tags: string[];
   categories: string[]; // e.g. ['greetings', 'numbers', 'food']
-  topicId?: string; // For broader groupings
-  lastConfidenceLevel?: ConfidenceLevel;
   intervalModifier: number; // For SRS algorithm
+};
+
+// Lesson Structure
+export type Lesson = {
+  id: string;
+  name: string;
+  description: string;
+  categories: string[];
+  difficulty: "beginner" | "intermediate" | "advanced";
+  estimatedTime: number; // minutes
+  totalItems: number;
+  version: number; // For data migrations
+  items: LessonItem[];
+};
+
+// Working Set Item
+export type WorkingSetItem = {
+  id: string;
+  mastery: number;
+  vocabularyItem: LessonItem;
+  lastReviewed: Date;
 };
 
 // AI-Generated Study Materials
@@ -176,11 +194,4 @@ export type PlayerProfile = {
   name: string;
   createdAt: number;
   lastActive: number;
-};
-
-// Lesson Type
-export type Lesson = {
-  id: string;
-  title: string;
-  items: LessonItem[];
 };

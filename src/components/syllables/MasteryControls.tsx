@@ -1,16 +1,20 @@
 import React from "react";
 import { RefreshCcw, Check, SkipForward, Brain } from "lucide-react";
-import { VocabularyItem } from "@/types/lessons";
-import { LessonSubset } from "@/hooks/game/useWorkingSet";
 
 type ProgressionMode = "firstPass" | "spacedRepetition" | "test";
+
+interface LessonSubset {
+  unseenItems: string[];
+  practiceItems: string[];
+  masteredItems: string[];
+  skippedItems: string[];
+}
 
 interface MasteryControlsProps {
   onRatingSelect: (value: number) => void;
   onFirstPassChoice?: (choice: "skip" | "mastered" | "practice") => void;
   mode: ProgressionMode;
   className?: string;
-  workingSet: VocabularyItem[];
   lessonSubset: LessonSubset;
 }
 
@@ -20,7 +24,6 @@ const MasteryControls: React.FC<MasteryControlsProps> = ({
   mode,
   className,
   lessonSubset,
-  workingSet,
 }) => {
   const renderFirstPassControls = () => (
     <div className="grid grid-cols-3 gap-2">

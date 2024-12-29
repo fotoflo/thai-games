@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ItemDisplay from "./ItemDisplay";
-import { Example, VocabularyItem } from "@/types/lessons";
+import { LessonItem } from "@/types/lessons";
 
 type Size = "sm" | "md" | "lg" | "xl";
 
@@ -65,7 +65,7 @@ const sizeConfigs: Record<Size, SizeConfig> = {
 };
 
 interface DetailCardProps {
-  vocabItem: VocabularyItem;
+  vocabItem: LessonItem;
   showExamples: boolean;
   onToggleExamples: () => void;
   onSpeak: (text: string) => void;
@@ -86,56 +86,53 @@ const DetailCard: React.FC<DetailCardProps> = ({
       <div
         className={`${sizeConfig.containerPadding} ${sizeConfig.contentSpacing}`}
       >
-        <ItemDisplay
-          vocabItem={vocabItem}
-          textSize={sizeConfig.textSize}
-          iconSize={sizeConfig.iconSize}
-        />
+        <div
+          className="cursor-pointer"
+          onClick={() => onSpeak(vocabItem.sides[0].markdown)}
+        >
+          <ItemDisplay
+            vocabItem={vocabItem}
+            textSize={sizeConfig.textSize}
+            iconSize={sizeConfig.iconSize}
+          />
+        </div>
         <div className="space-y-1">
-          <div className={`${sizeConfig.translationTextSize} text-slate-300`}>
-            translation: {vocabItem?.translation}
+          <div
+            className={`${sizeConfig.translationTextSize} text-slate-300 cursor-pointer`}
+            onClick={() => onSpeak(vocabItem.sides[1].markdown)}
+          >
+            translation: {vocabItem.sides[1].markdown}
           </div>
           <div
             className={`${sizeConfig.romanizationTextSize} text-slate-400 font-mono`}
           >
-            romanization: {vocabItem?.romanization}
+            romanization: {vocabItem.sides[0].metadata?.pronunciation}
           </div>
         </div>
 
-        {vocabItem?.examples?.length > 0 && (
+        {vocabItem.tags.length > 0 && (
           <button
             onClick={onToggleExamples}
             className={`flex items-center gap-2 mt-2 ${sizeConfig.romanizationTextSize} text-slate-400 hover:text-slate-300 w-full justify-between p-2 rounded-lg hover:bg-slate-700/30`}
           >
-            <span>Examples ({vocabItem?.examples.length})</span>
+            <span>Tags ({vocabItem.tags.length})</span>
             {showExamples ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
           </button>
         )}
       </div>
 
-      {showExamples && vocabItem?.examples && (
+      {showExamples && vocabItem.tags.length > 0 && (
         <div className="border-t border-slate-700/50">
           <div className="divide-y divide-slate-700/50">
-            {vocabItem?.examples.map((example: Example, idx) => (
+            {vocabItem.tags.map((tag, idx) => (
               <div
                 key={idx}
                 className={`${sizeConfig.examplePadding} hover:bg-slate-700/20`}
               >
-                <ItemDisplay
-                  vocabItem={example}
-                  textSize={sizeConfig.exampleTextSize}
-                  iconSize={sizeConfig.exampleIconSize}
-                  className="mb-2 items-start"
-                />
                 <div
                   className={`${sizeConfig.romanizationTextSize} text-slate-400`}
                 >
-                  {example.translation}
-                </div>
-                <div
-                  className={`${sizeConfig.romanizationTextSize} text-slate-500 font-mono mt-1`}
-                >
-                  {example.romanization}
+                  {tag}
                 </div>
               </div>
             ))}

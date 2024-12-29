@@ -1,50 +1,56 @@
 {
-  "lessonName": "Basic Thai",
-  "languagePair": {
-    "target": {
-      "code": "th",
-      "name": "Thai",
-      "nativeName": "ภาษาไทย",
-      "script": "thai"
-    },
-    "native": {
-      "code": "en",
-      "name": "English",
-      "nativeName": "English"
-    }
-  },
+  "id": "basic-thai",
+  "name": "Basic Thai",
+  "description": "Basic Thai vocabulary focusing on simple words and common animals",
+  "categories": ["basics", "animals", "nature"],
+  "difficulty": "beginner",
+  "estimatedTime": 15,
+  "totalItems": 2,
+  "version": 1,
   "items": [
     {
       "id": "ka",
-      "text": "กา",
-      "translation": "crow",
-      "romanization": "gaa",
-      "examples": [
+      "sides": [
         {
-          "text": "กาดำบินมา",
-          "translation": "The black crow flew here",
-          "romanization": "gaa dam bin maa"
+          "markdown": "กา",
+          "metadata": {
+            "pronunciation": "gaa",
+            "notes": "This is a common word used in basic Thai sentences"
+          }
+        },
+        {
+          "markdown": "crow"
         }
       ],
-      "difficulty": 1,
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
       "tags": ["animal", "nature"],
-      "notes": "This is a common word used in basic Thai sentences"
+      "categories": ["animals", "nature"],
+      "intervalModifier": 1
     },
     {
       "id": "ma",
-      "text": "ม้า",
-      "translation": "horse",
-      "romanization": "máa",
-      "examples": [
+      "sides": [
         {
-          "text": "ม้าวิ่งเร็ว",
-          "translation": "The horse runs fast",
-          "romanization": "máa wîng reo"
+          "markdown": "ม้า",
+          "metadata": {
+            "pronunciation": "máa",
+            "notes": "Notice the high tone mark"
+          }
+        },
+        {
+          "markdown": "horse"
         }
       ],
-      "difficulty": 1,
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
       "tags": ["animal", "common"],
-      "notes": "Notice the high tone mark"
+      "categories": ["animals"],
+      "intervalModifier": 1
     }
   ]
 }

@@ -1,175 +1,224 @@
 {
-  "lessonName": "First Words",
-  "lessonDescription": "Essential Thai vocabulary for beginners, covering basic greetings, polite expressions, and common descriptive words",
-  "lessonLevel": "beginner",
-  "lessonType": "vocabulary",
-  "tags": ["basics", "greetings", "everyday-phrases", "adjectives"],
-  "difficulty": 1,
-  "languagePair": {
-    "target": {
-      "code": "th",
-      "name": "Thai",
-      "nativeName": "ภาษาไทย",
-      "script": "thai"
-    },
-    "native": {
-      "code": "en",
-      "name": "English",
-      "nativeName": "English"
-    }
-  },
+  "id": "words1",
+  "name": "First Words",
+  "description": "Essential Thai vocabulary for beginners, covering basic greetings, polite expressions, and common descriptive words",
+  "categories": ["basics", "greetings", "everyday-phrases", "adjectives"],
+  "difficulty": "beginner",
+  "estimatedTime": 30,
+  "totalItems": 10,
+  "version": 1,
   "items": [
     {
       "id": "sawasdee",
-      "text": "สวัสดี",
-      "translation": "hello",
-      "romanization": "sà-wàt-dii",
-      "notes": "Formal greeting",
-      "examples": [
+      "sides": [
         {
-          "text": "สวัสดีครับ/ค่ะ",
-          "translation": "Hello (polite, male/female)",
-          "romanization": "sà-wàt-dii kráp/kâ"
+          "markdown": "สวัสดี",
+          "metadata": {
+            "pronunciation": "sà-wàt-dii",
+            "notes": "Formal greeting"
+          }
+        },
+        {
+          "markdown": "hello"
         }
       ],
-      "difficulty": 1,
-      "tags": ["greeting", "formal", "common"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["greeting", "formal", "common"],
+      "categories": ["greetings"],
+      "intervalModifier": 1
     },
     {
       "id": "khobkhun",
-      "text": "ขอบคุณ",
-      "translation": "thank you",
-      "romanization": "kɔ̀ɔp-kuun",
-      "notes": "Formal thanks",
-      "examples": [
+      "sides": [
         {
-          "text": "ขอบคุณมาก",
-          "translation": "Thank you very much",
-          "romanization": "kɔ̀ɔp-kuun mâak"
+          "markdown": "ขอบคุณ",
+          "metadata": {
+            "pronunciation": "kɔ̀ɔp-kuun",
+            "notes": "Formal thanks"
+          }
+        },
+        {
+          "markdown": "thank you"
         }
       ],
-      "difficulty": 1,
-      "tags": ["polite", "formal", "common"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["polite", "formal", "common"],
+      "categories": ["greetings"],
+      "intervalModifier": 1
     },
     {
       "id": "chai",
-      "text": "ใช่",
-      "translation": "yes",
-      "romanization": "châi",
-      "examples": [
+      "sides": [
         {
-          "text": "ใช่ไหม",
-          "translation": "Is that right?",
-          "romanization": "châi mǎi"
+          "markdown": "ใช่",
+          "metadata": {
+            "pronunciation": "châi"
+          }
+        },
+        {
+          "markdown": "yes"
         }
       ],
-      "difficulty": 1,
-      "tags": ["basic", "common"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["basic", "common"],
+      "categories": ["basics"],
+      "intervalModifier": 1
     },
     {
       "id": "mai",
-      "text": "ไม่",
-      "translation": "no",
-      "romanization": "mâi",
-      "examples": [
+      "sides": [
         {
-          "text": "ไม่ใช่",
-          "translation": "No, it's not",
-          "romanization": "mâi châi"
+          "markdown": "ไม่",
+          "metadata": {
+            "pronunciation": "mâi"
+          }
+        },
+        {
+          "markdown": "no"
         }
       ],
-      "difficulty": 1,
-      "tags": ["basic", "common"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["basic", "common"],
+      "categories": ["basics"],
+      "intervalModifier": 1
     },
     {
       "id": "maipenrai",
-      "text": "ไม่เป็นไร",
-      "translation": "no problem/it's okay",
-      "romanization": "mâi-pen-rai",
-      "examples": [
+      "sides": [
         {
-          "text": "ไม่เป็นไรครับ/ค่ะ",
-          "translation": "It's okay (polite, male/female)",
-          "romanization": "mâi-pen-rai kráp/kâ"
+          "markdown": "ไม่เป็นไร",
+          "metadata": {
+            "pronunciation": "mâi-pen-rai"
+          }
+        },
+        {
+          "markdown": "no problem/it's okay"
         }
       ],
-      "difficulty": 1,
-      "tags": ["polite", "common"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["polite", "common"],
+      "categories": ["everyday-phrases"],
+      "intervalModifier": 1
     },
     {
       "id": "kin",
-      "text": "กิน",
-      "translation": "to eat",
-      "romanization": "gin",
-      "examples": [
+      "sides": [
         {
-          "text": "กินข้าว",
-          "translation": "Eat rice/have a meal",
-          "romanization": "gin khâao"
+          "markdown": "กิน",
+          "metadata": {
+            "pronunciation": "gin"
+          }
+        },
+        {
+          "markdown": "to eat"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "food"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["verb", "food"],
+      "categories": ["basics"],
+      "intervalModifier": 1
     },
     {
       "id": "nam",
-      "text": "น้ำ",
-      "translation": "water",
-      "romanization": "náam",
-      "examples": [
+      "sides": [
         {
-          "text": "น้ำเย็น",
-          "translation": "Cold water",
-          "romanization": "náam yen"
+          "markdown": "น้ำ",
+          "metadata": {
+            "pronunciation": "náam"
+          }
+        },
+        {
+          "markdown": "water"
         }
       ],
-      "difficulty": 1,
-      "tags": ["noun", "drink", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["noun", "drink", "basic"],
+      "categories": ["basics"],
+      "intervalModifier": 1
     },
     {
       "id": "ron",
-      "text": "ร้อน",
-      "translation": "hot",
-      "romanization": "rɔ́ɔn",
-      "examples": [
+      "sides": [
         {
-          "text": "อากาศร้อน",
-          "translation": "Hot weather",
-          "romanization": "aa-gàat rɔ́ɔn"
+          "markdown": "ร้อน",
+          "metadata": {
+            "pronunciation": "rɔ́ɔn"
+          }
+        },
+        {
+          "markdown": "hot"
         }
       ],
-      "difficulty": 1,
-      "tags": ["adjective", "weather"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["adjective", "weather"],
+      "categories": ["adjectives"],
+      "intervalModifier": 1
     },
     {
       "id": "yen",
-      "text": "เย็น",
-      "translation": "cold",
-      "romanization": "yen",
-      "examples": [
+      "sides": [
         {
-          "text": "น้ำเย็น",
-          "translation": "Cold water",
-          "romanization": "náam yen"
+          "markdown": "เย็น",
+          "metadata": {
+            "pronunciation": "yen"
+          }
+        },
+        {
+          "markdown": "cold"
         }
       ],
-      "difficulty": 1,
-      "tags": ["adjective", "weather"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["adjective", "weather"],
+      "categories": ["adjectives"],
+      "intervalModifier": 1
     },
     {
       "id": "aroi",
-      "text": "อร่อย",
-      "translation": "delicious",
-      "romanization": "à-rɔ̀i",
-      "examples": [
+      "sides": [
         {
-          "text": "อาหารอร่อย",
-          "translation": "The food is delicious",
-          "romanization": "aa-hǎan à-rɔ̀i"
+          "markdown": "อร่อย",
+          "metadata": {
+            "pronunciation": "à-rɔ̀i"
+          }
+        },
+        {
+          "markdown": "delicious"
         }
       ],
-      "difficulty": 1,
-      "tags": ["adjective", "food"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "createdAt": 1703894400000,
+      "updatedAt": 1703894400000,
+      "tags": ["adjective", "food"],
+      "categories": ["adjectives"],
+      "intervalModifier": 1
     }
   ]
 }

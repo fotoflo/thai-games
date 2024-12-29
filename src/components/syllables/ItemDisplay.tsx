@@ -1,7 +1,7 @@
 import React from "react";
 import { Volume2 } from "lucide-react";
 import { useThaiSpeech } from "../../hooks/useThaiSpeech";
-import { VocabularyItem, Example } from "../../types/lessons";
+import { LessonItem } from "../../types/lessons";
 
 const ItemDisplay = ({
   vocabItem,
@@ -14,7 +14,7 @@ const ItemDisplay = ({
   speakOnUnmount = false,
   invertTranslation = false,
 }: {
-  vocabItem: VocabularyItem | Example | null;
+  vocabItem: LessonItem | null;
   textSize?: string;
   iconSize?: number;
   className?: string;
@@ -27,12 +27,16 @@ const ItemDisplay = ({
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,
     speakOnUnmount,
-    vocabItem?.text
+    vocabItem?.sides?.[0]?.markdown
   );
 
   const displayText = invertTranslation
-    ? vocabItem?.translation || vocabItem?.text
-    : vocabItem?.text;
+    ? vocabItem?.sides?.[1]?.markdown || vocabItem?.sides?.[0]?.markdown
+    : vocabItem?.sides?.[0]?.markdown || "";
+
+  if (!vocabItem) {
+    return null;
+  }
 
   return (
     <div
