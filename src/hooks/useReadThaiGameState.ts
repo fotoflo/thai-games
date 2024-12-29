@@ -11,6 +11,63 @@ export const useReadThaiGameState = () => {
     progressionMode: lessonState.progressionMode,
   });
 
+<<<<<<< Updated upstream
+=======
+  const useFlashcardMachine = useFlashcardMachine();
+
+  // Handle first pass choices
+  const handleFirstPassChoice = useCallback(
+    (itemId: string, choice: "skip" | "mastered" | "practice") => {
+      // Update lesson state
+      lessonState.handleFirstPassChoice(itemId, choice);
+
+      // Update working set state based on choice
+      if (choice === "practice") {
+        workingSet.markForPractice(itemId);
+      } else if (choice === "mastered") {
+        workingSet.markAsMastered(itemId);
+      } else if (choice === "skip") {
+        workingSet.markAsSkipped(itemId);
+      }
+
+      // If it's a practice item, add it to the working set
+      if (choice === "practice") {
+        const item = lessons[lessonState.currentLesson].items.find(
+          (i) => i.id === itemId
+        );
+        if (item && !workingSet.isWorkingSetFull) {
+          workingSet.addToWorkingSet([
+            {
+              id: itemId,
+              mastery: 1,
+              vocabularyItem: item,
+            },
+          ]);
+        }
+      }
+    },
+    [lessonState, workingSet, lessons]
+  );
+
+  // Handle progression mode changes
+  const handleProgressionModeChange = useCallback(
+    (mode: "firstPass" | "spacedRepetition" | "test") => {
+      lessonState.setProgressionMode(mode);
+
+      if (mode === "firstPass") {
+        workingSet.loadFirstPassItems();
+      } else if (mode === "spacedRepetition") {
+        // Refresh working set from practice items
+        workingSet.refreshWorkingSet();
+      } else if (mode === "test") {
+        // Clear working set in test mode
+        workingSet.clearWorkingSet();
+      }
+    },
+    [lessonState, workingSet]
+  );
+
+>>>>>>> Stashed changes
   return {
     // Game settings
     ...gameSettings,
