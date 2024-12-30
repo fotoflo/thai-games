@@ -143,11 +143,16 @@ const DebugPage: React.FC = () => {
       data: null,
     },
     {
-      title: "Active Item",
+      title: "Active Item (simplified)",
       data: {
-        activeItemId: gameState.activeItem,
+        thai: gameState.activeItem?.vocabularyItem.sides[0].markdown,
+        english: gameState.activeItem?.vocabularyItem.sides[1].markdown,
+        activeItemId: gameState.activeItem?.id,
+        mastery: gameState.activeItem?.mastery,
+        tags: gameState.activeItem?.vocabularyItem.tags,
       },
     },
+
     {
       title: "Lesson State",
       data: {
@@ -175,6 +180,10 @@ const DebugPage: React.FC = () => {
       title: "Game State",
       data: gameState.gameState,
     },
+    {
+      title: "Active Item",
+      data: gameState.activeItem,
+    },
   ];
 
   return (
@@ -201,12 +210,22 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        {/* State Views Section */}
-        <div className="grid grid-cols-2 gap-4">
+        {/* State Views Section - Pinterest-style layout */}
+        <div className="grid grid-cols-2 gap-4 auto-rows-auto grid-flow-dense">
           {sections
             .filter((section) => section.title !== "Actions")
             .map((section, index) => (
-              <div key={index}>{renderSection(section)}</div>
+              <div
+                key={index}
+                className={`${
+                  section.title === "Active Item" ||
+                  section.title === "Lesson State"
+                    ? "col-span-1 row-span-2"
+                    : "col-span-1"
+                }`}
+              >
+                {renderSection(section)}
+              </div>
             ))}
         </div>
       </div>
