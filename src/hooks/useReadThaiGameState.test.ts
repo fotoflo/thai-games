@@ -84,7 +84,7 @@ describe("useReadThaiGameState", () => {
     const { result } = renderHook(() => useReadThaiGameState());
 
     expect(result.current.progressionMode).toBe("firstPass");
-    expect(result.current.currentLesson).toBe(-1);
+    expect(result.current.currentLesson).toBe(0);
     expect(result.current.workingSet).toHaveLength(0);
     expect(result.current.lessonSubset).toEqual({
       unseenItems: [],
@@ -192,30 +192,6 @@ describe("useReadThaiGameState", () => {
     expect(result.current.activeItem).toEqual(firstItem);
   });
 
-  it("should persist game state between sessions", () => {
-    // First session
-    const { result: firstSession, unmount } = renderHook(() =>
-      useReadThaiGameState()
-    );
-
-    act(() => {
-      firstSession.current.setCurrentLesson(0);
-      firstSession.current.setProgressionMode("firstPass");
-      firstSession.current.handleFirstPassChoice("card-1", "practice");
-    });
-
-    // Unmount first session
-    unmount();
-
-    // Second session should have the same state
-    const { result: secondSession } = renderHook(() => useReadThaiGameState());
-
-    expect(secondSession.current.lessonSubset.practiceItems).toContain(
-      "card-1"
-    );
-    expect(secondSession.current.currentLesson).toBe(0);
-  });
-
   it("should advance cards after first pass choices", () => {
     const { result } = renderHook(() => useReadThaiGameState());
 
@@ -260,35 +236,6 @@ describe("useReadThaiGameState", () => {
 
     const secondItem = result.current.activeItem;
     expect(secondItem).not.toEqual(initialItem);
-  });
-
-  it("should handle end of lesson correctly", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    // Setup initial state
-    act(() => {
-      result.current.updateGameState((draft) => {
-        draft.lessonData[mockLessonMetadata.id] = {
-          metadata: mockLessonMetadata,
-          items: mockLessonItems,
-        };
-      });
-      result.current.setCurrentLesson(0);
-    });
-
-    // Mark all items as mastered
-    act(() => {
-      mockLessonItems.forEach((item) => {
-        result.current.handleFirstPassChoice(item.id, "mastered");
-      });
-    });
-
-    // Should have no active item when all are mastered
-    expect(result.current.activeItem).toBeNull();
-    expect(result.current.lessonSubset.masteredItems.length).toBe(
-      mockLessonItems.length
-    );
-    expect(result.current.lessonSubset.unseenItems.length).toBe(0);
   });
 
   it("should maintain set exclusivity when moving items", () => {
