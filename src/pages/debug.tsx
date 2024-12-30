@@ -136,9 +136,9 @@ const DebugPage: React.FC = () => {
     {
       title: "Active Item (simplified)",
       data: {
+        activeItemId: gameState.activeItem?.id,
         thai: gameState.activeItem?.vocabularyItem.sides[0].markdown,
         english: gameState.activeItem?.vocabularyItem.sides[1].markdown,
-        activeItemId: gameState.activeItem?.id,
         mastery: gameState.activeItem?.mastery,
         tags: gameState.activeItem?.vocabularyItem.tags,
       },
@@ -150,7 +150,6 @@ const DebugPage: React.FC = () => {
         currentLesson: gameState.currentLesson,
         lesson: gameState?.lessons[gameState.currentLesson]?.name,
         progressionMode: gameState.progressionMode,
-        totalLessons: gameState.totalLessons,
         lessonItems: gameState?.lessons[gameState.currentLesson]?.items.map(
           (item) => item.id
         ),
@@ -158,10 +157,10 @@ const DebugPage: React.FC = () => {
     },
     {
       title: "Working Set",
-      data: {
-        workingSetEntries: gameState.workingSet.map((entry) => entry.id),
-        workingSetLength: gameState.workingSet.length,
-      },
+      data: gameState.workingSet.map((entry) => ({
+        id: entry.id,
+        // recallCategory: entry.vocabularyItem.recallCategory,
+      })),
     },
     {
       title: "Lesson Subset",

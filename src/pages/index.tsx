@@ -36,7 +36,6 @@ const IndexPage: React.FC = () => {
 
     // Lesson management
     lessons,
-    totalLessons,
     currentLesson,
     setCurrentLesson,
 
@@ -189,7 +188,6 @@ const IndexPage: React.FC = () => {
             <LessonSelector
               currentLesson={currentLesson}
               setCurrentLesson={setCurrentLesson}
-              totalLessons={totalLessons}
               lessons={lessons}
               onViewDetails={handleViewLessonDetails}
             />

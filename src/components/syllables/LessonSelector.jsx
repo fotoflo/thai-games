@@ -4,7 +4,6 @@ import LessonListScreen from '../LessonListScreen';
 const LessonSelector = ({ 
   currentLesson, 
   setCurrentLesson, 
-  totalLessons, 
   lessons,
   onViewDetails 
 }) => {
@@ -19,7 +18,7 @@ const LessonSelector = ({
           className="flex gap-2 overflow-x-auto scrollbar-hidden"
           style={{ margin: '0', padding: '0' }}
         >
-          {totalLessons > 0 ? (
+          {lessons.length > 0 ? (
             <>
               <button
                 key={currentLesson}

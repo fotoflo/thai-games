@@ -349,6 +349,7 @@ export const useReadThaiGameState = () => {
     setActiveItem: workingSet.setActiveItem,
     addMoreItems: workingSet.addMoreItems,
     nextItem: workingSet.nextItem,
+
     handleFirstPassChoice,
     handleMarkForPractice,
     handleMarkAsMastered,
@@ -356,7 +357,6 @@ export const useReadThaiGameState = () => {
 
     // Lesson data
     lessons: lessonState.lessons,
-    totalLessons: lessonState.totalLessons,
 
     // Progress tracking
     lessonSubset: workingSet.lessonSubset,

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState, useMemo } from "react";
-import { Lesson, GameState, RecallCategory } from "../../types/lessons";
+import { useEffect, useState, useMemo } from "react";
+import { Lesson, GameState } from "../../types/lessons";
 import { loadLessons } from "../../lessons/LessonLoader";
 
 interface UseLessons {
@@ -8,7 +8,6 @@ interface UseLessons {
   progressionMode: "firstPass" | "spacedRepetition" | "test";
   setProgressionMode: (mode: "firstPass" | "spacedRepetition" | "test") => void;
   lessons: Lesson[];
-  totalLessons: number;
   lessonData: GameState["lessonData"];
 }
 
@@ -56,7 +55,6 @@ export const useLessons = (): UseLessons => {
     progressionMode,
     setProgressionMode,
     lessons,
-    totalLessons: lessons.length,
     lessonData,
   };
 };
