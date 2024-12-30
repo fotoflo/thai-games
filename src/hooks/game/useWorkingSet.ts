@@ -26,7 +26,7 @@ export const useWorkingSet = ({
   progressionMode,
 }: UseWorkingSetProps) => {
   const [workingSet, setWorkingSet] = useState<WorkingSetItem[]>([]);
-  const [activeItem, setactiveItem] = useState<WorkingSetItem | null>(null);
+  const [activeItem, setActiveItem] = useState<WorkingSetItem | null>(null);
   const [lessonSubset, setLessonSubset] = useState<LessonSubset>({
     unseenItems: [],
     practiceItems: [],
@@ -47,7 +47,7 @@ export const useWorkingSet = ({
         return newSet;
       });
       if (!activeItem && items.length > 0) {
-        setactiveItem({ ...items[0] });
+        setActiveItem({ ...items[0] });
       }
     },
     [activeItem]
@@ -61,7 +61,7 @@ export const useWorkingSet = ({
       });
       if (activeItem?.id === itemId) {
         const remainingItems = workingSet.filter((item) => item.id !== itemId);
-        setactiveItem(remainingItems[0] || null);
+        setActiveItem(remainingItems[0] || null);
       }
     },
     [activeItem, workingSet]
@@ -69,7 +69,7 @@ export const useWorkingSet = ({
 
   const clearWorkingSet = useCallback(() => {
     setWorkingSet([]);
-    setactiveItem(null);
+    setActiveItem(null);
   }, []);
 
   const nextItem = useCallback(() => {
@@ -95,7 +95,7 @@ export const useWorkingSet = ({
     setWorkingSet(newWorkingSet);
 
     // Then update the active item
-    setactiveItem(newWorkingSet[nextIndex]);
+    setActiveItem(newWorkingSet[nextIndex]);
   }, [activeItem, workingSet]);
 
   const addMoreItems = useCallback(
@@ -225,7 +225,7 @@ export const useWorkingSet = ({
           addToWorkingSet([newWorkingSetItem]);
 
           // Set it as the active item
-          setactiveItem({ ...newWorkingSetItem });
+          setActiveItem({ ...newWorkingSetItem });
         }
       } else {
         // If no unseen items, move to the next item in the working set
@@ -240,7 +240,7 @@ export const useWorkingSet = ({
       addToWorkingSet,
       removeFromWorkingSet,
       nextItem,
-      setactiveItem,
+      setActiveItem,
       setWorkingSet,
     ]
   );
@@ -309,6 +309,6 @@ export const useWorkingSet = ({
     markAsSkipped,
     refreshWorkingSet,
     setLessonSubset,
-    setactiveItem,
+    setActiveItem,
   };
 };

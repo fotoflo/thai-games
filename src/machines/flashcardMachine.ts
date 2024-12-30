@@ -10,7 +10,7 @@ type LessonItem = {
 type FlashcardContext = {
   practiceSet: string[];
   practiceSetMaxLength: number;
-  currentItem: LessonItem | null;
+  activeItem: LessonItem | null;
   lessonSet: LessonItem[];
 };
 
@@ -20,7 +20,7 @@ const flashcardMachine = createMachine({
   context: {
     practiceSet: [],
     practiceSetMaxLength: 4,
-    currentItem: null,
+    activeItem: null,
     lessonSet: [],
   } as FlashcardContext,
   states: {

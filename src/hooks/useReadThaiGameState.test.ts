@@ -186,7 +186,7 @@ describe("useReadThaiGameState", () => {
     // Select a specific item
     const firstItem = result.current.workingSet[0];
     act(() => {
-      result.current.setactiveItem({ ...firstItem });
+      result.current.setActiveItem({ ...firstItem });
     });
 
     expect(result.current.activeItem).toEqual(firstItem);

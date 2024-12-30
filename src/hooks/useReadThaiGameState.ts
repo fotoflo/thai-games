@@ -58,7 +58,7 @@ export const useReadThaiGameState = () => {
               ...parsed.activeItem,
               lastReviewed: new Date(parsed.activeItem.lastReviewed),
             };
-            workingSet.setactiveItem(item);
+            workingSet.setActiveItem(item);
           }
         } catch (error) {
           console.error("Failed to parse saved game state:", error);
@@ -86,7 +86,7 @@ export const useReadThaiGameState = () => {
             masteredItems: [],
             skippedItems: [],
           });
-          workingSet.setactiveItem(workingSetItem);
+          workingSet.setActiveItem(workingSetItem);
         }
       }
     }
@@ -118,7 +118,7 @@ export const useReadThaiGameState = () => {
             masteredItems: [],
             skippedItems: [],
           });
-          workingSet.setactiveItem(workingSetItem);
+          workingSet.setActiveItem(workingSetItem);
         }
       } else if (mode === "spacedRepetition") {
         // Get all practice items from the current lesson
@@ -138,7 +138,7 @@ export const useReadThaiGameState = () => {
           if (practiceItems.length > 0) {
             workingSet.clearWorkingSet();
             workingSet.addToWorkingSet(practiceItems);
-            workingSet.setactiveItem(practiceItems[0]);
+            workingSet.setActiveItem(practiceItems[0]);
           }
         }
       } else if (mode === "test") {
@@ -186,7 +186,7 @@ export const useReadThaiGameState = () => {
         // Add to working set if not already present
         if (!workingSet.workingSet.some((i) => i.id === itemId)) {
           workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setactiveItem(workingSetItem);
+          workingSet.setActiveItem(workingSetItem);
         }
 
         // Update lesson subset
@@ -269,7 +269,7 @@ export const useReadThaiGameState = () => {
           lastReviewed: new Date(),
         };
         workingSet.addToWorkingSet([nextWorkingSetItem]);
-        workingSet.setactiveItem(nextWorkingSetItem);
+        workingSet.setActiveItem(nextWorkingSetItem);
       } else {
         // If no unseen items, move to the next item in the working set
         workingSet.nextItem();
@@ -319,8 +319,7 @@ export const useReadThaiGameState = () => {
     // Working set
     workingSet: workingSet.workingSet,
     activeItem: workingSet.activeItem,
-    currentItem: workingSet.activeItem, // Alias for activeItem
-    setactiveItem: (item: typeof workingSet.activeItem) => {
+    setActiveItem: (item: typeof workingSet.activeItem) => {
       if (item) {
         workingSet.addToWorkingSet([item]);
       }

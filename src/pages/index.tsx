@@ -31,7 +31,7 @@ const IndexPage: React.FC = () => {
     // Working set state
     workingSet,
     activeItem,
-    setactiveItem,
+    setActiveItem,
     addMoreItems,
 
     // Lesson management
@@ -64,9 +64,9 @@ const IndexPage: React.FC = () => {
 
   const handleCardSelect = useCallback(
     (item: WorkingSetItem) => {
-      setactiveItem(item);
+      setActiveItem(item);
     },
-    [setactiveItem]
+    [setActiveItem]
   );
 
   const openSettings = () => setShowSettingsContainer(true);

@@ -21,7 +21,7 @@ const LessonProgress: React.FC<LessonProgressProps> = ({
   },
   lessonSubset = {
     unseenItems: [],
-    currentItem: null,
+    activeItem: null,
     practiceItems: [],
     masteredItems: [],
     skippedItems: [],
