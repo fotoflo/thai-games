@@ -145,7 +145,7 @@ const DebugPage: React.FC = () => {
     {
       title: "Active Item",
       data: {
-        activeItemId: gameState.activeItem?.id,
+        activeItemId: gameState.activeItem,
       },
     },
     {
@@ -182,33 +182,33 @@ const DebugPage: React.FC = () => {
       <GameHeader title="Debug View" darkMode={true} />
 
       <div className="max-w-4xl mx-auto text-xs">
-        {sections.map((section, index) => (
-          <div key={index}>
-            {section.title === "Actions" ? (
-              <div className="bg-gray-800 rounded-lg p-4 mb-4">
-                <h2 className="text-xl font-bold mb-4 text-white">
-                  {section.title}
-                </h2>
-                <div className="space-y-4">
-                  {buttonGroups.map((group, i) => (
-                    <div key={i} className="space-y-2">
-                      <h3 className="text-md font-semibold text-gray-300">
-                        {group.title}
-                      </h3>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                        {group.buttons.map((button, j) => (
-                          <div key={j}>{renderActionButton(button)}</div>
-                        ))}
-                      </div>
-                    </div>
+        {/* Actions Section */}
+        <div className="bg-gray-800 rounded-lg p-4 mb-4">
+          <h2 className="text-xl font-bold mb-4 text-white">Actions</h2>
+          <div className="space-y-4">
+            {buttonGroups.map((group, i) => (
+              <div key={i} className="space-y-2">
+                <h3 className="text-md font-semibold text-gray-300">
+                  {group.title}
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {group.buttons.map((button, j) => (
+                    <div key={j}>{renderActionButton(button)}</div>
                   ))}
                 </div>
               </div>
-            ) : (
-              renderSection(section)
-            )}
+            ))}
           </div>
-        ))}
+        </div>
+
+        {/* State Views Section */}
+        <div className="grid grid-cols-2 gap-4">
+          {sections
+            .filter((section) => section.title !== "Actions")
+            .map((section, index) => (
+              <div key={index}>{renderSection(section)}</div>
+            ))}
+        </div>
       </div>
     </div>
   );
