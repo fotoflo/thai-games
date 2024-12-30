@@ -117,7 +117,7 @@ const DebugPage: React.FC = () => {
     {
       title: "Active Item",
       data: {
-        activeItemId: gameState.activeItem,
+        activeItem: gameState.activeItem,
       },
     },
     {
