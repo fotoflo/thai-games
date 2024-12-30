@@ -1,10 +1,5 @@
 import { useCallback, useEffect, useState, useMemo } from "react";
-import {
-  Lesson,
-  LessonItem,
-  GameState,
-  RecallCategory,
-} from "../../types/lessons";
+import { Lesson, GameState, RecallCategory } from "../../types/lessons";
 import { loadLessons } from "../../lessons/LessonLoader";
 
 interface UseLessons {

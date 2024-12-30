@@ -3,13 +3,7 @@ import { useGameSettings } from "./game/useGameSettings";
 import { useLessons } from "./game/useLessons";
 import { useWorkingSet } from "./game/useWorkingSet";
 import { useFlashcardMachine } from "./useFlashcardMachine";
-import {
-  RecallCategory,
-  CardSource,
-  LessonItem,
-  Lesson,
-} from "../types/lessons";
-import { create } from "domain";
+import { RecallCategory, LessonItem, Lesson } from "../types/lessons";
 
 export const useReadThaiGameState = () => {
   const gameSettings = useGameSettings();
@@ -37,13 +31,6 @@ export const useReadThaiGameState = () => {
       skippedItems: [],
     };
   }, []);
-
-  // Initialize with -1 if no lesson is selected
-  useEffect(() => {
-    if (lessonState.currentLesson !== -1 && lessonState.lessons.length === 0) {
-      lessonState.setCurrentLesson(0);
-    }
-  }, [lessonState]);
 
   const flashcardMachine = useFlashcardMachine();
 
@@ -287,6 +274,21 @@ export const useReadThaiGameState = () => {
     workingSet.activeItem,
   ]);
 
+  useEffect(() => {
+    if (lessonState.currentLesson === -1) {
+      lessonState.setCurrentLesson(0);
+      handleProgressionModeChange("firstPass");
+      workingSet.setActiveItem(
+        createWorkingSetItem(lessonState.lessons[0].items[0])
+      );
+    }
+  }, [
+    lessonState,
+    handleProgressionModeChange,
+    workingSet,
+    createWorkingSetItem,
+  ]);
+
   return {
     // Game settings
     ...gameSettings,
@@ -300,11 +302,7 @@ export const useReadThaiGameState = () => {
     // Working set
     workingSet: workingSet.workingSet,
     activeItem: workingSet.activeItem,
-    setActiveItem: (item: typeof workingSet.activeItem) => {
-      if (item) {
-        workingSet.addToWorkingSet([item]);
-      }
-    },
+    setActiveItem: workingSet.setActiveItem,
     addMoreItems: workingSet.addMoreItems,
     nextItem: workingSet.nextItem,
     handleFirstPassChoice,
