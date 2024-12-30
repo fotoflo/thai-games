@@ -26,9 +26,7 @@ export const useWorkingSet = ({
   progressionMode,
 }: UseWorkingSetProps) => {
   const [workingSet, setWorkingSet] = useState<WorkingSetItem[]>([]);
-  const [activeVocabItem, setActiveVocabItem] = useState<WorkingSetItem | null>(
-    null
-  );
+  const [activeItem, setactiveItem] = useState<WorkingSetItem | null>(null);
   const [lessonSubset, setLessonSubset] = useState<LessonSubset>({
     unseenItems: [],
     practiceItems: [],
@@ -48,11 +46,11 @@ export const useWorkingSet = ({
         ].slice(0, 7);
         return newSet;
       });
-      if (!activeVocabItem && items.length > 0) {
-        setActiveVocabItem({ ...items[0] });
+      if (!activeItem && items.length > 0) {
+        setactiveItem({ ...items[0] });
       }
     },
-    [activeVocabItem]
+    [activeItem]
   );
 
   const removeFromWorkingSet = useCallback(
@@ -61,24 +59,24 @@ export const useWorkingSet = ({
         const newSet = prev.filter((item) => item.id !== itemId);
         return newSet;
       });
-      if (activeVocabItem?.id === itemId) {
+      if (activeItem?.id === itemId) {
         const remainingItems = workingSet.filter((item) => item.id !== itemId);
-        setActiveVocabItem(remainingItems[0] || null);
+        setactiveItem(remainingItems[0] || null);
       }
     },
-    [activeVocabItem, workingSet]
+    [activeItem, workingSet]
   );
 
   const clearWorkingSet = useCallback(() => {
     setWorkingSet([]);
-    setActiveVocabItem(null);
+    setactiveItem(null);
   }, []);
 
   const nextItem = useCallback(() => {
-    if (!activeVocabItem || workingSet.length === 0) return;
+    if (!activeItem || workingSet.length === 0) return;
 
     const currentIndex = workingSet.findIndex(
-      (item) => item.id === activeVocabItem.id
+      (item) => item.id === activeItem.id
     );
 
     // If item not found or it's the only item, keep current
@@ -97,8 +95,8 @@ export const useWorkingSet = ({
     setWorkingSet(newWorkingSet);
 
     // Then update the active item
-    setActiveVocabItem(newWorkingSet[nextIndex]);
-  }, [activeVocabItem, workingSet]);
+    setactiveItem(newWorkingSet[nextIndex]);
+  }, [activeItem, workingSet]);
 
   const addMoreItems = useCallback(
     (count: number = 1) => {
@@ -227,7 +225,7 @@ export const useWorkingSet = ({
           addToWorkingSet([newWorkingSetItem]);
 
           // Set it as the active item
-          setActiveVocabItem({ ...newWorkingSetItem });
+          setactiveItem({ ...newWorkingSetItem });
         }
       } else {
         // If no unseen items, move to the next item in the working set
@@ -242,7 +240,7 @@ export const useWorkingSet = ({
       addToWorkingSet,
       removeFromWorkingSet,
       nextItem,
-      setActiveVocabItem,
+      setactiveItem,
       setWorkingSet,
     ]
   );
@@ -296,7 +294,7 @@ export const useWorkingSet = ({
 
   return {
     workingSet,
-    activeVocabItem,
+    activeItem,
     lessonSubset,
     isWorkingSetFull: workingSet.length >= 7,
     addToWorkingSet,
@@ -311,6 +309,6 @@ export const useWorkingSet = ({
     markAsSkipped,
     refreshWorkingSet,
     setLessonSubset,
-    setActiveVocabItem,
+    setactiveItem,
   };
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
 
@@ -45,9 +45,13 @@ const DebugPage: React.FC = () => {
 
   const actionButtons: ActionButton[] = [
     {
-      label: "Load First Lesson",
-      onClick: () => gameState.setCurrentLesson(0),
-      disabled: gameState.currentLesson === 0,
+      label: "Reset Lesson",
+      onClick: () => {
+        // Just reset to first lesson and first pass mode
+        gameState.setCurrentLesson(0);
+        gameState.setProgressionMode("firstPass");
+      },
+      disabled: false,
     },
     {
       label: "First Pass Mode",
@@ -67,43 +71,34 @@ const DebugPage: React.FC = () => {
     {
       label: "Next Item",
       onClick: () => gameState.nextItem(),
-      disabled: !gameState.activeVocabItem,
+      disabled: !gameState.activeItem,
     },
     {
       label: "Mark for Practice",
       onClick: () => {
-        if (gameState.activeVocabItem) {
-          gameState.handleFirstPassChoice(
-            gameState.activeVocabItem.id,
-            "practice"
-          );
+        if (gameState.activeItem) {
+          gameState.handleFirstPassChoice(gameState.activeItem.id, "practice");
         }
       },
-      disabled: !gameState.activeVocabItem,
+      disabled: !gameState.activeItem,
     },
     {
       label: "Mark as Mastered",
       onClick: () => {
-        if (gameState.activeVocabItem) {
-          gameState.handleFirstPassChoice(
-            gameState.activeVocabItem.id,
-            "mastered"
-          );
+        if (gameState.activeItem) {
+          gameState.handleFirstPassChoice(gameState.activeItem.id, "mastered");
         }
       },
-      disabled: !gameState.activeVocabItem,
+      disabled: !gameState.activeItem,
     },
     {
       label: "Skip Item",
       onClick: () => {
-        if (gameState.activeVocabItem) {
-          gameState.handleFirstPassChoice(
-            gameState.activeVocabItem.id,
-            "skipped"
-          );
+        if (gameState.activeItem) {
+          gameState.handleFirstPassChoice(gameState.activeItem.id, "skipped");
         }
       },
-      disabled: !gameState.activeVocabItem,
+      disabled: !gameState.activeItem,
     },
     {
       label: "Clear Local Storage",
@@ -120,19 +115,28 @@ const DebugPage: React.FC = () => {
       data: null,
     },
     {
+      title: "Active Item",
+      data: {
+        activeItemId: gameState.activeItem,
+      },
+    },
+    {
       title: "Lesson State",
       data: {
         currentLesson: gameState.currentLesson,
+        lesson: gameState?.lessons[gameState.currentLesson]?.name,
         progressionMode: gameState.progressionMode,
         totalLessons: gameState.totalLessons,
+        lessonItems: gameState?.lessons[gameState.currentLesson]?.items.map(
+          (item) => item.id
+        ),
       },
     },
     {
       title: "Working Set",
       data: {
-        workingSet: gameState.workingSet,
-        activeVocabItem: gameState.activeVocabItem,
-        currentItem: gameState.currentItem,
+        workingSetEntries: gameState.workingSet.map((entry) => entry.id),
+        workingSetLength: gameState.workingSet.length,
       },
     },
     {

@@ -53,15 +53,40 @@ export const useReadThaiGameState = () => {
             }));
             workingSet.addToWorkingSet(items);
           }
-          if (parsed.activeVocabItem) {
+          if (parsed.activeItem) {
             const item = {
-              ...parsed.activeVocabItem,
-              lastReviewed: new Date(parsed.activeVocabItem.lastReviewed),
+              ...parsed.activeItem,
+              lastReviewed: new Date(parsed.activeItem.lastReviewed),
             };
-            workingSet.setActiveVocabItem(item);
+            workingSet.setactiveItem(item);
           }
         } catch (error) {
           console.error("Failed to parse saved game state:", error);
+        }
+      } else {
+        // No saved state, initialize with first lesson
+        lessonState.setCurrentLesson(0);
+        lessonState.setProgressionMode("firstPass");
+
+        // Initialize first item
+        const currentLesson = lessonState.lessons[0];
+        if (currentLesson?.items.length > 0) {
+          const firstItem = currentLesson.items[0];
+          const workingSetItem = {
+            id: firstItem.id,
+            mastery: 0,
+            vocabularyItem: firstItem,
+            lastReviewed: new Date(),
+          };
+          workingSet.clearWorkingSet();
+          workingSet.addToWorkingSet([workingSetItem]);
+          workingSet.setLessonSubset({
+            unseenItems: currentLesson.items.slice(1).map((item) => item.id),
+            practiceItems: [],
+            masteredItems: [],
+            skippedItems: [],
+          });
+          workingSet.setactiveItem(workingSetItem);
         }
       }
     }
@@ -93,7 +118,7 @@ export const useReadThaiGameState = () => {
             masteredItems: [],
             skippedItems: [],
           });
-          workingSet.setActiveVocabItem(workingSetItem);
+          workingSet.setactiveItem(workingSetItem);
         }
       } else if (mode === "spacedRepetition") {
         // Get all practice items from the current lesson
@@ -113,7 +138,7 @@ export const useReadThaiGameState = () => {
           if (practiceItems.length > 0) {
             workingSet.clearWorkingSet();
             workingSet.addToWorkingSet(practiceItems);
-            workingSet.setActiveVocabItem(practiceItems[0]);
+            workingSet.setactiveItem(practiceItems[0]);
           }
         }
       } else if (mode === "test") {
@@ -161,7 +186,7 @@ export const useReadThaiGameState = () => {
         // Add to working set if not already present
         if (!workingSet.workingSet.some((i) => i.id === itemId)) {
           workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setActiveVocabItem(workingSetItem);
+          workingSet.setactiveItem(workingSetItem);
         }
 
         // Update lesson subset
@@ -244,7 +269,7 @@ export const useReadThaiGameState = () => {
           lastReviewed: new Date(),
         };
         workingSet.addToWorkingSet([nextWorkingSetItem]);
-        workingSet.setActiveVocabItem(nextWorkingSetItem);
+        workingSet.setactiveItem(nextWorkingSetItem);
       } else {
         // If no unseen items, move to the next item in the working set
         workingSet.nextItem();
@@ -264,10 +289,10 @@ export const useReadThaiGameState = () => {
         ...item,
         lastReviewed: item.lastReviewed.toISOString(),
       })),
-      activeVocabItem: workingSet.activeVocabItem
+      activeItem: workingSet.activeItem
         ? {
-            ...workingSet.activeVocabItem,
-            lastReviewed: workingSet.activeVocabItem.lastReviewed.toISOString(),
+            ...workingSet.activeItem,
+            lastReviewed: workingSet.activeItem.lastReviewed.toISOString(),
           }
         : null,
     };
@@ -278,7 +303,7 @@ export const useReadThaiGameState = () => {
     lessonState.progressionMode,
     workingSet.lessonSubset,
     workingSet.workingSet,
-    workingSet.activeVocabItem,
+    workingSet.activeItem,
   ]);
 
   return {
@@ -293,9 +318,9 @@ export const useReadThaiGameState = () => {
 
     // Working set
     workingSet: workingSet.workingSet,
-    activeVocabItem: workingSet.activeVocabItem,
-    currentItem: workingSet.activeVocabItem, // Alias for activeVocabItem
-    setActiveVocabItem: (item: typeof workingSet.activeVocabItem) => {
+    activeItem: workingSet.activeItem,
+    currentItem: workingSet.activeItem, // Alias for activeItem
+    setactiveItem: (item: typeof workingSet.activeItem) => {
       if (item) {
         workingSet.addToWorkingSet([item]);
       }

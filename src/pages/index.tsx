@@ -30,8 +30,8 @@ const IndexPage: React.FC = () => {
 
     // Working set state
     workingSet,
-    activeVocabItem,
-    setActiveVocabItem,
+    activeItem,
+    setactiveItem,
     addMoreItems,
 
     // Lesson management
@@ -57,16 +57,16 @@ const IndexPage: React.FC = () => {
 
   // Move the addMoreItems logic into useEffect
   useEffect(() => {
-    if (!activeVocabItem && currentLesson >= 0) {
+    if (!activeItem && currentLesson >= 0) {
       addMoreItems(5);
     }
-  }, [activeVocabItem, currentLesson, addMoreItems]);
+  }, [activeItem, currentLesson, addMoreItems]);
 
   const handleCardSelect = useCallback(
     (item: WorkingSetItem) => {
-      setActiveVocabItem(item);
+      setactiveItem(item);
     },
-    [setActiveVocabItem]
+    [setactiveItem]
   );
 
   const openSettings = () => setShowSettingsContainer(true);
@@ -80,7 +80,7 @@ const IndexPage: React.FC = () => {
     setCurrentLesson(index);
   };
 
-  const displayItem = activeVocabItem?.vocabularyItem;
+  const displayItem = activeItem?.vocabularyItem;
 
   if (!displayItem) {
     return (
@@ -133,11 +133,8 @@ const IndexPage: React.FC = () => {
           mode={progressionMode}
           lessonSubset={lessonSubset}
           onFirstPassChoice={(choice) => {
-            if (activeVocabItem) {
-              handleFirstPassChoice(
-                activeVocabItem.id,
-                choice as RecallCategory
-              );
+            if (activeItem) {
+              handleFirstPassChoice(activeItem.id, choice as RecallCategory);
             }
           }}
         />
@@ -155,11 +152,8 @@ const IndexPage: React.FC = () => {
             }}
             mode={progressionMode}
             onFirstPassChoice={(choice) => {
-              if (activeVocabItem) {
-                handleFirstPassChoice(
-                  activeVocabItem.id,
-                  choice as RecallCategory
-                );
+              if (activeItem) {
+                handleFirstPassChoice(activeItem.id, choice as RecallCategory);
               }
             }}
             className="mb-10"
@@ -174,10 +168,10 @@ const IndexPage: React.FC = () => {
               lastReviewed: item.lastReviewed || new Date(),
             }))}
             selectedItem={
-              activeVocabItem
+              activeItem
                 ? {
-                    ...activeVocabItem,
-                    lastReviewed: activeVocabItem.lastReviewed || new Date(),
+                    ...activeItem,
+                    lastReviewed: activeItem.lastReviewed || new Date(),
                   }
                 : null
             }
@@ -186,7 +180,7 @@ const IndexPage: React.FC = () => {
             lessonSubset={lessonSubset}
           />
 
-          <pre>{false && JSON.stringify(activeVocabItem, null, 2)}</pre>
+          <pre>{false && JSON.stringify(activeItem, null, 2)}</pre>
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 

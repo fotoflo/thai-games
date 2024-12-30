@@ -151,6 +151,6 @@ describe("useWorkingSet", () => {
     });
 
     // Should be back to the first item
-    expect(result.current.activeVocabItem?.id).toBe("item-1");
+    expect(result.current.activeItem?.id).toBe("item-1");
   });
 });

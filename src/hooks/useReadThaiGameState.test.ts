@@ -181,15 +181,15 @@ describe("useReadThaiGameState", () => {
     });
 
     expect(result.current.workingSet.length).toBe(2);
-    expect(result.current.activeVocabItem).not.toBeNull();
+    expect(result.current.activeItem).not.toBeNull();
 
     // Select a specific item
     const firstItem = result.current.workingSet[0];
     act(() => {
-      result.current.setActiveVocabItem({ ...firstItem });
+      result.current.setactiveItem({ ...firstItem });
     });
 
-    expect(result.current.activeVocabItem).toEqual(firstItem);
+    expect(result.current.activeItem).toEqual(firstItem);
   });
 
   it("should persist game state between sessions", () => {
@@ -226,15 +226,15 @@ describe("useReadThaiGameState", () => {
       result.current.handleFirstPassChoice("card-2", "practice");
     });
 
-    const initialItem = result.current.activeVocabItem;
+    const initialItem = result.current.activeItem;
     expect(initialItem).not.toBeNull();
 
     act(() => {
       result.current.nextItem();
     });
-    expect(result.current.activeVocabItem).not.toEqual(initialItem);
+    expect(result.current.activeItem).not.toEqual(initialItem);
 
-    const secondItem = result.current.activeVocabItem;
+    const secondItem = result.current.activeItem;
     expect(secondItem).not.toEqual(initialItem);
   });
 
@@ -249,16 +249,16 @@ describe("useReadThaiGameState", () => {
       result.current.handleFirstPassChoice("card-2", "practice");
     });
 
-    const initialItem = result.current.activeVocabItem;
+    const initialItem = result.current.activeItem;
     expect(initialItem).not.toBeNull();
 
     // Next should advance
     act(() => {
       result.current.nextItem();
     });
-    expect(result.current.activeVocabItem).not.toEqual(initialItem);
+    expect(result.current.activeItem).not.toEqual(initialItem);
 
-    const secondItem = result.current.activeVocabItem;
+    const secondItem = result.current.activeItem;
     expect(secondItem).not.toEqual(initialItem);
   });
 
@@ -284,7 +284,7 @@ describe("useReadThaiGameState", () => {
     });
 
     // Should have no active item when all are mastered
-    expect(result.current.activeVocabItem).toBeNull();
+    expect(result.current.activeItem).toBeNull();
     expect(result.current.lessonSubset.masteredItems.length).toBe(
       mockLessonItems.length
     );
