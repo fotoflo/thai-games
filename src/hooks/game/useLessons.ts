@@ -99,17 +99,6 @@ export const useLessons = (): UseLessons => {
     }
   }, []);
 
-  // Initialize with default lesson if none selected and lessons are loaded
-  useEffect(() => {
-    if (
-      currentLesson === -1 &&
-      lessons.length > 0 &&
-      Object.keys(lessonData).length > 0
-    ) {
-      setCurrentLesson(0);
-    }
-  }, [currentLesson, lessons.length, lessonData]);
-
   return {
     currentLesson,
     setCurrentLesson,
