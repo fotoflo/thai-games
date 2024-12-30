@@ -56,7 +56,7 @@ const DebugPage: React.FC = () => {
     {
       label: "First Pass Mode",
       onClick: () => gameState.setProgressionMode("firstPass"),
-      disabled: gameState.progressionMode === "firstPass",
+      // disabled: gameState.progressionMode === "firstPass",
     },
     {
       label: "Practice Mode",
@@ -117,7 +117,7 @@ const DebugPage: React.FC = () => {
     {
       title: "Active Item",
       data: {
-        activeItem: gameState.activeItem,
+        activeItemId: gameState.activeItem?.id,
       },
     },
     {
