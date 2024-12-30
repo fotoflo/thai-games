@@ -39,23 +39,31 @@ export const useWorkingSet = ({
   const addToWorkingSet = useCallback(
     (items: WorkingSetItem[]) => {
       setWorkingSet((prev: WorkingSetItem[]) => {
-        const newSet = [...prev, ...items].slice(0, 7);
+        // Filter out duplicates and create new references
+        const existingIds = new Set(prev.map((item) => item.id));
+        const newItems = items.filter((item) => !existingIds.has(item.id));
+        const newSet = [
+          ...prev.map((item) => ({ ...item })),
+          ...newItems,
+        ].slice(0, 7);
         return newSet;
       });
       if (!activeVocabItem && items.length > 0) {
-        setActiveVocabItem(items[0]);
+        setActiveVocabItem({ ...items[0] });
       }
     },
-    [activeVocabItem, setActiveVocabItem]
+    [activeVocabItem]
   );
 
   const removeFromWorkingSet = useCallback(
     (itemId: string) => {
-      setWorkingSet((prev: WorkingSetItem[]) =>
-        prev.filter((item) => item.id !== itemId)
-      );
+      setWorkingSet((prev: WorkingSetItem[]) => {
+        const newSet = prev.filter((item) => item.id !== itemId);
+        return newSet;
+      });
       if (activeVocabItem?.id === itemId) {
-        setActiveVocabItem(workingSet[0] || null);
+        const remainingItems = workingSet.filter((item) => item.id !== itemId);
+        setActiveVocabItem(remainingItems[0] || null);
       }
     },
     [activeVocabItem, workingSet]
@@ -68,14 +76,28 @@ export const useWorkingSet = ({
 
   const nextItem = useCallback(() => {
     if (!activeVocabItem || workingSet.length === 0) return;
+
     const currentIndex = workingSet.findIndex(
       (item) => item.id === activeVocabItem.id
     );
+
+    // If item not found or it's the only item, keep current
+    if (currentIndex === -1 || workingSet.length === 1) return;
+
+    // Calculate next index, cycling back to 0 if at end
     const nextIndex = (currentIndex + 1) % workingSet.length;
-    setActiveVocabItem({
-      ...workingSet[nextIndex],
-      lastReviewed: new Date(),
-    });
+
+    // Create a new reference for all items to ensure React detects the change
+    const newWorkingSet = workingSet.map((item, idx) => ({
+      ...item,
+      lastReviewed: idx === nextIndex ? new Date() : item.lastReviewed,
+    }));
+
+    // Update the working set
+    setWorkingSet(newWorkingSet);
+
+    // Then update the active item
+    setActiveVocabItem(newWorkingSet[nextIndex]);
   }, [activeVocabItem, workingSet]);
 
   const addMoreItems = useCallback(
@@ -84,17 +106,22 @@ export const useWorkingSet = ({
         const lessonItems = lessons[currentLesson].items;
         if (lessonItems.length === 0) return;
 
-        const newItems = lessonItems.slice(0, count).map((item) => ({
-          id: item.id,
-          mastery: 0,
-          vocabularyItem: item,
-          lastReviewed: new Date(),
-        }));
+        const newItems = lessonItems
+          .filter((item) => !workingSet.some((w) => w.id === item.id))
+          .slice(0, count)
+          .map((item) => ({
+            id: item.id,
+            mastery: 0,
+            vocabularyItem: item,
+            lastReviewed: new Date(),
+          }));
 
-        addToWorkingSet(newItems);
+        if (newItems.length > 0) {
+          addToWorkingSet(newItems);
+        }
       }
     },
-    [currentLesson, lessons, addToWorkingSet]
+    [currentLesson, lessons, workingSet, addToWorkingSet]
   );
 
   const loadFirstPassItems = useCallback(() => {
@@ -131,32 +158,31 @@ export const useWorkingSet = ({
         const newSubset = { ...prev };
 
         // Remove from all categories first
-        newSubset.unseenItems = newSubset.unseenItems.filter(
-          (id: string) => id !== itemId
-        );
-        newSubset.practiceItems = newSubset.practiceItems.filter(
-          (id: string) => id !== itemId
-        );
-        newSubset.masteredItems = newSubset.masteredItems.filter(
-          (id: string) => id !== itemId
-        );
-        newSubset.skippedItems = newSubset.skippedItems.filter(
-          (id: string) => id !== itemId
-        );
+        (Object.keys(newSubset) as Array<keyof LessonSubset>).forEach((key) => {
+          newSubset[key] = newSubset[key].filter((id: string) => id !== itemId);
+        });
 
         // Add to appropriate category
         switch (choice) {
           case "practice":
-            newSubset.practiceItems.push(itemId);
+            if (!newSubset.practiceItems.includes(itemId)) {
+              newSubset.practiceItems.push(itemId);
+            }
             break;
           case "mastered":
-            newSubset.masteredItems.push(itemId);
+            if (!newSubset.masteredItems.includes(itemId)) {
+              newSubset.masteredItems.push(itemId);
+            }
             break;
           case "unseen":
-            newSubset.unseenItems.push(itemId);
+            if (!newSubset.unseenItems.includes(itemId)) {
+              newSubset.unseenItems.push(itemId);
+            }
             break;
           case "skipped":
-            newSubset.skippedItems.push(itemId);
+            if (!newSubset.skippedItems.includes(itemId)) {
+              newSubset.skippedItems.push(itemId);
+            }
             break;
         }
 
@@ -169,14 +195,13 @@ export const useWorkingSet = ({
           (i: LessonItem) => i.id === itemId
         );
         if (item && workingSet.length < 7) {
-          addToWorkingSet([
-            {
-              id: itemId,
-              mastery: 1,
-              vocabularyItem: item,
-              lastReviewed: new Date(),
-            },
-          ]);
+          const newItem = {
+            id: itemId,
+            mastery: 1,
+            vocabularyItem: item,
+            lastReviewed: new Date(),
+          };
+          addToWorkingSet([newItem]);
         }
       } else {
         removeFromWorkingSet(itemId);
@@ -189,15 +214,24 @@ export const useWorkingSet = ({
           (item: LessonItem) => item.id === nextItemId
         );
         if (nextItem) {
-          addToWorkingSet([
-            {
-              id: nextItem.id,
-              mastery: 0,
-              vocabularyItem: nextItem,
-              lastReviewed: new Date(),
-            },
-          ]);
+          // Remove any existing unseen items from working set
+          setWorkingSet((prev) => prev.filter((item) => item.mastery > 0));
+
+          // Add the new unseen item with a new reference
+          const newWorkingSetItem = {
+            id: nextItem.id,
+            mastery: 0,
+            vocabularyItem: nextItem,
+            lastReviewed: new Date(),
+          };
+          addToWorkingSet([newWorkingSetItem]);
+
+          // Set it as the active item
+          setActiveVocabItem({ ...newWorkingSetItem });
         }
+      } else {
+        // If no unseen items, move to the next item in the working set
+        nextItem();
       }
     },
     [
@@ -207,6 +241,9 @@ export const useWorkingSet = ({
       lessonSubset,
       addToWorkingSet,
       removeFromWorkingSet,
+      nextItem,
+      setActiveVocabItem,
+      setWorkingSet,
     ]
   );
 
@@ -266,12 +303,14 @@ export const useWorkingSet = ({
     removeFromWorkingSet,
     clearWorkingSet,
     nextItem,
+    addMoreItems,
     loadFirstPassItems,
     handleFirstPassChoice,
-    addMoreItems,
     markForPractice,
     markAsMastered,
     markAsSkipped,
     refreshWorkingSet,
+    setLessonSubset,
+    setActiveVocabItem,
   };
 };

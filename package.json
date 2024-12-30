@@ -7,9 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "jest": "jest --watch",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "jest": "jest",
+    "test": "jest --watchAll=false",
+    "test:watch": "jest --watch",
+    "test:single": "jest --watchAll=false --testPathPattern",
+    "test:coverage": "jest --coverage --watchAll=false"
   },
   "dependencies": {
     "@dayone-labs/lambda-queue-serverless": "^0.1.4",

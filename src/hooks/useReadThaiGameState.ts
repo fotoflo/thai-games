@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useGameSettings } from "./game/useGameSettings";
 import { useLessons } from "./game/useLessons";
 import { useWorkingSet } from "./game/useWorkingSet";
@@ -14,101 +14,108 @@ export const useReadThaiGameState = () => {
     progressionMode: lessonState.progressionMode,
   });
 
+  // Initialize with -1 if no lesson is selected
+  useEffect(() => {
+    if (lessonState.currentLesson !== -1 && lessonState.lessons.length === 0) {
+      lessonState.setCurrentLesson(-1);
+    }
+  }, [lessonState]);
+
   const flashcardMachine = useFlashcardMachine();
 
-  // Handle first pass choices
-  const handleFirstPassChoice = useCallback(
-    (itemId: string, choice: RecallCategory) => {
-      // Update lesson state
-      lessonState.handleFirstPassChoice(itemId, choice);
-
-      // Update working set state based on choice
-      if (choice === "practice") {
-        workingSet.markForPractice(itemId);
-      } else if (choice === "mastered") {
-        workingSet.markAsMastered(itemId);
-      } else if (choice === "skipped") {
-        workingSet.markAsSkipped(itemId);
-      }
-
-      // If it's a practice item, add it to the working set
-      if (choice === "practice") {
-        const item = lessonState.lessons[lessonState.currentLesson]?.items.find(
-          (i) => i.id === itemId
-        );
-        if (item && !workingSet.isWorkingSetFull) {
-          workingSet.addToWorkingSet([
-            {
-              id: itemId,
-              mastery: 1,
-              vocabularyItem: item,
-              lastReviewed: new Date(),
-            },
-          ]);
-        }
-      }
-
-      // Update game state
-      flashcardMachine.updateGameState((draft) => {
-        if (!draft.currentLesson) return;
-        const card = draft.currentLesson.items.find((i) => i.id === itemId);
-        if (!card) return;
-
-        const oldCategory = card.recallCategory;
-        card.recallCategory = choice;
-
-        // Update stats based on the transition
-        if (choice === "practice") {
-          draft.currentLesson.progress.practiceSetIds.push(itemId);
-          draft.currentLesson.progress.stats.practice++;
-          draft.currentLesson.progress.stats.unseen--;
-        } else if (choice === "mastered") {
-          // Remove from practice set if it was there
-          draft.currentLesson.progress.practiceSetIds =
-            draft.currentLesson.progress.practiceSetIds.filter(
-              (id) => id !== itemId
-            );
-          draft.currentLesson.progress.stats.mastered++;
-
-          // Update stats based on previous category
-          if (oldCategory === "practice") {
-            draft.currentLesson.progress.stats.practice--;
-          } else if (oldCategory === "unseen") {
-            draft.currentLesson.progress.stats.unseen--;
-          }
-
-          card.practiceHistory.push({
-            timestamp: Date.now(),
-            result: choice,
-            timeSpent: 1000,
-            recalledSide: 0,
-            confidenceLevel: 5,
-            isCorrect: true,
-            attemptCount: 1,
-            sourceCategory:
-              oldCategory === "practice"
-                ? "practice"
-                : ("unseen" as CardSource),
+  // Initialize with default lesson if none selected
+  useEffect(() => {
+    if (lessonState.currentLesson === -1 && lessonState.lessons.length > 0) {
+      // Load saved state from localStorage
+      const savedState = localStorage.getItem("flashcardGameState");
+      if (savedState) {
+        try {
+          const parsed = JSON.parse(savedState);
+          flashcardMachine.updateGameState((draft) => {
+            Object.assign(draft, {
+              lessonData: parsed.lessonData,
+            });
           });
-        } else if (choice === "skipped") {
-          draft.currentLesson.progress.stats.skipped++;
-          draft.currentLesson.progress.stats.unseen--;
+          // Restore lesson state
+          if (parsed.currentLesson !== undefined) {
+            lessonState.setCurrentLesson(parsed.currentLesson);
+          }
+          if (parsed.progressionMode) {
+            lessonState.setProgressionMode(parsed.progressionMode);
+          }
+          if (parsed.lessonSubset) {
+            workingSet.setLessonSubset(parsed.lessonSubset);
+          }
+          if (parsed.workingSet && Array.isArray(parsed.workingSet)) {
+            const items = parsed.workingSet.map((item: any) => ({
+              ...item,
+              lastReviewed: new Date(item.lastReviewed),
+            }));
+            workingSet.addToWorkingSet(items);
+          }
+          if (parsed.activeVocabItem) {
+            const item = {
+              ...parsed.activeVocabItem,
+              lastReviewed: new Date(parsed.activeVocabItem.lastReviewed),
+            };
+            workingSet.setActiveVocabItem(item);
+          }
+        } catch (error) {
+          console.error("Failed to parse saved game state:", error);
         }
-      });
-    },
-    [lessonState, workingSet, flashcardMachine]
-  );
+      }
+    }
+  }, [lessonState, flashcardMachine, workingSet]);
 
   // Handle progression mode changes
   const handleProgressionModeChange = useCallback(
     (mode: "firstPass" | "spacedRepetition" | "test") => {
+      if (mode === lessonState.progressionMode) return;
+
       lessonState.setProgressionMode(mode);
 
       if (mode === "firstPass") {
-        workingSet.loadFirstPassItems();
+        // Initialize with first item from current lesson
+        const currentLesson = lessonState.lessons[lessonState.currentLesson];
+        if (currentLesson?.items.length > 0) {
+          const firstItem = currentLesson.items[0];
+          const workingSetItem = {
+            id: firstItem.id,
+            mastery: 0,
+            vocabularyItem: firstItem,
+            lastReviewed: new Date(),
+          };
+          workingSet.clearWorkingSet();
+          workingSet.addToWorkingSet([workingSetItem]);
+          workingSet.setLessonSubset({
+            unseenItems: currentLesson.items.slice(1).map((item) => item.id),
+            practiceItems: [],
+            masteredItems: [],
+            skippedItems: [],
+          });
+          workingSet.setActiveVocabItem(workingSetItem);
+        }
       } else if (mode === "spacedRepetition") {
-        // Refresh working set from practice items
-        workingSet.refreshWorkingSet();
+        // Get all practice items from the current lesson
+        const currentLesson = lessonState.lessons[lessonState.currentLesson];
+        if (currentLesson?.items.length > 0) {
+          const practiceItems = currentLesson.items
+            .filter((item) =>
+              workingSet.lessonSubset.practiceItems.includes(item.id)
+            )
+            .map((item) => ({
+              id: item.id,
+              mastery: 1,
+              vocabularyItem: item,
+              lastReviewed: new Date(),
+            }));
+
+          if (practiceItems.length > 0) {
+            workingSet.clearWorkingSet();
+            workingSet.addToWorkingSet(practiceItems);
+            workingSet.setActiveVocabItem(practiceItems[0]);
+          }
+        }
       } else if (mode === "test") {
         // Clear working set in test mode
         workingSet.clearWorkingSet();
@@ -116,6 +123,163 @@ export const useReadThaiGameState = () => {
     },
     [lessonState, workingSet]
   );
+
+  // Initialize first pass mode when lesson is selected
+  useEffect(() => {
+    if (
+      lessonState.currentLesson >= 0 &&
+      lessonState.progressionMode === "firstPass"
+    ) {
+      handleProgressionModeChange("firstPass");
+    }
+  }, [
+    lessonState.currentLesson,
+    lessonState.progressionMode,
+    handleProgressionModeChange,
+  ]);
+
+  // Handle first pass choices
+  const handleFirstPassChoice = useCallback(
+    (itemId: string, choice: RecallCategory) => {
+      // Update lesson state
+      lessonState.handleFirstPassChoice(itemId, choice);
+
+      const currentLesson = lessonState.lessons[lessonState.currentLesson];
+      const item = currentLesson?.items.find((i) => i.id === itemId);
+
+      if (!item) return;
+
+      // Update working set state based on choice
+      if (choice === "practice") {
+        const workingSetItem = {
+          id: itemId,
+          mastery: 1,
+          vocabularyItem: item,
+          lastReviewed: new Date(),
+        };
+
+        // Add to working set if not already present
+        if (!workingSet.workingSet.some((i) => i.id === itemId)) {
+          workingSet.addToWorkingSet([workingSetItem]);
+          workingSet.setActiveVocabItem(workingSetItem);
+        }
+
+        // Update lesson subset
+        workingSet.setLessonSubset((prev) => {
+          const newSubset = { ...prev };
+          // Remove from all other categories
+          newSubset.unseenItems = newSubset.unseenItems.filter(
+            (id) => id !== itemId
+          );
+          newSubset.masteredItems = newSubset.masteredItems.filter(
+            (id) => id !== itemId
+          );
+          newSubset.skippedItems = newSubset.skippedItems.filter(
+            (id) => id !== itemId
+          );
+          // Add to practice items if not already there
+          if (!newSubset.practiceItems.includes(itemId)) {
+            newSubset.practiceItems.push(itemId);
+          }
+          return newSubset;
+        });
+      } else if (choice === "mastered") {
+        // Remove from working set
+        workingSet.removeFromWorkingSet(itemId);
+
+        // Update lesson subset
+        workingSet.setLessonSubset((prev) => {
+          const newSubset = { ...prev };
+          // Remove from all other categories
+          newSubset.unseenItems = newSubset.unseenItems.filter(
+            (id) => id !== itemId
+          );
+          newSubset.practiceItems = newSubset.practiceItems.filter(
+            (id) => id !== itemId
+          );
+          newSubset.skippedItems = newSubset.skippedItems.filter(
+            (id) => id !== itemId
+          );
+          // Add to mastered items if not already there
+          if (!newSubset.masteredItems.includes(itemId)) {
+            newSubset.masteredItems.push(itemId);
+          }
+          return newSubset;
+        });
+      } else if (choice === "skipped") {
+        // Remove from working set
+        workingSet.removeFromWorkingSet(itemId);
+
+        // Update lesson subset
+        workingSet.setLessonSubset((prev) => {
+          const newSubset = { ...prev };
+          // Remove from all other categories
+          newSubset.unseenItems = newSubset.unseenItems.filter(
+            (id) => id !== itemId
+          );
+          newSubset.practiceItems = newSubset.practiceItems.filter(
+            (id) => id !== itemId
+          );
+          newSubset.masteredItems = newSubset.masteredItems.filter(
+            (id) => id !== itemId
+          );
+          // Add to skipped items if not already there
+          if (!newSubset.skippedItems.includes(itemId)) {
+            newSubset.skippedItems.push(itemId);
+          }
+          return newSubset;
+        });
+      }
+
+      // Load next unseen item if available
+      const nextUnseenItem = currentLesson?.items.find((i) =>
+        workingSet.lessonSubset.unseenItems.includes(i.id)
+      );
+
+      if (nextUnseenItem) {
+        const nextWorkingSetItem = {
+          id: nextUnseenItem.id,
+          mastery: 0,
+          vocabularyItem: nextUnseenItem,
+          lastReviewed: new Date(),
+        };
+        workingSet.addToWorkingSet([nextWorkingSetItem]);
+        workingSet.setActiveVocabItem(nextWorkingSetItem);
+      } else {
+        // If no unseen items, move to the next item in the working set
+        workingSet.nextItem();
+      }
+    },
+    [lessonState, workingSet]
+  );
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    const state = {
+      lessonData: flashcardMachine.gameState.lessonData,
+      currentLesson: lessonState.currentLesson,
+      progressionMode: lessonState.progressionMode,
+      lessonSubset: workingSet.lessonSubset,
+      workingSet: workingSet.workingSet.map((item) => ({
+        ...item,
+        lastReviewed: item.lastReviewed.toISOString(),
+      })),
+      activeVocabItem: workingSet.activeVocabItem
+        ? {
+            ...workingSet.activeVocabItem,
+            lastReviewed: workingSet.activeVocabItem.lastReviewed.toISOString(),
+          }
+        : null,
+    };
+    localStorage.setItem("flashcardGameState", JSON.stringify(state));
+  }, [
+    flashcardMachine.gameState,
+    lessonState.currentLesson,
+    lessonState.progressionMode,
+    workingSet.lessonSubset,
+    workingSet.workingSet,
+    workingSet.activeVocabItem,
+  ]);
 
   return {
     // Game settings

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import {
   Lesson,
   LessonItem,
@@ -19,134 +19,100 @@ interface UseLessons {
 }
 
 export const useLessons = (): UseLessons => {
-  // Load lessons
-  const lessons = loadLessons();
-
-  // Initialize with first valid lesson or 0
-  const initialLesson = lessons.length > 0 ? 0 : -1;
-  const [currentLesson, setCurrentLesson] = useState(initialLesson);
+  const [currentLesson, setCurrentLesson] = useState<number>(-1);
   const [progressionMode, setProgressionMode] = useState<
     "firstPass" | "spacedRepetition" | "test"
   >("firstPass");
-
-  // Initialize lesson data
   const [lessonData, setLessonData] = useState<GameState["lessonData"]>({});
 
-  // Persist state to localStorage
-  useEffect(() => {
-    const savedLesson = localStorage.getItem("currentLesson");
-    if (savedLesson) {
-      setCurrentLesson(parseInt(savedLesson, 10));
+  // Load lessons from the lesson loader
+  const lessons = useMemo(() => {
+    try {
+      return loadLessons();
+    } catch (error) {
+      console.error("Failed to load lessons:", error);
+      return [];
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("currentLesson", currentLesson.toString());
-  }, [currentLesson]);
-
-  useEffect(() => {
-    const savedMode = localStorage.getItem("progressionMode");
-    if (savedMode) {
-      setProgressionMode(
-        savedMode as "firstPass" | "spacedRepetition" | "test"
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("progressionMode", progressionMode);
-  }, [progressionMode]);
-
-  useEffect(() => {
-    const savedData = localStorage.getItem("lessonData");
-    if (savedData) {
-      setLessonData(JSON.parse(savedData));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("lessonData", JSON.stringify(lessonData));
-  }, [lessonData]);
-
-  // Ensure currentLesson is valid
-  useEffect(() => {
-    if (currentLesson >= lessons.length || currentLesson < 0) {
-      setCurrentLesson(initialLesson);
-    }
-  }, [currentLesson, lessons.length, initialLesson]);
-
-  // Wrap setCurrentLesson to ensure proper initialization
-  const setCurrentLessonAndInit = useCallback(
-    (newLesson: number) => {
-      setCurrentLesson(newLesson);
-      setProgressionMode("firstPass"); // Reset progression mode when changing lessons
-    },
-    [setCurrentLesson, setProgressionMode]
-  );
 
   // Handle first pass choices
   const handleFirstPassChoice = useCallback(
     (itemId: string, choice: RecallCategory) => {
-      if (currentLesson < 0 || !lessons[currentLesson]) return;
+      setLessonData((prev) => {
+        const currentLessonId = currentLesson.toString();
+        const lesson = prev[currentLessonId];
+        if (!lesson?.items) return prev;
 
-      const lesson = lessons[currentLesson];
-      const item = lesson.items.find((i: LessonItem) => i.id === itemId);
-      if (!item) return;
+        const item = lesson.items.find((i) => i.id === itemId);
+        if (!item) return prev;
 
-      setLessonData((prev: GameState["lessonData"]) => {
-        const newData = { ...prev };
-        const lessonId = lesson.id;
-
-        if (!newData[lessonId]) {
-          newData[lessonId] = {
-            metadata: {
-              id: lesson.id,
-              name: lesson.title,
-              description: "",
-              categories: [],
-              difficulty: "beginner",
-              estimatedTime: 0,
-              totalItems: lesson.items.length,
-              version: 1,
-            },
-            items: lesson.items,
-          };
-        }
-
-        if (newData[lessonId].items) {
-          const itemIndex = newData[lessonId].items!.findIndex(
-            (i: LessonItem) => i.id === itemId
-          );
-          if (itemIndex >= 0) {
-            newData[lessonId].items![itemIndex] = {
-              ...newData[lessonId].items![itemIndex],
-              recallCategory: choice,
-              practiceHistory: [
-                ...newData[lessonId].items![itemIndex].practiceHistory,
-                {
-                  timestamp: Date.now(),
-                  result: choice,
-                  timeSpent: 0,
-                  recalledSide: 0,
-                  confidenceLevel: 1,
-                  isCorrect: true,
-                  attemptCount: 1,
-                  sourceCategory: "unseen",
-                },
-              ],
-            };
-          }
-        }
-
-        return newData;
+        return {
+          ...prev,
+          [currentLessonId]: {
+            ...lesson,
+            items: lesson.items.map((i) =>
+              i.id === itemId
+                ? {
+                    ...i,
+                    recallCategory: choice,
+                    practiceHistory: [
+                      ...i.practiceHistory,
+                      {
+                        timestamp: Date.now(),
+                        result: choice,
+                        timeSpent: 0,
+                        recalledSide: 0,
+                        confidenceLevel: 5,
+                        isCorrect: choice === "mastered",
+                        attemptCount: 1,
+                        sourceCategory: "unseen",
+                      },
+                    ],
+                  }
+                : i
+            ),
+          },
+        };
       });
     },
-    [currentLesson, lessons]
+    [currentLesson]
   );
+
+  // Save lesson data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("lessonData", JSON.stringify(lessonData));
+  }, [lessonData]);
+
+  // Load lesson data from localStorage on mount
+  useEffect(() => {
+    const savedData = localStorage.getItem("lessonData");
+    if (savedData) {
+      try {
+        const parsed = JSON.parse(savedData);
+        setLessonData(parsed);
+        if (parsed.currentLesson !== undefined) {
+          setCurrentLesson(parsed.currentLesson);
+        }
+      } catch (error) {
+        console.error("Failed to parse saved lesson data:", error);
+      }
+    }
+  }, []);
+
+  // Initialize with default lesson if none selected and lessons are loaded
+  useEffect(() => {
+    if (
+      currentLesson === -1 &&
+      lessons.length > 0 &&
+      Object.keys(lessonData).length > 0
+    ) {
+      setCurrentLesson(0);
+    }
+  }, [currentLesson, lessons.length, lessonData]);
 
   return {
     currentLesson,
-    setCurrentLesson: setCurrentLessonAndInit,
+    setCurrentLesson,
     progressionMode,
     setProgressionMode,
     lessons,
