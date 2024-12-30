@@ -163,86 +163,65 @@ export const useWorkingSet = ({
         // Add to appropriate category
         switch (choice) {
           case "practice":
-            if (!newSubset.practiceItems.includes(itemId)) {
-              newSubset.practiceItems.push(itemId);
-            }
+            newSubset.practiceItems.push(itemId);
             break;
           case "mastered":
-            if (!newSubset.masteredItems.includes(itemId)) {
-              newSubset.masteredItems.push(itemId);
-            }
-            break;
-          case "unseen":
-            if (!newSubset.unseenItems.includes(itemId)) {
-              newSubset.unseenItems.push(itemId);
-            }
+            newSubset.masteredItems.push(itemId);
             break;
           case "skipped":
-            if (!newSubset.skippedItems.includes(itemId)) {
-              newSubset.skippedItems.push(itemId);
-            }
+            newSubset.skippedItems.push(itemId);
             break;
+          case "unseen":
+            newSubset.unseenItems.push(itemId);
+            break;
+        }
+
+        // Handle next item selection within the same update
+        const nextUnseenId = newSubset.unseenItems[0];
+        if (nextUnseenId) {
+          const nextItem = lessons[currentLesson]?.items.find(
+            (item: LessonItem) => item.id === nextUnseenId
+          );
+          if (nextItem) {
+            // Queue the working set updates
+            queueMicrotask(() => {
+              const newWorkingSetItem = {
+                id: nextItem.id,
+                mastery: 0,
+                vocabularyItem: nextItem,
+                lastReviewed: new Date(),
+              };
+
+              if (choice === "practice") {
+                const practiceItem = {
+                  id: itemId,
+                  mastery: 1,
+                  vocabularyItem: lessons[currentLesson]?.items.find(
+                    (i) => i.id === itemId
+                  )!,
+                  lastReviewed: new Date(),
+                };
+                setWorkingSet((prev) => [
+                  ...prev.filter((i) => i.id !== itemId && i.mastery > 0),
+                  practiceItem,
+                ]);
+              } else {
+                setWorkingSet((prev) =>
+                  prev.filter((i) => i.id !== itemId && i.mastery > 0)
+                );
+              }
+
+              // Add new unseen item after updating working set
+              addToWorkingSet([newWorkingSetItem]);
+              setActiveItem({ ...newWorkingSetItem });
+            });
+          }
         }
 
         return newSubset;
       });
-
-      // Handle working set updates
-      if (choice === "practice") {
-        const item = lessons[currentLesson]?.items.find(
-          (i: LessonItem) => i.id === itemId
-        );
-        if (item && workingSet.length < 7) {
-          const newItem = {
-            id: itemId,
-            mastery: 1,
-            vocabularyItem: item,
-            lastReviewed: new Date(),
-          };
-          addToWorkingSet([newItem]);
-        }
-      } else {
-        removeFromWorkingSet(itemId);
-      }
-
-      // Load next unseen item if available
-      if (lessonSubset.unseenItems.length > 0) {
-        const nextItemId = lessonSubset.unseenItems[0];
-        const nextItem = lessons[currentLesson]?.items.find(
-          (item: LessonItem) => item.id === nextItemId
-        );
-        if (nextItem) {
-          // Remove any existing unseen items from working set
-          setWorkingSet((prev) => prev.filter((item) => item.mastery > 0));
-
-          // Add the new unseen item with a new reference
-          const newWorkingSetItem = {
-            id: nextItem.id,
-            mastery: 0,
-            vocabularyItem: nextItem,
-            lastReviewed: new Date(),
-          };
-          addToWorkingSet([newWorkingSetItem]);
-
-          // Set it as the active item
-          setActiveItem({ ...newWorkingSetItem });
-        }
-      } else {
-        // If no unseen items, move to the next item in the working set
-        nextItem();
-      }
     },
-    [
-      currentLesson,
-      lessons,
-      workingSet,
-      lessonSubset,
-      addToWorkingSet,
-      removeFromWorkingSet,
-      nextItem,
-      setActiveItem,
-      setWorkingSet,
-    ]
+    [currentLesson, lessons, addToWorkingSet, setActiveItem]
   );
 
   const markForPractice = useCallback(
