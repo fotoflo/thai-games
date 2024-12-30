@@ -41,7 +41,7 @@ export const useReadThaiGameState = () => {
   // Initialize with -1 if no lesson is selected
   useEffect(() => {
     if (lessonState.currentLesson !== -1 && lessonState.lessons.length === 0) {
-      lessonState.setCurrentLesson(-1);
+      lessonState.setCurrentLesson(0);
     }
   }, [lessonState]);
 
@@ -90,18 +90,7 @@ export const useReadThaiGameState = () => {
       } else {
         // No saved state, initialize with first lesson
         lessonState.setCurrentLesson(0);
-        lessonState.setProgressionMode("firstPass");
-
-        // Initialize first item
-        const currentLesson = lessonState.lessons[0];
-        if (currentLesson?.items.length > 0) {
-          const firstItem = currentLesson.items[0];
-          const workingSetItem = createWorkingSetItem(firstItem);
-          workingSet.clearWorkingSet();
-          workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setLessonSubset(createLessonSubset(currentLesson));
-          workingSet.setActiveItem(workingSetItem);
-        }
+        handleProgressionModeChange("firstPass");
       }
     }
   }, [lessonState, flashcardMachine, workingSet]);
@@ -109,7 +98,10 @@ export const useReadThaiGameState = () => {
   // Handle progression mode changes
   const handleProgressionModeChange = useCallback(
     (mode: "firstPass" | "spacedRepetition" | "test") => {
-      if (mode === lessonState.progressionMode) return;
+      // debugger;
+      if (mode === lessonState.progressionMode && !!workingSet.activeItem)
+        return;
+      console.log("handleProgressionModeChange", mode);
 
       lessonState.setProgressionMode(mode);
 
