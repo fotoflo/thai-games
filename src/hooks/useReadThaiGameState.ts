@@ -14,6 +14,8 @@ export const useReadThaiGameState = () => {
     progressionMode: lessonState.progressionMode,
   });
 
+  const flashcardMachine = useFlashcardMachine();
+
   const createWorkingSetItem = useCallback((item: LessonItem) => {
     return {
       id: item.id,
@@ -32,7 +34,101 @@ export const useReadThaiGameState = () => {
     };
   }, []);
 
-  const flashcardMachine = useFlashcardMachine();
+  const getCurrentLesson = useCallback(() => {
+    return lessonState.lessons[lessonState.currentLesson];
+  }, [lessonState]);
+
+  const initializeWorkingSet = useCallback(
+    ({
+      items,
+      shouldClearWorkingSet = true,
+      shouldSetLessonSubset = false,
+    }: {
+      items: LessonItem[];
+      shouldClearWorkingSet?: boolean;
+      shouldSetLessonSubset?: boolean;
+    }) => {
+      const workingSetItems = items.map((item) => createWorkingSetItem(item));
+
+      if (workingSetItems.length === 0) return;
+
+      if (shouldClearWorkingSet) {
+        workingSet.clearWorkingSet();
+      }
+
+      workingSet.addToWorkingSet(workingSetItems);
+      workingSet.setActiveItem(workingSetItems[0]);
+
+      if (shouldSetLessonSubset) {
+        const currentLesson = getCurrentLesson();
+        if (currentLesson) {
+          workingSet.setLessonSubset(createLessonSubset(currentLesson));
+        }
+      }
+    },
+    [workingSet, createWorkingSetItem, getCurrentLesson, createLessonSubset]
+  );
+
+  const initializeFirstPassMode = useCallback(() => {
+    const currentLesson = getCurrentLesson();
+    if (currentLesson?.items.length > 0) {
+      initializeWorkingSet({
+        items: [currentLesson.items[0]],
+        shouldClearWorkingSet: true,
+        shouldSetLessonSubset: true,
+      });
+    }
+  }, [getCurrentLesson, initializeWorkingSet]);
+
+  const initializeSpacedRepetitionMode = useCallback(() => {
+    const currentLesson = getCurrentLesson();
+    if (currentLesson?.items.length > 0) {
+      const practiceItems = currentLesson.items.filter((item) =>
+        workingSet.lessonSubset.practiceItems.includes(item.id)
+      );
+
+      if (practiceItems.length > 0) {
+        initializeWorkingSet({
+          items: practiceItems,
+          shouldClearWorkingSet: true,
+        });
+      }
+    }
+  }, [getCurrentLesson, workingSet.lessonSubset, initializeWorkingSet]);
+
+  const initializeTestMode = useCallback(() => {
+    workingSet.clearWorkingSet();
+  }, [workingSet]);
+
+  // Handle progression mode changes
+  const handleProgressionModeChange = useCallback(
+    (mode: "firstPass" | "spacedRepetition" | "test") => {
+      if (mode === lessonState.progressionMode && !!workingSet.activeItem)
+        return;
+      console.log("handleProgressionModeChange", mode);
+
+      lessonState.setProgressionMode(mode);
+
+      switch (mode) {
+        case "firstPass":
+          initializeFirstPassMode();
+          break;
+        case "spacedRepetition":
+          initializeSpacedRepetitionMode();
+          break;
+        case "test":
+          initializeTestMode();
+          break;
+      }
+    },
+    [
+      lessonState,
+      workingSet,
+      initializeFirstPassMode,
+      initializeSpacedRepetitionMode,
+      initializeTestMode,
+    ]
+  );
 
   // Initialize with default lesson if none selected
   useEffect(() => {
@@ -82,51 +178,6 @@ export const useReadThaiGameState = () => {
     }
   }, [lessonState, flashcardMachine, workingSet]);
 
-  // Handle progression mode changes
-  const handleProgressionModeChange = useCallback(
-    (mode: "firstPass" | "spacedRepetition" | "test") => {
-      // debugger;
-      if (mode === lessonState.progressionMode && !!workingSet.activeItem)
-        return;
-      console.log("handleProgressionModeChange", mode);
-
-      lessonState.setProgressionMode(mode);
-
-      if (mode === "firstPass") {
-        // Initialize with first item from current lesson
-        const currentLesson = lessonState.lessons[lessonState.currentLesson];
-        if (currentLesson?.items.length > 0) {
-          const firstItem = currentLesson.items[0];
-          const workingSetItem = createWorkingSetItem(firstItem);
-          workingSet.clearWorkingSet();
-          workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setLessonSubset(createLessonSubset(currentLesson));
-          workingSet.setActiveItem(workingSetItem);
-        }
-      } else if (mode === "spacedRepetition") {
-        // Get all practice items from the current lesson
-        const currentLesson = lessonState.lessons[lessonState.currentLesson];
-        if (currentLesson?.items.length > 0) {
-          const practiceItems = currentLesson.items
-            .filter((item) =>
-              workingSet.lessonSubset.practiceItems.includes(item.id)
-            )
-            .map((item) => createWorkingSetItem(item));
-
-          if (practiceItems.length > 0) {
-            workingSet.clearWorkingSet();
-            workingSet.addToWorkingSet(practiceItems);
-            workingSet.setActiveItem(practiceItems[0]);
-          }
-        }
-      } else if (mode === "test") {
-        // Clear working set in test mode
-        workingSet.clearWorkingSet();
-      }
-    },
-    [lessonState, workingSet]
-  );
-
   // Initialize first pass mode when lesson is selected
   useEffect(() => {
     if (
@@ -152,6 +203,29 @@ export const useReadThaiGameState = () => {
 
       if (!item) return;
 
+      const removeFromAllCategories = (
+        subset: typeof workingSet.lessonSubset
+      ) => {
+        return {
+          ...subset,
+          unseenItems: subset.unseenItems.filter((id) => id !== itemId),
+          practiceItems: subset.practiceItems.filter((id) => id !== itemId),
+          masteredItems: subset.masteredItems.filter((id) => id !== itemId),
+          skippedItems: subset.skippedItems.filter((id) => id !== itemId),
+        };
+      };
+
+      const addToCategory = (
+        subset: typeof workingSet.lessonSubset,
+        category: keyof typeof workingSet.lessonSubset
+      ) => {
+        const newSubset = removeFromAllCategories(subset);
+        if (!newSubset[category].includes(itemId)) {
+          newSubset[category].push(itemId);
+        }
+        return newSubset;
+      };
+
       // Update working set state based on choice
       if (choice === "practice") {
         const workingSetItem = createWorkingSetItem(item);
@@ -163,70 +237,25 @@ export const useReadThaiGameState = () => {
         }
 
         // Update lesson subset
-        workingSet.setLessonSubset((prev) => {
-          const newSubset = { ...prev };
-          // Remove from all other categories
-          newSubset.unseenItems = newSubset.unseenItems.filter(
-            (id) => id !== itemId
-          );
-          newSubset.masteredItems = newSubset.masteredItems.filter(
-            (id) => id !== itemId
-          );
-          newSubset.skippedItems = newSubset.skippedItems.filter(
-            (id) => id !== itemId
-          );
-          // Add to practice items if not already there
-          if (!newSubset.practiceItems.includes(itemId)) {
-            newSubset.practiceItems.push(itemId);
-          }
-          return newSubset;
-        });
+        workingSet.setLessonSubset((prev) =>
+          addToCategory(prev, "practiceItems")
+        );
       } else if (choice === "mastered") {
         // Remove from working set
         workingSet.removeFromWorkingSet(itemId);
 
         // Update lesson subset
-        workingSet.setLessonSubset((prev) => {
-          const newSubset = { ...prev };
-          // Remove from all other categories
-          newSubset.unseenItems = newSubset.unseenItems.filter(
-            (id) => id !== itemId
-          );
-          newSubset.practiceItems = newSubset.practiceItems.filter(
-            (id) => id !== itemId
-          );
-          newSubset.skippedItems = newSubset.skippedItems.filter(
-            (id) => id !== itemId
-          );
-          // Add to mastered items if not already there
-          if (!newSubset.masteredItems.includes(itemId)) {
-            newSubset.masteredItems.push(itemId);
-          }
-          return newSubset;
-        });
+        workingSet.setLessonSubset((prev) =>
+          addToCategory(prev, "masteredItems")
+        );
       } else if (choice === "skipped") {
         // Remove from working set
         workingSet.removeFromWorkingSet(itemId);
 
         // Update lesson subset
-        workingSet.setLessonSubset((prev) => {
-          const newSubset = { ...prev };
-          // Remove from all other categories
-          newSubset.unseenItems = newSubset.unseenItems.filter(
-            (id) => id !== itemId
-          );
-          newSubset.practiceItems = newSubset.practiceItems.filter(
-            (id) => id !== itemId
-          );
-          newSubset.masteredItems = newSubset.masteredItems.filter(
-            (id) => id !== itemId
-          );
-          // Add to skipped items if not already there
-          if (!newSubset.skippedItems.includes(itemId)) {
-            newSubset.skippedItems.push(itemId);
-          }
-          return newSubset;
-        });
+        workingSet.setLessonSubset((prev) =>
+          addToCategory(prev, "skippedItems")
+        );
       }
 
       // Load next unseen item if available
