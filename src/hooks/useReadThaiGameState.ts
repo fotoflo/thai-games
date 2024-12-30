@@ -3,7 +3,13 @@ import { useGameSettings } from "./game/useGameSettings";
 import { useLessons } from "./game/useLessons";
 import { useWorkingSet } from "./game/useWorkingSet";
 import { useFlashcardMachine } from "./useFlashcardMachine";
-import { RecallCategory, CardSource } from "../types/lessons";
+import {
+  RecallCategory,
+  CardSource,
+  LessonItem,
+  Lesson,
+} from "../types/lessons";
+import { create } from "domain";
 
 export const useReadThaiGameState = () => {
   const gameSettings = useGameSettings();
@@ -13,6 +19,24 @@ export const useReadThaiGameState = () => {
     lessons: lessonState.lessons,
     progressionMode: lessonState.progressionMode,
   });
+
+  const createWorkingSetItem = useCallback((item: LessonItem) => {
+    return {
+      id: item.id,
+      mastery: 0,
+      vocabularyItem: item,
+      lastReviewed: new Date(),
+    };
+  }, []);
+
+  const createLessonSubset = useCallback((lesson: Lesson) => {
+    return {
+      unseenItems: lesson.items.slice(1).map((item) => item.id),
+      practiceItems: [],
+      masteredItems: [],
+      skippedItems: [],
+    };
+  }, []);
 
   // Initialize with -1 if no lesson is selected
   useEffect(() => {
@@ -72,20 +96,10 @@ export const useReadThaiGameState = () => {
         const currentLesson = lessonState.lessons[0];
         if (currentLesson?.items.length > 0) {
           const firstItem = currentLesson.items[0];
-          const workingSetItem = {
-            id: firstItem.id,
-            mastery: 0,
-            vocabularyItem: firstItem,
-            lastReviewed: new Date(),
-          };
+          const workingSetItem = createWorkingSetItem(firstItem);
           workingSet.clearWorkingSet();
           workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setLessonSubset({
-            unseenItems: currentLesson.items.slice(1).map((item) => item.id),
-            practiceItems: [],
-            masteredItems: [],
-            skippedItems: [],
-          });
+          workingSet.setLessonSubset(createLessonSubset(currentLesson));
           workingSet.setActiveItem(workingSetItem);
         }
       }
@@ -104,20 +118,10 @@ export const useReadThaiGameState = () => {
         const currentLesson = lessonState.lessons[lessonState.currentLesson];
         if (currentLesson?.items.length > 0) {
           const firstItem = currentLesson.items[0];
-          const workingSetItem = {
-            id: firstItem.id,
-            mastery: 0,
-            vocabularyItem: firstItem,
-            lastReviewed: new Date(),
-          };
+          const workingSetItem = createWorkingSetItem(firstItem);
           workingSet.clearWorkingSet();
           workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setLessonSubset({
-            unseenItems: currentLesson.items.slice(1).map((item) => item.id),
-            practiceItems: [],
-            masteredItems: [],
-            skippedItems: [],
-          });
+          workingSet.setLessonSubset(createLessonSubset(currentLesson));
           workingSet.setActiveItem(workingSetItem);
         }
       } else if (mode === "spacedRepetition") {
@@ -128,12 +132,7 @@ export const useReadThaiGameState = () => {
             .filter((item) =>
               workingSet.lessonSubset.practiceItems.includes(item.id)
             )
-            .map((item) => ({
-              id: item.id,
-              mastery: 1,
-              vocabularyItem: item,
-              lastReviewed: new Date(),
-            }));
+            .map((item) => createWorkingSetItem(item));
 
           if (practiceItems.length > 0) {
             workingSet.clearWorkingSet();
@@ -176,12 +175,7 @@ export const useReadThaiGameState = () => {
 
       // Update working set state based on choice
       if (choice === "practice") {
-        const workingSetItem = {
-          id: itemId,
-          mastery: 1,
-          vocabularyItem: item,
-          lastReviewed: new Date(),
-        };
+        const workingSetItem = createWorkingSetItem(item);
 
         // Add to working set if not already present
         if (!workingSet.workingSet.some((i) => i.id === itemId)) {
@@ -262,12 +256,7 @@ export const useReadThaiGameState = () => {
       );
 
       if (nextUnseenItem) {
-        const nextWorkingSetItem = {
-          id: nextUnseenItem.id,
-          mastery: 0,
-          vocabularyItem: nextUnseenItem,
-          lastReviewed: new Date(),
-        };
+        const nextWorkingSetItem = createWorkingSetItem(nextUnseenItem);
         workingSet.addToWorkingSet([nextWorkingSetItem]);
         workingSet.setActiveItem(nextWorkingSetItem);
       } else {
