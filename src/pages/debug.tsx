@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
 
@@ -11,6 +11,11 @@ interface ActionButton {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+}
+
+interface ButtonGroup {
+  title: string;
+  buttons: ActionButton[];
 }
 
 const DebugPage: React.FC = () => {
@@ -43,69 +48,92 @@ const DebugPage: React.FC = () => {
     </button>
   );
 
-  const actionButtons: ActionButton[] = [
+  const buttonGroups: ButtonGroup[] = [
     {
-      label: "Reset Lesson",
-      onClick: () => {
-        // Just reset to first lesson and first pass mode
-        gameState.setCurrentLesson(0);
-        gameState.setProgressionMode("firstPass");
-      },
-      disabled: false,
+      title: "Item Actions",
+      buttons: [
+        {
+          label: "Next Item",
+          onClick: () => gameState.nextItem(),
+          disabled: !gameState.activeItem,
+        },
+        {
+          label: "Mark for Practice",
+          onClick: () => {
+            if (gameState.activeItem) {
+              gameState.handleFirstPassChoice(
+                gameState.activeItem.id,
+                "practice"
+              );
+            }
+          },
+          disabled: !gameState.activeItem,
+        },
+        {
+          label: "Mark as Mastered",
+          onClick: () => {
+            if (gameState.activeItem) {
+              gameState.handleFirstPassChoice(
+                gameState.activeItem.id,
+                "mastered"
+              );
+            }
+          },
+          disabled: !gameState.activeItem,
+        },
+        {
+          label: "Skip Item",
+          onClick: () => {
+            if (gameState.activeItem) {
+              gameState.handleFirstPassChoice(
+                gameState.activeItem.id,
+                "skipped"
+              );
+            }
+          },
+          disabled: !gameState.activeItem,
+        },
+      ],
     },
     {
-      label: "First Pass Mode",
-      onClick: () => gameState.setProgressionMode("firstPass"),
-      // disabled: gameState.progressionMode === "firstPass",
+      title: "Mode Selection",
+      buttons: [
+        {
+          label: "First Pass Mode",
+          onClick: () => gameState.setProgressionMode("firstPass"),
+          disabled: gameState.progressionMode === "firstPass",
+        },
+        {
+          label: "Practice Mode",
+          onClick: () => gameState.setProgressionMode("spacedRepetition"),
+          disabled: gameState.progressionMode === "spacedRepetition",
+        },
+        {
+          label: "Test Mode",
+          onClick: () => gameState.setProgressionMode("test"),
+          disabled: gameState.progressionMode === "test",
+        },
+      ],
     },
     {
-      label: "Practice Mode",
-      onClick: () => gameState.setProgressionMode("spacedRepetition"),
-      disabled: gameState.progressionMode === "spacedRepetition",
-    },
-    {
-      label: "Test Mode",
-      onClick: () => gameState.setProgressionMode("test"),
-      disabled: gameState.progressionMode === "test",
-    },
-    {
-      label: "Next Item",
-      onClick: () => gameState.nextItem(),
-      disabled: !gameState.activeItem,
-    },
-    {
-      label: "Mark for Practice",
-      onClick: () => {
-        if (gameState.activeItem) {
-          gameState.handleFirstPassChoice(gameState.activeItem.id, "practice");
-        }
-      },
-      disabled: !gameState.activeItem,
-    },
-    {
-      label: "Mark as Mastered",
-      onClick: () => {
-        if (gameState.activeItem) {
-          gameState.handleFirstPassChoice(gameState.activeItem.id, "mastered");
-        }
-      },
-      disabled: !gameState.activeItem,
-    },
-    {
-      label: "Skip Item",
-      onClick: () => {
-        if (gameState.activeItem) {
-          gameState.handleFirstPassChoice(gameState.activeItem.id, "skipped");
-        }
-      },
-      disabled: !gameState.activeItem,
-    },
-    {
-      label: "Clear Local Storage",
-      onClick: () => {
-        localStorage.clear();
-        window.location.reload();
-      },
+      title: "Lesson Control",
+      buttons: [
+        {
+          label: "Reset Lesson",
+          onClick: () => {
+            gameState.setCurrentLesson(0);
+            gameState.setProgressionMode("firstPass");
+          },
+          disabled: false,
+        },
+        {
+          label: "Clear Local Storage",
+          onClick: () => {
+            localStorage.clear();
+            window.location.reload();
+          },
+        },
+      ],
     },
   ];
 
@@ -161,9 +189,18 @@ const DebugPage: React.FC = () => {
                 <h2 className="text-xl font-bold mb-4 text-white">
                   {section.title}
                 </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {actionButtons.map((button, i) => (
-                    <div key={i}>{renderActionButton(button)}</div>
+                <div className="space-y-4">
+                  {buttonGroups.map((group, i) => (
+                    <div key={i} className="space-y-2">
+                      <h3 className="text-md font-semibold text-gray-300">
+                        {group.title}
+                      </h3>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        {group.buttons.map((button, j) => (
+                          <div key={j}>{renderActionButton(button)}</div>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
