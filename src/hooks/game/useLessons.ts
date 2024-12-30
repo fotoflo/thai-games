@@ -10,7 +10,6 @@ interface UseLessons {
   lessons: Lesson[];
   totalLessons: number;
   lessonData: GameState["lessonData"];
-  handleFirstPassChoice: (itemId: string, choice: RecallCategory) => void;
 }
 
 export const useLessons = (): UseLessons => {
@@ -29,49 +28,6 @@ export const useLessons = (): UseLessons => {
       return [];
     }
   }, []);
-
-  // Handle first pass choices
-  const handleFirstPassChoice = useCallback(
-    (itemId: string, choice: RecallCategory) => {
-      setLessonData((prev) => {
-        const currentLessonId = currentLesson.toString();
-        const lesson = prev[currentLessonId];
-        if (!lesson?.items) return prev;
-
-        const item = lesson.items.find((i) => i.id === itemId);
-        if (!item) return prev;
-
-        return {
-          ...prev,
-          [currentLessonId]: {
-            ...lesson,
-            items: lesson.items.map((i) =>
-              i.id === itemId
-                ? {
-                    ...i,
-                    recallCategory: choice,
-                    practiceHistory: [
-                      ...i.practiceHistory,
-                      {
-                        timestamp: Date.now(),
-                        result: choice,
-                        timeSpent: 0,
-                        recalledSide: 0,
-                        confidenceLevel: 5,
-                        isCorrect: choice === "mastered",
-                        attemptCount: 1,
-                        sourceCategory: "unseen",
-                      },
-                    ],
-                  }
-                : i
-            ),
-          },
-        };
-      });
-    },
-    [currentLesson]
-  );
 
   // Save lesson data to localStorage whenever it changes
   useEffect(() => {
@@ -102,6 +58,5 @@ export const useLessons = (): UseLessons => {
     lessons,
     totalLessons: lessons.length,
     lessonData,
-    handleFirstPassChoice,
   };
 };

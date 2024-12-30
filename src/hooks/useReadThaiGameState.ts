@@ -103,9 +103,8 @@ export const useReadThaiGameState = () => {
   // Handle progression mode changes
   const handleProgressionModeChange = useCallback(
     (mode: "firstPass" | "spacedRepetition" | "test") => {
-      if (mode === lessonState.progressionMode && !!workingSet.activeItem)
+      if (!!workingSet.activeItem && mode === lessonState.progressionMode)
         return;
-      console.log("handleProgressionModeChange", mode);
 
       lessonState.setProgressionMode(mode);
 
@@ -195,9 +194,6 @@ export const useReadThaiGameState = () => {
   // Handle first pass choices
   const handleFirstPassChoice = useCallback(
     (itemId: string, choice: RecallCategory) => {
-      // Update lesson state
-      lessonState.handleFirstPassChoice(itemId, choice);
-
       const currentLesson = lessonState.lessons[lessonState.currentLesson];
       const item = currentLesson?.items.find((i) => i.id === itemId);
 
@@ -318,6 +314,25 @@ export const useReadThaiGameState = () => {
     createWorkingSetItem,
   ]);
 
+  // Separate handlers for each choice type
+  const handleMarkForPractice = useCallback(() => {
+    if (workingSet.activeItem) {
+      handleFirstPassChoice(workingSet.activeItem.id, "practice");
+    }
+  }, [workingSet.activeItem, handleFirstPassChoice]);
+
+  const handleMarkAsMastered = useCallback(() => {
+    if (workingSet.activeItem) {
+      handleFirstPassChoice(workingSet.activeItem.id, "mastered");
+    }
+  }, [workingSet.activeItem, handleFirstPassChoice]);
+
+  const handleSkipItem = useCallback(() => {
+    if (workingSet.activeItem) {
+      handleFirstPassChoice(workingSet.activeItem.id, "skipped");
+    }
+  }, [workingSet.activeItem, handleFirstPassChoice]);
+
   return {
     // Game settings
     ...gameSettings,
@@ -335,6 +350,9 @@ export const useReadThaiGameState = () => {
     addMoreItems: workingSet.addMoreItems,
     nextItem: workingSet.nextItem,
     handleFirstPassChoice,
+    handleMarkForPractice,
+    handleMarkAsMastered,
+    handleSkipItem,
 
     // Lesson data
     lessons: lessonState.lessons,

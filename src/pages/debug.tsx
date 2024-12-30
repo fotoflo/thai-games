@@ -61,10 +61,7 @@ const DebugPage: React.FC = () => {
           label: "Mark for Practice",
           onClick: () => {
             if (gameState.activeItem) {
-              gameState.handleFirstPassChoice(
-                gameState.activeItem.id,
-                "practice"
-              );
+              gameState.handleMarkForPractice();
             }
           },
           disabled: !gameState.activeItem,
@@ -73,10 +70,7 @@ const DebugPage: React.FC = () => {
           label: "Mark as Mastered",
           onClick: () => {
             if (gameState.activeItem) {
-              gameState.handleFirstPassChoice(
-                gameState.activeItem.id,
-                "mastered"
-              );
+              gameState.handleMarkAsMastered();
             }
           },
           disabled: !gameState.activeItem,
@@ -85,10 +79,7 @@ const DebugPage: React.FC = () => {
           label: "Skip Item",
           onClick: () => {
             if (gameState.activeItem) {
-              gameState.handleFirstPassChoice(
-                gameState.activeItem.id,
-                "skipped"
-              );
+              gameState.handleSkipItem();
             }
           },
           disabled: !gameState.activeItem,
