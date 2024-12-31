@@ -3,7 +3,7 @@ import { Eye } from 'lucide-react';
 
 const CheckTranslationButton = ({ onClick, current }) => {
   // Only render if current has details with a translation
-  if (!current?.vocabularyItem?.translation) return null;
+  if (!current?.lessonItem?.translation) return null;
 
   return (
     <div className="flex justify-center mt-12 mb-8">

@@ -79,7 +79,7 @@ const IndexPage: React.FC = () => {
     setCurrentLesson(index);
   };
 
-  const displayItem = activeItem?.vocabularyItem;
+  const displayItem = activeItem?.lessonItem;
 
   if (!displayItem) {
     return (

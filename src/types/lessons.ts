@@ -55,7 +55,7 @@ export type Lesson = {
 export type WorkingSetItem = {
   id: string;
   mastery: number;
-  vocabularyItem: LessonItem;
+  lessonItem: LessonItem;
   lastReviewed: Date;
 };
 

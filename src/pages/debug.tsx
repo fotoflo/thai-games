@@ -5,6 +5,7 @@ import GameHeader from "../components/GameHeader";
 interface DebugSection {
   title: string;
   data: unknown;
+  priority?: number; // Higher number = wider/taller
 }
 
 interface ActionButton {
@@ -22,9 +23,9 @@ const DebugPage: React.FC = () => {
   const gameState = useReadThaiGameState();
 
   const renderSection = ({ title, data }: DebugSection) => (
-    <div className="bg-gray-800 rounded-lg p-4 mb-4">
+    <div className="bg-gray-800 rounded-lg p-4 w-full break-inside-avoid mb-4">
       <h2 className="text-xl font-bold mb-2 text-white">{title}</h2>
-      <pre className="bg-gray-900 p-4 rounded overflow-auto text-white whitespace-pre-wrap break-words">
+      <pre className="bg-gray-900 p-4 rounded overflow-auto text-white whitespace-pre-wrap break-words text-xs">
         {JSON.stringify(data, null, 2)}
       </pre>
     </div>
@@ -38,7 +39,7 @@ const DebugPage: React.FC = () => {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 rounded-lg ${
+      className={`px-4 py-2 rounded-lg w-full ${
         disabled
           ? "bg-gray-700 text-gray-500 cursor-not-allowed"
           : "bg-blue-600 text-white hover:bg-blue-700"
@@ -118,20 +119,16 @@ const DebugPage: React.FC = () => {
 
   const sections: DebugSection[] = [
     {
-      title: "Actions",
-      data: null,
-    },
-    {
       title: "Active Item (simplified)",
       data: {
         id: gameState.activeItem?.id,
-        thai: gameState.activeItem?.vocabularyItem.sides[0].markdown,
-        english: gameState.activeItem?.vocabularyItem.sides[1].markdown,
+        thai: gameState.activeItem?.lessonItem.sides[0].markdown,
+        english: gameState.activeItem?.lessonItem.sides[1].markdown,
         mastery: gameState.activeItem?.mastery,
-        tags: gameState.activeItem?.vocabularyItem.tags,
+        tags: gameState.activeItem?.lessonItem.tags,
       },
+      priority: 2,
     },
-
     {
       title: "Lesson State",
       data: {
@@ -142,25 +139,35 @@ const DebugPage: React.FC = () => {
           (item) => item.id
         ),
       },
+      priority: 2,
     },
     {
-      title: "Working Set",
+      title: "Working Set (simplified)",
       data: gameState.workingSet.map((entry) => ({
         id: entry.id,
-        recallCategory: entry.vocabularyItem.recallCategory,
+        recallCategory: entry.lessonItem.recallCategory,
       })),
-    },
-    {
-      title: "Lesson Subset",
-      data: gameState.lessonSubset,
-    },
-    {
-      title: "Game State",
-      data: gameState.gameState,
+      priority: 1,
     },
     {
       title: "Active Item",
       data: gameState.activeItem,
+      priority: 3,
+    },
+    {
+      title: "Lesson Subset",
+      data: gameState.lessonSubset,
+      priority: 2,
+    },
+    {
+      title: "Game State",
+      data: gameState.gameState,
+      priority: 2,
+    },
+    {
+      title: "Working Set",
+      data: gameState.workingSet,
+      priority: 3,
     },
   ];
 
@@ -168,7 +175,7 @@ const DebugPage: React.FC = () => {
     <div className="min-h-screen bg-gray-900 p-4">
       <GameHeader title="Debug View" darkMode={true} />
 
-      <div className="max-w-4xl mx-auto text-xs">
+      <div className="max-w-7xl mx-auto">
         {/* Actions Section */}
         <div className="bg-gray-800 rounded-lg p-4 mb-4">
           <h2 className="text-xl font-bold mb-4 text-white">Actions</h2>
@@ -188,18 +195,15 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        {/* State Views Section - Pinterest-style layout */}
-        <div className="grid grid-cols-2 gap-4 auto-rows-auto grid-flow-dense">
+        {/* State Views Section - Masonry Layout */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
           {sections
             .filter((section) => section.title !== "Actions")
             .map((section, index) => (
               <div
                 key={index}
-                className={`${
-                  section.title === "Active Item" ||
-                  section.title === "Lesson State"
-                    ? "col-span-1 row-span-2"
-                    : "col-span-1"
+                className={`break-inside-avoid-column ${
+                  section.priority === 3 ? "w-full" : ""
                 }`}
               >
                 {renderSection(section)}

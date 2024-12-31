@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, BookOpen, Globe } from "lucide-react";
-import { Lesson, VocabularyItem } from "@/types/lessons";
+import { Lesson } from "@/types/lessons";
 import ModalContainer from "../ui/ModalContainer";
 import DetailCard from "./DetailCard";
 

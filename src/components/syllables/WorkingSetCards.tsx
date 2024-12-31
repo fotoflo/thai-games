@@ -38,7 +38,7 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 flex-wrap justify-center">
           {workingSet.map((item) => {
-            const text = item.vocabularyItem.sides[0].markdown;
+            const text = item.lessonItem.sides[0].markdown;
             if (!text) return null;
 
             const phoneticText = thaiToIPA(text);

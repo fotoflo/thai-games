@@ -63,7 +63,7 @@ describe("useWorkingSet", () => {
         {
           id: "item-1",
           mastery: 1,
-          vocabularyItem: mockLesson.items[0],
+          lessonItem: mockLesson.items[0],
           lastReviewed: new Date(),
         },
       ]);
@@ -86,7 +86,7 @@ describe("useWorkingSet", () => {
         {
           id: "item-1",
           mastery: 1,
-          vocabularyItem: mockLesson.items[0],
+          lessonItem: mockLesson.items[0],
           lastReviewed: new Date(),
         },
       ]);
@@ -97,7 +97,7 @@ describe("useWorkingSet", () => {
         {
           id: "item-1",
           mastery: 1,
-          vocabularyItem: mockLesson.items[0],
+          lessonItem: mockLesson.items[0],
           lastReviewed: new Date(),
         },
       ]);
@@ -120,19 +120,19 @@ describe("useWorkingSet", () => {
         {
           id: "item-1",
           mastery: 1,
-          vocabularyItem: mockLesson.items[0],
+          lessonItem: mockLesson.items[0],
           lastReviewed: new Date(),
         },
         {
           id: "item-2",
           mastery: 1,
-          vocabularyItem: mockLesson.items[1],
+          lessonItem: mockLesson.items[1],
           lastReviewed: new Date(),
         },
         {
           id: "item-3",
           mastery: 1,
-          vocabularyItem: mockLesson.items[2],
+          lessonItem: mockLesson.items[2],
           lastReviewed: new Date(),
         },
       ]);

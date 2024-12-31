@@ -20,7 +20,7 @@ export const useReadThaiGameState = () => {
     return {
       id: item.id,
       mastery: 0,
-      vocabularyItem: item,
+      lessonItem: item,
       lastReviewed: new Date(),
     };
   }, []);
