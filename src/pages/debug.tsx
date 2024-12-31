@@ -124,7 +124,6 @@ const DebugPage: React.FC = () => {
         id: gameState.activeItem?.id,
         thai: gameState.activeItem?.lessonItem.sides[0].markdown,
         english: gameState.activeItem?.lessonItem.sides[1].markdown,
-        mastery: gameState.activeItem?.mastery,
         tags: gameState.activeItem?.lessonItem.tags,
       },
       priority: 2,

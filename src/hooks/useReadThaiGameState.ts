@@ -19,9 +19,9 @@ export const useReadThaiGameState = () => {
   const createWorkingSetItem = useCallback((item: LessonItem) => {
     return {
       id: item.id,
-      mastery: 0,
       lessonItem: item,
       lastReviewed: new Date(),
+      recallCategory: item.recallCategory,
     };
   }, []);
 
@@ -138,52 +138,7 @@ export const useReadThaiGameState = () => {
     ]
   );
 
-  // Initialize with default lesson if none selected
-  useEffect(() => {
-    if (lessonState.currentLesson === -1 && lessonState.lessons.length > 0) {
-      // Load saved state from localStorage
-      const savedState = localStorage.getItem("flashcardGameState");
-      if (savedState) {
-        try {
-          const parsed = JSON.parse(savedState);
-          flashcardMachine.updateGameState((draft) => {
-            Object.assign(draft, {
-              lessonData: parsed.lessonData,
-            });
-          });
-
-          // Restore lesson state
-          lessonState.setCurrentLesson(parsed.currentLesson ?? 0);
-          lessonState.setProgressionMode(parsed.progressionMode ?? "firstPass");
-
-          if (parsed.lessonSubset) {
-            workingSet.setLessonSubset(parsed.lessonSubset);
-          }
-          if (parsed.workingSet && Array.isArray(parsed.workingSet)) {
-            const items = parsed.workingSet.map((item: any) => ({
-              ...item,
-              lastReviewed: new Date(item.lastReviewed),
-            }));
-            workingSet.addToWorkingSet(items);
-          }
-          if (parsed.activeItem) {
-            workingSet.setActiveItem({
-              ...parsed.activeItem,
-              lastReviewed: new Date(parsed.activeItem.lastReviewed),
-            });
-          }
-        } catch (error) {
-          console.error("Failed to parse saved game state:", error);
-          initializeFirstTime();
-        }
-      } else {
-        initializeFirstTime();
-      }
-    }
-  }, [lessonState, flashcardMachine, workingSet]);
-
-  // Add a new function to handle first-time initialization
-  const initializeFirstTime = useCallback(() => {
+  const initializeWorkingSetAndLessonSubset = useCallback(() => {
     const firstLesson = lessonState.lessons[0];
     if (!firstLesson?.items.length) return;
 
@@ -206,6 +161,58 @@ export const useReadThaiGameState = () => {
     workingSet.addToWorkingSet([firstItem]);
     workingSet.setActiveItem(firstItem);
   }, [lessonState, workingSet, createWorkingSetItem]);
+
+  // Initialize with default lesson if none selected
+  useEffect(() => {
+    if (lessonState.currentLesson === -1 && lessonState.lessons.length > 0) {
+      // Load saved state from localStorage
+      const savedState = localStorage.getItem("flashcardGameState");
+      if (!savedState) {
+        initializeWorkingSetAndLessonSubset();
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(savedState);
+        flashcardMachine.updateGameState((draft) => {
+          Object.assign(draft, {
+            lessonData: parsed.lessonData,
+          });
+        });
+
+        // Restore lesson state
+        lessonState.setCurrentLesson(parsed.currentLesson ?? 0);
+        lessonState.setProgressionMode(parsed.progressionMode ?? "firstPass");
+
+        if (parsed.lessonSubset) {
+          workingSet.setLessonSubset(parsed.lessonSubset);
+        }
+        if (parsed.workingSet && Array.isArray(parsed.workingSet)) {
+          const items = parsed.workingSet.map((item: any) => ({
+            ...item,
+            lastReviewed: new Date(item.lastReviewed),
+          }));
+          workingSet.addToWorkingSet(items);
+        }
+        if (parsed.activeItem) {
+          workingSet.setActiveItem({
+            ...parsed.activeItem,
+            lastReviewed: new Date(parsed.activeItem.lastReviewed),
+          });
+        }
+      } catch (error) {
+        console.error("Failed to parse saved game state:", error);
+        initializeWorkingSetAndLessonSubset();
+      }
+    }
+  }, [
+    lessonState,
+    flashcardMachine,
+    workingSet,
+    initializeWorkingSetAndLessonSubset,
+  ]);
+
+  // Add a new function to handle first-time initialization
 
   // Initialize first pass mode when lesson is selected
   useEffect(() => {
@@ -233,6 +240,7 @@ export const useReadThaiGameState = () => {
       );
       if (!currentItem) return;
 
+      currentItem.recallCategory = choice;
       // Create practice item if needed
       const practiceItem =
         choice === "practice" ? createWorkingSetItem(currentItem) : null;

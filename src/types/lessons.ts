@@ -54,7 +54,7 @@ export type Lesson = {
 // Working Set Item
 export type WorkingSetItem = {
   id: string;
-  mastery: number;
+  recallCategory: RecallCategory;
   lessonItem: LessonItem;
   lastReviewed: Date;
 };
