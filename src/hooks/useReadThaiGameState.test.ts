@@ -1,6 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
 import { useReadThaiGameState } from "./useReadThaiGameState";
-import { LessonMetadata, LessonItem, CardSide } from "../types/lessons";
+import {
+  LessonMetadata,
+  LessonItem,
+  CardSide,
+  WorkingSetItem,
+} from "../types/lessons";
 import * as LessonLoader from "../lessons/LessonLoader";
 
 // Mock the loadLessons function
@@ -192,7 +197,7 @@ describe("useReadThaiGameState", () => {
     expect(result.current.activeItem).toEqual(firstItem);
   });
 
-  it("should advance cards after first pass choices", () => {
+  it("should advance cards after first pass choices", async () => {
     const { result } = renderHook(() => useReadThaiGameState());
 
     act(() => {
@@ -214,7 +219,7 @@ describe("useReadThaiGameState", () => {
     expect(secondItem).not.toEqual(initialItem);
   });
 
-  it("should advance cards in practice mode", () => {
+  it("should advance cards in practice mode", async () => {
     const { result } = renderHook(() => useReadThaiGameState());
 
     // Setup initial state with practice items
@@ -325,5 +330,222 @@ describe("useReadThaiGameState", () => {
     expect(result.current.lessonSubset.practiceItems).toContain("card-1");
     expect(result.current.lessonSubset.masteredItems).toContain("card-2");
     expect(result.current.lessonSubset.skippedItems).toContain("card-3");
+  });
+
+  describe("Item Actions", () => {
+    let result: { current: ReturnType<typeof useReadThaiGameState> };
+
+    beforeEach(() => {
+      // Setup for each test
+      const hook = renderHook(() => useReadThaiGameState());
+      result = hook.result;
+
+      // Initialize the lesson and mode
+      act(() => {
+        // First set up the lesson data
+        result.current.updateGameState((draft) => {
+          draft.lessonData[mockLessonMetadata.id] = {
+            metadata: mockLessonMetadata,
+            items: mockLessonItems,
+          };
+        });
+
+        // Then set the lesson and mode
+        result.current.setCurrentLesson(0);
+        result.current.setProgressionMode("firstPass");
+      });
+
+      // Wait for state to update
+      act(() => {
+        // Empty act to flush effects
+      });
+    });
+
+    it("should handle marking item for practice", () => {
+      // Get initial active item
+      const initialActiveItem = result.current.activeItem;
+      expect(initialActiveItem).not.toBeNull();
+      if (!initialActiveItem) return;
+
+      // Mark for practice
+      act(() => {
+        result.current.handleMarkForPractice();
+      });
+
+      // Verify item was added to practice items
+      expect(result.current.lessonSubset.practiceItems).toContain(
+        initialActiveItem.id
+      );
+
+      // Verify item is in working set
+      const itemInWorkingSet = result.current.workingSet.find(
+        (item: WorkingSetItem) => item.id === initialActiveItem.id
+      );
+      expect(itemInWorkingSet).toBeTruthy();
+      expect(itemInWorkingSet?.mastery).toBe(1);
+
+      // Verify item was removed from unseen items
+      expect(result.current.lessonSubset.unseenItems).not.toContain(
+        initialActiveItem.id
+      );
+    });
+
+    it("should handle marking item as mastered", () => {
+      // Get initial active item
+      const initialActiveItem = result.current.activeItem;
+      expect(initialActiveItem).not.toBeNull();
+      if (!initialActiveItem) return;
+
+      // Mark as mastered
+      act(() => {
+        result.current.handleMarkAsMastered();
+      });
+
+      // Verify item was added to mastered items
+      expect(result.current.lessonSubset.masteredItems).toContain(
+        initialActiveItem.id
+      );
+
+      // Verify item was removed from working set
+      const itemInWorkingSet = result.current.workingSet.find(
+        (item: WorkingSetItem) => item.id === initialActiveItem.id
+      );
+      expect(itemInWorkingSet).toBeFalsy();
+
+      // Verify item was removed from unseen items
+      expect(result.current.lessonSubset.unseenItems).not.toContain(
+        initialActiveItem.id
+      );
+
+      // Verify item is not in practice items
+      expect(result.current.lessonSubset.practiceItems).not.toContain(
+        initialActiveItem.id
+      );
+    });
+
+    it("should handle skipping item", () => {
+      // Get initial active item
+      const initialActiveItem = result.current.activeItem;
+      expect(initialActiveItem).not.toBeNull();
+      if (!initialActiveItem) return;
+
+      // Skip item
+      act(() => {
+        result.current.handleSkipItem();
+      });
+
+      // Verify item was added to skipped items
+      expect(result.current.lessonSubset.skippedItems).toContain(
+        initialActiveItem.id
+      );
+
+      // Verify item was removed from working set
+      const itemInWorkingSet = result.current.workingSet.find(
+        (item: WorkingSetItem) => item.id === initialActiveItem.id
+      );
+      expect(itemInWorkingSet).toBeFalsy();
+
+      // Verify item was removed from unseen items
+      expect(result.current.lessonSubset.unseenItems).not.toContain(
+        initialActiveItem.id
+      );
+
+      // Verify item is not in practice or mastered items
+      expect(result.current.lessonSubset.practiceItems).not.toContain(
+        initialActiveItem.id
+      );
+      expect(result.current.lessonSubset.masteredItems).not.toContain(
+        initialActiveItem.id
+      );
+    });
+
+    it("should move to next item after any action", () => {
+      // Get initial active item
+      const initialActiveItem = result.current.activeItem;
+      expect(initialActiveItem).not.toBeNull();
+      if (!initialActiveItem) return;
+
+      // Test after marking for practice
+      act(() => {
+        result.current.handleMarkForPractice();
+      });
+      expect(result.current.activeItem?.id).not.toBe(initialActiveItem.id);
+
+      // Test after marking as mastered
+      const secondItem = result.current.activeItem;
+      if (!secondItem) return;
+      act(() => {
+        result.current.handleMarkAsMastered();
+      });
+      expect(result.current.activeItem?.id).not.toBe(secondItem.id);
+
+      // Test after skipping
+      const thirdItem = result.current.activeItem;
+      if (!thirdItem) return;
+      act(() => {
+        result.current.handleSkipItem();
+      });
+      expect(result.current.activeItem?.id).not.toBe(thirdItem.id);
+    });
+
+    it("should maintain set exclusivity", () => {
+      // Get initial active item
+      const initialActiveItem = result.current.activeItem;
+      expect(initialActiveItem).not.toBeNull();
+      if (!initialActiveItem) return;
+
+      // Test practice
+      act(() => {
+        result.current.handleMarkForPractice();
+      });
+      expect(result.current.lessonSubset.practiceItems).toContain(
+        initialActiveItem.id
+      );
+      expect(result.current.lessonSubset.masteredItems).not.toContain(
+        initialActiveItem.id
+      );
+      expect(result.current.lessonSubset.skippedItems).not.toContain(
+        initialActiveItem.id
+      );
+      expect(result.current.lessonSubset.unseenItems).not.toContain(
+        initialActiveItem.id
+      );
+
+      // Test mastered with second item
+      const secondItem = result.current.activeItem;
+      if (!secondItem) return;
+      act(() => {
+        result.current.handleMarkAsMastered();
+      });
+      expect(result.current.lessonSubset.masteredItems).toContain(
+        secondItem.id
+      );
+      expect(result.current.lessonSubset.practiceItems).not.toContain(
+        secondItem.id
+      );
+      expect(result.current.lessonSubset.skippedItems).not.toContain(
+        secondItem.id
+      );
+      expect(result.current.lessonSubset.unseenItems).not.toContain(
+        secondItem.id
+      );
+
+      // Test skipped with third item
+      const thirdItem = result.current.activeItem;
+      if (!thirdItem) return;
+      act(() => {
+        result.current.handleSkipItem();
+      });
+      expect(result.current.lessonSubset.skippedItems).toContain(thirdItem.id);
+      expect(result.current.lessonSubset.practiceItems).not.toContain(
+        thirdItem.id
+      );
+      expect(result.current.lessonSubset.masteredItems).not.toContain(
+        thirdItem.id
+      );
+      expect(result.current.lessonSubset.unseenItems).not.toContain(
+        thirdItem.id
+      );
+    });
   });
 });

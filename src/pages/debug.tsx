@@ -54,34 +54,22 @@ const DebugPage: React.FC = () => {
       buttons: [
         {
           label: "Next Item",
-          onClick: () => gameState.nextItem(),
+          onClick: gameState.nextItem,
           disabled: !gameState.activeItem,
         },
         {
           label: "Mark for Practice",
-          onClick: () => {
-            if (gameState.activeItem) {
-              gameState.handleMarkForPractice();
-            }
-          },
+          onClick: gameState.handleMarkForPractice,
           disabled: !gameState.activeItem,
         },
         {
           label: "Mark as Mastered",
-          onClick: () => {
-            if (gameState.activeItem) {
-              gameState.handleMarkAsMastered();
-            }
-          },
+          onClick: gameState.handleMarkAsMastered,
           disabled: !gameState.activeItem,
         },
         {
           label: "Skip Item",
-          onClick: () => {
-            if (gameState.activeItem) {
-              gameState.handleSkipItem();
-            }
-          },
+          onClick: gameState.handleSkipItem,
           disabled: !gameState.activeItem,
         },
       ],

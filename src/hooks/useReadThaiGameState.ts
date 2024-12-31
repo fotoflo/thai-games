@@ -194,81 +194,77 @@ export const useReadThaiGameState = () => {
   // Handle first pass choices
   const handleFirstPassChoice = useCallback(
     (itemId: string, choice: RecallCategory) => {
-      const currentLesson = lessonState.lessons[lessonState.currentLesson];
-      const item = currentLesson?.items.find((i) => i.id === itemId);
+      const currentLesson = getCurrentLesson();
+      if (!currentLesson) return;
 
-      if (!item) return;
-
-      const removeFromAllCategories = (
-        subset: typeof workingSet.lessonSubset
-      ) => {
-        return {
-          ...subset,
-          unseenItems: subset.unseenItems.filter((id) => id !== itemId),
-          practiceItems: subset.practiceItems.filter((id) => id !== itemId),
-          masteredItems: subset.masteredItems.filter((id) => id !== itemId),
-          skippedItems: subset.skippedItems.filter((id) => id !== itemId),
-        };
-      };
-
-      const addToCategory = (
-        subset: typeof workingSet.lessonSubset,
-        category: keyof typeof workingSet.lessonSubset
-      ) => {
-        const newSubset = removeFromAllCategories(subset);
-        if (!newSubset[category].includes(itemId)) {
-          newSubset[category].push(itemId);
-        }
-        return newSubset;
-      };
-
-      // Update working set state based on choice
-      if (choice === "practice") {
-        const workingSetItem = createWorkingSetItem(item);
-
-        // Add to working set if not already present
-        if (!workingSet.workingSet.some((i) => i.id === itemId)) {
-          workingSet.addToWorkingSet([workingSetItem]);
-          workingSet.setActiveItem(workingSetItem);
-        }
-
-        // Update lesson subset
-        workingSet.setLessonSubset((prev) =>
-          addToCategory(prev, "practiceItems")
-        );
-      } else if (choice === "mastered") {
-        // Remove from working set
-        workingSet.removeFromWorkingSet(itemId);
-
-        // Update lesson subset
-        workingSet.setLessonSubset((prev) =>
-          addToCategory(prev, "masteredItems")
-        );
-      } else if (choice === "skipped") {
-        // Remove from working set
-        workingSet.removeFromWorkingSet(itemId);
-
-        // Update lesson subset
-        workingSet.setLessonSubset((prev) =>
-          addToCategory(prev, "skippedItems")
-        );
-      }
-
-      // Load next unseen item if available
-      const nextUnseenItem = currentLesson?.items.find((i) =>
-        workingSet.lessonSubset.unseenItems.includes(i.id)
+      // Get the current item
+      const currentItem = currentLesson.items.find(
+        (item) => item.id === itemId
       );
+      if (!currentItem) return;
 
-      if (nextUnseenItem) {
-        const nextWorkingSetItem = createWorkingSetItem(nextUnseenItem);
-        workingSet.addToWorkingSet([nextWorkingSetItem]);
-        workingSet.setActiveItem(nextWorkingSetItem);
-      } else {
-        // If no unseen items, move to the next item in the working set
-        workingSet.nextItem();
-      }
+      // Create practice item if needed
+      const practiceItem =
+        choice === "practice" ? createWorkingSetItem(currentItem) : null;
+
+      // Batch our state updates
+      workingSet.setLessonSubset((prev) => {
+        const newSubset = { ...prev };
+
+        // Remove from all categories
+        Object.keys(newSubset).forEach((key) => {
+          newSubset[key as keyof typeof newSubset] = newSubset[
+            key as keyof typeof newSubset
+          ].filter((id) => id !== itemId);
+        });
+
+        // Add to new category
+        switch (choice) {
+          case "practice":
+            newSubset.practiceItems.push(itemId);
+            break;
+          case "mastered":
+            newSubset.masteredItems.push(itemId);
+            break;
+          case "skipped":
+            newSubset.skippedItems.push(itemId);
+            break;
+          case "unseen":
+            newSubset.unseenItems.push(itemId);
+            break;
+        }
+
+        // Get next unseen item from the new state
+        const nextUnseenId = newSubset.unseenItems[0];
+        const nextUnseenItem = nextUnseenId
+          ? currentLesson.items.find((item) => item.id === nextUnseenId)
+          : null;
+
+        // Queue microtask to handle working set updates after state is committed
+        queueMicrotask(() => {
+          // Update working set based on choice
+          if (choice === "practice" && practiceItem) {
+            workingSet.addToWorkingSet([practiceItem]);
+          } else {
+            workingSet.removeFromWorkingSet(itemId);
+          }
+
+          // Set next active item
+          if (nextUnseenItem) {
+            const nextWorkingSetItem = createWorkingSetItem(nextUnseenItem);
+            workingSet.addToWorkingSet([nextWorkingSetItem]);
+            workingSet.setActiveItem(nextWorkingSetItem);
+          } else if (practiceItem) {
+            workingSet.setActiveItem(practiceItem);
+          } else {
+            workingSet.nextItem();
+          }
+        });
+
+        return newSubset;
+      });
     },
-    [lessonState, workingSet]
+    [getCurrentLesson, workingSet, createWorkingSetItem]
   );
 
   // Save state to localStorage whenever it changes
