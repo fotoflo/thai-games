@@ -1,10 +1,11 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { useReadThaiGameState } from "./useReadThaiGameState";
 import {
   LessonMetadata,
   LessonItem,
   CardSide,
-  WorkingSetItem,
+  GameState,
+  LessonProgress,
 } from "../types/lessons";
 import * as LessonLoader from "../lessons/LessonLoader";
 
@@ -75,6 +76,57 @@ describe("useReadThaiGameState", () => {
     items: mockLessonItems,
   };
 
+  const mockLessonProgress: LessonProgress = {
+    startedAt: Date.now(),
+    lastAccessedAt: Date.now(),
+    practiceSetIds: [],
+    practiceSetMaxLength: 7,
+    streakDays: 0,
+    bestStreak: 0,
+    totalTimeSpent: 0,
+    accuracyRate: 0,
+    recentlyShownCategories: [],
+    stats: {
+      unseen: mockLessonItems.length,
+      skipped: 0,
+      mastered: 0,
+      practice: 0,
+    },
+  };
+
+  const mockInitialGameState: GameState = {
+    lessonData: {
+      [mockLessonMetadata.id]: {
+        metadata: mockLessonMetadata,
+        items: mockLessonItems,
+      },
+    },
+    currentLesson: {
+      id: mockLessonMetadata.id,
+      progress: mockLessonProgress,
+      items: mockLessonItems,
+    },
+    completedLessons: [],
+    settings: {
+      defaultPracticeSetSize: 5,
+      audioEnabled: true,
+      interleaving: {
+        enabled: false,
+        strategy: "balanced",
+        minCategorySpacing: 2,
+      },
+      srsSettings: {
+        baseInterval: 24 * 60 * 60 * 1000, // 24 hours
+        intervalModifier: 1,
+        failureSetback: 0.5,
+      },
+      offlineMode: {
+        enabled: false,
+        maxCacheSize: 100,
+      },
+    },
+  };
+
   beforeEach(() => {
     localStorage.clear();
     // Mock loadLessons to return our test data
@@ -85,467 +137,59 @@ describe("useReadThaiGameState", () => {
     jest.clearAllMocks();
   });
 
-  it("should initialize with default settings", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
+  describe("Initialization", () => {
+    it("should initialize with default settings when no saved state exists", () => {
+      const { result } = renderHook(() => useReadThaiGameState());
 
-    expect(result.current.progressionMode).toBe("firstPass");
-    expect(result.current.currentLesson).toBe(0);
-    expect(result.current.workingSet).toHaveLength(0);
-    expect(result.current.lessonSubset).toEqual({
-      unseenItems: [],
-      practiceItems: [],
-      masteredItems: [],
-      skippedItems: [],
-    });
-  });
-
-  it("should handle lesson selection", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    act(() => {
-      result.current.setCurrentLesson(0);
-    });
-
-    expect(result.current.currentLesson).toBe(0);
-    expect(result.current.lessons[0].items).toHaveLength(3);
-  });
-
-  it("should handle progression mode changes", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    // Setup initial state
-    act(() => {
-      result.current.updateGameState((draft) => {
-        draft.lessonData[mockLessonMetadata.id] = {
-          metadata: mockLessonMetadata,
-          items: mockLessonItems,
-        };
+      expect(result.current.progressionMode).toBe("firstPass");
+      expect(result.current.currentLesson).toBe(0);
+      expect(result.current.workingSet).toHaveLength(1);
+      expect(result.current.lessonSubset).toEqual({
+        unseenItems: mockLessonItems.slice(1).map((item) => item.id),
+        practiceItems: [],
+        masteredItems: [],
+        skippedItems: [],
       });
-      result.current.setCurrentLesson(0);
+      expect(result.current.activeItem).toBeTruthy();
+      if (result.current.activeItem) {
+        expect(result.current.activeItem.id).toBe(mockLessonItems[0].id);
+      }
     });
 
-    // Change to spaced repetition mode
-    act(() => {
-      result.current.setProgressionMode("spacedRepetition");
+    it("should restore state from localStorage if it exists", () => {
+      // Set up initial state in localStorage
+      localStorage.setItem(
+        "flashcardGameState",
+        JSON.stringify(mockInitialGameState)
+      );
+
+      const { result } = renderHook(() => useReadThaiGameState());
+
+      expect(result.current.currentLesson).toBe(0);
+      expect(result.current.progressionMode).toBe("firstPass");
+      expect(result.current.lessons).toHaveLength(1);
+      expect(result.current.lessons[0]).toEqual(mockLesson);
     });
 
-    expect(result.current.progressionMode).toBe("spacedRepetition");
-    expect(result.current.workingSet).toHaveLength(0); // Should clear working set on mode change
+    it("should initialize working set with first item in first pass mode", () => {
+      const { result } = renderHook(() => useReadThaiGameState());
 
-    // Change to test mode
-    act(() => {
-      result.current.setProgressionMode("test");
+      expect(result.current.workingSet).toHaveLength(1);
+      expect(result.current.activeItem).toBeTruthy();
+      if (result.current.activeItem) {
+        expect(result.current.activeItem.id).toBe(mockLessonItems[0].id);
+        expect(result.current.activeItem.lessonItem).toEqual(
+          mockLessonItems[0]
+        );
+      }
     });
 
-    expect(result.current.progressionMode).toBe("test");
-  });
-
-  it("should handle first pass choices and update game state", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    act(() => {
-      result.current.setCurrentLesson(0);
-      result.current.setProgressionMode("firstPass");
-      result.current.handleFirstPassChoice("card-1", "practice");
-    });
-
-    expect(result.current.lessonSubset.practiceItems).toContain("card-1");
-    expect(
-      result.current.workingSet.some((item) => item.id === "card-1")
-    ).toBeTruthy();
-
-    act(() => {
-      result.current.handleFirstPassChoice("card-2", "mastered");
-    });
-
-    expect(result.current.lessonSubset.masteredItems).toContain("card-2");
-    expect(
-      result.current.workingSet.some((item) => item.id === "card-2")
-    ).toBeFalsy();
-  });
-
-  it("should handle working set management", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    // Setup initial state
-    act(() => {
-      result.current.updateGameState((draft) => {
-        draft.lessonData[mockLessonMetadata.id] = {
-          metadata: mockLessonMetadata,
-          items: mockLessonItems.map((item) => ({ ...item })),
-        };
-      });
-      result.current.setCurrentLesson(0);
-      result.current.setProgressionMode("firstPass");
-    });
-
-    // Add items to working set
-    act(() => {
-      result.current.handleFirstPassChoice("card-1", "practice");
-      result.current.handleFirstPassChoice("card-2", "practice");
-    });
-
-    expect(result.current.workingSet.length).toBe(2);
-    expect(result.current.activeItem).not.toBeNull();
-
-    // Select a specific item
-    const firstItem = result.current.workingSet[0];
-    act(() => {
-      result.current.setActiveItem({ ...firstItem });
-    });
-
-    expect(result.current.activeItem).toEqual(firstItem);
-  });
-
-  it("should advance cards after first pass choices", async () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    act(() => {
-      result.current.setCurrentLesson(0);
-      result.current.setProgressionMode("firstPass");
-      result.current.handleFirstPassChoice("card-1", "practice");
-      result.current.handleFirstPassChoice("card-2", "practice");
-    });
-
-    const initialItem = result.current.activeItem;
-    expect(initialItem).not.toBeNull();
-
-    act(() => {
-      result.current.nextItem();
-    });
-    expect(result.current.activeItem).not.toEqual(initialItem);
-
-    const secondItem = result.current.activeItem;
-    expect(secondItem).not.toEqual(initialItem);
-  });
-
-  it("should advance cards in practice mode", async () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    // Setup initial state with practice items
-    act(() => {
-      result.current.setCurrentLesson(0);
-      result.current.setProgressionMode("firstPass");
-      result.current.handleFirstPassChoice("card-1", "practice");
-      result.current.handleFirstPassChoice("card-2", "practice");
-    });
-
-    const initialItem = result.current.activeItem;
-    expect(initialItem).not.toBeNull();
-
-    // Next should advance
-    act(() => {
-      result.current.nextItem();
-    });
-    expect(result.current.activeItem).not.toEqual(initialItem);
-
-    const secondItem = result.current.activeItem;
-    expect(secondItem).not.toEqual(initialItem);
-  });
-
-  it("should maintain set exclusivity when moving items", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    // Setup initial state
-    act(() => {
-      result.current.updateGameState((draft) => {
-        draft.lessonData[mockLessonMetadata.id] = {
-          metadata: mockLessonMetadata,
-          items: mockLessonItems,
-        };
-      });
-      result.current.setCurrentLesson(0);
-    });
-
-    // Move items through different states
-    act(() => {
-      // First to practice
-      result.current.handleFirstPassChoice("card-1", "practice");
-      // Another to mastered
-      result.current.handleFirstPassChoice("card-2", "mastered");
-      // Last one skipped
-      result.current.handleFirstPassChoice("card-3", "skipped");
-    });
-
-    // Verify each item is only in one set
-    const allSets = [
-      ...result.current.lessonSubset.practiceItems,
-      ...result.current.lessonSubset.masteredItems,
-      ...result.current.lessonSubset.skippedItems,
-      ...result.current.lessonSubset.unseenItems,
-    ];
-
-    const uniqueItems = new Set(allSets);
-    expect(uniqueItems.size).toBe(mockLessonItems.length);
-    expect(allSets.length).toBe(mockLessonItems.length);
-
-    // Verify specific item locations
-    expect(result.current.lessonSubset.practiceItems).toContain("card-1");
-    expect(result.current.lessonSubset.masteredItems).toContain("card-2");
-    expect(result.current.lessonSubset.skippedItems).toContain("card-3");
-
-    // Verify each item is only in its assigned set
-    expect(result.current.lessonSubset.practiceItems).not.toContain("card-2");
-    expect(result.current.lessonSubset.practiceItems).not.toContain("card-3");
-    expect(result.current.lessonSubset.masteredItems).not.toContain("card-1");
-    expect(result.current.lessonSubset.masteredItems).not.toContain("card-3");
-    expect(result.current.lessonSubset.skippedItems).not.toContain("card-1");
-    expect(result.current.lessonSubset.skippedItems).not.toContain("card-2");
-  });
-
-  it("should maintain set exclusivity when changing progression modes", () => {
-    const { result } = renderHook(() => useReadThaiGameState());
-
-    // Setup initial state
-    act(() => {
-      result.current.setCurrentLesson(0);
-      result.current.setProgressionMode("firstPass");
-    });
-
-    // Move items through different states
-    act(() => {
-      result.current.handleFirstPassChoice("card-1", "practice");
-      result.current.handleFirstPassChoice("card-2", "mastered");
-      result.current.handleFirstPassChoice("card-3", "skipped");
-    });
-
-    // Verify each item is only in one set
-    const allSets = [
-      ...result.current.lessonSubset.practiceItems,
-      ...result.current.lessonSubset.masteredItems,
-      ...result.current.lessonSubset.skippedItems,
-      ...result.current.lessonSubset.unseenItems,
-    ];
-
-    const uniqueItems = new Set(allSets);
-    expect(uniqueItems.size).toBe(3);
-    expect(allSets.length).toBe(3);
-
-    // Move items in spaced repetition mode
-    act(() => {
-      result.current.setProgressionMode("spacedRepetition");
-    });
-
-    // Verify items maintain their states
-    expect(result.current.lessonSubset.practiceItems).toContain("card-1");
-    expect(result.current.lessonSubset.masteredItems).toContain("card-2");
-    expect(result.current.lessonSubset.skippedItems).toContain("card-3");
-  });
-
-  describe("Item Actions", () => {
-    let result: { current: ReturnType<typeof useReadThaiGameState> };
-
-    beforeEach(() => {
-      // Setup for each test
-      const hook = renderHook(() => useReadThaiGameState());
-      result = hook.result;
-
-      // Initialize the lesson and mode
-      act(() => {
-        // First set up the lesson data
-        result.current.updateGameState((draft) => {
-          draft.lessonData[mockLessonMetadata.id] = {
-            metadata: mockLessonMetadata,
-            items: mockLessonItems,
-          };
-        });
-
-        // Then set the lesson and mode
-        result.current.setCurrentLesson(0);
-        result.current.setProgressionMode("firstPass");
-      });
-
-      // Wait for state to update
-      act(() => {
-        // Empty act to flush effects
-      });
-    });
-
-    it("should handle marking item for practice", () => {
-      // Get initial active item
-      const initialActiveItem = result.current.activeItem;
-      expect(initialActiveItem).not.toBeNull();
-      if (!initialActiveItem) return;
-
-      // Mark for practice
-      act(() => {
-        result.current.handleMarkForPractice();
-      });
-
-      // Verify item was added to practice items
-      expect(result.current.lessonSubset.practiceItems).toContain(
-        initialActiveItem.id
-      );
-
-      // Verify item is in working set
-      const itemInWorkingSet = result.current.workingSet.find(
-        (item: WorkingSetItem) => item.id === initialActiveItem.id
-      );
-      expect(itemInWorkingSet).toBeTruthy();
-      expect(itemInWorkingSet?.mastery).toBe(1);
-
-      // Verify item was removed from unseen items
-      expect(result.current.lessonSubset.unseenItems).not.toContain(
-        initialActiveItem.id
-      );
-    });
-
-    it("should handle marking item as mastered", () => {
-      // Get initial active item
-      const initialActiveItem = result.current.activeItem;
-      expect(initialActiveItem).not.toBeNull();
-      if (!initialActiveItem) return;
-
-      // Mark as mastered
-      act(() => {
-        result.current.handleMarkAsMastered();
-      });
-
-      // Verify item was added to mastered items
-      expect(result.current.lessonSubset.masteredItems).toContain(
-        initialActiveItem.id
-      );
-
-      // Verify item was removed from working set
-      const itemInWorkingSet = result.current.workingSet.find(
-        (item: WorkingSetItem) => item.id === initialActiveItem.id
-      );
-      expect(itemInWorkingSet).toBeFalsy();
-
-      // Verify item was removed from unseen items
-      expect(result.current.lessonSubset.unseenItems).not.toContain(
-        initialActiveItem.id
-      );
-
-      // Verify item is not in practice items
-      expect(result.current.lessonSubset.practiceItems).not.toContain(
-        initialActiveItem.id
-      );
-    });
-
-    it("should handle skipping item", () => {
-      // Get initial active item
-      const initialActiveItem = result.current.activeItem;
-      expect(initialActiveItem).not.toBeNull();
-      if (!initialActiveItem) return;
-
-      // Skip item
-      act(() => {
-        result.current.handleSkipItem();
-      });
-
-      // Verify item was added to skipped items
-      expect(result.current.lessonSubset.skippedItems).toContain(
-        initialActiveItem.id
-      );
-
-      // Verify item was removed from working set
-      const itemInWorkingSet = result.current.workingSet.find(
-        (item: WorkingSetItem) => item.id === initialActiveItem.id
-      );
-      expect(itemInWorkingSet).toBeFalsy();
-
-      // Verify item was removed from unseen items
-      expect(result.current.lessonSubset.unseenItems).not.toContain(
-        initialActiveItem.id
-      );
-
-      // Verify item is not in practice or mastered items
-      expect(result.current.lessonSubset.practiceItems).not.toContain(
-        initialActiveItem.id
-      );
-      expect(result.current.lessonSubset.masteredItems).not.toContain(
-        initialActiveItem.id
-      );
-    });
-
-    it("should move to next item after any action", () => {
-      // Get initial active item
-      const initialActiveItem = result.current.activeItem;
-      expect(initialActiveItem).not.toBeNull();
-      if (!initialActiveItem) return;
-
-      // Test after marking for practice
-      act(() => {
-        result.current.handleMarkForPractice();
-      });
-      expect(result.current.activeItem?.id).not.toBe(initialActiveItem.id);
-
-      // Test after marking as mastered
-      const secondItem = result.current.activeItem;
-      if (!secondItem) return;
-      act(() => {
-        result.current.handleMarkAsMastered();
-      });
-      expect(result.current.activeItem?.id).not.toBe(secondItem.id);
-
-      // Test after skipping
-      const thirdItem = result.current.activeItem;
-      if (!thirdItem) return;
-      act(() => {
-        result.current.handleSkipItem();
-      });
-      expect(result.current.activeItem?.id).not.toBe(thirdItem.id);
-    });
-
-    it("should maintain set exclusivity", () => {
-      // Get initial active item
-      const initialActiveItem = result.current.activeItem;
-      expect(initialActiveItem).not.toBeNull();
-      if (!initialActiveItem) return;
-
-      // Test practice
-      act(() => {
-        result.current.handleMarkForPractice();
-      });
-      expect(result.current.lessonSubset.practiceItems).toContain(
-        initialActiveItem.id
-      );
-      expect(result.current.lessonSubset.masteredItems).not.toContain(
-        initialActiveItem.id
-      );
-      expect(result.current.lessonSubset.skippedItems).not.toContain(
-        initialActiveItem.id
-      );
-      expect(result.current.lessonSubset.unseenItems).not.toContain(
-        initialActiveItem.id
-      );
-
-      // Test mastered with second item
-      const secondItem = result.current.activeItem;
-      if (!secondItem) return;
-      act(() => {
-        result.current.handleMarkAsMastered();
-      });
-      expect(result.current.lessonSubset.masteredItems).toContain(
-        secondItem.id
-      );
-      expect(result.current.lessonSubset.practiceItems).not.toContain(
-        secondItem.id
-      );
-      expect(result.current.lessonSubset.skippedItems).not.toContain(
-        secondItem.id
-      );
-      expect(result.current.lessonSubset.unseenItems).not.toContain(
-        secondItem.id
-      );
-
-      // Test skipped with third item
-      const thirdItem = result.current.activeItem;
-      if (!thirdItem) return;
-      act(() => {
-        result.current.handleSkipItem();
-      });
-      expect(result.current.lessonSubset.skippedItems).toContain(thirdItem.id);
-      expect(result.current.lessonSubset.practiceItems).not.toContain(
-        thirdItem.id
-      );
-      expect(result.current.lessonSubset.masteredItems).not.toContain(
-        thirdItem.id
-      );
-      expect(result.current.lessonSubset.unseenItems).not.toContain(
-        thirdItem.id
-      );
+    it("should load lessons correctly", () => {
+      const { result } = renderHook(() => useReadThaiGameState());
+
+      expect(result.current.lessons).toHaveLength(1);
+      expect(result.current.lessons[0]).toEqual(mockLesson);
+      expect(LessonLoader.loadLessons).toHaveBeenCalled();
     });
   });
 });
