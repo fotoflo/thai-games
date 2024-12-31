@@ -130,6 +130,14 @@ const DebugPage: React.FC = () => {
       priority: 2,
     },
     {
+      title: "Working Set (simplified)",
+      data: gameState.workingSet.map((entry) => ({
+        id: entry.id,
+        recallCategory: entry.lessonItem.recallCategory,
+      })),
+      priority: 1,
+    },
+    {
       title: "Lesson State",
       data: {
         currentLesson: gameState.currentLesson,
@@ -140,14 +148,6 @@ const DebugPage: React.FC = () => {
         ),
       },
       priority: 2,
-    },
-    {
-      title: "Working Set (simplified)",
-      data: gameState.workingSet.map((entry) => ({
-        id: entry.id,
-        recallCategory: entry.lessonItem.recallCategory,
-      })),
-      priority: 1,
     },
     {
       title: "Active Item",

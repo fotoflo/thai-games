@@ -349,6 +349,7 @@ export const useReadThaiGameState = () => {
     ...gameSettings,
 
     // Lesson management
+    lessons: lessonState.lessons,
     currentLesson: lessonState.currentLesson,
     setCurrentLesson: lessonState.setCurrentLesson,
     progressionMode: lessonState.progressionMode,
@@ -356,26 +357,15 @@ export const useReadThaiGameState = () => {
 
     // Working set
     workingSet: workingSet.workingSet,
+    lessonSubset: workingSet.lessonSubset,
     activeItem: workingSet.activeItem,
     setActiveItem: workingSet.setActiveItem,
     addMoreItems: workingSet.addMoreItems,
     nextItem: workingSet.nextItem,
 
-    handleFirstPassChoice,
+    // handleFirstPassChoice,
     handleMarkForPractice,
     handleMarkAsMastered,
     handleSkipItem,
-
-    // Lesson data
-    lessons: lessonState.lessons,
-
-    // Progress tracking
-    lessonSubset: workingSet.lessonSubset,
-
-    // Game state
-    gameState: flashcardMachine.gameState,
-
-    // Update game state
-    updateGameState: flashcardMachine.updateGameState,
   };
 };
