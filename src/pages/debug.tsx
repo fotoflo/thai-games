@@ -124,7 +124,7 @@ const DebugPage: React.FC = () => {
     {
       title: "Active Item (simplified)",
       data: {
-        activeItemId: gameState.activeItem?.id,
+        id: gameState.activeItem?.id,
         thai: gameState.activeItem?.vocabularyItem.sides[0].markdown,
         english: gameState.activeItem?.vocabularyItem.sides[1].markdown,
         mastery: gameState.activeItem?.mastery,
@@ -147,7 +147,7 @@ const DebugPage: React.FC = () => {
       title: "Working Set",
       data: gameState.workingSet.map((entry) => ({
         id: entry.id,
-        // recallCategory: entry.vocabularyItem.recallCategory,
+        recallCategory: entry.vocabularyItem.recallCategory,
       })),
     },
     {
