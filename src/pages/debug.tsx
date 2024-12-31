@@ -196,7 +196,7 @@ const DebugPage: React.FC = () => {
         </div>
 
         {/* State Views Section - Masonry Layout */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
           {sections
             .filter((section) => section.title !== "Actions")
             .map((section, index) => (
