@@ -71,14 +71,23 @@ export const useReadThaiGameState = () => {
 
   const initializeFirstPassMode = useCallback(() => {
     const currentLesson = getCurrentLesson();
-    if (currentLesson?.items.length > 0) {
-      initializeWorkingSet({
-        items: [currentLesson.items[0]],
-        shouldClearWorkingSet: true,
-        shouldSetLessonSubset: true,
-      });
-    }
-  }, [getCurrentLesson, initializeWorkingSet]);
+    if (!currentLesson?.items.length) return;
+
+    // Initialize lesson subset with all items except the first one as unseen
+    const initialLessonSubset = {
+      unseenItems: currentLesson.items.slice(1).map((item) => item.id),
+      practiceItems: [],
+      masteredItems: [],
+      skippedItems: [],
+    };
+    workingSet.setLessonSubset(initialLessonSubset);
+
+    // Initialize working set with first item
+    const firstItem = createWorkingSetItem(currentLesson.items[0]);
+    workingSet.clearWorkingSet();
+    workingSet.addToWorkingSet([firstItem]);
+    workingSet.setActiveItem(firstItem);
+  }, [getCurrentLesson, workingSet, createWorkingSetItem]);
 
   const initializeSpacedRepetitionMode = useCallback(() => {
     const currentLesson = getCurrentLesson();
@@ -142,13 +151,11 @@ export const useReadThaiGameState = () => {
               lessonData: parsed.lessonData,
             });
           });
+
           // Restore lesson state
-          if (parsed.currentLesson !== undefined) {
-            lessonState.setCurrentLesson(parsed.currentLesson);
-          }
-          if (parsed.progressionMode) {
-            lessonState.setProgressionMode(parsed.progressionMode);
-          }
+          lessonState.setCurrentLesson(parsed.currentLesson ?? 0);
+          lessonState.setProgressionMode(parsed.progressionMode ?? "firstPass");
+
           if (parsed.lessonSubset) {
             workingSet.setLessonSubset(parsed.lessonSubset);
           }
@@ -160,22 +167,45 @@ export const useReadThaiGameState = () => {
             workingSet.addToWorkingSet(items);
           }
           if (parsed.activeItem) {
-            const item = {
+            workingSet.setActiveItem({
               ...parsed.activeItem,
               lastReviewed: new Date(parsed.activeItem.lastReviewed),
-            };
-            workingSet.setActiveItem(item);
+            });
           }
         } catch (error) {
           console.error("Failed to parse saved game state:", error);
+          initializeFirstTime();
         }
       } else {
-        // No saved state, initialize with first lesson
-        lessonState.setCurrentLesson(0);
-        handleProgressionModeChange("firstPass");
+        initializeFirstTime();
       }
     }
   }, [lessonState, flashcardMachine, workingSet]);
+
+  // Add a new function to handle first-time initialization
+  const initializeFirstTime = useCallback(() => {
+    const firstLesson = lessonState.lessons[0];
+    if (!firstLesson?.items.length) return;
+
+    // Set initial lesson and mode
+    lessonState.setCurrentLesson(0);
+    lessonState.setProgressionMode("firstPass");
+
+    // Initialize lesson subset with all items except the first one as unseen
+    const initialLessonSubset = {
+      unseenItems: firstLesson.items.slice(1).map((item) => item.id),
+      practiceItems: [],
+      masteredItems: [],
+      skippedItems: [],
+    };
+    workingSet.setLessonSubset(initialLessonSubset);
+
+    // Initialize working set with first item
+    const firstItem = createWorkingSetItem(firstLesson.items[0]);
+    workingSet.clearWorkingSet();
+    workingSet.addToWorkingSet([firstItem]);
+    workingSet.setActiveItem(firstItem);
+  }, [lessonState, workingSet, createWorkingSetItem]);
 
   // Initialize first pass mode when lesson is selected
   useEffect(() => {
@@ -293,21 +323,6 @@ export const useReadThaiGameState = () => {
     workingSet.lessonSubset,
     workingSet.workingSet,
     workingSet.activeItem,
-  ]);
-
-  useEffect(() => {
-    if (lessonState.currentLesson === -1) {
-      lessonState.setCurrentLesson(0);
-      handleProgressionModeChange("firstPass");
-      workingSet.setActiveItem(
-        createWorkingSetItem(lessonState.lessons[0].items[0])
-      );
-    }
-  }, [
-    lessonState,
-    handleProgressionModeChange,
-    workingSet,
-    createWorkingSetItem,
   ]);
 
   // Separate handlers for each choice type
