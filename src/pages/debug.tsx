@@ -130,10 +130,13 @@ const DebugPage: React.FC = () => {
     },
     {
       title: "Working Set (simplified)",
-      data: gameState.workingSet.map((entry) => ({
-        id: entry.id,
-        recallCategory: entry.lessonItem.recallCategory,
-      })),
+      data: {
+        length: gameState.workingSet.length,
+        items: gameState.workingSet.map((entry) => ({
+          id: entry.id,
+          recallCategory: entry.lessonItem.recallCategory,
+        })),
+      },
       priority: 1,
     },
     {
