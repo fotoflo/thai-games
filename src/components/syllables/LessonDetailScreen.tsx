@@ -3,6 +3,7 @@ import { X, BookOpen, Globe } from "lucide-react";
 import { Lesson } from "@/types/lessons";
 import ModalContainer from "../ui/ModalContainer";
 import DetailCard from "./DetailCard";
+import ItemDisplay from "./ItemDisplay";
 
 interface LessonDetailsProps {
   lesson: Lesson;
@@ -109,12 +110,14 @@ const LessonDetails = ({
               key={index}
               className="bg-slate-800/30 p-3 hover:bg-slate-700/30 transition-colors"
             >
-              <div className="text-lg sm:text-xl text-slate-100">
-                {item.sides[0].markdown.split("\n")[0]}
-              </div>
-              <div className="text-xs sm:text-sm text-slate-400">
-                {item.sides[1].markdown.split("\n")[0]}
-              </div>
+              <ItemDisplay
+                key={index}
+                vocabItem={item}
+                textSize="text-lg sm:text-xl"
+                iconSize={16}
+                sideTwoTextSize="text-sm sm:text-base"
+                showBothSides={true}
+              />
             </div>
           ))}
         </div>

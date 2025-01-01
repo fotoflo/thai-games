@@ -11,11 +11,14 @@ const ItemDisplay = ({
   iconSize = 24,
   className = "",
   textColor = "text-white",
+  sideTwoTextColor = "text-slate-400",
   iconColor = "text-gray-400",
   speakOnMount = false,
   speakOnUnmount = false,
   invertTranslation = false,
   useFullMarkdown = false,
+  showBothSides = false,
+  sideTwoTextSize = "text-sm sm:text-base",
 }: {
   vocabItem: LessonItem | null;
   textSize?: string;
@@ -27,6 +30,9 @@ const ItemDisplay = ({
   speakOnUnmount?: boolean;
   invertTranslation?: boolean;
   useFullMarkdown?: boolean;
+  showBothSides?: boolean;
+  sideTwoTextSize?: string;
+  sideTwoTextColor?: string;
 }) => {
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,
@@ -40,7 +46,7 @@ const ItemDisplay = ({
 
   const processedDisplayText = useFullMarkdown
     ? displayText
-    : displayText.split("\n")[0].replace(/<[^>]*>/g, "");
+    : displayText?.split("\n")[0].replace(/<[^>]*>/g, "");
 
   if (!vocabItem) {
     return null;
@@ -51,36 +57,43 @@ const ItemDisplay = ({
       className={`flex flex-col ${className}`}
       onClick={() => handleSpeak(processedDisplayText)}
     >
-      <div className="flex items-center justify-center gap-4">
-        {useFullMarkdown ? (
-          <ReactMarkdown
-            className={`${textSize} ${textColor}`}
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              span: ({ node, ...props }) => (
-                <span style={{ color: props.style?.color }} {...props} />
-              ),
-            }}
+      <div className="flex flex-col">
+        <div className="flex items-center justify-left">
+          {useFullMarkdown ? (
+            <ReactMarkdown
+              className={`${textSize} ${textColor}`}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                span: ({ ...props }) => (
+                  <span style={{ color: props.style?.color }} {...props} />
+                ),
+              }}
+            >
+              {processedDisplayText}
+            </ReactMarkdown>
+          ) : (
+            <div className={`${textSize} ${textColor}`}>
+              {processedDisplayText}
+            </div>
+          )}
+          <button
+            className="p-2 rounded-full hover:bg-gray-800 transition-colors"
+            title="Speak"
+            disabled={!hasThai || speaking}
           >
-            {processedDisplayText}
-          </ReactMarkdown>
-        ) : (
-          <div className={`${textSize} ${textColor}`}>
-            {processedDisplayText}
+            <Volume2
+              size={iconSize}
+              className={`${iconColor} hover:text-white ${
+                speaking ? "opacity-50" : ""
+              }`}
+            />
+          </button>
+        </div>
+        {showBothSides && (
+          <div className={`${sideTwoTextSize} ${sideTwoTextColor}`}>
+            {vocabItem?.sides?.[1]?.markdown}
           </div>
         )}
-        <button
-          className="p-2 rounded-full hover:bg-gray-800 transition-colors"
-          title="Speak"
-          disabled={!hasThai || speaking}
-        >
-          <Volume2
-            size={iconSize}
-            className={`${iconColor} hover:text-white ${
-              speaking ? "opacity-50" : ""
-            }`}
-          />
-        </button>
       </div>
 
       {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
