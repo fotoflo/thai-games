@@ -1,7 +1,9 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { Volume2 } from "lucide-react";
 import { useThaiSpeech } from "../../hooks/useThaiSpeech";
 import { LessonItem } from "../../types/lessons";
+import rehypeRaw from "rehype-raw";
 
 const ItemDisplay = ({
   vocabItem,
@@ -13,6 +15,7 @@ const ItemDisplay = ({
   speakOnMount = false,
   speakOnUnmount = false,
   invertTranslation = false,
+  useFullMarkdown = false,
 }: {
   vocabItem: LessonItem | null;
   textSize?: string;
@@ -23,6 +26,7 @@ const ItemDisplay = ({
   speakOnMount?: boolean;
   speakOnUnmount?: boolean;
   invertTranslation?: boolean;
+  useFullMarkdown?: boolean;
 }) => {
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,
@@ -34,6 +38,10 @@ const ItemDisplay = ({
     ? vocabItem?.sides?.[1]?.markdown || vocabItem?.sides?.[0]?.markdown
     : vocabItem?.sides?.[0]?.markdown || "";
 
+  const processedDisplayText = useFullMarkdown
+    ? displayText
+    : displayText.split("\n")[0].replace(/<[^>]*>/g, "");
+
   if (!vocabItem) {
     return null;
   }
@@ -41,10 +49,26 @@ const ItemDisplay = ({
   return (
     <div
       className={`flex flex-col ${className}`}
-      onClick={() => handleSpeak(displayText)}
+      onClick={() => handleSpeak(processedDisplayText)}
     >
       <div className="flex items-center justify-center gap-4">
-        <div className={`${textSize} ${textColor}`}>{displayText}</div>
+        {useFullMarkdown ? (
+          <ReactMarkdown
+            className={`${textSize} ${textColor}`}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              span: ({ node, ...props }) => (
+                <span style={{ color: props.style?.color }} {...props} />
+              ),
+            }}
+          >
+            {processedDisplayText}
+          </ReactMarkdown>
+        ) : (
+          <div className={`${textSize} ${textColor}`}>
+            {processedDisplayText}
+          </div>
+        )}
         <button
           className="p-2 rounded-full hover:bg-gray-800 transition-colors"
           title="Speak"

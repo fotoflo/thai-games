@@ -13,6 +13,7 @@ import words1 from "./words1.json";
 import envirenmentalSigns from "./envirenmental-signs.json";
 // import food1 from "./food1.json";
 // import food2veg from "./food2veg.json";
+import food2vegMd from "./food2vegMd.json";
 // import greetings from "./greetings.json";
 // import languageLearning2 from "./language-learning-2.json";
 // import languageLearning from "./language-learning.json";
@@ -23,9 +24,9 @@ import envirenmentalSigns from "./envirenmental-signs.json";
 import verbs from "./verbs.json";
 
 // Array of all lesson data
-const allLessons = [words1, basicThai, verbs, envirenmentalSigns];
+const allLessons = [words1, basicThai, verbs, food2vegMd, envirenmentalSigns];
 
-// Define Zod schemas
+//Define Zod schemas
 const CardSideSchema = z.object({
   markdown: z.string(),
   metadata: z

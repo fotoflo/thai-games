@@ -1,0 +1,70 @@
+{
+  "id": "thai-vegetarian",
+  "name": "Thai Vegetarian Food Basics",
+  "description": "Learn essential Thai vocabulary for ordering vegetarian food, including meat-free dishes, vegetables, and important phrases to ensure your meal is vegetarian. This lesson helps vegetarians navigate Thai restaurants and street food stalls safely.",
+  "subject": "Thai for English Speakers",
+  "categories": ["food", "practical", "ordering", "restaurants", "vegetarian"],
+  "difficulty": "beginner",
+  "estimatedTime": 30,
+  "totalItems": 29,
+  "version": 1,
+  "items": [
+    {
+      "id": "jay",
+      "sides": [
+        {
+          "markdown": "<span style='color: #FF4545'>เจ</span>",
+          "metadata": {
+            "pronunciation": "jee"
+          }
+        },
+        {
+          "markdown": "*jee*\n\n素食 (sùshí)\n\nvegan/strict vegetarian"
+        }
+      ],
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["food", "vegetarian", "essential"],
+      "categories": ["vocabulary"],
+      "intervalModifier": 1
+    },
+    {
+      "id": "mangsawirat",
+      "sides": [
+        {
+          "markdown": "<span style='color: #FF4545'>มัง</span><span style='color: #4545FF'>สะ</span><span style='color: #FF4545'>วิรัติ</span>",
+          "metadata": {
+            "pronunciation": "mang-sà-wí-rát"
+          }
+        },
+        {
+          "markdown": "*mang-sà-wí-rát*\n\n素食者 (sùshízhě)\n\nvegetarian"
+        }
+      ],
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["food", "vegetarian", "essential"],
+      "categories": ["vocabulary"],
+      "intervalModifier": 1
+    },
+    {
+      "id": "mai-sai-neua",
+      "sides": [
+        {
+          "markdown": "<span style='color: #FF4545'>ไม่</span><span style='color: #4545FF'>ใส่</span><span style='color: #FF4545'>เนื้อ</span>",
+          "metadata": {
+            "pronunciation": "mâi sài néua"
+          }
+        },
+        {
+          "markdown": "*mâi sài néua*\n\n不放肉 (bù fàng ròu)\n\nwithout meat"
+        }
+      ],
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["food", "vegetarian", "phrase"],
+      "categories": ["vocabulary"],
+      "intervalModifier": 1
+    }
+  ]
+}

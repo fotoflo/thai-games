@@ -98,6 +98,7 @@ const DetailCard: React.FC<DetailCardProps> = ({
             vocabItem={vocabItem}
             textSize={sizeConfig.textSize}
             iconSize={sizeConfig.iconSize}
+            useFullMarkdown={true}
           />
         </div>
         <div className="space-y-1">
