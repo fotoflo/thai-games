@@ -10,7 +10,7 @@ import words1 from "./words1.json";
 // import atTheRestraunt from "./at-the-restraunt.json";
 // import combos1 from "./combos1.json";
 // import combos2 from "./combos2.json";
-// import envirenmentalSigns from "./envirenmental-signs.json";
+import envirenmentalSigns from "./envirenmental-signs.json";
 // import food1 from "./food1.json";
 // import food2veg from "./food2veg.json";
 // import greetings from "./greetings.json";
@@ -23,7 +23,7 @@ import words1 from "./words1.json";
 import verbs from "./verbs.json";
 
 // Array of all lesson data
-const allLessons = [words1, basicThai, verbs];
+const allLessons = [words1, basicThai, verbs, envirenmentalSigns];
 
 // Define Zod schemas
 const CardSideSchema = z.object({
