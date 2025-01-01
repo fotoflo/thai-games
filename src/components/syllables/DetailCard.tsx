@@ -2,6 +2,7 @@ import React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import ItemDisplay from "./ItemDisplay";
 import { LessonItem } from "@/types/lessons";
+import { useThaiSpeech } from "@/hooks/useThaiSpeech";
 
 type Size = "sm" | "md" | "lg" | "xl";
 
@@ -68,7 +69,6 @@ interface DetailCardProps {
   vocabItem: LessonItem;
   showExamples: boolean;
   onToggleExamples: () => void;
-  onSpeak: (text: string) => void;
   size?: Size;
 }
 
@@ -76,10 +76,11 @@ const DetailCard: React.FC<DetailCardProps> = ({
   vocabItem,
   showExamples,
   onToggleExamples,
-  onSpeak,
   size = "lg", // Default size
 }) => {
   const sizeConfig = sizeConfigs[size];
+
+  const { handleSpeak } = useThaiSpeech(false, false);
 
   return (
     <div className="bg-slate-700/30 rounded-xl overflow-hidden">
@@ -88,7 +89,10 @@ const DetailCard: React.FC<DetailCardProps> = ({
       >
         <div
           className="cursor-pointer"
-          onClick={() => onSpeak(vocabItem.sides[0].markdown)}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSpeak(vocabItem.sides[0].markdown);
+          }}
         >
           <ItemDisplay
             vocabItem={vocabItem}
@@ -99,7 +103,10 @@ const DetailCard: React.FC<DetailCardProps> = ({
         <div className="space-y-1">
           <div
             className={`${sizeConfig.translationTextSize} text-slate-300 cursor-pointer`}
-            onClick={() => onSpeak(vocabItem.sides[1].markdown)}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSpeak(vocabItem.sides[1].markdown);
+            }}
           >
             translation: {vocabItem.sides[1].markdown}
           </div>

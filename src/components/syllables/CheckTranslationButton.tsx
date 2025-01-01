@@ -1,9 +1,16 @@
-import React from 'react';
-import { Eye } from 'lucide-react';
+import React from "react";
+import { Eye } from "lucide-react";
+import { LessonItem } from "@/types/lessons";
 
-const CheckTranslationButton = ({ onClick, current }) => {
+const CheckTranslationButton = ({
+  onClick,
+  lessonItem,
+}: {
+  onClick: () => void;
+  lessonItem: LessonItem | null;
+}) => {
   // Only render if current has details with a translation
-  if (!current?.lessonItem?.translation) return null;
+  if (!lessonItem) return null;
 
   return (
     <div className="flex justify-center mt-12 mb-8">
@@ -17,4 +24,4 @@ const CheckTranslationButton = ({ onClick, current }) => {
   );
 };
 
-export default CheckTranslationButton; 
+export default CheckTranslationButton;

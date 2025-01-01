@@ -33,7 +33,7 @@ const LessonListScreen = ({ onClose, lessons, setCurrentLesson, onViewDetails })
                       </span>
                     </div>
                     <h3 className="text-lg font-semibold text-slate-50">
-                      {lesson.lessonName}
+                      {lesson.name}
                     </h3>
                   </div>
                   <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm whitespace-nowrap">

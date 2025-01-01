@@ -10,6 +10,7 @@ const LessonSelector = ({
   const carouselRef = useRef(null);
   const [showLessonList, setShowLessonList] = useState(false);
 
+
   return (
     <div className="flex items-center mb-6">
       <div className="flex overflow-hidden max-w-md mx-auto">
@@ -27,7 +28,7 @@ const LessonSelector = ({
                 }}
                 className={`px-3 py-2 rounded-md transition-colors bg-blue-600 text-white`}
               >
-                {lessons[currentLesson].lessonName}
+                {lessons[currentLesson].name}
               </button>
               <button
                 onClick={() => setShowLessonList(true)}

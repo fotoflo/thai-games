@@ -1,6 +1,3 @@
-import React, { useEffect } from "react";
-import { useThaiSpeech } from "../../hooks/useThaiSpeech";
-
 import ModalContainer from "../ui/ModalContainer";
 import MasteryControls from "./MasteryControls";
 import DetailCard from "./DetailCard";
@@ -28,18 +25,15 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
   onClose,
   mode,
   lessonSubset,
-  onFirstPassChoice,
 }) => {
-  const { handleSpeak } = useThaiSpeech(false, false);
-
-  useEffect(() => {
-    if (trigger === "CheckTranslationButton") {
-      const timer = setTimeout(() => {
-        onClose();
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [trigger, onClose]);
+  // useEffect(() => {
+  //   if (trigger === "CheckTranslationButton") {
+  //     const timer = setTimeout(() => {
+  //       onClose();
+  //     }, 2000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [trigger, onClose]);
 
   if (!trigger) return null;
 
@@ -54,17 +48,11 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
             vocabItem={vocabItem}
             showExamples={true}
             onToggleExamples={() => {}}
-            onSpeak={handleSpeak}
             size="xl"
           />
         </div>
         <MasteryControls
           onRatingSelect={onNext}
-          onFirstPassChoice={(choice) => {
-            if (onFirstPassChoice) {
-              onFirstPassChoice(choice);
-            }
-          }}
           className="mb-4"
           mode={mode}
           lessonSubset={lessonSubset}

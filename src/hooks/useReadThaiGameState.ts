@@ -106,7 +106,7 @@ export const useReadThaiGameState = () => {
   }, [getCurrentLesson, workingSet.lessonSubset, initializeWorkingSet]);
 
   const addMoreItems = useCallback(
-    (itemCount: number) => {
+    (itemCount: number = 1) => {
       const currentLesson = getCurrentLesson();
       if (!currentLesson) return;
 
@@ -129,6 +129,13 @@ export const useReadThaiGameState = () => {
     (mode: "firstPass" | "spacedRepetition" | "test") => {
       if (!!workingSet.activeItem && mode === lessonState.progressionMode)
         return;
+
+      if (
+        workingSet.lessonSubset.practiceItems.length !== 0 &&
+        lessonState.progressionMode == "spacedRepetition"
+      ) {
+        return;
+      }
 
       lessonState.setProgressionMode(mode);
 

@@ -27,7 +27,7 @@ const LessonHeader = ({
             {lesson.lessonType}
           </span>
         </div>
-        <h1 className="text-2xl font-semibold">{lesson.lessonName}</h1>
+        <h1 className="text-2xl font-semibold">{lesson.name}</h1>
       </div>
       <button
         onClick={onClose}
@@ -38,7 +38,7 @@ const LessonHeader = ({
     </div>
 
     <p className="text-sm text-slate-300 leading-relaxed">
-      {lesson.lessonDescription}
+      {lesson.description}
     </p>
 
     <div className="flex flex-wrap gap-2">
@@ -47,7 +47,7 @@ const LessonHeader = ({
         {lesson.languagePair?.target?.name}
       </span>
       <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm">
-        {lesson.lessonLevel}
+        {lesson.level}
       </span>
     </div>
   </div>

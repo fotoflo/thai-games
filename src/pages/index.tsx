@@ -106,7 +106,6 @@ const IndexPage: React.FC = () => {
 
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SettingsHamburger onClick={openSettings} />
-
         {/* Active Item Display */}
         <ItemDisplay
           vocabItem={displayItem}
@@ -119,7 +118,7 @@ const IndexPage: React.FC = () => {
 
         <CheckTranslationButton
           onClick={() => setDisplayTrigger("CheckTranslationButton")}
-          current={displayItem}
+          lessonItem={displayItem}
         />
 
         <FlashCardModal
@@ -140,7 +139,6 @@ const IndexPage: React.FC = () => {
             }
           }}
         />
-
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
@@ -206,7 +204,6 @@ const IndexPage: React.FC = () => {
             />
           </div>
         </div>
-
         {/* Modals */}
         {showSettingsContainer && (
           <SettingsModalContainer onClose={closeSettings} />
