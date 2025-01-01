@@ -12,7 +12,9 @@ interface LessonSubset {
 
 interface MasteryControlsProps {
   onRatingSelect: (value: number) => void;
-  onFirstPassChoice?: (choice: "mastered" | "practice" | "skip") => void;
+  handleMarkForPractice: () => void;
+  handleMarkAsMastered: () => void;
+  handleSkipItem: () => void;
   mode: ProgressionMode;
   className?: string;
   lessonSubset: LessonSubset;
@@ -20,7 +22,9 @@ interface MasteryControlsProps {
 
 const MasteryControls: React.FC<MasteryControlsProps> = ({
   onRatingSelect,
-  onFirstPassChoice,
+  handleMarkForPractice,
+  handleMarkAsMastered,
+  handleSkipItem,
   mode,
   className,
   lessonSubset,
@@ -31,7 +35,7 @@ const MasteryControls: React.FC<MasteryControlsProps> = ({
         Unseen: {lessonSubset.unseenItems.length}
       </div>
       <button
-        onClick={() => onFirstPassChoice?.("skip")}
+        onClick={handleSkipItem}
         className="p-2 rounded transition-colors bg-gray-600 hover:bg-gray-500 flex flex-col items-center justify-center min-h-[60px] active:scale-95 transform animate-extended-active"
       >
         <div className="flex items-center gap-1">
@@ -43,7 +47,7 @@ const MasteryControls: React.FC<MasteryControlsProps> = ({
         </span>
       </button>
       <button
-        onClick={() => onFirstPassChoice?.("practice")}
+        onClick={handleMarkForPractice}
         className="p-2 rounded transition-colors bg-blue-600 hover:bg-blue-500 flex flex-col items-center justify-center min-h-[60px] active:scale-95 transform animate-extended-active"
       >
         <div className="flex items-center gap-1">
@@ -55,7 +59,7 @@ const MasteryControls: React.FC<MasteryControlsProps> = ({
         </span>
       </button>
       <button
-        onClick={() => onFirstPassChoice?.("mastered")}
+        onClick={handleMarkAsMastered}
         className="p-2 rounded transition-colors bg-purple-600 hover:bg-purple-500 flex flex-col items-center justify-center min-h-[60px] active:scale-95 transform animate-extended-active"
       >
         <div className="flex items-center gap-1">

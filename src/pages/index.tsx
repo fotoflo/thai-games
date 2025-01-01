@@ -42,7 +42,10 @@ const IndexPage: React.FC = () => {
     // Progression
     progressionMode,
     setProgressionMode,
-    handleFirstPassChoice,
+
+    handleMarkForPractice,
+    handleMarkAsMastered,
+    handleSkipItem,
 
     // Progress tracking
     lessonSubset,
@@ -150,11 +153,9 @@ const IndexPage: React.FC = () => {
               }
             }}
             mode={progressionMode}
-            onFirstPassChoice={(choice) => {
-              if (activeItem) {
-                handleFirstPassChoice(activeItem.id, choice as RecallCategory);
-              }
-            }}
+            handleMarkForPractice={handleMarkForPractice}
+            handleMarkAsMastered={handleMarkAsMastered}
+            handleSkipItem={handleSkipItem}
             className="mb-10"
           />
 

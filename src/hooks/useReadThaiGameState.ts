@@ -105,6 +105,21 @@ export const useReadThaiGameState = () => {
     }
   }, [getCurrentLesson, workingSet.lessonSubset, initializeWorkingSet]);
 
+  const addMoreItems = useCallback(
+    (itemCount: number) => {
+      const currentLesson = getCurrentLesson();
+      if (!currentLesson) return;
+
+      const itemsToAdd = currentLesson.items.slice(1).slice(0, itemCount);
+      const workingSetItems = itemsToAdd.map((item) =>
+        createWorkingSetItem(item)
+      );
+
+      workingSet.addToWorkingSet(workingSetItems);
+    },
+    [workingSet, createWorkingSetItem, getCurrentLesson]
+  );
+
   const initializeTestMode = useCallback(() => {
     workingSet.clearWorkingSet();
   }, [workingSet]);
@@ -368,9 +383,9 @@ export const useReadThaiGameState = () => {
     lessonSubset: workingSet.lessonSubset,
     activeItem: workingSet.activeItem,
     setActiveItem: workingSet.setActiveItem,
-    addMoreItems: workingSet.addMoreItems,
-    nextItem: workingSet.nextItem,
+    addMoreItems,
 
+    nextItem: workingSet.nextItem,
     // handleFirstPassChoice,
     handleMarkForPractice,
     handleMarkAsMastered,
