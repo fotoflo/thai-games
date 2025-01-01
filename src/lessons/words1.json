@@ -24,8 +24,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["greeting", "formal", "common"],
       "categories": ["greetings"],
       "intervalModifier": 1
@@ -46,8 +44,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["polite", "formal", "common"],
       "categories": ["greetings"],
       "intervalModifier": 1
@@ -67,8 +63,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["basic", "common"],
       "categories": ["basics"],
       "intervalModifier": 1
@@ -88,8 +82,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["basic", "common"],
       "categories": ["basics"],
       "intervalModifier": 1
@@ -109,8 +101,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["polite", "common"],
       "categories": ["everyday-phrases"],
       "intervalModifier": 1
@@ -130,8 +120,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["verb", "food"],
       "categories": ["basics"],
       "intervalModifier": 1
@@ -151,8 +139,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["noun", "drink", "basic"],
       "categories": ["basics"],
       "intervalModifier": 1
@@ -172,8 +158,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["adjective", "weather"],
       "categories": ["adjectives"],
       "intervalModifier": 1
@@ -193,8 +177,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["adjective", "weather"],
       "categories": ["adjectives"],
       "intervalModifier": 1
@@ -214,8 +196,6 @@
       ],
       "practiceHistory": [],
       "recallCategory": "unseen",
-      "createdAt": 1703894400000,
-      "updatedAt": 1703894400000,
       "tags": ["adjective", "food"],
       "categories": ["adjectives"],
       "intervalModifier": 1

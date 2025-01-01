@@ -20,7 +20,10 @@ import words1 from "./words1.json";
 // import pronunciationAndSpelling from "./pronunciation-and-spelling.json";
 // import syllables1 from "./syllables1.json";
 // import syllables2 from "./syllables2.json";
-// import verbs from "./verbs.json";
+import verbs from "./verbs.json";
+
+// Array of all lesson data
+const allLessons = [words1, basicThai, verbs];
 
 // Define Zod schemas
 const CardSideSchema = z.object({
@@ -29,6 +32,11 @@ const CardSideSchema = z.object({
     .object({
       pronunciation: z.string().optional(),
       notes: z.string().optional(),
+      language: z.string().optional(),
+      level: z.string().optional(),
+      audio: z.string().optional(),
+      video: z.string().optional(),
+      image: z.string().optional(),
     })
     .optional(),
 });
@@ -55,8 +63,8 @@ const LessonItemSchema = z.object({
   sides: z.tuple([CardSideSchema, CardSideSchema]),
   practiceHistory: z.array(PracticeEventSchema),
   recallCategory: z.enum(["unseen", "skipped", "mastered", "practice"]),
-  createdAt: z.number(),
-  updatedAt: z.number(),
+  createdAt: z.number().optional(),
+  updatedAt: z.number().optional(),
   tags: z.array(z.string()),
   categories: z.array(z.string()),
   intervalModifier: z.number(),
@@ -72,6 +80,7 @@ const LessonSchema = z.object({
   totalItems: z.number(),
   version: z.number(),
   items: z.array(LessonItemSchema),
+  subject: z.string().optional(),
 });
 
 // Updated validation function with detailed error reporting
@@ -137,9 +146,6 @@ export const loadLessons = (): Lesson[] => {
 
   return validLessons;
 };
-
-// Array of all lesson data
-const allLessons = [words1, basicThai];
 
 // Export lessons array directly
 export const lessons = loadLessons();

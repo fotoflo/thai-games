@@ -1,220 +1,204 @@
 {
-  "lessonName": "Common Verbs",
-  "lessonDescription": "This lesson covers the most common verbs in the Thai language. Each verb is represented by a single syllable, and the lesson includes a mix of consonants and vowels.",
-  "lessonLevel": "beginner",
-  "languagePair": {
-    "target": {
-      "code": "th",
-      "name": "Thai",
-      "nativeName": "ภาษาไทย",
-      "script": "thai"
-    },
-    "native": {
-      "code": "en",
-      "name": "English",
-      "nativeName": "English"
-    }
-  },
+  "id": "common-verbs",
+  "name": "Common Verbs",
+  "description": "This lesson covers the most common verbs in the Thai language. Each verb is represented by a single syllable, and the lesson includes a mix of consonants and vowels.",
+  "categories": ["verbs", "basics"],
+  "difficulty": "beginner",
+  "subject": "Thai for English Speakers",
+  "estimatedTime": 30,
+  "totalItems": 10,
+  "version": 1,
   "items": [
     {
       "id": "gin",
-      "text": "กิน",
-      "translation": "to eat",
-      "romanization": "gin",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณกินข้าว",
-          "translation": "You eat rice",
-          "romanization": "kun gin khâao"
+          "markdown": "กิน",
+          "metadata": {
+            "pronunciation": "gin",
+            "notes": "Commonly used verb for eating"
+          }
         },
         {
-          "text": "ผมกินอาหาร",
-          "translation": "I eat food",
-          "romanization": "pǒm gin aa-hǎan"
+          "markdown": "to eat"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "food", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "food", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "deum",
-      "text": "ดื่ม",
-      "translation": "to drink",
-      "romanization": "dèum",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณดื่มน้ำ",
-          "translation": "You drink water",
-          "romanization": "kun dèum nám"
+          "markdown": "ดื่ม",
+          "metadata": {
+            "pronunciation": "dèum"
+          }
         },
         {
-          "text": "ผมดื่มกาแฟ",
-          "translation": "I drink coffee",
-          "romanization": "pǒm dèum gaa-fae"
+          "markdown": "to drink"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "food", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "food", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "pai",
-      "text": "ไป",
-      "translation": "to go",
-      "romanization": "bpai",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณไปไหน",
-          "translation": "Where are you going?",
-          "romanization": "kun bpai nǎi"
+          "markdown": "ไป",
+          "metadata": {
+            "pronunciation": "bpai"
+          }
         },
         {
-          "text": "ผมไปบ้าน",
-          "translation": "I go home",
-          "romanization": "pǒm bpai bâan"
+          "markdown": "to go"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "movement", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "movement", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "ma",
-      "text": "มา",
-      "translation": "to come",
-      "romanization": "maa",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณมาไหม",
-          "translation": "Are you coming?",
-          "romanization": "kun maa mǎi"
+          "markdown": "มา",
+          "metadata": {
+            "pronunciation": "maa"
+          }
         },
         {
-          "text": "ผมมาแล้ว",
-          "translation": "I am here",
-          "romanization": "pǒm maa láew"
+          "markdown": "to come"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "movement", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "movement", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "nang",
-      "text": "นั่ง",
-      "translation": "to sit",
-      "romanization": "nâng",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณนั่งนี่",
-          "translation": "You sit here",
-          "romanization": "kun nâng nîi"
+          "markdown": "นั่ง",
+          "metadata": {
+            "pronunciation": "nâng"
+          }
         },
         {
-          "text": "ผมนั่งเก้าอี้",
-          "translation": "I sit on the chair",
-          "romanization": "pǒm nâng gâo-îi"
+          "markdown": "to sit"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "action", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "action", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "yeun",
-      "text": "ยืน",
-      "translation": "to stand",
-      "romanization": "yeun",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณยืนตรงนี้",
-          "translation": "You stand here",
-          "romanization": "kun yeun dtrong níi"
+          "markdown": "ยืน",
+          "metadata": {
+            "pronunciation": "yeun"
+          }
         },
         {
-          "text": "ผมยืนรอ",
-          "translation": "I stand and wait",
-          "romanization": "pǒm yeun rɔɔ"
+          "markdown": "to stand"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "action", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "action", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "norn",
-      "text": "นอน",
-      "translation": "to sleep/lie down",
-      "romanization": "nɔɔn",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณนอนไหม",
-          "translation": "Do you sleep?",
-          "romanization": "kun nɔɔn mǎi"
+          "markdown": "นอน",
+          "metadata": {
+            "pronunciation": "nɔɔn"
+          }
         },
         {
-          "text": "ผมนอนแล้ว",
-          "translation": "I am sleeping",
-          "romanization": "pǒm nɔɔn láew"
+          "markdown": "to sleep/lie down"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "action", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "action", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "doen",
-      "text": "เดิน",
-      "translation": "to walk",
-      "romanization": "dəən",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณเดินไหม",
-          "translation": "Do you walk?",
-          "romanization": "kun dəən mǎi"
+          "markdown": "เดิน",
+          "metadata": {
+            "pronunciation": "dəən"
+          }
         },
         {
-          "text": "ผมเดินบ้าน",
-          "translation": "I walk home",
-          "romanization": "pǒm dəən bâan"
+          "markdown": "to walk"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "movement", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "movement", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "wing",
-      "text": "วิ่ง",
-      "translation": "to run",
-      "romanization": "wîng",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณวิ่งไหม",
-          "translation": "Do you run?",
-          "romanization": "kun wîng mǎi"
+          "markdown": "วิ่ง",
+          "metadata": {
+            "pronunciation": "wîng"
+          }
         },
         {
-          "text": "ผมวิ่งเร็ว",
-          "translation": "I run fast",
-          "romanization": "pǒm wîng reo"
+          "markdown": "to run"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "movement", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "movement", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     },
     {
       "id": "phut",
-      "text": "พูด",
-      "translation": "to speak",
-      "romanization": "pûut",
-      "examples": [
+      "sides": [
         {
-          "text": "คุณพูดไทย",
-          "translation": "You speak Thai",
-          "romanization": "kun pûut thai"
+          "markdown": "พูด",
+          "metadata": {
+            "pronunciation": "pûut"
+          }
         },
         {
-          "text": "ผมพูดอังกฤษ",
-          "translation": "I speak English",
-          "romanization": "pǒm pûut ang-grìt"
+          "markdown": "to speak"
         }
       ],
-      "difficulty": 1,
-      "tags": ["verb", "communication", "basic"]
+      "practiceHistory": [],
+      "recallCategory": "unseen",
+      "tags": ["verb", "communication", "basic"],
+      "categories": ["verbs"],
+      "intervalModifier": 1
     }
   ]
 }

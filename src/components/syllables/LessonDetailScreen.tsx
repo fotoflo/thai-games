@@ -24,7 +24,7 @@ const LessonHeader = ({
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-emerald-500" />
           <span className="text-sm font-medium text-emerald-500">
-            {lesson.lessonType}
+            {lesson.categories.join(", ")}
           </span>
         </div>
         <h1 className="text-2xl font-semibold">{lesson.name}</h1>
@@ -44,10 +44,10 @@ const LessonHeader = ({
     <div className="flex flex-wrap gap-2">
       <span className="px-3 py-1.5 bg-slate-800/50 rounded-full text-sm inline-flex items-center gap-2">
         <Globe className="w-3.5 h-3.5" />
-        {lesson.languagePair?.target?.name}
+        {lesson.subject}
       </span>
       <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm">
-        {lesson.level}
+        {lesson.difficulty}
       </span>
     </div>
   </div>
@@ -110,10 +110,10 @@ const LessonDetails = ({
               className="bg-slate-800/30 p-3 hover:bg-slate-700/30 transition-colors"
             >
               <div className="text-lg sm:text-xl text-slate-100">
-                {item.text}
+                {item.sides[0].markdown.split("\n")[0]}
               </div>
               <div className="text-xs sm:text-sm text-slate-400">
-                {item.translation}
+                {item.sides[1].markdown.split("\n")[0]}
               </div>
             </div>
           ))}
@@ -131,7 +131,6 @@ const LessonDetails = ({
             vocabItem={item}
             showExamples={expandedItems.has(index)}
             onToggleExamples={() => toggleExamples(index)}
-            onSpeak={handleSpeak}
           />
         ))}
       </div>
