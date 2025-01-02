@@ -21,15 +21,17 @@ const LessonSelector = ({
         >
           {lessons.length > 0 ? (
             <>
-              <button
-                key={currentLesson}
-                onClick={() => {
-                  onViewDetails(lessons[currentLesson], currentLesson); // Show lesson details
-                }}
-                className={`px-3 py-2 rounded-md transition-colors bg-blue-600 text-white`}
-              >
-                {lessons[currentLesson].name}
-              </button>
+              {currentLesson >= 0 && lessons[currentLesson] && (
+                <button
+                  key={currentLesson}
+                  onClick={() => {
+                    onViewDetails(lessons[currentLesson], currentLesson);
+                  }}
+                  className={`px-3 py-2 rounded-md transition-colors bg-blue-600 text-white`}
+                >
+                  {lessons[currentLesson].name}
+                </button>
+              )}
               <button
                 onClick={() => setShowLessonList(true)}
                 className={`px-3 py-2 rounded-md transition-colors bg-gray-700 hover:bg-gray-600 text-gray-300`}

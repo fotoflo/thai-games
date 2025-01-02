@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useGameSettings } from "./game/useGameSettings";
 import { useLessons } from "./game/useLessons";
 import { useWorkingSet } from "./game/useWorkingSet";
-import { useFlashcardMachine } from "./useFlashcardMachine";
 import { RecallCategory, LessonItem, Lesson } from "../types/lessons";
 
 export const useReadThaiGameState = () => {
+  const hasInitialized = useRef(false);
   const gameSettings = useGameSettings();
   const lessonState = useLessons();
   const workingSet = useWorkingSet({
@@ -13,8 +13,6 @@ export const useReadThaiGameState = () => {
     lessons: lessonState.lessons,
     progressionMode: lessonState.progressionMode,
   });
-
-  const flashcardMachine = useFlashcardMachine();
 
   const createWorkingSetItem = useCallback((item: LessonItem) => {
     return {
@@ -186,7 +184,9 @@ export const useReadThaiGameState = () => {
 
   // Initialize with default lesson if none selected
   useEffect(() => {
+    if (hasInitialized.current) return;
     if (lessonState.currentLesson === -1 && lessonState.lessons.length > 0) {
+      hasInitialized.current = true;
       // Load saved state from localStorage
       const savedState = localStorage.getItem("flashcardGameState");
       if (!savedState) {
@@ -196,11 +196,6 @@ export const useReadThaiGameState = () => {
 
       try {
         const parsed = JSON.parse(savedState);
-        flashcardMachine.updateGameState((draft) => {
-          Object.assign(draft, {
-            lessonData: parsed.lessonData,
-          });
-        });
 
         // Restore lesson state
         lessonState.setCurrentLesson(parsed.currentLesson ?? 0);
@@ -210,10 +205,17 @@ export const useReadThaiGameState = () => {
           workingSet.setLessonSubset(parsed.lessonSubset);
         }
         if (parsed.workingSet && Array.isArray(parsed.workingSet)) {
-          const items = parsed.workingSet.map((item: any) => ({
-            ...item,
-            lastReviewed: new Date(item.lastReviewed),
-          }));
+          const items = parsed.workingSet.map(
+            (item: {
+              id: string;
+              lessonItem: LessonItem;
+              lastReviewed: string;
+              recallCategory: RecallCategory;
+            }) => ({
+              ...item,
+              lastReviewed: new Date(item.lastReviewed),
+            })
+          );
           workingSet.addToWorkingSet(items);
         }
         if (parsed.activeItem) {
@@ -229,7 +231,7 @@ export const useReadThaiGameState = () => {
     }
   }, [
     lessonState,
-    flashcardMachine,
+    // flashcardMachine,
     workingSet,
     initializeWorkingSetAndLessonSubset,
   ]);
@@ -330,7 +332,6 @@ export const useReadThaiGameState = () => {
   // Save state to localStorage whenever it changes
   useEffect(() => {
     const state = {
-      lessonData: flashcardMachine.gameState.lessonData,
       currentLesson: lessonState.currentLesson,
       progressionMode: lessonState.progressionMode,
       lessonSubset: workingSet.lessonSubset,
@@ -347,7 +348,6 @@ export const useReadThaiGameState = () => {
     };
     localStorage.setItem("flashcardGameState", JSON.stringify(state));
   }, [
-    flashcardMachine.gameState,
     lessonState.currentLesson,
     lessonState.progressionMode,
     workingSet.lessonSubset,
@@ -393,7 +393,6 @@ export const useReadThaiGameState = () => {
     addMoreItems,
 
     nextItem: workingSet.nextItem,
-    // handleFirstPassChoice,
     handleMarkForPractice,
     handleMarkAsMastered,
     handleSkipItem,

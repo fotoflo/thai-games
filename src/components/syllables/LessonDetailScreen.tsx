@@ -25,10 +25,10 @@ const LessonHeader = ({
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-emerald-500" />
           <span className="text-sm font-medium text-emerald-500">
-            {lesson.categories.join(", ")}
+            {lesson?.categories?.join(", ")}
           </span>
         </div>
-        <h1 className="text-2xl font-semibold">{lesson.name}</h1>
+        <h1 className="text-2xl font-semibold">{lesson?.name}</h1>
       </div>
       <button
         onClick={onClose}
@@ -39,16 +39,16 @@ const LessonHeader = ({
     </div>
 
     <p className="text-sm text-slate-300 leading-relaxed">
-      {lesson.description}
+      {lesson?.description}
     </p>
 
     <div className="flex flex-wrap gap-2">
       <span className="px-3 py-1.5 bg-slate-800/50 rounded-full text-sm inline-flex items-center gap-2">
         <Globe className="w-3.5 h-3.5" />
-        {lesson.subject}
+        {lesson?.subject}
       </span>
       <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm">
-        {lesson.difficulty}
+        {lesson?.difficulty}
       </span>
     </div>
   </div>
@@ -61,10 +61,6 @@ const LessonDetails = ({
   lessonIndex,
 }: LessonDetailsProps) => {
   const [expandedItems, setExpandedItems] = useState(new Set());
-
-  const handleSpeak = (text: string) => {
-    console.log("Speaking:", text);
-  };
 
   const toggleExamples = (index: number) => {
     setExpandedItems((prev) => {
@@ -105,7 +101,7 @@ const LessonDetails = ({
           Vocabulary Overview
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {lesson.items.map((item, index) => (
+          {lesson?.items?.map((item, index) => (
             <div
               key={index}
               className="bg-slate-800/30 p-3 hover:bg-slate-700/30 transition-colors"
@@ -128,7 +124,7 @@ const LessonDetails = ({
         <h2 className="text-sm font-medium text-slate-400 uppercase tracking-wide">
           Vocabulary Details
         </h2>
-        {lesson.items.map((item, index) => (
+        {lesson?.items?.map((item, index) => (
           <DetailCard
             key={index}
             vocabItem={item}
