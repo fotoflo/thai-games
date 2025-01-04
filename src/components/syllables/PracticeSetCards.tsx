@@ -26,8 +26,8 @@ const PracticeSetCards: React.FC<PraticeSetCardsProps> = ({
   activeItem,
 }) => {
   return (
-    <div className="flex flex-col relative border-red-500 border-2 h-20">
-      <div className="flex items-center justify-center gap-2 mb-4">
+    <div className="flex flex-col relative border-y-2 border-slate-700 my-2">
+      <div className="flex items-center justify-center gap-2 my-2">
         <div className="flex gap-2 flex-wrap justify-center">
           {practiceSet?.map((item) => {
             const text = item?.item?.sides?.[0]?.markdown;
@@ -43,7 +43,7 @@ const PracticeSetCards: React.FC<PraticeSetCardsProps> = ({
                   hover:bg-blue-600 transition-colors
                   flex flex-col justify-center
                 `}
-                onClick={() => onCardSelect(item)}
+                // onClick={() => onCardSelect(item)}
                 role="button"
                 tabIndex={0}
               >
@@ -70,7 +70,7 @@ const PracticeSetCards: React.FC<PraticeSetCardsProps> = ({
           })}
           {practiceSet?.length > 0 && (
             <button
-              onClick={addMoreItems}
+              // onClick={addMoreItems}
               className="w-[60px] h-[80px] bg-gray-800 hover:bg-blue-600 transition-colors rounded flex items-center justify-center"
             >
               <PlusCircle className="text-gray-400" />

@@ -88,6 +88,7 @@ export const handleMarkForPractice = assign(
         itemId: context?.activeItem?.id || "0",
         newCategory: "practice",
       }),
+      practiceSet: [...context.practiceSet, context.activeItem],
     };
   }
 );
