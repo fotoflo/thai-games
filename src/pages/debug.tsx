@@ -130,7 +130,7 @@ const DebugPage: React.FC = () => {
       priority: 2,
     },
     {
-      title: "Working Set (simplified)",
+      title: "PracticeSet (simplified)",
       data: {
         length: gameState.practiceSet.length,
         items: gameState.practiceSet.map((entry) => ({

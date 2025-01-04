@@ -64,24 +64,6 @@ const createPracticeSetItem = (item: LessonItem): PracticeSetItem => ({
   recallCategory: "unseen" as RecallCategory,
 });
 
-// const getUnseenItems = (lesson: Lesson) => {
-//   return lesson?.items?.filter(
-//     (item) => !item.recallCategory || item.recallCategory === "unseen"
-//   );
-// };
-
-// const getPracticeItems = (lesson: Lesson) => {
-//   return lesson?.items?.filter((item) => item.recallCategory === "practice");
-// };
-
-// const getMasteredItems = (lesson: Lesson) => {
-//   return lesson?.items?.filter((item) => item.recallCategory === "mastered");
-// };
-
-// const getSkippedItems = (lesson: Lesson) => {
-//   return lesson?.items?.filter((item) => item.recallCategory === "skipped");
-// };
-
 // Action Functions
 export const initialize = ({
   context,
@@ -91,16 +73,10 @@ export const initialize = ({
   event: InitializeEvent;
 }) => {
   const lessonData = event?.lessons?.[event?.lessonIndex];
-  // if (!lesson?.items.length) {
-
   const practiceSet = lessonData?.items.map(createPracticeSetItem);
+  const activeItem = practiceSet?.[0];
 
-  // const lessonSubset = {
-  //   unseenItems: getUnseenItems(currentLesson),
-  //   practiceItems: getPracticeItems(currentLesson),
-  //   masteredItems: getMasteredItems(currentLesson),
-  //   skippedItems: getSkippedItems(currentLesson),
-  // };
+  // if (!lesson?.items.length) {
 
   return {
     ...context,
@@ -108,7 +84,7 @@ export const initialize = ({
     practiceSet,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
-    activeItem: null,
+    activeItem,
     currentIndex: 0,
     currentLessonData: lessonData,
   };
