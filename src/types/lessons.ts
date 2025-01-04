@@ -34,21 +34,21 @@ export type LessonItem = {
 };
 
 export type LessonSubset = {
-  unseenItems: PracticeSetItem[];
-  practiceItems: PracticeSetItem[];
-  masteredItems: PracticeSetItem[];
-  skippedItems: PracticeSetItem[];
+  unseenItems: SuperSetItem[];
+  practiceItems: SuperSetItem[];
+  masteredItems: SuperSetItem[];
+  skippedItems: SuperSetItem[];
 };
 
 // Working Set Item
-export type PracticeSetItem = {
+export type SuperSetItem = {
   id: string;
   recallCategory: RecallCategory;
   item: LessonItem;
   lastReviewed: Date;
 };
 
-export type PracticeSet = PracticeSetItem[];
+export type SuperSet = SuperSetItem[];
 
 export type CardSide = {
   markdown: string; // Can include text, images, audio via markdown syntax
@@ -90,8 +90,8 @@ export type GameState = {
   currentLesson: Lesson;
   currentLessonId: string;
 
-  practiceSet: PracticeSet;
-  practiceSetSize: number;
+  superSet: SuperSet;
+  superSetSize: number;
 
   lessonSubset: LessonSubset;
 };

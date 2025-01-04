@@ -79,8 +79,8 @@ describe("useReadThaiGameState", () => {
   const mockLessonProgress: LessonProgress = {
     startedAt: Date.now(),
     lastAccessedAt: Date.now(),
-    practiceSetIds: [],
-    practiceSetMaxLength: 7,
+    superSetIds: [],
+    superSetMaxLength: 7,
     streakDays: 0,
     bestStreak: 0,
     totalTimeSpent: 0,
@@ -108,7 +108,7 @@ describe("useReadThaiGameState", () => {
     },
     completedLessons: [],
     settings: {
-      defaultPracticeSetSize: 5,
+      defaultSuperSetSize: 5,
       audioEnabled: true,
       interleaving: {
         enabled: false,
@@ -143,7 +143,7 @@ describe("useReadThaiGameState", () => {
 
       expect(result.current.progressionMode).toBe("firstPass");
       expect(result.current.currentLesson).toBe(0);
-      expect(result.current.practiceSet).toHaveLength(1);
+      expect(result.current.superSet).toHaveLength(1);
       expect(result.current.lessonSubset).toEqual({
         unseenItems: mockLessonItems.slice(1).map((item) => item.id),
         practiceItems: [],
@@ -174,7 +174,7 @@ describe("useReadThaiGameState", () => {
     it("should initialize working set with first item in first pass mode", () => {
       const { result } = renderHook(() => useReadThaiGameState());
 
-      expect(result.current.practiceSet).toHaveLength(1);
+      expect(result.current.superSet).toHaveLength(1);
       expect(result.current.activeItem).toBeTruthy();
       if (result.current.activeItem) {
         expect(result.current.activeItem.id).toBe(mockLessonItems[0].id);

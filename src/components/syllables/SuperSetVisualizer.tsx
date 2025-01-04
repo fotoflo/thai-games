@@ -1,21 +1,21 @@
-import { PracticeSet, RecallCategory } from "@/types/lessons";
+import { SuperSet, RecallCategory } from "@/types/lessons";
 import React from "react";
 
 const LessonSubsetVisualizer = ({
-  practiceSet,
+  superSet,
   className = "",
   activeItemIndex = 0,
 }: {
-  practiceSet: PracticeSet;
+  superSet: SuperSet;
   className?: string;
   activeItemIndex: number;
 }) => {
-  if (!practiceSet?.length) {
+  if (!superSet?.length) {
     return <div className={className}>No items in practice set</div>;
   }
 
   // Calculate counts for the legend
-  const counts = practiceSet.reduce((acc, item) => {
+  const counts = superSet.reduce((acc, item) => {
     acc[item.recallCategory] = (acc[item.recallCategory] || 0) + 1;
     return acc;
   }, {} as Record<RecallCategory, number>);
@@ -50,7 +50,7 @@ const LessonSubsetVisualizer = ({
 
       {/* Progress Bars with active item indicator */}
       <div className="flex gap-px">
-        {practiceSet.map((item, index) => (
+        {superSet.map((item, index) => (
           <div key={item.id} className="relative h-1 flex-1">
             <div
               className={`h-full w-full first:rounded-l-full last:rounded-r-full ${getStatusColor(

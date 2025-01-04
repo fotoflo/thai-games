@@ -1,7 +1,7 @@
 import React from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
-import PracticeSetVisualizer from "@/components/syllables/PracticeSetVisualizer";
+import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 
 interface DebugSection {
   title: string;
@@ -130,10 +130,10 @@ const DebugPage: React.FC = () => {
       priority: 2,
     },
     {
-      title: "PracticeSet (simplified)",
+      title: "SuperSet (simplified)",
       data: {
-        length: gameState.practiceSet.length,
-        items: gameState.practiceSet.map((entry) => ({
+        length: gameState.superSet.length,
+        items: gameState.superSet.map((entry) => ({
           id: entry.id,
           recallCategory: entry.item.recallCategory,
         })),
@@ -169,7 +169,7 @@ const DebugPage: React.FC = () => {
     },
     {
       title: "Working Set",
-      data: gameState.practiceSet,
+      data: gameState.superSet,
       priority: 3,
     },
   ];
@@ -198,8 +198,8 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        <PracticeSetVisualizer
-          practiceSet={gameState.practiceSet}
+        <SuperSetVisualizer
+          superSet={gameState.superSet}
           activeItemIndex={gameState.activeItemIndex}
           className="mb-5"
         />

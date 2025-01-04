@@ -112,14 +112,14 @@ stateDiagram-v2
         }
 
         Skip --> NextCard: Add to Skipped
-        Practice --> NextCard: Add to PracticeSet if space
+        Practice --> NextCard: Add to SuperSet if space
         Master --> NextCard: Add to Mastered
 
         NextCard --> ShowCard: More cards
         NextCard --> [*]: All cards seen
     }
 
-    FirstPass --> PracticeMode: PracticeSet full\\nor FirstPass complete
+    FirstPass --> PracticeMode: SuperSet full\\nor FirstPass complete
 
     state "Practice Mode" as PracticeMode {
         [*] --> ShowPracticeCard
@@ -282,8 +282,8 @@ type LessonMetadata = {
 type LessonProgress = {
   startedAt: number;
   lastAccessedAt: number;
-  practiceSetIds: string[];
-  practiceSetMaxLength: number;
+  superSetIds: string[];
+  superSetMaxLength: number;
   streakDays: number;
   bestStreak: number;
   totalTimeSpent: number;
@@ -324,13 +324,13 @@ type GameState = {
 
   interleavedSessions?: {
     activeLessonIds: string[];
-    practiceSetIds: string[];
+    superSetIds: string[];
     lastAccessed: number;
   };
 
   // Global settings
   settings: {
-    defaultPracticeSetSize: number;
+    defaultSuperSetSize: number;
     audioEnabled: boolean;
     interleaving: {
       enabled: boolean;

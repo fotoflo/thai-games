@@ -5,14 +5,14 @@ import MasteryControls from "../components/syllables/MasteryControls";
 import WelcomeModal from "../components/ReadThaiWelcomeModal";
 import FlashCardModal from "../components/syllables/FlashCardModal";
 import SettingsModalContainer from "../components/SettingsModalContainer";
-import PracticeSetCards from "../components/syllables/PracticeSetCards";
+import SuperSetCards from "../components/syllables/SuperSetCards";
 import LessonSelector from "../components/syllables/LessonSelector";
 import ProgressionSelector from "../components/syllables/ProgressionSelector";
 import ToggleInvertTranslationButton from "../components/syllables/ToggleInvertTranslationButton";
 import SettingsHamburger from "../components/ui/SettingsHamburger";
 import Divider from "../components/ui/divider";
 import LessonDetails from "../components/syllables/LessonDetailScreen";
-import { Lesson, RecallCategory, PracticeSetItem } from "../types/lessons";
+import { Lesson, RecallCategory, SuperSetItem } from "../types/lessons";
 import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
 
 interface LessonDetailsSelection {
@@ -29,7 +29,7 @@ const IndexPage: React.FC = () => {
     toggleInvertTranslation,
 
     // Working set state
-    practiceSet,
+    superSet,
     activeItem,
     setActiveItem,
     addMoreItems,
@@ -65,7 +65,7 @@ const IndexPage: React.FC = () => {
   }, [activeItem, currentLesson, addMoreItems]);
 
   const handleCardSelect = useCallback(
-    (item: PracticeSetItem) => {
+    (item: SuperSetItem) => {
       setActiveItem(item);
     },
     [setActiveItem]
@@ -160,8 +160,8 @@ const IndexPage: React.FC = () => {
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
           {/* Working Set Display */}
-          <PracticeSetCards
-            practiceSet={practiceSet.map((item) => ({
+          <SuperSetCards
+            superSet={superSet.map((item) => ({
               ...item,
               lastReviewed: item.lastReviewed || new Date(),
             }))}

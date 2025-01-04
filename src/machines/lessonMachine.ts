@@ -12,7 +12,7 @@ import {
 const initialContext: LessonContext = {
   lessons: [],
   currentLessonId: -1,
-  practiceSet: [],
+  superSet: [],
   lessonSubset: {
     unseenItems: [],
     practiceItems: [],

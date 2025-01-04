@@ -1,12 +1,12 @@
 import React from "react";
 import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
-import { PracticeSetItem } from "../../types/lessons";
+import { SuperSetItem } from "../../types/lessons";
 
-interface PracticeSetCardsProps {
-  practiceSet: PracticeSetItem[];
-  selectedItem: PracticeSetItem | null;
-  onCardSelect: (item: PracticeSetItem) => void;
+interface SuperSetCardsProps {
+  superSet: SuperSetItem[];
+  selectedItem: SuperSetItem | null;
+  onCardSelect: (item: SuperSetItem) => void;
   addMoreItems: () => void;
   lessonSubset: {
     practiceItems: string[];
@@ -26,8 +26,8 @@ const getPhoneticSizeClass = (text: string): string => {
   return "text-[8px]";
 };
 
-const PracticeSetCards: React.FC<PracticeSetCardsProps> = ({
-  practiceSet,
+const SuperSetCards: React.FC<SuperSetCardsProps> = ({
+  superSet,
   selectedItem,
   onCardSelect,
   addMoreItems,
@@ -37,7 +37,7 @@ const PracticeSetCards: React.FC<PracticeSetCardsProps> = ({
     <div className="flex flex-col relative">
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 flex-wrap justify-center">
-          {practiceSet.map((item) => {
+          {superSet.map((item) => {
             const text = item.lessonItem.sides[0].markdown;
             if (!text) return null;
 
@@ -92,4 +92,4 @@ const PracticeSetCards: React.FC<PracticeSetCardsProps> = ({
   );
 };
 
-export default PracticeSetCards;
+export default SuperSetCards;

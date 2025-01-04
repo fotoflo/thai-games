@@ -8,7 +8,7 @@ export type LessonSubset = {
   skippedItems: string[];
 };
 
-export type PracticeSetItem = {
+export type SuperSetItem = {
   id: string;
   item: LessonItem;
   lastReviewed: Date;
@@ -18,9 +18,9 @@ export type PracticeSetItem = {
 export type LessonContext = {
   lessons: Lesson[];
   currentLesson: number;
-  practiceSet: PracticeSetItem[];
+  superSet: SuperSetItem[];
   lessonSubset: LessonSubset;
-  activeItem: PracticeSetItem | null;
+  activeItem: SuperSetItem | null;
   activeItemIndex: number;
 };
 
@@ -40,7 +40,7 @@ export type LessonEvent =
   | { type: "SWITCH_TO_TEST" }
   | { type: "COMPLETE_TEST" };
 
-const createPracticeSetItem = (item: LessonItem): PracticeSetItem => ({
+const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
   id: item.id,
   item,
   lastReviewed: new Date(),
@@ -48,15 +48,15 @@ const createPracticeSetItem = (item: LessonItem): PracticeSetItem => ({
 });
 
 const updateRecallCategory = ({
-  practiceSet,
+  superSet,
   itemId,
   newCategory,
 }: {
-  practiceSet: PracticeSetItem[];
+  superSet: SuperSetItem[];
   itemId: string;
   newCategory: RecallCategory;
 }) => {
-  return practiceSet.map((item) =>
+  return superSet.map((item) =>
     item.id === itemId ? { ...item, recallCategory: newCategory } : item
   );
 };
@@ -71,15 +71,15 @@ export const initialize = ({
   const lessonData = event?.lessons?.[event?.lessonIndex];
   const activeItemIndex = 0;
 
-  const practiceSet = lessonData?.items.map(createPracticeSetItem);
+  const superSet = lessonData?.items.map(createSuperSetItem);
 
   return {
     ...context,
     lessonData,
-    practiceSet,
+    superSet,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
-    activeItem: practiceSet?.[activeItemIndex],
+    activeItem: superSet?.[activeItemIndex],
     activeItemIndex,
     currentLessonData: lessonData,
   };
@@ -88,8 +88,8 @@ export const initialize = ({
 export const handleMarkForPractice = assign(
   ({ context }: { context: LessonContext }) => {
     return {
-      practiceSet: updateRecallCategory({
-        practiceSet: context.practiceSet,
+      superSet: updateRecallCategory({
+        superSet: context.superSet,
         itemId: context?.activeItem?.id || "0",
         newCategory: "practice",
       }),
@@ -100,8 +100,8 @@ export const handleMarkForPractice = assign(
 export const handleMarkAsMastered = assign(
   ({ context }: { context: LessonContext }) => {
     return {
-      practiceSet: updateRecallCategory({
-        practiceSet: context.practiceSet,
+      superSet: updateRecallCategory({
+        superSet: context.superSet,
         itemId: context?.activeItem?.id || "0",
         newCategory: "mastered",
       }),
@@ -112,8 +112,8 @@ export const handleMarkAsMastered = assign(
 export const handleSkipItem = assign(
   ({ context }: { context: LessonContext }) => {
     return {
-      practiceSet: updateRecallCategory({
-        practiceSet: context.practiceSet,
+      superSet: updateRecallCategory({
+        superSet: context.superSet,
         itemId: context?.activeItem?.id || "0",
         newCategory: "skipped",
       }),
@@ -124,10 +124,10 @@ export const handleSkipItem = assign(
 export const moveToNextItem = assign(
   ({ context }: { context: LessonContext }) => {
     const activeItemIndex =
-      (context.activeItemIndex + 1) % context.practiceSet.length;
+      (context.activeItemIndex + 1) % context.superSet.length;
     return {
       activeItemIndex,
-      activeItem: context.practiceSet[activeItemIndex],
+      activeItem: context.superSet[activeItemIndex],
     };
   }
 );

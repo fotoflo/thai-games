@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { usePracticeSet } from "./usePracticeSet";
+import { useSuperSet } from "./useSuperSet";
 import { Lesson } from "../../types/lessons";
 
 const mockLesson: Lesson = {
@@ -48,10 +48,10 @@ const mockLesson: Lesson = {
   ],
 };
 
-describe("usePracticeSet", () => {
+describe("useSuperSet", () => {
   it("should auto-fill practice set when space is available", () => {
     const { result } = renderHook(() =>
-      usePracticeSet({
+      useSuperSet({
         currentLesson: 0,
         lessons: [mockLesson],
         progressionMode: "firstPass",
@@ -59,7 +59,7 @@ describe("usePracticeSet", () => {
     );
 
     act(() => {
-      result.current.addToPracticeSet([
+      result.current.addToSuperSet([
         {
           id: "item-1",
           mastery: 1,
@@ -69,12 +69,12 @@ describe("usePracticeSet", () => {
       ]);
     });
 
-    expect(result.current.practiceSet.length).toBe(1);
+    expect(result.current.superSet.length).toBe(1);
   });
 
   it("should maintain set exclusivity", () => {
     const { result } = renderHook(() =>
-      usePracticeSet({
+      useSuperSet({
         currentLesson: 0,
         lessons: [mockLesson],
         progressionMode: "firstPass",
@@ -82,7 +82,7 @@ describe("usePracticeSet", () => {
     );
 
     act(() => {
-      result.current.addToPracticeSet([
+      result.current.addToSuperSet([
         {
           id: "item-1",
           mastery: 1,
@@ -93,7 +93,7 @@ describe("usePracticeSet", () => {
     });
 
     act(() => {
-      result.current.addToPracticeSet([
+      result.current.addToSuperSet([
         {
           id: "item-1",
           mastery: 1,
@@ -103,12 +103,12 @@ describe("usePracticeSet", () => {
       ]);
     });
 
-    expect(result.current.practiceSet.length).toBe(1);
+    expect(result.current.superSet.length).toBe(1);
   });
 
   it("should cycle through practice set correctly", () => {
     const { result } = renderHook(() =>
-      usePracticeSet({
+      useSuperSet({
         currentLesson: 0,
         lessons: [mockLesson],
         progressionMode: "firstPass",
@@ -116,7 +116,7 @@ describe("usePracticeSet", () => {
     );
 
     act(() => {
-      result.current.addToPracticeSet([
+      result.current.addToSuperSet([
         {
           id: "item-1",
           mastery: 1,
