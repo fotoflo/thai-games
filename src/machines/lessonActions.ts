@@ -1,4 +1,3 @@
-import { useLessons } from "@/hooks/game/useLessons";
 import { Lesson, LessonItem, RecallCategory } from "../types/lessons";
 import { assign } from "xstate";
 
@@ -61,11 +60,6 @@ const updateRecallCategory = ({
     item.id === itemId ? { ...item, recallCategory: newCategory } : item
   );
 };
-
-const getActiveItem = (practiceSet: PracticeSetItem[]) => {
-  return practiceSet.find((item) => item.recallCategory === "active");
-};
-
 // Action Functions
 export const initialize = ({
   context,
