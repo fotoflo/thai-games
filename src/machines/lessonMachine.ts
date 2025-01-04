@@ -1,4 +1,4 @@
-import { createMachine } from "xstate";
+import { createMachine, assign } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
 import {
   initialize,
@@ -35,7 +35,7 @@ export const lessonMachine = createMachine({
       on: {
         INITIALIZE: {
           target: "firstPass",
-          actions: (context) => initialize(context),
+          actions: [assign((context, event) => initialize(context, event))],
         },
       },
     },

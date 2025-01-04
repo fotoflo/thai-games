@@ -64,15 +64,19 @@ const createWorkingSetItem = (item: LessonItem): WorkingSetItem => ({
   recallCategory: "unseen" as RecallCategory,
 });
 // Action Functions
-export const initialize = ({ context, event }) => {
-  // debugger;
-
+export const initialize = ({
+  context,
+  event,
+}: {
+  context: LessonContext;
+  event: InitializeEvent;
+}) => {
   const lessonData = event?.lessons?.[event?.lessonIndex];
   // if (!lesson?.items.length) {
   return {
     ...context,
-    lessonData,
-    currentLesson: 24,
+    currentLessonData: lessonData,
+    currentLesson: event?.lessonIndex,
     lessons: event?.lessons,
     workingSet: [],
     lessonSubset: {
