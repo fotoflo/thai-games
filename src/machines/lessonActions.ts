@@ -75,8 +75,7 @@ export const initialize = ({
   // if (!lesson?.items.length) {
   return {
     ...context,
-    currentLessonData: lessonData,
-    currentLesson: event?.lessonIndex,
+    currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
     workingSet: [],
     lessonSubset: {
@@ -87,6 +86,7 @@ export const initialize = ({
     },
     activeItem: null,
     currentIndex: 0,
+    currentLessonData: lessonData,
   };
   // }
 

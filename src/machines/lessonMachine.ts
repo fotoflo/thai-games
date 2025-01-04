@@ -11,7 +11,7 @@ import {
 
 const initialContext: LessonContext = {
   lessons: [],
-  currentLesson: -1,
+  currentLessonId: -1,
   workingSet: [],
   lessonSubset: {
     unseenItems: [],

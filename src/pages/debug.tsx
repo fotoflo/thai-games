@@ -1,6 +1,7 @@
 import React from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
+import LessonSetVisualizer from "../components/syllables/LessonSetVisualizer";
 
 interface DebugSection {
   title: string;
@@ -196,6 +197,8 @@ const DebugPage: React.FC = () => {
             ))}
           </div>
         </div>
+
+        <LessonSetVisualizer lesson={gameState.lessonSubset} />
 
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
