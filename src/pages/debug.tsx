@@ -1,7 +1,7 @@
 import React from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
-import LessonSetVisualizer from "../components/syllables/LessonSetVisualizer";
+import PracticeSetVisualizer from "@/components/syllables/PracticeSetVisualizer";
 
 interface DebugSection {
   title: string;
@@ -123,9 +123,9 @@ const DebugPage: React.FC = () => {
       title: "Active Item (simplified)",
       data: {
         id: gameState.activeItem?.id,
-        thai: gameState.activeItem?.lessonItem.sides[0].markdown,
-        english: gameState.activeItem?.lessonItem.sides[1].markdown,
-        tags: gameState.activeItem?.lessonItem.tags,
+        thai: gameState.activeItem?.item.sides[0].markdown,
+        english: gameState.activeItem?.item.sides[1].markdown,
+        tags: gameState.activeItem?.item.tags,
       },
       priority: 2,
     },
@@ -135,7 +135,7 @@ const DebugPage: React.FC = () => {
         length: gameState.practiceSet.length,
         items: gameState.practiceSet.map((entry) => ({
           id: entry.id,
-          recallCategory: entry.lessonItem.recallCategory,
+          recallCategory: entry.item.recallCategory,
         })),
       },
       priority: 1,
@@ -198,8 +198,10 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        <LessonSetVisualizer lesson={gameState.lessonSubset} />
-
+        <PracticeSetVisualizer
+          practiceSet={gameState.practiceSet}
+          className="mb-4"
+        />
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
           {sections

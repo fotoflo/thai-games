@@ -64,23 +64,23 @@ const createPracticeSetItem = (item: LessonItem): PracticeSetItem => ({
   recallCategory: "unseen" as RecallCategory,
 });
 
-const getUnseenItems = (lesson: Lesson) => {
-  return lesson.items.filter(
-    (item) => !item.recallCategory || item.recallCategory === "unseen"
-  );
-};
+// const getUnseenItems = (lesson: Lesson) => {
+//   return lesson?.items?.filter(
+//     (item) => !item.recallCategory || item.recallCategory === "unseen"
+//   );
+// };
 
-const getPracticeItems = (lesson: Lesson) => {
-  return lesson.items.filter((item) => item.recallCategory === "practice");
-};
+// const getPracticeItems = (lesson: Lesson) => {
+//   return lesson?.items?.filter((item) => item.recallCategory === "practice");
+// };
 
-const getMasteredItems = (lesson: Lesson) => {
-  return lesson.items.filter((item) => item.recallCategory === "mastered");
-};
+// const getMasteredItems = (lesson: Lesson) => {
+//   return lesson?.items?.filter((item) => item.recallCategory === "mastered");
+// };
 
-const getSkippedItems = (lesson: Lesson) => {
-  return lesson.items.filter((item) => item.recallCategory === "skipped");
-};
+// const getSkippedItems = (lesson: Lesson) => {
+//   return lesson?.items?.filter((item) => item.recallCategory === "skipped");
+// };
 
 // Action Functions
 export const initialize = ({
@@ -93,27 +93,21 @@ export const initialize = ({
   const lessonData = event?.lessons?.[event?.lessonIndex];
   // if (!lesson?.items.length) {
 
-  const currentLesson = lessonData?.items.map(createPracticeSetItem);
+  const practiceSet = lessonData?.items.map(createPracticeSetItem);
 
-  debugger;
-
-  const lessonSubset = {
-    unseenItems: getUnseenItems(currentLesson),
-    practiceItems: getPracticeItems(currentLesson),
-    masteredItems: getMasteredItems(currentLesson),
-    skippedItems: getSkippedItems(currentLesson),
-  };
-
-  debugger;
+  // const lessonSubset = {
+  //   unseenItems: getUnseenItems(currentLesson),
+  //   practiceItems: getPracticeItems(currentLesson),
+  //   masteredItems: getMasteredItems(currentLesson),
+  //   skippedItems: getSkippedItems(currentLesson),
+  // };
 
   return {
     ...context,
     lessonData,
-    currentLesson,
+    practiceSet,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
-    practiceSet: [],
-    lessonSubset,
     activeItem: null,
     currentIndex: 0,
     currentLessonData: lessonData,

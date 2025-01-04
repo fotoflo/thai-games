@@ -33,13 +33,22 @@ export type LessonItem = {
   intervalModifier: number; // For SRS algorithm
 };
 
+export type LessonSubset = {
+  unseenItems: PracticeSetItem[];
+  practiceItems: PracticeSetItem[];
+  masteredItems: PracticeSetItem[];
+  skippedItems: PracticeSetItem[];
+};
+
 // Working Set Item
 export type PracticeSetItem = {
   id: string;
   recallCategory: RecallCategory;
-  lessonItem: LessonItem;
+  item: LessonItem;
   lastReviewed: Date;
 };
+
+export type PracticeSet = PracticeSetItem[];
 
 export type CardSide = {
   markdown: string; // Can include text, images, audio via markdown syntax
@@ -77,19 +86,14 @@ export type LessonMetadata = {
 export type GameState = {
   // All available lessons (lazy loaded)
   lessonData: Lesson[];
-  currentLesson: Lesson;
 
-  practiceSet: PracticeSetItem[];
+  currentLesson: Lesson;
+  currentLessonId: string;
+
+  practiceSet: PracticeSet;
   practiceSetSize: number;
 
-  lessonSubset: {
-    unseenItems: PracticeSetItem[];
-    practiceItems: PracticeSetItem[];
-    masteredItems: PracticeSetItem[];
-    skippedItems: PracticeSetItem[];
-  };
-
-  currentLessonId: string;
+  lessonSubset: LessonSubset;
 };
 
 // Game Settings
