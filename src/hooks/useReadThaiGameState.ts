@@ -19,9 +19,6 @@ export const useReadThaiGameState = () => {
       });
     }
   }, [send, lessonState.lessons]);
-
-  const activeItem = state.context.activeItem;
-
   return {
     // Game settings
     ...gameSettings,
@@ -37,7 +34,7 @@ export const useReadThaiGameState = () => {
     // Working set
     practiceSet: state.context.practiceSet,
     lessonSubset: state.context.lessonSubset,
-    activeItem,
+    activeItem: state.context.activeItem,
 
     nextItem: () => send({ type: "NEXT_ITEM" }),
     handleMarkForPractice: () => send({ type: "MARK_FOR_PRACTICE" }),

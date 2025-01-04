@@ -22,7 +22,7 @@ export type LessonContext = {
   practiceSet: PracticeSetItem[];
   lessonSubset: LessonSubset;
   activeItem: PracticeSetItem | null;
-  currentIndex: number;
+  activeItemIndex: number;
 };
 
 export type InitializeEvent = {
@@ -41,28 +41,30 @@ export type LessonEvent =
   | { type: "SWITCH_TO_TEST" }
   | { type: "COMPLETE_TEST" };
 
-// Helper Functions
-const moveItemToCategory = (
-  context: LessonContext,
-  itemId: string,
-  targetCategory: keyof LessonSubset
-): LessonSubset => {
-  const newSubset = { ...context.lessonSubset };
-  Object.keys(newSubset).forEach((key) => {
-    newSubset[key as keyof LessonSubset] = newSubset[
-      key as keyof LessonSubset
-    ].filter((id) => id !== itemId);
-  });
-  newSubset[targetCategory].push(itemId);
-  return newSubset;
-};
-
 const createPracticeSetItem = (item: LessonItem): PracticeSetItem => ({
   id: item.id,
   item,
   lastReviewed: new Date(),
   recallCategory: "unseen" as RecallCategory,
 });
+
+const updateRecallCategory = ({
+  practiceSet,
+  itemId,
+  newCategory,
+}: {
+  practiceSet: PracticeSetItem[];
+  itemId: string;
+  newCategory: RecallCategory;
+}) => {
+  return practiceSet.map((item) =>
+    item.id === itemId ? { ...item, recallCategory: newCategory } : item
+  );
+};
+
+const getActiveItem = (practiceSet: PracticeSetItem[]) => {
+  return practiceSet.find((item) => item.recallCategory === "active");
+};
 
 // Action Functions
 export const initialize = ({
@@ -73,10 +75,9 @@ export const initialize = ({
   event: InitializeEvent;
 }) => {
   const lessonData = event?.lessons?.[event?.lessonIndex];
-  const practiceSet = lessonData?.items.map(createPracticeSetItem);
-  const activeItem = practiceSet?.[0];
+  const activeItemIndex = 0;
 
-  // if (!lesson?.items.length) {
+  const practiceSet = lessonData?.items.map(createPracticeSetItem);
 
   return {
     ...context,
@@ -84,53 +85,65 @@ export const initialize = ({
     practiceSet,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
-    activeItem,
-    currentIndex: 0,
+    activeItem: practiceSet?.[activeItemIndex],
+    activeItemIndex,
     currentLessonData: lessonData,
   };
 };
 
-export const handleMarkForPractice = assign((context: LessonContext) => ({
-  lessonSubset: context.activeItem
-    ? moveItemToCategory(context, context.activeItem.id, "practiceItems")
-    : context.lessonSubset,
-}));
+export const handleMarkForPractice = assign(
+  ({ context }: { context: LessonContext }) => {
+    return {
+      practiceSet: updateRecallCategory({
+        practiceSet: context.practiceSet,
+        itemId: context?.activeItem?.id || "0",
+        newCategory: "practice",
+      }),
+    };
+  }
+);
 
-export const handleMarkAsMastered = assign((context: LessonContext) => ({
-  lessonSubset: context.activeItem
-    ? moveItemToCategory(context, context.activeItem.id, "masteredItems")
-    : context.lessonSubset,
-}));
+export const handleMarkAsMastered = assign(
+  ({ context }: { context: LessonContext }) => {
+    return {
+      practiceSet: updateRecallCategory({
+        practiceSet: context.practiceSet,
+        itemId: context?.activeItem?.id || "0",
+        newCategory: "mastered",
+      }),
+    };
+  }
+);
 
-export const handleSkipItem = assign((context: LessonContext) => ({
-  lessonSubset: context.activeItem
-    ? moveItemToCategory(context, context.activeItem.id, "skippedItems")
-    : context.lessonSubset,
-}));
+export const handleSkipItem = assign(
+  ({ context }: { context: LessonContext }) => {
+    return {
+      practiceSet: updateRecallCategory({
+        practiceSet: context.practiceSet,
+        itemId: context?.activeItem?.id || "0",
+        newCategory: "skipped",
+      }),
+    };
+  }
+);
 
-export const moveToNextItem = assign((context: LessonContext) => {
-  const nextUnseenId = context.lessonSubset.unseenItems[0];
-  if (!nextUnseenId) return { activeItem: null };
+export const moveToNextItem = assign(
+  ({ context }: { context: LessonContext }) => {
+    return {
+      activeItemIndex: context.activeItemIndex + 1,
+      activeItem: context.practiceSet[context.activeItemIndex + 1],
+    };
+  }
+);
 
-  const lesson = context.lessons[context.currentLesson];
-  const nextItem = lesson.items.find(
-    (item: LessonItem) => item.id === nextUnseenId
-  );
-  if (!nextItem) return { activeItem: null };
+// export const hasPracticeItems = (context: LessonContext): boolean => {
+//   return context.lessonSubset.practiceItems.length > 0;
+// };
 
+export const cyclePracticeSet = assign<LessonContext>(({ context }) => {
+  const nextIndex = (context.activeItemIndex + 1) % context.practiceSet.length;
   return {
-    activeItem: createPracticeSetItem(nextItem),
-  };
-});
-
-export const hasPracticeItems = (context: LessonContext): boolean => {
-  return context.lessonSubset.practiceItems.length > 0;
-};
-
-export const cyclePracticeSet = assign<LessonContext>((context) => {
-  const nextIndex = (context.currentIndex + 1) % context.practiceSet.length;
-  return {
-    currentIndex: nextIndex,
+    activeItemIndex: nextIndex,
     activeItem: context.practiceSet[nextIndex],
   };
 });
