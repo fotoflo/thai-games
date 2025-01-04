@@ -9,9 +9,9 @@ export type LessonSubset = {
   skippedItems: string[];
 };
 
-export type WorkingSetItem = {
+export type PracticeSetItem = {
   id: string;
-  lessonItem: LessonItem;
+  item: LessonItem;
   lastReviewed: Date;
   recallCategory: RecallCategory;
 };
@@ -19,9 +19,9 @@ export type WorkingSetItem = {
 export type LessonContext = {
   lessons: Lesson[];
   currentLesson: number;
-  workingSet: WorkingSetItem[];
+  practiceSet: PracticeSetItem[];
   lessonSubset: LessonSubset;
-  activeItem: WorkingSetItem | null;
+  activeItem: PracticeSetItem | null;
   currentIndex: number;
 };
 
@@ -57,12 +57,31 @@ const moveItemToCategory = (
   return newSubset;
 };
 
-const createWorkingSetItem = (item: LessonItem): WorkingSetItem => ({
+const createPracticeSetItem = (item: LessonItem): PracticeSetItem => ({
   id: item.id,
-  lessonItem: item,
+  item,
   lastReviewed: new Date(),
   recallCategory: "unseen" as RecallCategory,
 });
+
+const getUnseenItems = (lesson: Lesson) => {
+  return lesson.items.filter(
+    (item) => !item.recallCategory || item.recallCategory === "unseen"
+  );
+};
+
+const getPracticeItems = (lesson: Lesson) => {
+  return lesson.items.filter((item) => item.recallCategory === "practice");
+};
+
+const getMasteredItems = (lesson: Lesson) => {
+  return lesson.items.filter((item) => item.recallCategory === "mastered");
+};
+
+const getSkippedItems = (lesson: Lesson) => {
+  return lesson.items.filter((item) => item.recallCategory === "skipped");
+};
+
 // Action Functions
 export const initialize = ({
   context,
@@ -73,41 +92,31 @@ export const initialize = ({
 }) => {
   const lessonData = event?.lessons?.[event?.lessonIndex];
   // if (!lesson?.items.length) {
+
+  const currentLesson = lessonData?.items.map(createPracticeSetItem);
+
+  debugger;
+
+  const lessonSubset = {
+    unseenItems: getUnseenItems(currentLesson),
+    practiceItems: getPracticeItems(currentLesson),
+    masteredItems: getMasteredItems(currentLesson),
+    skippedItems: getSkippedItems(currentLesson),
+  };
+
+  debugger;
+
   return {
     ...context,
+    lessonData,
+    currentLesson,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
-    workingSet: [],
-    lessonSubset: {
-      unseenItems: [],
-      practiceItems: [],
-      masteredItems: [],
-      skippedItems: [],
-    },
+    practiceSet: [],
+    lessonSubset,
     activeItem: null,
     currentIndex: 0,
     currentLessonData: lessonData,
-  };
-  // }
-
-  const practiceItems = lesson.items.filter(
-    (item) => item.recallCategory === "practice"
-  );
-
-  const practiceSet = practiceItems.map(createWorkingSetItem);
-
-  return {
-    currentLesson: event.lessonIndex,
-    lessons: event.lessons,
-    workingSet: practiceSet,
-    lessonSubset: {
-      unseenItems: [],
-      practiceItems: practiceItems.map((item) => item.id),
-      masteredItems: [],
-      skippedItems: [],
-    },
-    activeItem: practiceSet[0] || null,
-    currentIndex: 0,
   };
 };
 
@@ -140,7 +149,7 @@ export const moveToNextItem = assign((context: LessonContext) => {
   if (!nextItem) return { activeItem: null };
 
   return {
-    activeItem: createWorkingSetItem(nextItem),
+    activeItem: createPracticeSetItem(nextItem),
   };
 });
 
@@ -149,9 +158,9 @@ export const hasPracticeItems = (context: LessonContext): boolean => {
 };
 
 export const cyclePracticeSet = assign<LessonContext>((context) => {
-  const nextIndex = (context.currentIndex + 1) % context.workingSet.length;
+  const nextIndex = (context.currentIndex + 1) % context.practiceSet.length;
   return {
     currentIndex: nextIndex,
-    activeItem: context.workingSet[nextIndex],
+    activeItem: context.practiceSet[nextIndex],
   };
 });

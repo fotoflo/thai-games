@@ -1,16 +1,16 @@
 import React from "react";
 import { LessonState } from "../../types/lessons";
-import { LessonSubset } from "../../hooks/game/useWorkingSet";
+import { LessonSubset } from "../../hooks/game/usePracticeSet";
 
 interface LessonProgressProps {
-  workingSetLength: number;
+  practiceSetLength: number;
   lessonState?: LessonState;
   lessonSubset?: LessonSubset;
   className?: string;
 }
 
 const LessonProgress: React.FC<LessonProgressProps> = ({
-  workingSetLength,
+  practiceSetLength,
   lessonState = {
     progressionMode: "firstPass",
     itemStates: {},
@@ -36,7 +36,7 @@ const LessonProgress: React.FC<LessonProgressProps> = ({
           {lessonSubset.skippedItems.length}
         </div>
         <div>
-          <span className="text-blue-400">Practice:</span> {workingSetLength}
+          <span className="text-blue-400">Practice:</span> {practiceSetLength}
         </div>
         <div>
           <span className="text-purple-400">Know It:</span>{" "}

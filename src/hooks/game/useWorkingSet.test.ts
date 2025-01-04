@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useWorkingSet } from "./useWorkingSet";
+import { usePracticeSet } from "./usePracticeSet";
 import { Lesson } from "../../types/lessons";
 
 const mockLesson: Lesson = {
@@ -48,10 +48,10 @@ const mockLesson: Lesson = {
   ],
 };
 
-describe("useWorkingSet", () => {
+describe("usePracticeSet", () => {
   it("should auto-fill practice set when space is available", () => {
     const { result } = renderHook(() =>
-      useWorkingSet({
+      usePracticeSet({
         currentLesson: 0,
         lessons: [mockLesson],
         progressionMode: "firstPass",
@@ -59,7 +59,7 @@ describe("useWorkingSet", () => {
     );
 
     act(() => {
-      result.current.addToWorkingSet([
+      result.current.addToPracticeSet([
         {
           id: "item-1",
           mastery: 1,
@@ -69,12 +69,12 @@ describe("useWorkingSet", () => {
       ]);
     });
 
-    expect(result.current.workingSet.length).toBe(1);
+    expect(result.current.practiceSet.length).toBe(1);
   });
 
   it("should maintain set exclusivity", () => {
     const { result } = renderHook(() =>
-      useWorkingSet({
+      usePracticeSet({
         currentLesson: 0,
         lessons: [mockLesson],
         progressionMode: "firstPass",
@@ -82,7 +82,7 @@ describe("useWorkingSet", () => {
     );
 
     act(() => {
-      result.current.addToWorkingSet([
+      result.current.addToPracticeSet([
         {
           id: "item-1",
           mastery: 1,
@@ -93,7 +93,7 @@ describe("useWorkingSet", () => {
     });
 
     act(() => {
-      result.current.addToWorkingSet([
+      result.current.addToPracticeSet([
         {
           id: "item-1",
           mastery: 1,
@@ -103,12 +103,12 @@ describe("useWorkingSet", () => {
       ]);
     });
 
-    expect(result.current.workingSet.length).toBe(1);
+    expect(result.current.practiceSet.length).toBe(1);
   });
 
   it("should cycle through practice set correctly", () => {
     const { result } = renderHook(() =>
-      useWorkingSet({
+      usePracticeSet({
         currentLesson: 0,
         lessons: [mockLesson],
         progressionMode: "firstPass",
@@ -116,7 +116,7 @@ describe("useWorkingSet", () => {
     );
 
     act(() => {
-      result.current.addToWorkingSet([
+      result.current.addToPracticeSet([
         {
           id: "item-1",
           mastery: 1,

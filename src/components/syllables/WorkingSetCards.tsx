@@ -1,12 +1,12 @@
 import React from "react";
 import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
-import { WorkingSetItem } from "../../types/lessons";
+import { PracticeSetItem } from "../../types/lessons";
 
-interface WorkingSetCardsProps {
-  workingSet: WorkingSetItem[];
-  selectedItem: WorkingSetItem | null;
-  onCardSelect: (item: WorkingSetItem) => void;
+interface PracticeSetCardsProps {
+  practiceSet: PracticeSetItem[];
+  selectedItem: PracticeSetItem | null;
+  onCardSelect: (item: PracticeSetItem) => void;
   addMoreItems: () => void;
   lessonSubset: {
     practiceItems: string[];
@@ -26,8 +26,8 @@ const getPhoneticSizeClass = (text: string): string => {
   return "text-[8px]";
 };
 
-const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
-  workingSet,
+const PracticeSetCards: React.FC<PracticeSetCardsProps> = ({
+  practiceSet,
   selectedItem,
   onCardSelect,
   addMoreItems,
@@ -37,7 +37,7 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
     <div className="flex flex-col relative">
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 flex-wrap justify-center">
-          {workingSet.map((item) => {
+          {practiceSet.map((item) => {
             const text = item.lessonItem.sides[0].markdown;
             if (!text) return null;
 
@@ -92,4 +92,4 @@ const WorkingSetCards: React.FC<WorkingSetCardsProps> = ({
   );
 };
 
-export default WorkingSetCards;
+export default PracticeSetCards;

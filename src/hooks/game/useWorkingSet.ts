@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { LessonItem, Lesson, WorkingSetItem } from "../../types/lessons";
+import { LessonItem, Lesson, PracticeSetItem } from "../../types/lessons";
 
 interface LessonSubset {
   unseenItems: string[];
@@ -8,19 +8,19 @@ interface LessonSubset {
   skippedItems: string[];
 }
 
-interface UseWorkingSetProps {
+interface UsePracticeSetProps {
   currentLesson: number;
   lessons: Lesson[];
   progressionMode: "firstPass" | "spacedRepetition" | "test";
 }
 
-export const useWorkingSet = ({
+export const usePracticeSet = ({
   currentLesson,
   lessons,
   progressionMode,
-}: UseWorkingSetProps) => {
-  const [workingSet, setWorkingSet] = useState<WorkingSetItem[]>([]);
-  const [activeItem, setActiveItem] = useState<WorkingSetItem | null>(null);
+}: UsePracticeSetProps) => {
+  const [practiceSet, setPracticeSet] = useState<PracticeSetItem[]>([]);
+  const [activeItem, setActiveItem] = useState<PracticeSetItem | null>(null);
   const [lessonSubset, setLessonSubset] = useState<LessonSubset>({
     unseenItems: [],
     practiceItems: [],
@@ -28,9 +28,9 @@ export const useWorkingSet = ({
     skippedItems: [],
   });
 
-  const addToWorkingSet = useCallback(
-    (items: WorkingSetItem[]) => {
-      setWorkingSet((prev: WorkingSetItem[]) => {
+  const addToPracticeSet = useCallback(
+    (items: PracticeSetItem[]) => {
+      setPracticeSet((prev: PracticeSetItem[]) => {
         const existingIds = new Set(prev.map((item) => item.id));
         const newItems = items.filter((item) => !existingIds.has(item.id));
         const newSet = [
@@ -46,45 +46,45 @@ export const useWorkingSet = ({
     [activeItem]
   );
 
-  const removeFromWorkingSet = useCallback(
+  const removeFromPracticeSet = useCallback(
     (itemId: string) => {
-      setWorkingSet((prev: WorkingSetItem[]) => {
+      setPracticeSet((prev: PracticeSetItem[]) => {
         const newSet = prev.filter((item) => item.id !== itemId);
         return newSet;
       });
       if (activeItem?.id === itemId) {
-        const remainingItems = workingSet.filter((item) => item.id !== itemId);
+        const remainingItems = practiceSet.filter((item) => item.id !== itemId);
         setActiveItem(remainingItems[0] || null);
       }
     },
-    [activeItem, workingSet]
+    [activeItem, practiceSet]
   );
 
-  const clearWorkingSet = useCallback(() => {
-    setWorkingSet([]);
+  const clearPracticeSet = useCallback(() => {
+    setPracticeSet([]);
     setActiveItem(null);
   }, []);
 
   const nextItem = useCallback(() => {
-    if (!activeItem || workingSet.length === 0) return;
+    if (!activeItem || practiceSet.length === 0) return;
 
-    const currentIndex = workingSet.findIndex(
+    const currentIndex = practiceSet.findIndex(
       (item) => item.id === activeItem.id
     );
-    if (currentIndex === -1 || workingSet.length === 1) return;
+    if (currentIndex === -1 || practiceSet.length === 1) return;
 
-    const nextIndex = (currentIndex + 1) % workingSet.length;
-    setActiveItem({ ...workingSet[nextIndex] });
-  }, [activeItem, workingSet]);
+    const nextIndex = (currentIndex + 1) % practiceSet.length;
+    setActiveItem({ ...practiceSet[nextIndex] });
+  }, [activeItem, practiceSet]);
 
   return {
-    workingSet,
+    practiceSet,
     activeItem,
     lessonSubset,
-    isWorkingSetFull: workingSet.length >= 7,
-    addToWorkingSet,
-    removeFromWorkingSet,
-    clearWorkingSet,
+    isPracticeSetFull: practiceSet.length >= 7,
+    addToPracticeSet,
+    removeFromPracticeSet,
+    clearPracticeSet,
     nextItem,
     setLessonSubset,
     setActiveItem,
