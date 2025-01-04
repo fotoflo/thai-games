@@ -35,6 +35,7 @@ export const useReadThaiGameState = () => {
     practiceSet: state.context.practiceSet,
     lessonSubset: state.context.lessonSubset,
     activeItem: state.context.activeItem,
+    activeItemIndex: state.context.activeItemIndex,
 
     nextItem: () => send({ type: "NEXT_ITEM" }),
     handleMarkForPractice: () => send({ type: "MARK_FOR_PRACTICE" }),

@@ -129,21 +129,11 @@ export const handleSkipItem = assign(
 
 export const moveToNextItem = assign(
   ({ context }: { context: LessonContext }) => {
+    const activeItemIndex =
+      (context.activeItemIndex + 1) % context.practiceSet.length;
     return {
-      activeItemIndex: context.activeItemIndex + 1,
-      activeItem: context.practiceSet[context.activeItemIndex + 1],
+      activeItemIndex,
+      activeItem: context.practiceSet[activeItemIndex],
     };
   }
 );
-
-// export const hasPracticeItems = (context: LessonContext): boolean => {
-//   return context.lessonSubset.practiceItems.length > 0;
-// };
-
-export const cyclePracticeSet = assign<LessonContext>(({ context }) => {
-  const nextIndex = (context.activeItemIndex + 1) % context.practiceSet.length;
-  return {
-    activeItemIndex: nextIndex,
-    activeItem: context.practiceSet[nextIndex],
-  };
-});

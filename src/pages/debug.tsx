@@ -120,7 +120,7 @@ const DebugPage: React.FC = () => {
 
   const sections: DebugSection[] = [
     {
-      title: "Active Item (simplified)",
+      title: `Active Item (simplified) - ${gameState.activeItemIndex}`,
       data: {
         id: gameState.activeItem?.id,
         thai: gameState.activeItem?.item.sides[0].markdown,
@@ -200,7 +200,8 @@ const DebugPage: React.FC = () => {
 
         <PracticeSetVisualizer
           practiceSet={gameState.practiceSet}
-          className="mb-4"
+          activeItemIndex={gameState.activeItemIndex}
+          className="mb-5"
         />
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">

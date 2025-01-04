@@ -4,13 +4,16 @@ import React from "react";
 const LessonSubsetVisualizer = ({
   practiceSet,
   className = "",
+  activeItemIndex = 0,
 }: {
   practiceSet: PracticeSet;
   className?: string;
+  activeItemIndex: number;
 }) => {
   if (!practiceSet?.length) {
     return <div className={className}>No items in practice set</div>;
   }
+
   // Calculate counts for the legend
   const counts = practiceSet.reduce((acc, item) => {
     acc[item.recallCategory] = (acc[item.recallCategory] || 0) + 1;
@@ -45,15 +48,20 @@ const LessonSubsetVisualizer = ({
         </div>
       </div>
 
-      {/* Progress Bars */}
+      {/* Progress Bars with active item indicator */}
       <div className="flex gap-px">
-        {practiceSet.map((item) => (
-          <div
-            key={item.id}
-            className={`h-1 flex-1 first:rounded-l-full last:rounded-r-full ${getStatusColor(
-              item.recallCategory
-            )}`}
-          />
+        {practiceSet.map((item, index) => (
+          <div key={item.id} className="relative h-1 flex-1">
+            <div
+              className={`h-full w-full first:rounded-l-full last:rounded-r-full ${getStatusColor(
+                item.recallCategory
+              )}`}
+            />
+            {/* Active item indicator */}
+            {index === activeItemIndex && (
+              <div className="absolute -bottom-1.5 left-0 right-0 h-3/4 bg-slate-500 rounded-full opacity-75" />
+            )}
+          </div>
         ))}
       </div>
     </div>
