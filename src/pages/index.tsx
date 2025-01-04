@@ -5,7 +5,7 @@ import MasteryControls from "../components/syllables/MasteryControls";
 import WelcomeModal from "../components/ReadThaiWelcomeModal";
 import FlashCardModal from "../components/syllables/FlashCardModal";
 import SettingsModalContainer from "../components/SettingsModalContainer";
-import SuperSetCards from "../components/syllables/SuperSetCards";
+import PracticeSetCards from "../components/syllables/PracticeSetCards";
 import LessonSelector from "../components/syllables/LessonSelector";
 import ProgressionSelector from "../components/syllables/ProgressionSelector";
 import ToggleInvertTranslationButton from "../components/syllables/ToggleInvertTranslationButton";
@@ -159,24 +159,8 @@ const IndexPage: React.FC = () => {
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
-          {/* Working Set Display */}
-          <SuperSetCards
-            superSet={superSet.map((item) => ({
-              ...item,
-              lastReviewed: item.lastReviewed || new Date(),
-            }))}
-            selectedItem={
-              activeItem
-                ? {
-                    ...activeItem,
-                    lastReviewed: activeItem.lastReviewed || new Date(),
-                  }
-                : null
-            }
-            onCardSelect={handleCardSelect}
-            addMoreItems={addMoreItems}
-            lessonSubset={lessonSubset}
-          />
+          {/* Practice Set Display */}
+          <PracticeSetCards practiceSet={practiceSet} activeItem={activeItem} />
 
           <pre>{false && JSON.stringify(activeItem, null, 2)}</pre>
 

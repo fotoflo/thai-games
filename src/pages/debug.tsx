@@ -2,6 +2,7 @@ import React from "react";
 import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
+import PracticeSetCards from "@/components/syllables/PracticeSetCards";
 
 interface DebugSection {
   title: string;
@@ -203,6 +204,12 @@ const DebugPage: React.FC = () => {
           activeItemIndex={gameState.activeItemIndex}
           className="mb-5"
         />
+
+        <PracticeSetCards
+          practiceSet={gameState.practiceSet}
+          activeItem={gameState.activeItem}
+        />
+
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">
           {sections

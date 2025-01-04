@@ -1,13 +1,6 @@
 import { Lesson, LessonItem, RecallCategory } from "../types/lessons";
 import { assign } from "xstate";
 
-export type LessonSubset = {
-  unseenItems: string[];
-  practiceItems: string[];
-  masteredItems: string[];
-  skippedItems: string[];
-};
-
 export type SuperSetItem = {
   id: string;
   item: LessonItem;
@@ -19,7 +12,7 @@ export type LessonContext = {
   lessons: Lesson[];
   currentLesson: number;
   superSet: SuperSetItem[];
-  lessonSubset: LessonSubset;
+  practiceSet: SuperSetItem[];
   activeItem: SuperSetItem | null;
   activeItemIndex: number;
 };
@@ -72,11 +65,13 @@ export const initialize = ({
   const activeItemIndex = 0;
 
   const superSet = lessonData?.items.map(createSuperSetItem);
+  const practiceSet = [] as SuperSetItem[];
 
   return {
     ...context,
     lessonData,
     superSet,
+    practiceSet,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
     activeItem: superSet?.[activeItemIndex],

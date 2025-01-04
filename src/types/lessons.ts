@@ -40,7 +40,7 @@ export type LessonSubset = {
   skippedItems: SuperSetItem[];
 };
 
-// Working Set Item
+// SuperSet Item
 export type SuperSetItem = {
   id: string;
   recallCategory: RecallCategory;

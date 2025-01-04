@@ -31,9 +31,9 @@ export const useReadThaiGameState = () => {
     progressionMode: lessonState.progressionMode,
     setProgressionMode: lessonState.setProgressionMode,
 
-    // Working set
     superSet: state.context.superSet,
-    lessonSubset: state.context.lessonSubset,
+    practiceSet: state.context.practiceSet,
+
     activeItem: state.context.activeItem,
     activeItemIndex: state.context.activeItemIndex,
 

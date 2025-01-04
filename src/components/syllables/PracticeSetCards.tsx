@@ -3,14 +3,9 @@ import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
 import { SuperSetItem } from "../../types/lessons";
 
-interface SuperSetCardsProps {
-  superSet: SuperSetItem[];
-  selectedItem: SuperSetItem | null;
-  onCardSelect: (item: SuperSetItem) => void;
-  addMoreItems: () => void;
-  lessonSubset: {
-    practiceItems: string[];
-  };
+interface PraticeSetCardsProps {
+  practiceSet: SuperSetItem[];
+  activeItem: SuperSetItem | null;
 }
 
 const getTextSizeClass = (text: string): string => {
@@ -26,19 +21,16 @@ const getPhoneticSizeClass = (text: string): string => {
   return "text-[8px]";
 };
 
-const SuperSetCards: React.FC<SuperSetCardsProps> = ({
-  superSet,
-  selectedItem,
-  onCardSelect,
-  addMoreItems,
-  lessonSubset,
+const PracticeSetCards: React.FC<PraticeSetCardsProps> = ({
+  practiceSet,
+  activeItem,
 }) => {
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col relative border-red-500 border-2 h-20">
       <div className="flex items-center justify-center gap-2 mb-4">
         <div className="flex gap-2 flex-wrap justify-center">
-          {superSet.map((item) => {
-            const text = item.lessonItem.sides[0].markdown;
+          {practiceSet?.map((item) => {
+            const text = item?.item?.sides?.[0]?.markdown;
             if (!text) return null;
 
             const phoneticText = thaiToIPA(text);
@@ -47,9 +39,7 @@ const SuperSetCards: React.FC<SuperSetCardsProps> = ({
                 key={item.id}
                 className={`
                   text-center p-2 rounded cursor-pointer w-[60px] h-[80px]
-                  ${
-                    item.id === selectedItem?.id ? "bg-blue-700" : "bg-gray-800"
-                  }
+                  ${item.id === activeItem?.id ? "bg-blue-700" : "bg-gray-800"}
                   hover:bg-blue-600 transition-colors
                   flex flex-col justify-center
                 `}
@@ -78,7 +68,7 @@ const SuperSetCards: React.FC<SuperSetCardsProps> = ({
               </div>
             );
           })}
-          {lessonSubset.practiceItems.length > 0 && (
+          {practiceSet?.length > 0 && (
             <button
               onClick={addMoreItems}
               className="w-[60px] h-[80px] bg-gray-800 hover:bg-blue-600 transition-colors rounded flex items-center justify-center"
@@ -92,4 +82,4 @@ const SuperSetCards: React.FC<SuperSetCardsProps> = ({
   );
 };
 
-export default SuperSetCards;
+export default PracticeSetCards;
