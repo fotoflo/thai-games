@@ -114,14 +114,24 @@ const updateRecallCategory = ({
   );
 };
 
+const addActiveItemToPracticeSet = (context: LessonContext) => {
+  if (!context.activeItem) {
+    return context.practiceSet;
+  }
+
+  return [...context.practiceSet, context.activeItem];
+};
+
+const practiceSetIsFull = (context: LessonContext) => {
+  return context.practiceSet.length < context.practiceSetSize;
+};
+
 export const handleMarkForPractice = assign(
   ({ context, event }: { context: LessonContext; event: LessonEvent }) => {
     let updatedPracticeSet = context.practiceSet;
 
-    if (context.practiceSet.length < context.practiceSetSize) {
-      updatedPracticeSet = [...context.practiceSet, context.activeItem].filter(
-        (item): item is SuperSetItem => item !== null
-      );
+    if (practiceSetIsFull(context)) {
+      updatedPracticeSet = addActiveItemToPracticeSet(context);
     }
 
     return {
