@@ -1,4 +1,4 @@
-import { createMachine, assign } from "xstate";
+import { createMachine, assign, setup } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
 import {
   initialize,
@@ -27,7 +27,20 @@ const initialContext: LessonContext = {
   activeItem: null,
 };
 
-export const lessonMachine = createMachine({
+export const lessonMachine = setup({
+  actions: {
+    initialize,
+    enterSwitchToPractice,
+    enterSwitchToFirstPass,
+    enterSwitchToTest,
+    moveToNextSuperSetItem,
+    moveToNextPracticeSetItem,
+    handleMarkForPractice,
+    handleMarkAsMastered,
+    handleSkipItem,
+    hasPracticeItems,
+  },
+}).createMachine({
   id: "lesson",
   context: initialContext,
   initial: "idle",
@@ -45,19 +58,19 @@ export const lessonMachine = createMachine({
       },
     },
     firstPass: {
-      entry: [enterSwitchToFirstPass],
+      entry: ["enterSwitchToFirstPass"],
       on: {
         MARK_FOR_PRACTICE: {
-          actions: [handleMarkForPractice, moveToNextSuperSetItem],
+          actions: ["handleMarkForPractice", "moveToNextSuperSetItem"],
         },
         MARK_AS_MASTERED: {
-          actions: [handleMarkAsMastered, moveToNextSuperSetItem],
+          actions: ["handleMarkAsMastered", "moveToNextSuperSetItem"],
         },
         SKIP_ITEM: {
-          actions: [handleSkipItem, moveToNextSuperSetItem],
+          actions: ["handleSkipItem", "moveToNextSuperSetItem"],
         },
         NEXT_ITEM: {
-          actions: moveToNextSuperSetItem,
+          actions: "moveToNextSuperSetItem",
         },
         SWITCH_TO_PRACTICE: {
           target: "practice",
@@ -69,19 +82,19 @@ export const lessonMachine = createMachine({
       },
     },
     practice: {
-      entry: enterSwitchToPractice,
+      entry: ["enterSwitchToPractice"],
       on: {
         MARK_FOR_PRACTICE: {
-          actions: [handleMarkForPractice, moveToNextPracticeSetItem],
+          actions: ["handleMarkForPractice", "moveToNextPracticeSetItem"],
         },
         MARK_AS_MASTERED: {
-          actions: [handleMarkAsMastered, moveToNextPracticeSetItem],
+          actions: ["handleMarkAsMastered", "moveToNextPracticeSetItem"],
         },
         SKIP_ITEM: {
-          actions: [handleSkipItem, moveToNextPracticeSetItem],
+          actions: ["handleSkipItem", "moveToNextPracticeSetItem"],
         },
         NEXT_ITEM: {
-          actions: moveToNextPracticeSetItem,
+          actions: "moveToNextPracticeSetItem",
         },
         SWITCH_TO_TEST: {
           target: "test",
@@ -92,7 +105,7 @@ export const lessonMachine = createMachine({
       },
     },
     test: {
-      entry: [enterSwitchToTest],
+      entry: ["enterSwitchToTest"],
       on: {
         COMPLETE_TEST: {
           target: "firstPass",
