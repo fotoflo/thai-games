@@ -1,12 +1,12 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Volume2 } from "lucide-react";
-import { useThaiSpeech } from "../../hooks/useThaiSpeech";
-import { LessonItem } from "../../types/lessons";
+import { useThaiSpeech } from "@/hooks/useThaiSpeech";
+import { SuperSetItem } from "@/types/lessons";
 import rehypeRaw from "rehype-raw";
 
 const ItemDisplay = ({
-  vocabItem,
+  superSetItem,
   textSize = "text-6xl",
   iconSize = 24,
   className = "",
@@ -20,7 +20,7 @@ const ItemDisplay = ({
   showBothSides = false,
   sideTwoTextSize = "text-sm sm:text-base",
 }: {
-  vocabItem: LessonItem | null;
+  superSetItem: SuperSetItem | null;
   textSize?: string;
   iconSize?: number;
   className?: string;
@@ -34,10 +34,12 @@ const ItemDisplay = ({
   sideTwoTextSize?: string;
   sideTwoTextColor?: string;
 }) => {
+  const vocabItem = superSetItem?.item;
+
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,
     speakOnUnmount,
-    vocabItem?.sides?.[0]?.markdown
+    vocabItem?.sides?.[1]?.markdown
   );
 
   const displayText = invertTranslation

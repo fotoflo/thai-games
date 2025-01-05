@@ -3,6 +3,7 @@ import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
 import GameHeader from "../components/GameHeader";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import PracticeSetCards from "@/components/syllables/PracticeSetCards";
+import ItemDisplay from "@/components/syllables/ItemDisplay";
 
 interface DebugSection {
   title: string;
@@ -203,6 +204,15 @@ const DebugPage: React.FC = () => {
           superSet={gameState.superSet}
           activeItemIndex={gameState.activeItemIndex}
           className="mb-5"
+        />
+
+        <ItemDisplay
+          superSetItem={gameState.activeItem}
+          iconSize={52}
+          textSize="text-6xl"
+          className="flex items-center justify-center mb-10"
+          speakOnUnmount={false}
+          invertTranslation={false}
         />
 
         <PracticeSetCards
