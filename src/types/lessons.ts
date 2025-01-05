@@ -91,7 +91,8 @@ export type GameState = {
   currentLessonId: string;
 
   superSet: SuperSet;
-  superSetSize: number;
+  practiceSet: SuperSet;
+  practiceSetSize: number;
 
   lessonSubset: LessonSubset;
 };

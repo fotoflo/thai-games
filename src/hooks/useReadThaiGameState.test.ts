@@ -108,7 +108,7 @@ describe("useReadThaiGameState", () => {
     },
     completedLessons: [],
     settings: {
-      defaultSuperSetSize: 5,
+      defaultPracticeSetSize: 5,
       audioEnabled: true,
       interleaving: {
         enabled: false,

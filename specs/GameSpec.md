@@ -330,7 +330,7 @@ type GameState = {
 
   // Global settings
   settings: {
-    defaultSuperSetSize: number;
+    defaultPracticeSetSize: number;
     audioEnabled: boolean;
     interleaving: {
       enabled: boolean;

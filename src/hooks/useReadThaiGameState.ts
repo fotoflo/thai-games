@@ -33,6 +33,7 @@ export const useReadThaiGameState = () => {
 
     superSet: state.context.superSet,
     practiceSet: state.context.practiceSet,
+    practiceSetSize: state.context.practiceSetSize,
 
     activeItem: state.context.activeItem,
     activeItemIndex: state.context.activeItemIndex,
