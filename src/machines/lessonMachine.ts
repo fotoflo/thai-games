@@ -3,8 +3,8 @@ import { LessonContext, LessonEvent } from "./lessonActions";
 import {
   initialize,
   enterSwitchToPractice,
-  switchToFirstPass,
-  switchToTest,
+  enterSwitchToFirstPass,
+  enterSwitchToTest,
   moveToNextSuperSetItem,
   moveToNextPracticeSetItem,
   handleMarkForPractice,
@@ -45,7 +45,7 @@ export const lessonMachine = createMachine({
       },
     },
     firstPass: {
-      entry: [switchToFirstPass],
+      entry: [enterSwitchToFirstPass],
       on: {
         MARK_FOR_PRACTICE: {
           actions: [handleMarkForPractice, moveToNextSuperSetItem],
@@ -62,6 +62,9 @@ export const lessonMachine = createMachine({
         SWITCH_TO_PRACTICE: {
           target: "practice",
           guard: hasPracticeItems,
+        },
+        SWITCH_TO_TEST: {
+          target: "test",
         },
       },
     },
@@ -84,17 +87,21 @@ export const lessonMachine = createMachine({
           target: "test",
         },
         SWITCH_TO_FIRST_PASS: {
-          actions: [switchToFirstPass],
           target: "firstPass",
         },
       },
     },
     test: {
-      entry: [switchToTest],
+      entry: [enterSwitchToTest],
       on: {
         COMPLETE_TEST: {
-          actions: [switchToFirstPass],
           target: "firstPass",
+        },
+        SWITCH_TO_FIRST_PASS: {
+          target: "firstPass",
+        },
+        SWITCH_TO_PRACTICE: {
+          target: "practice",
         },
       },
     },

@@ -82,18 +82,17 @@ export const initialize = ({
 
 export const enterSwitchToPractice = assign(
   ({ context }: { context: LessonContext }) => {
-    console.log("enterSwitchToPractice");
     return {
       progressionMode: "practice",
     };
   }
 );
 
-export const switchToFirstPass = assign((context: LessonContext) => ({
-  // progressionMode: "firstPass",
+export const enterSwitchToFirstPass = assign((context: LessonContext) => ({
+  progressionMode: "firstPass",
 }));
 
-export const switchToTest = assign((context: LessonContext) => ({
+export const enterSwitchToTest = assign((context: LessonContext) => ({
   progressionMode: "test",
 }));
 
