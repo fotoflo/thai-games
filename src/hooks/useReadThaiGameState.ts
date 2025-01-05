@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useGameSettings } from "./game/useGameSettings";
 import { useLessons } from "./game/useLessons";
 import { useMachine } from "@xstate/react";
-import { lessonMachine } from "../machines/lessonMachine";
+import { lessonMachine } from "@/machines/lessonMachine";
 
 export const useReadThaiGameState = () => {
   const gameSettings = useGameSettings();
@@ -28,8 +28,11 @@ export const useReadThaiGameState = () => {
     lessons: lessonState.lessons,
     currentLesson: state,
     setCurrentLesson: lessonState.setCurrentLesson,
-    progressionMode: lessonState.progressionMode,
-    setProgressionMode: lessonState.setProgressionMode,
+
+    progressionMode: state.context.progressionMode,
+    handleSwitchToPracticeMode: () => send({ type: "SWITCH_TO_PRACTICE" }),
+    handleSwitchToFirstPassMode: () => send({ type: "SWITCH_TO_FIRST_PASS" }),
+    handleSwitchToTestMode: () => send({ type: "SWITCH_TO_TEST" }),
 
     superSet: state.context.superSet,
     practiceSet: state.context.practiceSet,

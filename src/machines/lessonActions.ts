@@ -8,6 +8,12 @@ export type SuperSetItem = {
   recallCategory: RecallCategory;
 };
 
+export type ProgressionMode =
+  | "firstPass"
+  | "practice"
+  | "test"
+  | "initializing";
+
 export type LessonContext = {
   lessons: Lesson[];
   currentLesson: number;
@@ -16,6 +22,7 @@ export type LessonContext = {
   practiceSetSize: number;
   activeItem: SuperSetItem | null;
   activeItemIndex: number;
+  progressionMode: ProgressionMode;
 };
 
 const INITIAL_PRACTICE_SET_SIZE = 5;
@@ -32,8 +39,9 @@ export type LessonEvent =
   | { type: "MARK_AS_MASTERED" }
   | { type: "SKIP_ITEM" }
   | { type: "NEXT_ITEM" }
-  | { type: "SWITCH_TO_SPACED" }
+  | { type: "SWITCH_TO_PRACTICE" }
   | { type: "SWITCH_TO_TEST" }
+  | { type: "SWITCH_TO_FIRST_PASS" }
   | { type: "COMPLETE_TEST" };
 
 const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
@@ -68,8 +76,26 @@ export const initialize = ({
     activeItem: superSet?.[activeItemIndex],
     activeItemIndex,
     currentLessonData: lessonData,
+    progressionMode: "firstPass",
   };
 };
+
+export const enterSwitchToPractice = assign(
+  ({ context }: { context: LessonContext }) => {
+    console.log("enterSwitchToPractice");
+    return {
+      progressionMode: "practice",
+    };
+  }
+);
+
+export const switchToFirstPass = assign((context: LessonContext) => ({
+  // progressionMode: "firstPass",
+}));
+
+export const switchToTest = assign((context: LessonContext) => ({
+  progressionMode: "test",
+}));
 
 const updateRecallCategory = ({
   superSet,
@@ -90,7 +116,7 @@ const updateRecallCategory = ({
 };
 
 export const handleMarkForPractice = assign(
-  ({ context }: { context: LessonContext }) => {
+  ({ context, event }: { context: LessonContext; event: LessonEvent }) => {
     let updatedPracticeSet = context.practiceSet;
 
     if (context.practiceSet.length < context.practiceSetSize) {
@@ -180,6 +206,7 @@ export const moveToNextPracticeSetItem = assign(
   }
 );
 
-export const hasPracticeItems = (context: LessonContext) => {
-  return context.practiceSet.length > 0;
+export const hasPracticeItems = ({ context }: { context: LessonContext }) => {
+  console.log("hasPracticeItems", context?.practiceSet?.length > 0);
+  return context?.practiceSet?.length > 0;
 };

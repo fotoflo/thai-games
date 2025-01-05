@@ -83,17 +83,17 @@ const DebugPage: React.FC = () => {
       buttons: [
         {
           label: "First Pass Mode",
-          onClick: () => gameState.setProgressionMode("firstPass"),
+          onClick: () => gameState.handleSwitchToFirstPassMode(),
           disabled: gameState.progressionMode === "firstPass",
         },
         {
           label: "Practice Mode",
-          onClick: () => gameState.setProgressionMode("spacedRepetition"),
-          disabled: gameState.progressionMode === "spacedRepetition",
+          onClick: () => gameState.handleSwitchToPracticeMode(),
+          disabled: gameState.progressionMode === "practice",
         },
         {
           label: "Test Mode",
-          onClick: () => gameState.setProgressionMode("test"),
+          onClick: () => gameState.handleSwitchToTestMode(),
           disabled: gameState.progressionMode === "test",
         },
       ],
@@ -179,6 +179,10 @@ const DebugPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-4">
       <GameHeader title="Debug View" darkMode={true} />
+
+      <span className="text-white">
+        Current Mode: {gameState.progressionMode}
+      </span>
 
       <div className="max-w-7xl mx-auto">
         {/* Actions Section */}

@@ -2,6 +2,9 @@ import { createMachine, assign } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
 import {
   initialize,
+  enterSwitchToPractice,
+  switchToFirstPass,
+  switchToTest,
   moveToNextSuperSetItem,
   moveToNextPracticeSetItem,
   handleMarkForPractice,
@@ -12,6 +15,7 @@ import {
 
 const initialContext: LessonContext = {
   lessons: [],
+  progressionMode: "initializing",
   currentLessonId: -1,
   superSet: [],
   lessonSubset: {
@@ -41,6 +45,7 @@ export const lessonMachine = createMachine({
       },
     },
     firstPass: {
+      entry: [switchToFirstPass],
       on: {
         MARK_FOR_PRACTICE: {
           actions: [handleMarkForPractice, moveToNextSuperSetItem],
@@ -54,13 +59,14 @@ export const lessonMachine = createMachine({
         NEXT_ITEM: {
           actions: moveToNextSuperSetItem,
         },
-        SWITCH_TO_SPACED: {
-          target: "spacedRepetition",
+        SWITCH_TO_PRACTICE: {
+          target: "practice",
           guard: hasPracticeItems,
         },
       },
     },
-    spacedRepetition: {
+    practice: {
+      entry: enterSwitchToPractice,
       on: {
         MARK_FOR_PRACTICE: {
           actions: [handleMarkForPractice, moveToNextPracticeSetItem],
@@ -77,11 +83,17 @@ export const lessonMachine = createMachine({
         SWITCH_TO_TEST: {
           target: "test",
         },
+        SWITCH_TO_FIRST_PASS: {
+          actions: [switchToFirstPass],
+          target: "firstPass",
+        },
       },
     },
     test: {
+      entry: [switchToTest],
       on: {
         COMPLETE_TEST: {
+          actions: [switchToFirstPass],
           target: "firstPass",
         },
       },

@@ -1,7 +1,6 @@
 import React from "react";
 import { Check, SkipForward, Brain } from "lucide-react";
-
-type ProgressionMode = "firstPass" | "spacedRepetition" | "test";
+import { ProgressionMode } from "@/machines/lessonActions";
 
 interface LessonSubset {
   unseenItems: string[];
