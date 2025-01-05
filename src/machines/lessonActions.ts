@@ -19,6 +19,7 @@ export type LessonContext = {
 };
 
 const INITIAL_PRACTICE_SET_SIZE = 5;
+
 export type InitializeEvent = {
   type: "INITIALIZE";
   lessonIndex: number;
@@ -155,8 +156,9 @@ export const handleSkipItem = assign(
   }
 );
 
-export const moveToNextItem = assign(
+export const moveToNextSuperSetItem = assign(
   ({ context }: { context: LessonContext }) => {
+    console.log("nextSuperSetItem");
     const activeItemIndex =
       (context.activeItemIndex + 1) % context.superSet.length;
     return {
@@ -165,3 +167,19 @@ export const moveToNextItem = assign(
     };
   }
 );
+
+export const moveToNextPracticeSetItem = assign(
+  ({ context }: { context: LessonContext }) => {
+    console.log("nextPracticeItem"); // not firing
+    const activeItemIndex =
+      (context.activeItemIndex + 1) % context.practiceSet.length;
+    return {
+      activeItemIndex,
+      activeItem: context.practiceSet[activeItemIndex],
+    };
+  }
+);
+
+export const hasPracticeItems = (context: LessonContext) => {
+  return context.practiceSet.length > 0;
+};

@@ -2,7 +2,8 @@ import { createMachine, assign } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
 import {
   initialize,
-  moveToNextItem,
+  moveToNextSuperSetItem,
+  moveToNextPracticeSetItem,
   handleMarkForPractice,
   handleMarkAsMastered,
   handleSkipItem,
@@ -42,16 +43,16 @@ export const lessonMachine = createMachine({
     firstPass: {
       on: {
         MARK_FOR_PRACTICE: {
-          actions: [handleMarkForPractice, moveToNextItem],
+          actions: [handleMarkForPractice, moveToNextSuperSetItem],
         },
         MARK_AS_MASTERED: {
-          actions: [handleMarkAsMastered, moveToNextItem],
+          actions: [handleMarkAsMastered, moveToNextSuperSetItem],
         },
         SKIP_ITEM: {
-          actions: [handleSkipItem, moveToNextItem],
+          actions: [handleSkipItem, moveToNextSuperSetItem],
         },
         NEXT_ITEM: {
-          actions: moveToNextItem,
+          actions: moveToNextSuperSetItem,
         },
         SWITCH_TO_SPACED: {
           target: "spacedRepetition",
@@ -62,16 +63,16 @@ export const lessonMachine = createMachine({
     spacedRepetition: {
       on: {
         MARK_FOR_PRACTICE: {
-          actions: [handleMarkForPractice, moveToNextItem],
+          actions: [handleMarkForPractice, moveToNextPracticeSetItem],
         },
         MARK_AS_MASTERED: {
-          actions: [handleMarkAsMastered, moveToNextItem],
+          actions: [handleMarkAsMastered, moveToNextPracticeSetItem],
         },
         SKIP_ITEM: {
-          actions: [handleSkipItem, moveToNextItem],
+          actions: [handleSkipItem, moveToNextPracticeSetItem],
         },
         NEXT_ITEM: {
-          actions: moveToNextItem,
+          actions: moveToNextPracticeSetItem,
         },
         SWITCH_TO_TEST: {
           target: "test",
