@@ -17,12 +17,15 @@ export type ProgressionMode =
 export type LessonContext = {
   lessons: Lesson[];
   currentLesson: number;
+  activeItem: SuperSetItem | null;
+
   superSet: SuperSetItem[];
+  superSetIndex: number;
+
   practiceSet: SuperSetItem[];
   practiceSetSize: number;
-  activeItem: SuperSetItem | null;
-  superSetIndex: number;
   practiceSetIndex: number;
+
   progressionMode: ProgressionMode;
 };
 
@@ -132,6 +135,15 @@ const updateActiveItemRecallCategory = (
 
 const addActiveItemToPracticeSet = (context: LessonContext) => {
   if (!context.activeItem) {
+    return context.practiceSet;
+  }
+
+  // check if the item is already in the practice set
+  const isInPracticeSet = context.practiceSet.some(
+    (item) => item.id === context.activeItem.id
+  );
+
+  if (isInPracticeSet) {
     return context.practiceSet;
   }
 
