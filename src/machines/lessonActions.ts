@@ -234,6 +234,11 @@ export const moveToNextSuperSetItem = assign(
   }
 );
 
+// make a function that checks if the practice set is empty
+export const practiceSetIsEmpty = assign((context: LessonContext) => {
+  return context.practiceSet.length === 0;
+});
+
 export const moveToNextPracticeSetItem = assign(({ context }) => {
   const nextPracticeSetIndex =
     (context.practiceSetIndex + 1) % context.practiceSet.length;

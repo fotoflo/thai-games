@@ -11,6 +11,7 @@ import {
   handleMarkAsMastered,
   handleSkipItem,
   hasPracticeItems,
+  practiceSetIsEmpty,
 } from "./lessonActions";
 
 const initialContext: LessonContext = {
@@ -36,6 +37,9 @@ export const lessonMachine = setup({
     handleMarkForPractice,
     handleMarkAsMastered,
     handleSkipItem,
+  },
+  guards: {
+    practiceSetIsEmpty,
     hasPracticeItems,
   },
 }).createMachine({
@@ -96,6 +100,7 @@ export const lessonMachine = setup({
         },
         NEXT_ITEM: {
           actions: "moveToNextPracticeSetItem",
+          guard: "practiceSetIsEmpty",
         },
         SWITCH_TO_TEST: {
           target: "test",
