@@ -205,10 +205,6 @@ export const handleSkipItem = assign(
 
 export const moveToNextSuperSetItem = assign(
   ({ context, self }: { context: LessonContext; self: AnyActor }) => {
-    // debugger;
-    // const context = fullContext.context;
-    // const self = fullContext.self;
-
     const superSetIndex = (context.superSetIndex + 1) % context.superSet.length;
 
     // Check if we have gone through all items
@@ -227,11 +223,18 @@ export const moveToNextSuperSetItem = assign(
 );
 
 export const moveToNextPracticeSetItem = assign(({ context }) => {
-  const nextIndex = (context.practiceSetIndex + 1) % context.practiceSet.length;
+  const nextPracticeSetIndex =
+    (context.practiceSetIndex + 1) % context.practiceSet.length;
+
+  const superSetIndex = context.superSet.findIndex(
+    (item: SuperSetItem) =>
+      item.id === context.practiceSet[nextPracticeSetIndex].id
+  );
 
   return {
-    practiceSetIndex: nextIndex,
-    activeItem: context.practiceSet[nextIndex],
+    practiceSetIndex: nextPracticeSetIndex,
+    superSetIndex,
+    activeItem: context.superSet[superSetIndex],
   };
 });
 
