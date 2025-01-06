@@ -40,6 +40,7 @@ export const useReadThaiGameState = () => {
 
     activeItem: state.context.activeItem,
     activeItemIndex: state.context.activeItemIndex,
+    practiceSetIndex: state.context.practiceSetIndex,
 
     nextItem: () => send({ type: "NEXT_ITEM" }),
     handleMarkForPractice: () => send({ type: "MARK_FOR_PRACTICE" }),

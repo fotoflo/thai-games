@@ -1,5 +1,5 @@
 import { Lesson, LessonItem, RecallCategory } from "../types/lessons";
-import { assign } from "xstate";
+import { AnyActor, assign } from "xstate";
 
 export type SuperSetItem = {
   id: string;
@@ -22,6 +22,7 @@ export type LessonContext = {
   practiceSetSize: number;
   activeItem: SuperSetItem | null;
   activeItemIndex: number;
+  practiceSetIndex: number;
   progressionMode: ProgressionMode;
 };
 
@@ -75,6 +76,7 @@ export const initialize = ({
     lessons: event?.lessons,
     activeItem: superSet?.[activeItemIndex],
     activeItemIndex,
+    practiceSetIndex: 0,
     currentLessonData: lessonData,
     progressionMode: "firstPass",
   };
@@ -90,6 +92,7 @@ export const enterSwitchToPractice = assign(
 
 export const enterSwitchToFirstPass = assign((context: LessonContext) => ({
   progressionMode: "firstPass",
+  // activeItem: context?.superSet?.[context?.activeItemIndex || 0],
 }));
 
 export const enterSwitchToTest = assign((context: LessonContext) => ({
@@ -114,6 +117,19 @@ const updateRecallCategory = ({
   );
 };
 
+const updateActiveItemRecallCategory = (
+  context: LessonContext,
+  recallCategory: RecallCategory
+) => {
+  if (!context.activeItem) {
+    return context.superSet;
+  }
+
+  return context.superSet.map((item) =>
+    item.id === context.activeItem?.item.id ? { ...item, recallCategory } : item
+  );
+};
+
 const addActiveItemToPracticeSet = (context: LessonContext) => {
   if (!context.activeItem) {
     return context.practiceSet;
@@ -135,11 +151,7 @@ export const handleMarkForPractice = assign(
     }
 
     return {
-      superSet: updateRecallCategory({
-        superSet: context.superSet,
-        itemId: context?.activeItem?.id,
-        newCategory: "practice",
-      }),
+      superSet: updateActiveItemRecallCategory(context, "practice"),
       practiceSet: updatedPracticeSet,
     };
   }
@@ -192,10 +204,22 @@ export const handleSkipItem = assign(
 );
 
 export const moveToNextSuperSetItem = assign(
-  ({ context }: { context: LessonContext }) => {
-    console.log("nextSuperSetItem");
+  ({ context, self }: { context: LessonContext; self: AnyActor }) => {
+    // debugger;
+    // const context = fullContext.context;
+    // const self = fullContext.self;
+
     const activeItemIndex =
       (context.activeItemIndex + 1) % context.superSet.length;
+
+    // Check if we have gone through all items
+    const allItemsProcessed = activeItemIndex === 0; // If we wrap around, we have processed all items
+
+    // Send event if all items are processed
+    if (allItemsProcessed) {
+      self.send({ type: "ALL_ITEMS_PROCESSED" });
+    }
+
     return {
       activeItemIndex,
       activeItem: context.superSet[activeItemIndex],
@@ -203,17 +227,14 @@ export const moveToNextSuperSetItem = assign(
   }
 );
 
-export const moveToNextPracticeSetItem = assign(
-  ({ context }: { context: LessonContext }) => {
-    console.log("nextPracticeItem"); // not firing
-    const activeItemIndex =
-      (context.activeItemIndex + 1) % context.practiceSet.length;
-    return {
-      activeItemIndex,
-      activeItem: context.practiceSet[activeItemIndex],
-    };
-  }
-);
+export const moveToNextPracticeSetItem = assign(({ context }) => {
+  const nextIndex = (context.practiceSetIndex + 1) % context.practiceSet.length;
+
+  return {
+    practiceSetIndex: nextIndex,
+    activeItem: context.practiceSet[nextIndex],
+  };
+});
 
 export const hasPracticeItems = ({ context }: { context: LessonContext }) => {
   console.log("hasPracticeItems", context?.practiceSet?.length > 0);

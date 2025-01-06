@@ -132,6 +132,14 @@ const DebugPage: React.FC = () => {
       priority: 2,
     },
     {
+      title: "Active Item Index",
+      data: {
+        activeItemIndex: gameState.activeItemIndex,
+        practiceSetIndex: gameState.practiceSetIndex,
+      },
+      priority: 1,
+    },
+    {
       title: "SuperSet (simplified)",
       data: {
         length: gameState.superSet.length,
@@ -155,7 +163,7 @@ const DebugPage: React.FC = () => {
       priority: 2,
     },
     {
-      title: "Active Item",
+      title: "Active Items",
       data: gameState.activeItem,
       priority: 3,
     },

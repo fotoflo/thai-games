@@ -16,15 +16,13 @@ import {
 const initialContext: LessonContext = {
   lessons: [],
   progressionMode: "initializing",
-  currentLessonId: -1,
   superSet: [],
-  lessonSubset: {
-    unseenItems: [],
-    practiceItems: [],
-    masteredItems: [],
-    skippedItems: [],
-  },
+  practiceSet: [],
+  practiceSetSize: 0,
+  practiceSetIndex: 0,
   activeItem: null,
+  currentLesson: 0,
+  activeItemIndex: 0,
 };
 
 export const lessonMachine = setup({
@@ -75,10 +73,12 @@ export const lessonMachine = setup({
         },
         SWITCH_TO_PRACTICE: {
           target: "practice",
-          guard: hasPracticeItems,
         },
         SWITCH_TO_TEST: {
           target: "test",
+        },
+        ALL_ITEMS_PROCESSED: {
+          target: "practice",
         },
       },
     },
