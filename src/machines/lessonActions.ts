@@ -21,7 +21,7 @@ export type LessonContext = {
   practiceSet: SuperSetItem[];
   practiceSetSize: number;
   activeItem: SuperSetItem | null;
-  activeItemIndex: number;
+  superSetIndex: number;
   practiceSetIndex: number;
   progressionMode: ProgressionMode;
 };
@@ -61,7 +61,7 @@ export const initialize = ({
   event: InitializeEvent;
 }) => {
   const lessonData = event?.lessons?.[event?.lessonIndex];
-  const activeItemIndex = 0;
+  const superSetIndex = 0;
 
   const superSet = lessonData?.items.map(createSuperSetItem);
   const practiceSet = [] as SuperSetItem[];
@@ -74,8 +74,8 @@ export const initialize = ({
     practiceSetSize: INITIAL_PRACTICE_SET_SIZE,
     currentLessonId: event?.lessonIndex,
     lessons: event?.lessons,
-    activeItem: superSet?.[activeItemIndex],
-    activeItemIndex,
+    activeItem: superSet?.[superSetIndex],
+    superSetIndex,
     practiceSetIndex: 0,
     currentLessonData: lessonData,
     progressionMode: "firstPass",
@@ -92,7 +92,7 @@ export const enterSwitchToPractice = assign(
 
 export const enterSwitchToFirstPass = assign((context: LessonContext) => ({
   progressionMode: "firstPass",
-  // activeItem: context?.superSet?.[context?.activeItemIndex || 0],
+  // activeItem: context?.superSet?.[context?.superSetIndex || 0],
 }));
 
 export const enterSwitchToTest = assign((context: LessonContext) => ({
@@ -209,11 +209,10 @@ export const moveToNextSuperSetItem = assign(
     // const context = fullContext.context;
     // const self = fullContext.self;
 
-    const activeItemIndex =
-      (context.activeItemIndex + 1) % context.superSet.length;
+    const superSetIndex = (context.superSetIndex + 1) % context.superSet.length;
 
     // Check if we have gone through all items
-    const allItemsProcessed = activeItemIndex === 0; // If we wrap around, we have processed all items
+    const allItemsProcessed = superSetIndex === 0; // If we wrap around, we have processed all items
 
     // Send event if all items are processed
     if (allItemsProcessed) {
@@ -221,8 +220,8 @@ export const moveToNextSuperSetItem = assign(
     }
 
     return {
-      activeItemIndex,
-      activeItem: context.superSet[activeItemIndex],
+      superSetIndex,
+      activeItem: context.superSet[superSetIndex],
     };
   }
 );

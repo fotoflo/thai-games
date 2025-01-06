@@ -22,7 +22,7 @@ const initialContext: LessonContext = {
   practiceSetIndex: 0,
   activeItem: null,
   currentLesson: 0,
-  activeItemIndex: 0,
+  superSetIndex: 0,
 };
 
 export const lessonMachine = setup({

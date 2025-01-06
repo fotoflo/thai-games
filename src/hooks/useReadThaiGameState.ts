@@ -39,7 +39,7 @@ export const useReadThaiGameState = () => {
     practiceSetSize: state.context.practiceSetSize,
 
     activeItem: state.context.activeItem,
-    activeItemIndex: state.context.activeItemIndex,
+    superSetIndex: state.context.superSetIndex,
     practiceSetIndex: state.context.practiceSetIndex,
 
     nextItem: () => send({ type: "NEXT_ITEM" }),

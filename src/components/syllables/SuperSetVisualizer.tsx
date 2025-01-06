@@ -4,11 +4,11 @@ import React from "react";
 const LessonSubsetVisualizer = ({
   superSet,
   className = "",
-  activeItemIndex = 0,
+  superSetIndex = 0,
 }: {
   superSet: SuperSet;
   className?: string;
-  activeItemIndex: number;
+  superSetIndex: number;
 }) => {
   if (!superSet?.length) {
     return <div className={className}>No items in practice set</div>;
@@ -58,7 +58,7 @@ const LessonSubsetVisualizer = ({
               )}`}
             />
             {/* Active item indicator */}
-            {index === activeItemIndex && (
+            {index === superSetIndex && (
               <div className="absolute -bottom-1.5 left-0 right-0 h-3/4 bg-slate-500 rounded-full opacity-75" />
             )}
           </div>

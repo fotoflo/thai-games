@@ -122,7 +122,7 @@ const DebugPage: React.FC = () => {
 
   const sections: DebugSection[] = [
     {
-      title: `Active Item (simplified) - ${gameState.activeItemIndex}`,
+      title: `Active Item (simplified) - ${gameState.superSetIndex}`,
       data: {
         id: gameState.activeItem?.id,
         thai: gameState.activeItem?.item.sides[0].markdown,
@@ -134,7 +134,7 @@ const DebugPage: React.FC = () => {
     {
       title: "Active Item Index",
       data: {
-        activeItemIndex: gameState.activeItemIndex,
+        superSetIndex: gameState.superSetIndex,
         practiceSetIndex: gameState.practiceSetIndex,
       },
       priority: 1,
@@ -214,7 +214,7 @@ const DebugPage: React.FC = () => {
 
         <SuperSetVisualizer
           superSet={gameState.superSet}
-          activeItemIndex={gameState.activeItemIndex}
+          superSetIndex={gameState.superSetIndex}
           className="mb-5"
         />
 
