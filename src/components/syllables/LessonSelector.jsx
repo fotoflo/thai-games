@@ -10,6 +10,9 @@ const LessonSelector = ({
 
   const { lessons, currentLesson, setCurrentLesson } = useReadThaiGame();
 
+  console.log("currentLesson", currentLesson);
+  console.log("lessons", lessons);
+
   return (
     <div className="flex items-center mb-6">
       <div className="flex overflow-hidden max-w-md mx-auto">

@@ -2,9 +2,13 @@ import React from 'react';
 import { BookOpen } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
+import { useReadThaiGame } from '@/context/ReadThaiGameContext';
 
-const LessonListScreen = ({ onClose, lessons, setCurrentLesson, onViewDetails }) => {
+const LessonListScreen = ({ onClose, onViewDetails }) => {
+  const { lessons, setCurrentLesson } = useReadThaiGame();
+
   const handleLessonClick = (index) => {
+    console.log("log handleLessonClick", index);
     setCurrentLesson(index); // Set the current lesson
     onClose(); // Close the modal
   };

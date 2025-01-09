@@ -63,7 +63,7 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
 
     // Lesson management
     lessons: lessonState.lessons,
-    currentLesson: state,
+    currentLesson: lessonState.currentLesson,
     setCurrentLesson: lessonState.setCurrentLesson,
 
     progressionMode: state.context.progressionMode,
@@ -93,6 +93,15 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useReadThaiGame = () => {
   const context = useContext(ReadThaiGameContext);
+
+  if (
+    context?.lessons &&
+    context?.lessons.length > 0 &&
+    context?.currentLesson === -1
+  ) {
+    context?.setCurrentLesson(0);
+  }
+
   if (!context) {
     throw new Error(
       "useReadThaiGame must be used within a ReadThaiGameProvider"
