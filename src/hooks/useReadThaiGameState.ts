@@ -32,7 +32,6 @@ export const useReadThaiGameState = () => {
     progressionMode: state.context.progressionMode,
     handleSwitchToPracticeMode: () => send({ type: "SWITCH_TO_PRACTICE" }),
     handleSwitchToFirstPassMode: () => send({ type: "SWITCH_TO_FIRST_PASS" }),
-    handleSwitchToTestMode: () => send({ type: "SWITCH_TO_TEST" }),
 
     superSet: state.context.superSet,
     practiceSet: state.context.practiceSet,

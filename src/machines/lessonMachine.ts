@@ -1,5 +1,6 @@
 import { assign, setup } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
+import { createBrowserInspector } from "@statelyai/inspect";
 import {
   initialize,
   enterSwitchToPractice,
@@ -10,10 +11,13 @@ import {
   handleMarkForPractice,
   handleMarkAsMastered,
   handleSkipItem,
-  hasPracticeItems,
+  hasPracticeSetPracticeItems,
+  hasSuperSetPracticeItems,
   practiceSetIsEmpty,
   allItemsMastered,
 } from "./lessonActions";
+
+const { inspect } = createBrowserInspector();
 
 const initialContext: LessonContext = {
   lessons: [],
@@ -28,12 +32,14 @@ const initialContext: LessonContext = {
 };
 
 export const lessonMachine = setup({
+  inspect,
   types: {} as {
     context: LessonContext;
     events: LessonEvent;
   },
   guards: {
-    hasPracticeItems,
+    hasPracticeSetPracticeItems,
+    hasSuperSetPracticeItems,
     practiceSetIsEmpty,
     allItemsMastered,
   },
@@ -49,6 +55,7 @@ export const lessonMachine = setup({
     enterSwitchToTest,
   },
 }).createMachine({
+  /** @xstate-layout N4IgpgJg5mDOIC5QBs6wPYDsB0BLCqAxAJIByxAKsQIIAyxAWgKIDaADALqKgAO6suAC64s3EAA9EAZgCcADmwB2ACxsAbMrnKAjGwCsc-XoA0IAJ6I527GxlSV8gEx7N2xdoC+H06lgYcAGa4AE6wggAKAIZ+hACy1ABKANIA+gBiAPIJKeEJ1ADCVPmsnGJ8AsKiSBKIinIy2Mqqas7KimpScgamFghtCm56UrLaMmrqsl4+aFjYQaER0bBxianUAMop8esUTAlMACLsXNXlQiKYYpIIdQ1N6q3tnd3m0np6SjI6bI4ybGzKKR6RxTEC+fxzEJhKIxdZJYjhFKUJixY5lfjnKqga63RrNR4dLpyHqIRzDRraRxyNQ0gGGDQg7xgmaBKGLGKkJgADQoSN2qNKpwxlUu1Rx9TxDxcTyJJIQ2ns2DkVg6P1syj0E1B4Nm82hS0I6wA6pR8gAJFIUDI5PKFYjFNFCioXK7SeRKZqab4GIxytSjGyauxUgxqdqKbUs7A8YKRADGwjjYBWyXSWRtBSKJROvGFLrFiGUjjlmscSpkFcBGi+yn9kb8sxj8cTyfiqY2Ww2u32R0FuedWJqfSkNhkjkc2jaagrqpMrwQnTY2D02jkijYiiBnTcUnrEKbCdwScN8MRyIFOZAZxFroQXWwq8p-unij0ajfajlzgG9jaugMq5dBGTI6jgB4toQnI8nyKKOv2mKitilhlo4AJqFo06yDI2huHK2gtNg4wtFItYtHIUiOHUe6NrGh7HsapoWla6TEAkOw5Bs6xwVeeaDtcsgKCo6hev+hjvH604PhRozTvom7KF4TKYOgEBwGIoHogOiFDgAtJ+856dROD4KgmkIbejiSTha4dMMPzrsS866MoD6UpqCrkZoGhqEZkILDC8BOuZBY3DSSgtMoMiKJZFYzn6+jLm+eivpF+FjsB0wNmBtEtmZN4hWuSokZ09QqvhLh+lIS5UjhiiVpqKhyIpHhAA */
   id: "lesson",
   context: initialContext,
   initial: "idle",
@@ -63,6 +70,12 @@ export const lessonMachine = setup({
     },
     firstPass: {
       entry: ["enterSwitchToFirstPass"],
+      always: [
+        {
+          target: "practice",
+          guard: "hasSuperSetPracticeItems",
+        },
+      ],
       on: {
         MARK_FOR_PRACTICE: {
           actions: ["handleMarkForPractice", "moveToNextSuperSetItem"],
@@ -78,28 +91,34 @@ export const lessonMachine = setup({
         },
         SWITCH_TO_PRACTICE: {
           target: "practice",
-          guard: "hasPracticeItems",
+          guard: "hasSuperSetPracticeItems",
         },
       },
     },
     practice: {
       entry: ["enterSwitchToPractice"],
+      always: [
+        {
+          target: "firstPass",
+          guard: "practiceSetIsEmpty",
+        },
+      ],
       on: {
         MARK_FOR_PRACTICE: {
           actions: ["handleMarkForPractice", "moveToNextPracticeSetItem"],
-          guard: "hasPracticeItems",
+          guard: "hasPracticeSetPracticeItems",
         },
         MARK_AS_MASTERED: {
           actions: ["handleMarkAsMastered", "moveToNextPracticeSetItem"],
-          guard: "hasPracticeItems",
+          guard: "hasPracticeSetPracticeItems",
         },
         SKIP_ITEM: {
           actions: ["handleSkipItem", "moveToNextPracticeSetItem"],
-          guard: "hasPracticeItems",
+          guard: "hasPracticeSetPracticeItems",
         },
         NEXT_ITEM: {
           actions: "moveToNextPracticeSetItem",
-          guard: "hasPracticeItems",
+          guard: "hasPracticeSetPracticeItems",
         },
         SWITCH_TO_FIRST_PASS: {
           target: "firstPass",

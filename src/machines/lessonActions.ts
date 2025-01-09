@@ -172,12 +172,32 @@ const removeFromPracticeSet = (
   return practiceSet.filter((item) => item.id !== itemId);
 };
 
+const getNextPracticeItem = (context: LessonContext): SuperSetItem | null => {
+  if (!context.superSet) return null;
+
+  // Find items marked for practice that aren't in the practice set
+  const practiceItems = context.superSet.filter(
+    (item) =>
+      item.recallCategory === "practice" &&
+      !context.practiceSet.some((practiceItem) => practiceItem.id === item.id)
+  );
+
+  return practiceItems[0] || null;
+};
+
 export const handleMarkAsMastered = assign(
   ({ context }: { context: LessonContext }) => {
+    // Remove the current item from practice set
     const updatedPracticeSet = removeFromPracticeSet(
       context.practiceSet,
       context.activeItem?.id
     );
+
+    // Try to get the next practice item to add
+    const nextPracticeItem = getNextPracticeItem(context);
+    const finalPracticeSet = nextPracticeItem
+      ? [...updatedPracticeSet, nextPracticeItem]
+      : updatedPracticeSet;
 
     return {
       superSet: updateRecallCategory({
@@ -185,7 +205,7 @@ export const handleMarkAsMastered = assign(
         itemId: context?.activeItem?.id,
         newCategory: "mastered",
       }),
-      practiceSet: updatedPracticeSet,
+      practiceSet: finalPracticeSet,
     };
   }
 );
@@ -246,10 +266,26 @@ export const moveToNextPracticeSetItem = assign(({ context }) => {
   };
 });
 
-export const hasPracticeItems = ({ context }: { context: LessonContext }) => {
+export const hasPracticeSetPracticeItems = ({
+  context,
+}: {
+  context: LessonContext;
+}) => {
   debugger;
   if (!context || !context.practiceSet) return false;
   return context.practiceSet.length > 0;
+};
+
+export const hasSuperSetPracticeItems = ({
+  context,
+}: {
+  context: LessonContext;
+}) => {
+  if (!context || !context.superSet) return false;
+  const superSetPracticeItems = context.superSet.filter(
+    (item) => item.recallCategory === "practice"
+  );
+  return superSetPracticeItems.length > 0;
 };
 
 export const allItemsMastered = ({ context }: { context: LessonContext }) => {
