@@ -1,5 +1,5 @@
 import { Lesson, LessonItem, RecallCategory } from "../types/lessons";
-import { AnyActor, assign } from "xstate";
+import { assign } from "xstate";
 
 export type SuperSetItem = {
   id: string;
@@ -85,22 +85,17 @@ export const initialize = ({
   };
 };
 
-export const enterSwitchToPractice = assign(
-  ({ context }: { context: LessonContext }) => {
-    return {
-      progressionMode: "practice",
-    };
-  }
-);
+export const enterSwitchToPractice = assign({
+  progressionMode: "practice" as const,
+});
 
-export const enterSwitchToFirstPass = assign((context: LessonContext) => ({
-  progressionMode: "firstPass",
-  // activeItem: context?.superSet?.[context?.superSetIndex || 0],
-}));
+export const enterSwitchToFirstPass = assign({
+  progressionMode: "firstPass" as const,
+});
 
-export const enterSwitchToTest = assign((context: LessonContext) => ({
-  progressionMode: "test",
-}));
+export const enterSwitchToTest = assign({
+  progressionMode: "test" as const,
+});
 
 const updateRecallCategory = ({
   superSet,
@@ -140,7 +135,7 @@ const addActiveItemToPracticeSet = (context: LessonContext) => {
 
   // check if the item is already in the practice set
   const isInPracticeSet = context.practiceSet.some(
-    (item) => item.id === context.activeItem.id
+    (item) => item.id === context.activeItem?.id
   );
 
   if (isInPracticeSet) {
@@ -155,7 +150,7 @@ const practiceSetIsFull = (context: LessonContext) => {
 };
 
 export const handleMarkForPractice = assign(
-  ({ context, event }: { context: LessonContext; event: LessonEvent }) => {
+  ({ context }: { context: LessonContext }) => {
     let updatedPracticeSet = context.practiceSet;
 
     if (practiceSetIsFull(context)) {
@@ -215,37 +210,35 @@ export const handleSkipItem = assign(
   }
 );
 
-export const moveToNextSuperSetItem = assign(
-  ({ context, self }: { context: LessonContext; self: AnyActor }) => {
-    const superSetIndex = (context.superSetIndex + 1) % context.superSet.length;
+export const moveToNextSuperSetItem = assign(({ context }) => {
+  const superSetIndex = (context.superSetIndex + 1) % context.superSet.length;
 
-    // Check if we have gone through all items
-    const allItemsProcessed = superSetIndex === 0; // If we wrap around, we have processed all items
-
-    // Send event if all items are processed
-    if (allItemsProcessed) {
-      self.send({ type: "ALL_ITEMS_PROCESSED" });
-    }
-
-    return {
-      superSetIndex,
-      activeItem: context.superSet[superSetIndex],
-    };
-  }
-);
-
-// make a function that checks if the practice set is empty
-export const practiceSetIsEmpty = assign((context: LessonContext) => {
-  return context.practiceSet.length === 0;
+  return {
+    superSetIndex,
+    activeItem: context.superSet[superSetIndex],
+  };
 });
 
+export const practiceSetIsEmpty = ({ context }: { context: LessonContext }) => {
+  if (!context || !context.practiceSet) return true;
+  return context.practiceSet.length === 0;
+};
+
 export const moveToNextPracticeSetItem = assign(({ context }) => {
+  if (!context.practiceSet.length) {
+    return {
+      practiceSetIndex: 0,
+      superSetIndex: 0,
+      activeItem: context.superSet[0],
+    };
+  }
+
   const nextPracticeSetIndex =
     (context.practiceSetIndex + 1) % context.practiceSet.length;
 
   const superSetIndex = context.superSet.findIndex(
     (item: SuperSetItem) =>
-      item.id === context.practiceSet[nextPracticeSetIndex].id
+      item.id === context.practiceSet[nextPracticeSetIndex]?.id
   );
 
   return {
@@ -256,6 +249,11 @@ export const moveToNextPracticeSetItem = assign(({ context }) => {
 });
 
 export const hasPracticeItems = ({ context }: { context: LessonContext }) => {
-  console.log("hasPracticeItems", context?.practiceSet?.length > 0);
-  return context?.practiceSet?.length > 0;
+  if (!context || !context.practiceSet) return false;
+  return context.practiceSet.length > 0;
+};
+
+export const allItemsMastered = ({ context }: { context: LessonContext }) => {
+  if (!context || !context.superSet) return false;
+  return context.superSet.every((item) => item.recallCategory === "mastered");
 };
