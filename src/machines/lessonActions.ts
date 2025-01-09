@@ -83,17 +83,7 @@ export const initialize = ({
   };
 };
 
-export const enterSwitchToPractice = assign({
-  progressionMode: "practice" as const,
-});
-
-export const enterSwitchToFirstPass = assign({
-  progressionMode: "firstPass" as const,
-});
-
-export const enterSwitchToTest = assign({
-  progressionMode: "test" as const,
-});
+///METHODS
 
 const updateRecallCategory = ({
   superSet,
@@ -143,25 +133,6 @@ const addActiveItemToPracticeSet = (context: LessonContext) => {
   return [...context.practiceSet, context.activeItem];
 };
 
-const practiceSetIsFull = (context: LessonContext) => {
-  return context.practiceSet.length < context.practiceSetSize;
-};
-
-export const handleMarkForPractice = assign(
-  ({ context }: { context: LessonContext }) => {
-    let updatedPracticeSet = context.practiceSet;
-
-    if (practiceSetIsFull(context)) {
-      updatedPracticeSet = addActiveItemToPracticeSet(context);
-    }
-
-    return {
-      superSet: updateActiveItemRecallCategory(context, "practice"),
-      practiceSet: updatedPracticeSet,
-    };
-  }
-);
-
 const removeFromPracticeSet = (
   practiceSet: SuperSetItem[],
   itemId: string | undefined
@@ -184,6 +155,35 @@ const getNextPracticeItem = (context: LessonContext): SuperSetItem | null => {
 
   return practiceItems[0] || null;
 };
+
+/// ASSIGNED FUNCTIONS
+
+export const handleMarkForPractice = assign(
+  ({ context }: { context: LessonContext }) => {
+    let updatedPracticeSet = context.practiceSet;
+
+    if (practiceSetIsFull(context)) {
+      updatedPracticeSet = addActiveItemToPracticeSet(context);
+    }
+
+    return {
+      superSet: updateActiveItemRecallCategory(context, "practice"),
+      practiceSet: updatedPracticeSet,
+    };
+  }
+);
+
+export const enterSwitchToPractice = assign({
+  progressionMode: "practice" as const,
+});
+
+export const enterSwitchToFirstPass = assign({
+  progressionMode: "firstPass" as const,
+});
+
+export const enterSwitchToTest = assign({
+  progressionMode: "test" as const,
+});
 
 export const handleMarkAsMastered = assign(
   ({ context }: { context: LessonContext }) => {
@@ -237,11 +237,6 @@ export const moveToNextSuperSetItem = assign(({ context }) => {
   };
 });
 
-export const practiceSetIsEmpty = ({ context }: { context: LessonContext }) => {
-  if (!context || !context.practiceSet) return true;
-  return context.practiceSet.length === 0;
-};
-
 export const moveToNextPracticeSetItem = assign(({ context }) => {
   if (!context.practiceSet.length) {
     return {
@@ -265,6 +260,17 @@ export const moveToNextPracticeSetItem = assign(({ context }) => {
     activeItem: context.superSet[superSetIndex],
   };
 });
+
+/// GUARDS
+
+const practiceSetIsFull = (context: LessonContext) => {
+  return context.practiceSet.length < context.practiceSetSize;
+};
+
+export const practiceSetIsEmpty = ({ context }: { context: LessonContext }) => {
+  if (!context || !context.practiceSet) return true;
+  return context.practiceSet.length === 0;
+};
 
 export const hasPracticeSetPracticeItems = ({
   context,
@@ -291,4 +297,9 @@ export const hasSuperSetPracticeItems = ({
 export const allItemsMastered = ({ context }: { context: LessonContext }) => {
   if (!context || !context.superSet) return false;
   return context.superSet.every((item) => item.recallCategory === "mastered");
+};
+
+export const allItemsSeen = ({ context }: { context: LessonContext }) => {
+  if (!context || !context.superSet) return false;
+  return context.superSet.every((item) => item.recallCategory !== "unseen");
 };

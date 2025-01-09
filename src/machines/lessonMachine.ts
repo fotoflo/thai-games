@@ -1,4 +1,4 @@
-import { assign, setup } from "xstate";
+import { createMachine, assign, setup } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
 import { createBrowserInspector } from "@statelyai/inspect";
 import {
@@ -15,6 +15,7 @@ import {
   hasSuperSetPracticeItems,
   practiceSetIsEmpty,
   allItemsMastered,
+  allItemsSeen,
 } from "./lessonActions";
 
 const { inspect } = createBrowserInspector();
@@ -42,6 +43,7 @@ export const lessonMachine = setup({
     hasSuperSetPracticeItems,
     practiceSetIsEmpty,
     allItemsMastered,
+    allItemsSeen,
   },
   actions: {
     moveToNextSuperSetItem,
@@ -73,7 +75,7 @@ export const lessonMachine = setup({
       always: [
         {
           target: "practice",
-          guard: "hasSuperSetPracticeItems",
+          guard: "allItemsSeen",
         },
       ],
       on: {
@@ -106,19 +108,19 @@ export const lessonMachine = setup({
       on: {
         MARK_FOR_PRACTICE: {
           actions: ["handleMarkForPractice", "moveToNextPracticeSetItem"],
-          guard: "hasPracticeSetPracticeItems",
+          guard: "hasSuperSetPracticeItems",
         },
         MARK_AS_MASTERED: {
           actions: ["handleMarkAsMastered", "moveToNextPracticeSetItem"],
-          guard: "hasPracticeSetPracticeItems",
+          guard: "hasSuperSetPracticeItems",
         },
         SKIP_ITEM: {
           actions: ["handleSkipItem", "moveToNextPracticeSetItem"],
-          guard: "hasPracticeSetPracticeItems",
+          guard: "hasSuperSetPracticeItems",
         },
         NEXT_ITEM: {
           actions: "moveToNextPracticeSetItem",
-          guard: "hasPracticeSetPracticeItems",
+          guard: "hasSuperSetPracticeItems",
         },
         SWITCH_TO_FIRST_PASS: {
           target: "firstPass",
