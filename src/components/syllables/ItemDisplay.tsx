@@ -2,25 +2,10 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Volume2 } from "lucide-react";
 import { useThaiSpeech } from "@/hooks/useThaiSpeech";
-import { SuperSetItem } from "@/types/lessons";
+import { useReadThaiGame } from "@/context/ReadThaiGameContext";
 import rehypeRaw from "rehype-raw";
 
-const ItemDisplay = ({
-  superSetItem,
-  textSize = "text-6xl",
-  iconSize = 24,
-  className = "",
-  textColor = "text-white",
-  sideTwoTextColor = "text-slate-400",
-  iconColor = "text-gray-400",
-  speakOnMount = false,
-  speakOnUnmount = false,
-  invertTranslation = false,
-  useFullMarkdown = false,
-  showBothSides = false,
-  sideTwoTextSize = "text-sm sm:text-base",
-}: {
-  superSetItem: SuperSetItem | null;
+interface ItemDisplayProps {
   textSize?: string;
   iconSize?: number;
   className?: string;
@@ -33,8 +18,23 @@ const ItemDisplay = ({
   showBothSides?: boolean;
   sideTwoTextSize?: string;
   sideTwoTextColor?: string;
+}
+
+const ItemDisplay: React.FC<ItemDisplayProps> = ({
+  textSize = "text-6xl",
+  iconSize = 24,
+  className = "",
+  textColor = "text-white",
+  iconColor = "text-gray-400",
+  speakOnMount = false,
+  speakOnUnmount = false,
+  useFullMarkdown = false,
+  showBothSides = false,
+  sideTwoTextSize = "text-sm sm:text-base",
+  sideTwoTextColor = "text-slate-400",
 }) => {
-  const vocabItem = superSetItem?.item;
+  const { activeItem, invertTranslation } = useReadThaiGame();
+  const vocabItem = activeItem?.item;
 
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,

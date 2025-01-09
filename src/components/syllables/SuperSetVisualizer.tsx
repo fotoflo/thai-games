@@ -1,15 +1,10 @@
-import { SuperSet, RecallCategory } from "@/types/lessons";
+import { useReadThaiGame } from "@/context/ReadThaiGameContext";
+import { RecallCategory } from "@/types/lessons";
 import React from "react";
 
-const LessonSubsetVisualizer = ({
-  superSet,
-  className = "",
-  superSetIndex = 0,
-}: {
-  superSet: SuperSet;
-  className?: string;
-  superSetIndex: number;
-}) => {
+const LessonSubsetVisualizer = ({ className = "" }: { className?: string }) => {
+  const { superSet, superSetIndex } = useReadThaiGame();
+
   if (!superSet?.length) {
     return <div className={className}>No items in practice set</div>;
   }

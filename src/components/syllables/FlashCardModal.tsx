@@ -1,41 +1,21 @@
+import React from "react";
 import ModalContainer from "../ui/ModalContainer";
 import MasteryControls from "./MasteryControls";
 import DetailCard from "./DetailCard";
-import { LessonItem } from "../../types/lessons";
+import { useReadThaiGame } from "@/context/ReadThaiGameContext";
 
 interface FlashCardModalProps {
-  vocabItem: LessonItem;
-  onNext: () => void;
-  trigger: string | null;
+  trigger: "speak" | "mastery" | "CheckTranslationButton" | null;
   onClose: () => void;
-  mode: "firstPass" | "spacedRepetition" | "test";
-  lessonSubset: {
-    unseenItems: string[];
-    practiceItems: string[];
-    masteredItems: string[];
-    skippedItems: string[];
-  };
-  onFirstPassChoice?: (choice: "mastered" | "practice" | "skip") => void;
 }
 
 const FlashCardModal: React.FC<FlashCardModalProps> = ({
-  vocabItem,
-  onNext,
   trigger,
   onClose,
-  mode,
-  lessonSubset,
 }) => {
-  // useEffect(() => {
-  //   if (trigger === "CheckTranslationButton") {
-  //     const timer = setTimeout(() => {
-  //       onClose();
-  //     }, 2000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [trigger, onClose]);
+  const { activeItem } = useReadThaiGame();
 
-  if (!trigger) return null;
+  if (!trigger || !activeItem) return null;
 
   return (
     <ModalContainer title="Flash Card" onClose={onClose}>
@@ -45,18 +25,13 @@ const FlashCardModal: React.FC<FlashCardModalProps> = ({
       >
         <div className="flex-grow flex items-center justify-center p-4">
           <DetailCard
-            vocabItem={vocabItem}
+            vocabItem={activeItem.item}
             showExamples={true}
             onToggleExamples={() => {}}
             size="xl"
           />
         </div>
-        <MasteryControls
-          onRatingSelect={onNext}
-          className="mb-4"
-          mode={mode}
-          lessonSubset={lessonSubset}
-        />
+        <MasteryControls className="mb-4" />
       </div>
     </ModalContainer>
   );

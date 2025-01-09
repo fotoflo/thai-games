@@ -25,11 +25,9 @@ interface ButtonGroup {
 
 const DebugPage: React.FC = () => {
   const {
-    // Game state
     gameState,
     activeItem,
     superSet,
-    practiceSet,
     superSetIndex,
     practiceSetIndex,
     progressionMode,
@@ -222,14 +220,9 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        <SuperSetVisualizer
-          superSet={superSet}
-          superSetIndex={superSetIndex}
-          className="mb-5"
-        />
+        <SuperSetVisualizer className="mb-5" />
 
         <ItemDisplay
-          superSetItem={activeItem}
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
@@ -237,7 +230,7 @@ const DebugPage: React.FC = () => {
           invertTranslation={false}
         />
 
-        <PracticeSetCards practiceSet={practiceSet} activeItem={activeItem} />
+        <PracticeSetCards className=" border-y-2 border-slate-700 my-2" />
 
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">

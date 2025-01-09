@@ -1,12 +1,7 @@
 import React from "react";
 import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
-import { SuperSetItem } from "../../types/lessons";
-
-interface PraticeSetCardsProps {
-  practiceSet: SuperSetItem[];
-  activeItem: SuperSetItem | null;
-}
+import { useReadThaiGame } from "@/context/ReadThaiGameContext";
 
 const getTextSizeClass = (text: string): string => {
   if (text.length <= 3) return "text-lg";
@@ -21,12 +16,13 @@ const getPhoneticSizeClass = (text: string): string => {
   return "text-[8px]";
 };
 
-const PracticeSetCards: React.FC<PraticeSetCardsProps> = ({
-  practiceSet,
-  activeItem,
+const PracticeSetCards: React.FC<{ className?: string }> = ({
+  className = "",
 }) => {
+  const { practiceSet, activeItem } = useReadThaiGame();
+
   return (
-    <div className="flex flex-col relative border-y-2 border-slate-700 my-2">
+    <div className={`flex flex-col relative ${className}`}>
       <div className="flex items-center justify-center gap-2 my-2">
         <div className="flex gap-2 flex-wrap justify-center">
           {practiceSet?.map((item) => {

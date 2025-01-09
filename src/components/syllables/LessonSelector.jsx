@@ -1,15 +1,14 @@
 import React, { useRef, useState } from 'react';
 import LessonListScreen from '../LessonListScreen';
+import { useReadThaiGame } from '@/context/ReadThaiGameContext';
 
 const LessonSelector = ({ 
-  currentLesson, 
-  setCurrentLesson, 
-  lessons,
   onViewDetails 
 }) => {
   const carouselRef = useRef(null);
   const [showLessonList, setShowLessonList] = useState(false);
 
+  const { lessons, currentLesson, setCurrentLesson } = useReadThaiGame();
 
   return (
     <div className="flex items-center mb-6">

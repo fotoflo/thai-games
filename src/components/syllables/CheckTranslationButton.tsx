@@ -1,22 +1,19 @@
 import React from "react";
 import { Eye } from "lucide-react";
-import { LessonItem } from "@/types/lessons";
 
-const CheckTranslationButton = ({
-  onClick,
-  lessonItem,
-}: {
+interface CheckTranslationButtonProps {
   onClick: () => void;
-  lessonItem: LessonItem | null;
-}) => {
-  // Only render if current has details with a translation
-  if (!lessonItem) return null;
+}
 
+const CheckTranslationButton: React.FC<CheckTranslationButtonProps> = ({
+  onClick,
+}) => {
   return (
-    <div className="flex justify-center mt-12 mb-8">
+    <div className="flex items-center justify-center">
       <button
         onClick={onClick}
-        className="px-8 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center justify-center text-lg w-1/2"
+        className="p-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-colors"
+        title="Check Translation"
       >
         <Eye size={24} />
       </button>
