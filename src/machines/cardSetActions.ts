@@ -1,32 +1,38 @@
-import { Lesson, LessonItem, RecallCategory } from "../types/lessons";
 import { assign } from "xstate";
+import { RecallCategory, SuperSetItem } from "@/types/lessons";
 
-export type SuperSetItem = {
-  id: string;
-  item: LessonItem;
-  lastReviewed: Date;
-  recallCategory: RecallCategory;
-};
-
-export type ProgressionMode =
-  | "firstPass"
-  | "practice"
-  | "test"
-  | "initializing";
-
-export type LessonContext = {
-  lessons: Lesson[];
-  currentLesson: number;
-  activeItem: SuperSetItem | null;
-
+export interface CardSetContext {
+  lessons: any[];
+  progressionMode: "initializing" | "firstPass" | "practice" | "test";
   superSet: SuperSetItem[];
-  superSetIndex: number;
-
   practiceSet: SuperSetItem[];
   practiceSetSize: number;
   practiceSetIndex: number;
+  activeItem: SuperSetItem | null;
+  currentLesson: number;
+  superSetIndex: number;
+}
 
-  progressionMode: ProgressionMode;
+export type CardSetEvent =
+  | { type: "INITIALIZE"; lessonIndex: number; lessons: any[] }
+  | { type: "MARK_FOR_PRACTICE" }
+  | { type: "MARK_AS_MASTERED" }
+  | { type: "SKIP_ITEM" }
+  | { type: "NEXT_ITEM" }
+  | { type: "SWITCH_TO_PRACTICE" }
+  | { type: "SWITCH_TO_FIRST_PASS" }
+  | { type: "SWITCH_TO_TEST" };
+
+export const initialContext: CardSetContext = {
+  lessons: [],
+  progressionMode: "initializing",
+  superSet: [],
+  practiceSet: [],
+  practiceSetSize: 0,
+  practiceSetIndex: 0,
+  activeItem: null,
+  currentLesson: 0,
+  superSetIndex: 0,
 };
 
 const INITIAL_PRACTICE_SET_SIZE = 5;
@@ -34,7 +40,7 @@ const INITIAL_PRACTICE_SET_SIZE = 5;
 export type InitializeEvent = {
   type: "INITIALIZE";
   lessonIndex: number;
-  lessons: Lesson[];
+  lessons: any[];
 };
 
 export type LessonEvent =
@@ -46,11 +52,11 @@ export type LessonEvent =
   | { type: "SWITCH_TO_PRACTICE" }
   | { type: "SWITCH_TO_FIRST_PASS" };
 
-const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
+const createSuperSetItem = (item: any): SuperSetItem => ({
   id: item.id,
   item,
   lastReviewed: new Date(),
-  recallCategory: "unseen" as RecallCategory,
+  recallCategory: "unseen",
 });
 
 // Action Functions
@@ -58,7 +64,7 @@ export const initialize = ({
   context,
   event,
 }: {
-  context: LessonContext;
+  context: CardSetContext;
   event: InitializeEvent;
 }) => {
   const lessonData = event?.lessons?.[event?.lessonIndex];
@@ -92,7 +98,7 @@ const updateRecallCategory = ({
 }: {
   superSet: SuperSetItem[];
   itemId: string | undefined;
-  newCategory: RecallCategory;
+  newCategory: string;
 }) => {
   if (!itemId) {
     return superSet;
@@ -104,7 +110,7 @@ const updateRecallCategory = ({
 };
 
 const updateActiveItemRecallCategory = (
-  context: LessonContext,
+  context: CardSetContext,
   recallCategory: RecallCategory
 ) => {
   if (!context.activeItem) {
@@ -116,7 +122,7 @@ const updateActiveItemRecallCategory = (
   );
 };
 
-const addActiveItemToPracticeSet = (context: LessonContext) => {
+const addActiveItemToPracticeSet = (context: CardSetContext) => {
   if (!context.activeItem) {
     return context.practiceSet;
   }
@@ -143,7 +149,7 @@ const removeFromPracticeSet = (
   return practiceSet.filter((item) => item.id !== itemId);
 };
 
-const getNextPracticeItem = (context: LessonContext): SuperSetItem | null => {
+const getNextPracticeItem = (context: CardSetContext): SuperSetItem | null => {
   if (!context.superSet) return null;
 
   // Find items marked for practice that aren't in the practice set
@@ -159,7 +165,7 @@ const getNextPracticeItem = (context: LessonContext): SuperSetItem | null => {
 /// ASSIGNED FUNCTIONS
 
 export const handleMarkForPractice = assign(
-  ({ context }: { context: LessonContext }) => {
+  ({ context }: { context: CardSetContext }) => {
     let updatedPracticeSet = context.practiceSet;
 
     if (practiceSetIsFull(context)) {
@@ -186,7 +192,7 @@ export const enterSwitchToTest = assign({
 });
 
 export const handleMarkAsMastered = assign(
-  ({ context }: { context: LessonContext }) => {
+  ({ context }: { context: CardSetContext }) => {
     // Remove the current item from practice set
     const updatedPracticeSet = removeFromPracticeSet(
       context.practiceSet,
@@ -211,7 +217,7 @@ export const handleMarkAsMastered = assign(
 );
 
 export const handleSkipItem = assign(
-  ({ context }: { context: LessonContext }) => {
+  ({ context }: { context: CardSetContext }) => {
     const updatedPracticeSet = removeFromPracticeSet(
       context.practiceSet,
       context.activeItem?.id
@@ -263,11 +269,15 @@ export const moveToNextPracticeSetItem = assign(({ context }) => {
 
 /// GUARDS
 
-const practiceSetIsFull = (context: LessonContext) => {
+const practiceSetIsFull = (context: CardSetContext) => {
   return context.practiceSet.length < context.practiceSetSize;
 };
 
-export const practiceSetIsEmpty = ({ context }: { context: LessonContext }) => {
+export const practiceSetIsEmpty = ({
+  context,
+}: {
+  context: CardSetContext;
+}) => {
   if (!context || !context.practiceSet) return true;
   return context.practiceSet.length === 0;
 };
@@ -275,7 +285,7 @@ export const practiceSetIsEmpty = ({ context }: { context: LessonContext }) => {
 export const hasPracticeSetPracticeItems = ({
   context,
 }: {
-  context: LessonContext;
+  context: CardSetContext;
 }) => {
   debugger;
   if (!context || !context.practiceSet) return false;
@@ -285,7 +295,7 @@ export const hasPracticeSetPracticeItems = ({
 export const hasSuperSetPracticeItems = ({
   context,
 }: {
-  context: LessonContext;
+  context: CardSetContext;
 }) => {
   if (!context || !context.superSet) return false;
   const superSetPracticeItems = context.superSet.filter(
@@ -294,12 +304,12 @@ export const hasSuperSetPracticeItems = ({
   return superSetPracticeItems.length > 0;
 };
 
-export const allItemsMastered = ({ context }: { context: LessonContext }) => {
+export const allItemsMastered = ({ context }: { context: CardSetContext }) => {
   if (!context || !context.superSet) return false;
   return context.superSet.every((item) => item.recallCategory === "mastered");
 };
 
-export const allItemsSeen = ({ context }: { context: LessonContext }) => {
+export const allItemsSeen = ({ context }: { context: CardSetContext }) => {
   if (!context || !context.superSet) return false;
   return context.superSet.every((item) => item.recallCategory !== "unseen");
 };

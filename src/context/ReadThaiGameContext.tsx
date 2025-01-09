@@ -2,8 +2,9 @@ import React, { createContext, useContext, useEffect } from "react";
 import { useGameSettings } from "../hooks/game/useGameSettings";
 import { useLessons } from "../hooks/game/useLessons";
 import { useMachine } from "@xstate/react";
-import { lessonMachine } from "@/machines/lessonMachine";
-import { SuperSetItem } from "@/types/lessons";
+import { cardSetMachine } from "@/machines/cardSetMachine";
+import { SuperSetItem, Lesson } from "@/types/lessons";
+import { StateFrom } from "xstate";
 
 interface ReadThaiGameContextType {
   // Game settings
@@ -11,9 +12,9 @@ interface ReadThaiGameContextType {
   toggleInvertTranslation: () => void;
 
   // Game state
-  gameState: any; // We'll type this properly later
-  lessons: any[]; // We'll type this properly later
-  currentLesson: any; // We'll type this properly later
+  gameState: StateFrom<typeof cardSetMachine>;
+  lessons: Lesson[];
+  currentLesson: Lesson | null;
   setCurrentLesson: (index: number) => void;
 
   // Progression state
@@ -43,7 +44,7 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const gameSettings = useGameSettings();
   const lessonState = useLessons();
-  const [state, send] = useMachine(lessonMachine);
+  const [state, send] = useMachine(cardSetMachine);
 
   // Self-initialize the lesson machine
   useEffect(() => {

@@ -1,28 +1,26 @@
 import { assign, setup } from "xstate";
-import { LessonContext, LessonEvent } from "./lessonActions";
-// import { createBrowserInspector } from "@statelyai/inspect";
 import {
-  initialize,
-  enterSwitchToPractice,
-  enterSwitchToFirstPass,
-  enterSwitchToTest,
-  moveToNextSuperSetItem,
-  moveToNextPracticeSetItem,
-  handleMarkForPractice,
-  handleMarkAsMastered,
-  handleSkipItem,
+  CardSetContext,
+  CardSetEvent,
   hasPracticeSetPracticeItems,
   hasSuperSetPracticeItems,
   practiceSetIsEmpty,
   allItemsMastered,
   allItemsSeen,
-} from "./lessonActions";
+  moveToNextSuperSetItem,
+  moveToNextPracticeSetItem,
+  handleMarkForPractice,
+  handleMarkAsMastered,
+  handleSkipItem,
+  initialize,
+  enterSwitchToPractice,
+  enterSwitchToFirstPass,
+  enterSwitchToTest,
+} from "./cardSetActions";
 
-// const { inspect } = createBrowserInspector();
-
-const initialContext: LessonContext = {
+const initialContext: CardSetContext = {
   lessons: [],
-  progressionMode: "initializing",
+  progressionMode: "firstPass",
   superSet: [],
   practiceSet: [],
   practiceSetSize: 0,
@@ -32,10 +30,10 @@ const initialContext: LessonContext = {
   superSetIndex: 0,
 };
 
-export const lessonMachine = setup({
+export const cardSetMachine = setup({
   types: {} as {
-    context: LessonContext;
-    events: LessonEvent;
+    context: CardSetContext;
+    events: CardSetEvent;
   },
   guards: {
     hasPracticeSetPracticeItems,
