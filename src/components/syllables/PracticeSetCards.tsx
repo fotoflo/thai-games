@@ -22,6 +22,7 @@ const PracticeSetCards: React.FC<{ className?: string }> = ({
   const { practiceSet, activeItem } = useReadThaiGame();
 
   const isEmpty = practiceSet?.length === 0;
+  const hasMoreCards = false; // practiceSetSize > practiceSet?.length;
 
   if (isEmpty) {
     return <div className="h-24"></div>;
@@ -70,7 +71,7 @@ const PracticeSetCards: React.FC<{ className?: string }> = ({
               </div>
             );
           })}
-          {practiceSet?.length > 0 && (
+          {hasMoreCards && (
             <button
               // onClick={addMoreItems}
               className="w-[60px] h-[80px] bg-gray-800 hover:bg-blue-600 transition-colors rounded flex items-center justify-center"
