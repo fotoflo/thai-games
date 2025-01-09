@@ -21,6 +21,12 @@ const PracticeSetCards: React.FC<{ className?: string }> = ({
 }) => {
   const { practiceSet, activeItem } = useReadThaiGame();
 
+  const isEmpty = practiceSet?.length === 0;
+
+  if (isEmpty) {
+    return <div className="h-24"></div>;
+  }
+
   return (
     <div className={`flex flex-col relative ${className}`}>
       <div className="flex items-center justify-center gap-2 my-2">
