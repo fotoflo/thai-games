@@ -1,9 +1,10 @@
 import React from "react";
-import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
+import { useReadThaiGame } from "../context/ReadThaiGameContext";
 import GameHeader from "../components/GameHeader";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import PracticeSetCards from "@/components/syllables/PracticeSetCards";
 import ItemDisplay from "@/components/syllables/ItemDisplay";
+import { Lesson } from "@/types/lessons";
 
 interface DebugSection {
   title: string;
@@ -23,7 +24,27 @@ interface ButtonGroup {
 }
 
 const DebugPage: React.FC = () => {
-  const gameState = useReadThaiGameState();
+  const {
+    // Game state
+    gameState,
+    activeItem,
+    superSet,
+    practiceSet,
+    superSetIndex,
+    practiceSetIndex,
+    progressionMode,
+    lessons,
+    currentLesson,
+    setCurrentLesson,
+
+    // Actions
+    nextItem,
+    handleMarkForPractice,
+    handleMarkAsMastered,
+    handleSkipItem,
+    handleSwitchToPracticeMode,
+    handleSwitchToFirstPassMode,
+  } = useReadThaiGame();
 
   const renderSection = ({ title, data }: DebugSection) => (
     <div className="bg-gray-800 rounded-lg p-4 w-full break-inside-avoid mb-4">
@@ -58,23 +79,23 @@ const DebugPage: React.FC = () => {
       buttons: [
         {
           label: "Next Item",
-          onClick: gameState.nextItem,
-          disabled: !gameState.activeItem,
+          onClick: nextItem,
+          disabled: !activeItem,
         },
         {
           label: "Mark for Practice",
-          onClick: gameState.handleMarkForPractice,
-          disabled: !gameState.activeItem,
+          onClick: handleMarkForPractice,
+          disabled: !activeItem,
         },
         {
           label: "Mark as Mastered",
-          onClick: gameState.handleMarkAsMastered,
-          disabled: !gameState.activeItem,
+          onClick: handleMarkAsMastered,
+          disabled: !activeItem,
         },
         {
           label: "Skip Item",
-          onClick: gameState.handleSkipItem,
-          disabled: !gameState.activeItem,
+          onClick: handleSkipItem,
+          disabled: !activeItem,
         },
       ],
     },
@@ -83,13 +104,13 @@ const DebugPage: React.FC = () => {
       buttons: [
         {
           label: "First Pass Mode",
-          onClick: () => gameState.handleSwitchToFirstPassMode(),
-          disabled: gameState.progressionMode === "firstPass",
+          onClick: handleSwitchToFirstPassMode,
+          disabled: progressionMode === "firstPass",
         },
         {
           label: "Practice Mode",
-          onClick: () => gameState.handleSwitchToPracticeMode(),
-          disabled: gameState.progressionMode === "practice",
+          onClick: handleSwitchToPracticeMode,
+          disabled: progressionMode === "practice",
         },
       ],
     },
@@ -99,8 +120,8 @@ const DebugPage: React.FC = () => {
         {
           label: "Reset Lesson",
           onClick: () => {
-            gameState.setCurrentLesson(0);
-            gameState.setProgressionMode("firstPass");
+            setCurrentLesson(0);
+            handleSwitchToFirstPassMode();
           },
           disabled: false,
         },
@@ -117,31 +138,31 @@ const DebugPage: React.FC = () => {
 
   const sections: DebugSection[] = [
     {
-      title: `Active Item (simplified) - ${gameState.superSetIndex}`,
+      title: `Active Item (simplified) - ${superSetIndex}`,
       data: {
-        id: gameState.activeItem?.id,
-        thai: gameState.activeItem?.item.sides[0].markdown,
-        english: gameState.activeItem?.item.sides[1].markdown,
-        tags: gameState.activeItem?.item.tags,
-        recallCategory: gameState.activeItem?.recallCategory,
+        id: activeItem?.id,
+        thai: activeItem?.item.sides[0].markdown,
+        english: activeItem?.item.sides[1].markdown,
+        tags: activeItem?.item.tags,
+        recallCategory: activeItem?.recallCategory,
       },
       priority: 2,
     },
     {
       title: "Active Item Index",
       data: {
-        superSetIndex: gameState.superSetIndex,
-        practiceSetIndex: gameState.practiceSetIndex,
+        superSetIndex,
+        practiceSetIndex,
       },
       priority: 1,
     },
     {
       title: "SuperSet (simplified)",
       data: {
-        length: gameState.superSet.length,
-        items: gameState.superSet.map((entry) => ({
+        length: superSet.length,
+        items: superSet.map((entry) => ({
           id: entry.id,
-          recallCategory: entry.item.recallCategory,
+          recallCategory: entry.recallCategory,
         })),
       },
       priority: 1,
@@ -149,33 +170,28 @@ const DebugPage: React.FC = () => {
     {
       title: "Lesson State",
       data: {
-        currentLesson: gameState.currentLesson,
-        lesson: gameState?.lessons[gameState.currentLesson]?.name,
-        progressionMode: gameState.progressionMode,
-        lessonItems: gameState?.lessons[gameState.currentLesson]?.items.map(
-          (item) => item.id
+        currentLesson,
+        lesson: lessons?.[currentLesson]?.name,
+        progressionMode,
+        lessonItems: lessons?.[currentLesson]?.items.map(
+          (item: Lesson) => item.id
         ),
       },
       priority: 2,
     },
     {
       title: "Active Items",
-      data: gameState.activeItem,
+      data: activeItem,
       priority: 3,
     },
     {
-      title: "Lesson Subset",
-      data: gameState.lessonSubset,
-      priority: 2,
-    },
-    {
       title: "Game State",
-      data: gameState.gameState,
+      data: gameState,
       priority: 2,
     },
     {
       title: "Working Set",
-      data: gameState.superSet,
+      data: superSet,
       priority: 3,
     },
   ];
@@ -184,9 +200,7 @@ const DebugPage: React.FC = () => {
     <div className="min-h-screen bg-gray-900 p-4">
       <GameHeader title="Debug View" darkMode={true} />
 
-      <span className="text-white">
-        Current Mode: {gameState.progressionMode}
-      </span>
+      <span className="text-white">Current Mode: {progressionMode}</span>
 
       <div className="max-w-7xl mx-auto">
         {/* Actions Section */}
@@ -209,13 +223,13 @@ const DebugPage: React.FC = () => {
         </div>
 
         <SuperSetVisualizer
-          superSet={gameState.superSet}
-          superSetIndex={gameState.superSetIndex}
+          superSet={superSet}
+          superSetIndex={superSetIndex}
           className="mb-5"
         />
 
         <ItemDisplay
-          superSetItem={gameState.activeItem}
+          superSetItem={activeItem}
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
@@ -223,10 +237,7 @@ const DebugPage: React.FC = () => {
           invertTranslation={false}
         />
 
-        <PracticeSetCards
-          practiceSet={gameState.practiceSet}
-          activeItem={gameState.activeItem}
-        />
+        <PracticeSetCards practiceSet={practiceSet} activeItem={activeItem} />
 
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">

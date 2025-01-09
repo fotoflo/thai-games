@@ -1,6 +1,6 @@
-import { createMachine, assign, setup } from "xstate";
+import { assign, setup } from "xstate";
 import { LessonContext, LessonEvent } from "./lessonActions";
-import { createBrowserInspector } from "@statelyai/inspect";
+// import { createBrowserInspector } from "@statelyai/inspect";
 import {
   initialize,
   enterSwitchToPractice,
@@ -18,7 +18,7 @@ import {
   allItemsSeen,
 } from "./lessonActions";
 
-const { inspect } = createBrowserInspector();
+// const { inspect } = createBrowserInspector();
 
 const initialContext: LessonContext = {
   lessons: [],
@@ -33,7 +33,6 @@ const initialContext: LessonContext = {
 };
 
 export const lessonMachine = setup({
-  inspect,
   types: {} as {
     context: LessonContext;
     events: LessonEvent;

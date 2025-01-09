@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useReadThaiGameState } from "../hooks/useReadThaiGameState";
+import React, { useState } from "react";
+import { useReadThaiGame } from "../context/ReadThaiGameContext";
 import ItemDisplay from "../components/syllables/ItemDisplay";
 import MasteryControls from "../components/syllables/MasteryControls";
 import WelcomeModal from "../components/ReadThaiWelcomeModal";
@@ -12,8 +12,7 @@ import ToggleInvertTranslationButton from "../components/syllables/ToggleInvertT
 import SettingsHamburger from "../components/ui/SettingsHamburger";
 import Divider from "../components/ui/divider";
 import LessonDetails from "../components/syllables/LessonDetailScreen";
-import { Lesson, RecallCategory, SuperSetItem } from "../types/lessons";
-import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
+import { Lesson } from "../types/lessons";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
@@ -28,48 +27,31 @@ const IndexPage: React.FC = () => {
     invertTranslation,
     toggleInvertTranslation,
 
-    // Working set state
-    superSet,
+    // Game state
     activeItem,
-    setActiveItem,
-    addMoreItems,
-
-    // Lesson management
     lessons,
     currentLesson,
     setCurrentLesson,
 
     // Progression
     progressionMode,
-    setProgressionMode,
+    handleSwitchToPracticeMode,
 
+    // Actions
+    nextItem,
     handleMarkForPractice,
     handleMarkAsMastered,
     handleSkipItem,
 
-    // Progress tracking
-    lessonSubset,
-  } = useReadThaiGameState();
+    // Sets
+    practiceSet,
+  } = useReadThaiGame();
 
   const [displayTrigger, setDisplayTrigger] = useState<DisplayTrigger>(null);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false);
   const [lessonDetailsSelectedLesson, setLessonDetailsSelectedLesson] =
     useState<LessonDetailsSelection | null>(null);
-
-  // Move the addMoreItems logic into useEffect
-  useEffect(() => {
-    if (!activeItem && currentLesson >= 0) {
-      addMoreItems(5);
-    }
-  }, [activeItem, currentLesson, addMoreItems]);
-
-  const handleCardSelect = useCallback(
-    (item: SuperSetItem) => {
-      setActiveItem(item);
-    },
-    [setActiveItem]
-  );
 
   const openSettings = () => setShowSettingsContainer(true);
   const closeSettings = () => setShowSettingsContainer(false);
@@ -82,16 +64,11 @@ const IndexPage: React.FC = () => {
     setCurrentLesson(index);
   };
 
-  const displayItem = activeItem?.lessonItem;
-
-  if (!displayItem) {
+  if (!activeItem) {
     return (
       <div className="flex items-center justify-center mb-10">
         <p className="text-2xl text-gray-500">
-          {progressionMode === "firstPass" &&
-          lessonSubset.unseenItems.length === 0
-            ? "All items have been reviewed!"
-            : "No item selected. Please select a lesson to study."}
+          No item selected. Please select a lesson to study.
         </p>
       </div>
     );
@@ -106,9 +83,10 @@ const IndexPage: React.FC = () => {
 
       <div className="p-4 pt-12 relative min-h-screen bg-gray-900 text-white">
         <SettingsHamburger onClick={openSettings} />
+
         {/* Active Item Display */}
         <ItemDisplay
-          vocabItem={displayItem}
+          superSetItem={activeItem}
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
@@ -116,40 +94,22 @@ const IndexPage: React.FC = () => {
           invertTranslation={invertTranslation}
         />
 
-        <CheckTranslationButton
-          onClick={() => setDisplayTrigger("CheckTranslationButton")}
-          lessonItem={displayItem}
-        />
-
         <FlashCardModal
-          vocabItem={displayItem}
+          superSetItem={activeItem}
           onNext={() => {
-            if (progressionMode !== "firstPass") {
-              addMoreItems();
-            }
+            nextItem();
             setDisplayTrigger(null);
           }}
           trigger={displayTrigger}
           onClose={() => setDisplayTrigger(null)}
           mode={progressionMode}
-          lessonSubset={lessonSubset}
-          onFirstPassChoice={(choice) => {
-            if (activeItem) {
-              handleFirstPassChoice(activeItem.id, choice as RecallCategory);
-            }
-          }}
         />
+
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
           {/* Mastery Controls */}
           <MasteryControls
-            lessonSubset={lessonSubset}
-            onRatingSelect={() => {
-              if (progressionMode !== "firstPass") {
-                addMoreItems();
-              }
-            }}
             mode={progressionMode}
             handleMarkForPractice={handleMarkForPractice}
             handleMarkAsMastered={handleMarkAsMastered}
@@ -161,8 +121,6 @@ const IndexPage: React.FC = () => {
 
           {/* Practice Set Display */}
           <PracticeSetCards practiceSet={practiceSet} activeItem={activeItem} />
-
-          <pre>{false && JSON.stringify(activeItem, null, 2)}</pre>
 
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
@@ -179,7 +137,7 @@ const IndexPage: React.FC = () => {
 
             <ProgressionSelector
               progressionMode={progressionMode}
-              onModeChange={setProgressionMode}
+              onModeChange={handleSwitchToPracticeMode}
             />
 
             <ToggleInvertTranslationButton
@@ -188,6 +146,7 @@ const IndexPage: React.FC = () => {
             />
           </div>
         </div>
+
         {/* Modals */}
         {showSettingsContainer && (
           <SettingsModalContainer onClose={closeSettings} />

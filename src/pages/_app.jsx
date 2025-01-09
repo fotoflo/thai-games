@@ -2,6 +2,7 @@ import Script from 'next/script';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import '../styles/globals.css'; // Ensure this line is present\
+import { ReadThaiGameProvider } from '@/context/ReadThaiGameContext';
 
 const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GTAG; // Use the environment variable
 
@@ -42,7 +43,9 @@ function MyApp({ Component, pageProps }) {
           `,
         }}
       />
-      <Component {...pageProps} />
+          <ReadThaiGameProvider>
+            <Component {...pageProps} />
+          </ReadThaiGameProvider>
     </>
   );
 }
