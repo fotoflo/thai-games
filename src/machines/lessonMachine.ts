@@ -80,19 +80,10 @@ export const lessonMachine = setup({
           target: "practice",
           guard: "hasPracticeItems",
         },
-        SWITCH_TO_TEST: {
-          target: "test",
-        },
       },
     },
     practice: {
       entry: ["enterSwitchToPractice"],
-      always: [
-        {
-          target: "firstPass",
-          guard: "practiceSetIsEmpty",
-        },
-      ],
       on: {
         MARK_FOR_PRACTICE: {
           actions: ["handleMarkForPractice", "moveToNextPracticeSetItem"],
@@ -110,26 +101,8 @@ export const lessonMachine = setup({
           actions: "moveToNextPracticeSetItem",
           guard: "hasPracticeItems",
         },
-        SWITCH_TO_TEST: {
-          target: "test",
-        },
         SWITCH_TO_FIRST_PASS: {
           target: "firstPass",
-        },
-      },
-    },
-    test: {
-      entry: ["enterSwitchToTest"],
-      on: {
-        COMPLETE_TEST: {
-          target: "firstPass",
-        },
-        SWITCH_TO_FIRST_PASS: {
-          target: "firstPass",
-        },
-        SWITCH_TO_PRACTICE: {
-          target: "practice",
-          guard: "hasPracticeItems",
         },
       },
     },

@@ -91,11 +91,6 @@ const DebugPage: React.FC = () => {
           onClick: () => gameState.handleSwitchToPracticeMode(),
           disabled: gameState.progressionMode === "practice",
         },
-        {
-          label: "Test Mode",
-          onClick: () => gameState.handleSwitchToTestMode(),
-          disabled: gameState.progressionMode === "test",
-        },
       ],
     },
     {
@@ -128,6 +123,7 @@ const DebugPage: React.FC = () => {
         thai: gameState.activeItem?.item.sides[0].markdown,
         english: gameState.activeItem?.item.sides[1].markdown,
         tags: gameState.activeItem?.item.tags,
+        recallCategory: gameState.activeItem?.recallCategory,
       },
       priority: 2,
     },

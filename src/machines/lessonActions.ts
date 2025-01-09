@@ -44,9 +44,7 @@ export type LessonEvent =
   | { type: "SKIP_ITEM" }
   | { type: "NEXT_ITEM" }
   | { type: "SWITCH_TO_PRACTICE" }
-  | { type: "SWITCH_TO_TEST" }
-  | { type: "SWITCH_TO_FIRST_PASS" }
-  | { type: "COMPLETE_TEST" };
+  | { type: "SWITCH_TO_FIRST_PASS" };
 
 const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
   id: item.id,
@@ -249,6 +247,7 @@ export const moveToNextPracticeSetItem = assign(({ context }) => {
 });
 
 export const hasPracticeItems = ({ context }: { context: LessonContext }) => {
+  debugger;
   if (!context || !context.practiceSet) return false;
   return context.practiceSet.length > 0;
 };
