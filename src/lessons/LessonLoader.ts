@@ -2,18 +2,40 @@ import { Lesson, LessonSchema } from "@/types/lessons";
 import { allLessons } from "@/lessons/lessonsForImport";
 
 // Helper functions
-export const getLessonById = (id: string): Lesson | undefined =>
-  lessons.find((lesson) => lesson.id === id);
+export const getLessonById = ({
+  lessons,
+  id,
+}: {
+  lessons: Lesson[];
+  id: string;
+}): Lesson | undefined => lessons.find((lesson) => lesson.id === id);
 
-export const getLessonsByLevel = (level: Lesson["difficulty"]): Lesson[] =>
-  lessons.filter((lesson) => lesson.difficulty === level);
+export const getLessonsByLevel = ({
+  lessons,
+  level,
+}: {
+  lessons: Lesson[];
+  level: Lesson["difficulty"];
+}): Lesson[] => lessons.filter((lesson) => lesson.difficulty === level);
 
-export const getLessonsByTag = (tag: string): Lesson[] =>
-  lessons.filter((lesson) => lesson.categories.includes(tag));
+export const getLessonsByTag = ({
+  lessons,
+  tag,
+}: {
+  lessons: Lesson[];
+  tag: string;
+}): Lesson[] => lessons.filter((lesson) => lesson.categories.includes(tag));
 
-export const getLessonsByDifficulty = (
-  difficulty: Lesson["difficulty"]
-): Lesson[] => lessons.filter((lesson) => lesson.difficulty === difficulty);
+export const getLessonsByDifficulty = ({
+  lessons,
+  difficulty,
+}: {
+  lessons: Lesson[];
+  difficulty: Lesson["difficulty"];
+}): Lesson[] => lessons.filter((lesson) => lesson.difficulty === difficulty);
+
+// Validations and Loaders
+
 // Updated validation function with detailed error reporting
 export const validateLesson = (lesson: unknown): lesson is Lesson => {
   try {
