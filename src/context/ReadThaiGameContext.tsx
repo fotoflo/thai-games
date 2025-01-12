@@ -67,6 +67,8 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
     cardSetMachineState,
     // Lesson management
     lessons: lessonState.lessons,
+    lessonsLoading: lessonState.lessonsLoading,
+    lessonsError: lessonState.lessonsError,
     currentLesson: lessonState.currentLesson,
     setCurrentLesson: lessonState.setCurrentLesson,
 

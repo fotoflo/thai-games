@@ -3,8 +3,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import '../styles/globals.css'; // Ensure this line is present\
 import { ReadThaiGameProvider } from '@/context/ReadThaiGameContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GTAG; // Use the environment variable
+
+// Create a client
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -43,9 +47,11 @@ function MyApp({ Component, pageProps }) {
           `,
         }}
       />
-          <ReadThaiGameProvider>
-            <Component {...pageProps} />
-          </ReadThaiGameProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReadThaiGameProvider>
+          <Component {...pageProps} />
+        </ReadThaiGameProvider>
+      </QueryClientProvider>
     </>
   );
 }
