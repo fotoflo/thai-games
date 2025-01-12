@@ -37,6 +37,30 @@ export const lessonApi = {
     }
   },
 
+  createLesson: async (
+    lessonData: Omit<LessonWithRelations, "id" | "createdAt" | "updatedAt">
+  ): Promise<LessonWithRelations> => {
+    try {
+      const response = await fetch(getApiUrl("/api/lessons"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lessonData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create lesson");
+      }
+
+      const data = await response.json();
+      return data.lesson;
+    } catch (error) {
+      console.error("Failed to create lesson:", error);
+      throw error;
+    }
+  },
+
   getInitialState: async (): Promise<LessonState> => {
     const lessons = await lessonApi.loadLessons();
     return {

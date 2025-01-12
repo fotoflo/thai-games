@@ -3,9 +3,12 @@ import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 import { useReadThaiGame } from '@/context/ReadThaiGameContext';
+import { lessonApi } from '@/api/lessonApi';
+import { useQueryClient } from '@tanstack/react-query';
 
 const LessonListScreen = ({ onClose, onViewDetails }) => {
   const { lessons, setCurrentLesson } = useReadThaiGame();
+  const queryClient = useQueryClient();
 
   const handleLessonClick = (index) => {
     console.log("log handleLessonClick", index);
@@ -13,9 +16,55 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
     onClose(); // Close the modal
   };
 
-  const handleCreateLesson = () => {
-    // TODO: Implement lesson creation
-    console.log("Create new lesson");
+  const handleCreateLesson = async () => {
+    try {
+      // Create a mock lesson
+      const mockLesson = {
+        name: "New Test Lesson",
+        description: "This is a test lesson created from the UI",
+        subject: "Thai for English Speakers",
+        difficulty: "BEGINNER",
+        estimatedTime: 30,
+        totalItems: 2,
+        version: 1,
+        items: [
+          {
+            id: "test1",
+            recallCategory: "UNSEEN",
+            sides: [
+              {
+                markdown: "สวัสดี",
+                pronunciation: "sa-wat-dee",
+                notes: "Common greeting",
+                language: "th",
+              },
+              {
+                markdown: "hello",
+                language: "en",
+              }
+            ],
+            tags: ["greeting"],
+            categories: ["basics"],
+            intervalModifier: 1,
+            practiceHistory: []
+          }
+        ],
+        categories: ["basics"]
+      };
+
+      // Create the lesson
+      const newLesson = await lessonApi.createLesson(mockLesson);
+      console.log("Created lesson:", newLesson);
+
+      // Invalidate the lessons query to trigger a refetch
+      await queryClient.invalidateQueries({ queryKey: ["lessons"] });
+
+      // Close the modal
+      onClose();
+    } catch (error) {
+      console.error("Failed to create lesson:", error);
+      // TODO: Show error message to user
+    }
   };
 
   return (
@@ -48,7 +97,7 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4 text-emerald-500" />
                       <span className="text-sm font-medium text-emerald-500">
-                        {lesson.lessonType}
+                        {lesson.subject}
                       </span>
                     </div>
                     <h3 className="text-lg font-semibold text-slate-50">
@@ -56,11 +105,11 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
                     </h3>
                   </div>
                   <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm whitespace-nowrap">
-                    {lesson.lessonLevel}
+                    {lesson.difficulty}
                   </span>
                 </div>
                 
-                <p className="text-sm text-slate-300">{lesson.lessonDescription}</p>
+                <p className="text-sm text-slate-300">{lesson.description}</p>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-slate-400 text-sm">
