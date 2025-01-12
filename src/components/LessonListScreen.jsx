@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 import { useReadThaiGame } from '@/context/ReadThaiGameContext';
 import { lessonApi } from '@/api/lessonApi';
 import { useQueryClient } from '@tanstack/react-query';
+import GuidedLessonCreator from './GuidedLessonCreator';
 
 const LessonListScreen = ({ onClose, onViewDetails }) => {
   const { lessons, setCurrentLesson } = useReadThaiGame();
   const queryClient = useQueryClient();
+  const [showGuidedCreator, setShowGuidedCreator] = useState(false);
 
   const handleLessonClick = (index) => {
     console.log("log handleLessonClick", index);
@@ -16,56 +18,18 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
     onClose(); // Close the modal
   };
 
-  const handleCreateLesson = async () => {
-    try {
-      // Create a mock lesson
-      const mockLesson = {
-        name: "New Test Lesson",
-        description: "This is a test lesson created from the UI",
-        subject: "Thai for English Speakers",
-        difficulty: "BEGINNER",
-        estimatedTime: 30,
-        totalItems: 2,
-        version: 1,
-        items: [
-          {
-            id: "test1",
-            recallCategory: "UNSEEN",
-            sides: [
-              {
-                markdown: "สวัสดี",
-                pronunciation: "sa-wat-dee",
-                notes: "Common greeting",
-                language: "th",
-              },
-              {
-                markdown: "hello",
-                language: "en",
-              }
-            ],
-            tags: ["greeting"],
-            categories: ["basics"],
-            intervalModifier: 1,
-            practiceHistory: []
-          }
-        ],
-        categories: ["basics"]
-      };
-
-      // Create the lesson
-      const newLesson = await lessonApi.createLesson(mockLesson);
-      console.log("Created lesson:", newLesson);
-
-      // Invalidate the lessons query to trigger a refetch
-      await queryClient.invalidateQueries({ queryKey: ["lessons"] });
-
-      // Close the modal
-      onClose();
-    } catch (error) {
-      console.error("Failed to create lesson:", error);
-      // TODO: Show error message to user
-    }
-  };
+  if (showGuidedCreator) {
+    return (
+      <ModalContainer 
+        title="Create New Lesson" 
+        onClose={() => setShowGuidedCreator(false)}
+        showHeader={false}
+        className="w-full max-w-3xl"
+      >
+        <GuidedLessonCreator onClose={() => setShowGuidedCreator(false)} />
+      </ModalContainer>
+    );
+  }
 
   return (
     <ModalContainer 
@@ -75,7 +39,7 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
     >
       <div className="px-4 pb-4 space-y-4">
         <button
-          onClick={handleCreateLesson}
+          onClick={() => setShowGuidedCreator(true)}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 
                    bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl 
                    transition-colors font-medium"
