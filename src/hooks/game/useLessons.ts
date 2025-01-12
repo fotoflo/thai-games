@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Lesson, GameState } from "@/types/lessons";
 import { lessonApi } from "@/api/lessonApi";
+import { LessonWithRelations } from "@/services/lessonService";
 
 interface UseLessons {
   currentLesson: number;
   setCurrentLesson: (newLesson: number) => void;
   progressionMode: "firstPass" | "spacedRepetition" | "test";
   setProgressionMode: (mode: "firstPass" | "spacedRepetition" | "test") => void;
-  lessons: Lesson[]; // from the api
+  lessons: LessonWithRelations[]; // from the api
   lessonsLoading: boolean;
   lessonsError: Error | null;
 }
@@ -21,17 +21,13 @@ export const useLessons = (): UseLessons => {
 
   // Load lessons using React Query
   const {
-    data: lessons = [] as Lesson[],
+    data: lessons = [] as LessonWithRelations[],
     isLoading: lessonsLoading,
     error: lessonsError,
   } = useQuery({
     queryKey: ["lessons"],
     queryFn: lessonApi.loadLessons,
   });
-
-  if (!lessonsLoading) {
-    console.log("loaded lesson2222", lessons);
-  }
 
   return {
     currentLesson,

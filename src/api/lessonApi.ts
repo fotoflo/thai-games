@@ -1,11 +1,10 @@
-import { Lesson, LessonSchema } from "@/types/lessons";
-import { z } from "zod";
+import { LessonWithRelations } from "@/services/lessonService";
 
 export interface LessonState {
   currentLesson: number;
   progressionMode: "firstPass" | "spacedRepetition" | "test";
   lessonData: Record<string, never>;
-  lessons: Lesson[];
+  lessons: LessonWithRelations[];
 }
 
 // Default to empty string for browser, can be overridden for testing
@@ -24,21 +23,14 @@ const getApiUrl = (path: string) => {
 };
 
 export const lessonApi = {
-  loadLessons: async (): Promise<Lesson[]> => {
+  loadLessons: async (): Promise<LessonWithRelations[]> => {
     try {
       const response = await fetch(getApiUrl("/api/lessons"));
       if (!response.ok) {
         throw new Error("Failed to fetch lessons");
       }
       const data = await response.json();
-
-      // Validate the response data
-      const result = z.array(LessonSchema).safeParse(data.lessons);
-      if (!result.success) {
-        throw new Error("Invalid lesson data");
-      }
-
-      return result.data;
+      return data.lessons;
     } catch (error) {
       console.error("Failed to load lessons:", error);
       throw error;

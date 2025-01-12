@@ -1,17 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { loadLessons } from "@/lessons/LessonLoader";
-import { Lesson } from "@/types/lessons";
+import { lessonService } from "@/services/lessonService";
+import { LessonWithRelations } from "@/services/lessonService";
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ lessons: Lesson[] } | { error: string }>
+  res: NextApiResponse<{ lessons: LessonWithRelations[] } | { error: string }>
 ) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const lessons = loadLessons();
+    const lessons = await lessonService.getAllLessons();
     return res.status(200).json({ lessons });
   } catch (error) {
     console.error("Failed to load lessons:", error);

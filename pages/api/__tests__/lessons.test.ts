@@ -1,10 +1,13 @@
 import { createMocks } from "node-mocks-http";
 import handler from "../lessons/index";
-import { loadLessons } from "../../../src/lessons/LessonLoader";
+import { lessonService } from "@/services/lessonService";
+import type { LessonWithRelations } from "@/services/lessonService";
 
-// Mock the LessonLoader
-jest.mock("../../../src/lessons/LessonLoader", () => ({
-  loadLessons: jest.fn(),
+// Mock the lessonService
+jest.mock("@/services/lessonService", () => ({
+  lessonService: {
+    getAllLessons: jest.fn(),
+  },
 }));
 
 describe("/api/lessons", () => {
@@ -26,22 +29,26 @@ describe("/api/lessons", () => {
   });
 
   it("should return lessons successfully", async () => {
-    const mockLessons = [
+    const mockLessons: LessonWithRelations[] = [
       {
         id: "1",
         name: "Test Lesson 1",
         description: "Test Description 1",
-        categories: ["test"],
+        categories: [{ id: "1", name: "test" }],
         subject: "test",
-        difficulty: "beginner",
+        difficulty: "BEGINNER",
         estimatedTime: 30,
         totalItems: 0,
         version: 1,
         items: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ];
 
-    (loadLessons as jest.Mock).mockReturnValueOnce(mockLessons);
+    (lessonService.getAllLessons as jest.Mock).mockResolvedValueOnce(
+      mockLessons
+    );
 
     const { req, res } = createMocks({
       method: "GET",
@@ -53,13 +60,13 @@ describe("/api/lessons", () => {
     expect(JSON.parse(res._getData())).toEqual({
       lessons: mockLessons,
     });
-    expect(loadLessons).toHaveBeenCalled();
+    expect(lessonService.getAllLessons).toHaveBeenCalled();
   });
 
-  it("should handle errors from loadLessons", async () => {
-    (loadLessons as jest.Mock).mockImplementationOnce(() => {
-      throw new Error("Failed to load lessons");
-    });
+  it("should handle errors from getAllLessons", async () => {
+    (lessonService.getAllLessons as jest.Mock).mockRejectedValueOnce(
+      new Error("Failed to load lessons")
+    );
 
     const { req, res } = createMocks({
       method: "GET",
@@ -71,6 +78,6 @@ describe("/api/lessons", () => {
     expect(JSON.parse(res._getData())).toEqual({
       error: "Failed to load lessons",
     });
-    expect(loadLessons).toHaveBeenCalled();
+    expect(lessonService.getAllLessons).toHaveBeenCalled();
   });
 });
