@@ -25,7 +25,7 @@ interface ButtonGroup {
 
 const DebugPage: React.FC = () => {
   const {
-    gameState,
+    cardSetMachineState,
     activeItem,
     superSet,
     superSetIndex,
@@ -184,7 +184,7 @@ const DebugPage: React.FC = () => {
     },
     {
       title: "Game State",
-      data: gameState,
+      data: cardSetMachineState,
       priority: 2,
     },
     {

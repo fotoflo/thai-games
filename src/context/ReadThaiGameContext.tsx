@@ -4,6 +4,7 @@ import { useLessons } from "../hooks/game/useLessons";
 import { useMachine } from "@xstate/react";
 import { cardSetMachine } from "@/machines/cardSetMachine";
 import { SuperSetItem, Lesson } from "@/types/lessons";
+
 import { StateFrom } from "xstate";
 
 interface ReadThaiGameContextType {
@@ -12,7 +13,8 @@ interface ReadThaiGameContextType {
   toggleInvertTranslation: () => void;
 
   // Game state
-  gameState: StateFrom<typeof cardSetMachine>;
+  cardSetMachineState: StateFrom<typeof cardSetMachine>;
+
   lessons: Lesson[];
   currentLesson: Lesson | null;
   setCurrentLesson: (index: number) => void;
@@ -44,45 +46,50 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const gameSettings = useGameSettings();
   const lessonState = useLessons();
-  const [state, send] = useMachine(cardSetMachine);
+  const [cardSetMachineState, sendToCardSetMachine] =
+    useMachine(cardSetMachine);
 
   // Self-initialize the lesson machine
   useEffect(() => {
     if (lessonState.lessons && lessonState.lessons.length > 0) {
-      send({
+      sendToCardSetMachine({
         type: "INITIALIZE",
         lessonIndex: 0,
         lessons: lessonState.lessons,
       });
     }
-  }, [send, lessonState.lessons]);
+  }, [sendToCardSetMachine, lessonState.lessons]);
 
   const value = {
     // Game settings
     ...gameSettings,
-    gameState: state,
-
+    gameState: cardSetMachineState,
+    cardSetMachineState,
     // Lesson management
     lessons: lessonState.lessons,
     currentLesson: lessonState.currentLesson,
     setCurrentLesson: lessonState.setCurrentLesson,
 
-    progressionMode: state.context.progressionMode,
-    handleSwitchToPracticeMode: () => send({ type: "SWITCH_TO_PRACTICE" }),
-    handleSwitchToFirstPassMode: () => send({ type: "SWITCH_TO_FIRST_PASS" }),
+    progressionMode: cardSetMachineState.context.progressionMode,
+    handleSwitchToPracticeMode: () =>
+      sendToCardSetMachine({ type: "SWITCH_TO_PRACTICE" }),
+    handleSwitchToFirstPassMode: () =>
+      sendToCardSetMachine({ type: "SWITCH_TO_FIRST_PASS" }),
 
-    superSet: state.context.superSet,
-    practiceSet: state.context.practiceSet,
-    practiceSetSize: state.context.practiceSetSize,
+    superSet: cardSetMachineState.context.superSet,
+    practiceSet: cardSetMachineState.context.practiceSet,
+    practiceSetSize: cardSetMachineState.context.practiceSetSize,
 
-    activeItem: state.context.activeItem,
-    superSetIndex: state.context.superSetIndex,
-    practiceSetIndex: state.context.practiceSetIndex,
+    activeItem: cardSetMachineState.context.activeItem,
+    superSetIndex: cardSetMachineState.context.superSetIndex,
+    practiceSetIndex: cardSetMachineState.context.practiceSetIndex,
 
-    nextItem: () => send({ type: "NEXT_ITEM" }),
-    handleMarkForPractice: () => send({ type: "MARK_FOR_PRACTICE" }),
-    handleMarkAsMastered: () => send({ type: "MARK_AS_MASTERED" }),
-    handleSkipItem: () => send({ type: "SKIP_ITEM" }),
+    nextItem: () => sendToCardSetMachine({ type: "NEXT_ITEM" }),
+    handleMarkForPractice: () =>
+      sendToCardSetMachine({ type: "MARK_FOR_PRACTICE" }),
+    handleMarkAsMastered: () =>
+      sendToCardSetMachine({ type: "MARK_AS_MASTERED" }),
+    handleSkipItem: () => sendToCardSetMachine({ type: "SKIP_ITEM" }),
   };
 
   return (

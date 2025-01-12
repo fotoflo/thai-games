@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { Lesson, GameState } from "../../types/lessons";
-import { loadLessons } from "../../lessons/LessonLoader";
+import { Lesson, GameState } from "@/types/lessons";
+import { loadLessons } from "@/lessons/LessonLoader";
 
 interface UseLessons {
   currentLesson: number;
