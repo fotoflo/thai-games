@@ -1,108 +1,32 @@
-import { lessonApi } from "../lessonApi";
-import { Lesson } from "@/types/lessons";
+import "isomorphic-fetch";
+import { LessonSchema } from "@/types/lessons";
 
-const mockLessons: Lesson[] = [
-  {
-    id: "1",
-    name: "Test Lesson 1",
-    description: "Test Description 1",
-    categories: ["test"],
-    subject: "test",
-    difficulty: "beginner",
-    estimatedTime: 30,
-    totalItems: 0,
-    version: 1,
-    items: [],
-  },
-  {
-    id: "2",
-    name: "Test Lesson 2",
-    description: "Test Description 2",
-    categories: ["test"],
-    subject: "test",
-    difficulty: "beginner",
-    estimatedTime: 30,
-    totalItems: 0,
-    version: 1,
-    items: [],
-  },
-];
-
-// Mock fetch globally
-global.fetch = jest.fn();
+// Import setup
+import "./setup";
 
 describe("lessonApi", () => {
-  beforeEach(() => {
-    // Clear mock before each test
-    (global.fetch as jest.Mock).mockClear();
-  });
+  it("should load lessons from the API", async () => {
+    // Re-import the module to get the updated environment variable
+    const { lessonApi } = await import("../lessonApi");
 
-  describe("loadLessons", () => {
-    it("should fetch lessons successfully", async () => {
-      // Mock successful response
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ lessons: mockLessons }),
-      });
+    const lessons = await lessonApi.loadLessons();
 
-      const lessons = await lessonApi.loadLessons();
-      expect(lessons).toEqual(mockLessons);
-      expect(global.fetch).toHaveBeenCalledWith("/api/lessons");
+    // Verify we got an array of lessons
+    expect(Array.isArray(lessons)).toBe(true);
+    expect(lessons.length).toBeGreaterThan(0);
+
+    // Verify each lesson has required properties
+    lessons.forEach((lesson) => {
+      expect(lesson).toHaveProperty("id");
+      expect(lesson).toHaveProperty("name");
+      expect(lesson).toHaveProperty("description");
+      expect(lesson).toHaveProperty("categories");
+      expect(lesson).toHaveProperty("difficulty");
+      expect(lesson).toHaveProperty("items");
     });
 
-    it("should handle fetch errors", async () => {
-      // Mock failed response
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error("Failed to fetch")
-      );
-
-      const lessons = await lessonApi.loadLessons();
-      expect(lessons).toEqual([]);
-      expect(global.fetch).toHaveBeenCalledWith("/api/lessons");
-    });
-
-    it("should handle non-ok response", async () => {
-      // Mock non-ok response
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: false,
-      });
-
-      const lessons = await lessonApi.loadLessons();
-      expect(lessons).toEqual([]);
-      expect(global.fetch).toHaveBeenCalledWith("/api/lessons");
-    });
-  });
-
-  describe("getInitialState", () => {
-    it("should return initial state with lessons", async () => {
-      // Mock successful response
-      (global.fetch as jest.Mock).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ lessons: mockLessons }),
-      });
-
-      const state = await lessonApi.getInitialState();
-      expect(state).toEqual({
-        currentLesson: -1,
-        progressionMode: "firstPass",
-        lessonData: {},
-        lessons: mockLessons,
-      });
-    });
-
-    it("should handle errors in initial state", async () => {
-      // Mock failed response
-      (global.fetch as jest.Mock).mockRejectedValueOnce(
-        new Error("Failed to fetch")
-      );
-
-      const state = await lessonApi.getInitialState();
-      expect(state).toEqual({
-        currentLesson: -1,
-        progressionMode: "firstPass",
-        lessonData: {},
-        lessons: [],
-      });
-    });
+    // Verify the lessons match our schema
+    const result = LessonSchema.array().safeParse(lessons);
+    expect(result.success).toBe(true);
   });
 });

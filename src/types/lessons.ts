@@ -71,7 +71,7 @@ export type Lesson = {
   name: string;
   description: string;
   categories: string[];
-  subject: string;
+  subject?: string;
   difficulty: "beginner" | "intermediate" | "advanced";
   estimatedTime: number; // minutes
   totalItems: number;

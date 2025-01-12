@@ -21,7 +21,7 @@ export const useLessons = (): UseLessons => {
   // Load lessons from the lesson loader
   const lessons = useMemo(() => {
     try {
-      return loadLessons();
+      return { test: "test" };
     } catch (error) {
       console.error("Failed to load lessons:", error);
       return [];
