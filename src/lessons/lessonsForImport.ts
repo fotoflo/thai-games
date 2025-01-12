@@ -1,9 +1,9 @@
 // Import only the active lessons
-import basicThai from "./basic-thai.json";
-import words1 from "./words1.json";
-import envirenmentalSigns from "./envirenmental-signs.json";
-import food2vegMd from "./food2vegMd.json";
-import verbs from "./verbs.json";
+import basicThai from "./basic-thai.json" assert { type: "json" };
+import words1 from "./words1.json" assert { type: "json" };
+import envirenmentalSigns from "./envirenmental-signs.json" assert { type: "json" };
+import food2vegMd from "./food2vegMd.json" assert { type: "json" };
+import verbs from "./verbs.json" assert { type: "json" };
 
 // Comment out unused lessons
 // import atTheBar from "./at-the-bar.json";

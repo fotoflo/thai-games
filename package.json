@@ -2,6 +2,7 @@
   "name": "thai-games",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -16,6 +17,7 @@
   "dependencies": {
     "@dayone-labs/lambda-queue-serverless": "^0.1.4",
     "@notionhq/client": "^2.2.15",
+    "@prisma/client": "^6.2.1",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-label": "^2.1.1",
@@ -28,7 +30,9 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.441.0",
+    "mysql2": "^3.12.0",
     "next": "^14.1.3",
+    "prisma": "^6.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
