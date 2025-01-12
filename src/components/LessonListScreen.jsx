@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 import { useReadThaiGame } from '@/context/ReadThaiGameContext';
@@ -13,6 +13,11 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
     onClose(); // Close the modal
   };
 
+  const handleCreateLesson = () => {
+    // TODO: Implement lesson creation
+    console.log("Create new lesson");
+  };
+
   return (
     <ModalContainer 
       title="Choose a Lesson" 
@@ -20,6 +25,16 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
       showHeader={true}
     >
       <div className="px-4 pb-4 space-y-4">
+        <button
+          onClick={handleCreateLesson}
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 
+                   bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl 
+                   transition-colors font-medium"
+        >
+          <Plus className="w-5 h-5" />
+          Create New Lesson
+        </button>
+
         <div className="grid grid-cols-1 gap-3">
           {lessons.map((lesson, index) => (
             <div 
