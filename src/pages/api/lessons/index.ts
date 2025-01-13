@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { lessonService } from "@/services/lessonService";
 import { LessonWithRelations } from "@/services/lessonService";
+import { LessonSchema } from "@/types/lessons";
 
 export default async function handler(
   req: NextApiRequest,
@@ -37,7 +38,7 @@ export default async function handler(
           });
         }
 
-        const lesson = await lessonService.createLesson(validationResult.data);
+        const lesson = await lessonService.createLesson(validationResult?.data);
         return res.status(201).json({ lesson });
       } catch (error) {
         console.error("Failed to create lesson:", error);

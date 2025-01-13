@@ -10,8 +10,8 @@ import {
   CheckCircle2,
   XCircle,
   RefreshCw,
-  Upload
 } from 'lucide-react';
+import LessonJsonUploader from './lessons/LessonJsonUploader';
 
 const GuidedLessonCreator = ({ onClose }) => {
   const { invalidateLessons } = useReadThaiGame();
@@ -19,15 +19,12 @@ const GuidedLessonCreator = ({ onClose }) => {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState(null);
-  const [jsonContent, setJsonContent] = useState(null);
-  const [jsonError, setJsonError] = useState(null);
   const [isCreatingSubject, setIsCreatingSubject] = useState(false);
   const [isCreatingLevel, setIsCreatingLevel] = useState(false);
   const [isCreatingTopic, setIsCreatingTopic] = useState(false);
   const [newSubject, setNewSubject] = useState('');
   const [newLevel, setNewLevel] = useState('');
   const [newTopic, setNewTopic] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const popularSubjects = [
     { id: 'thai', name: 'Thai', icon: '🇹🇭' },
@@ -49,61 +46,9 @@ const GuidedLessonCreator = ({ onClose }) => {
     { id: 'advanced', name: 'Advanced' },
   ];
 
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    try {
-      const text = await file.text();
-      const json = JSON.parse(text);
-      
-      // Basic validation
-      if (!json.name || !json.items || !Array.isArray(json.items)) {
-        throw new Error('Invalid lesson format: must include name and items array');
-      }
-
-      setJsonContent(json);
-      setJsonError(null);
-    } catch (error) {
-      console.error('Error parsing JSON:', error);
-      setJsonError(error.message);
-      setJsonContent(null);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!jsonContent) return;
-    
-    setIsSubmitting(true);
-    try {
-      // Transform the lesson data to match Prisma schema
-      const transformedLesson = {
-        ...jsonContent,
-        difficulty: jsonContent.difficulty.toUpperCase(),
-      };
-
-      const response = await fetch('/api/lessons', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(transformedLesson),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create lesson');
-      }
-
-      const data = await response.json();
-      console.log('Lesson created:', data);
-      await invalidateLessons();
-      onClose();
-    } catch (error) {
-      console.error('Error creating lesson:', error);
-      setJsonError(error.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleUploadSuccess = async (data) => {
+    await invalidateLessons();
+    onClose();
   };
 
   return (
@@ -136,98 +81,7 @@ const GuidedLessonCreator = ({ onClose }) => {
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto px-4 py-4 space-y-8">
           {isJsonMode ? (
-            <Card className="bg-gray-900 border-gray-800">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-gray-100">
-                    <Book className="h-5 w-5" />
-                    <h2 className="text-lg font-medium">Upload Lesson JSON</h2>
-                  </div>
-                  {jsonContent && (
-                    <Button 
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => {
-                        setJsonContent(null);
-                        setJsonError(null);
-                      }}
-                      className="text-gray-400 hover:text-gray-300"
-                    >
-                      Clear
-                    </Button>
-                  )}
-                </div>
-
-                <div className="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center">
-                  {jsonContent ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-center text-green-500">
-                        <CheckCircle2 className="h-8 w-8" />
-                      </div>
-                      <p className="text-gray-300">JSON validated successfully</p>
-                      <p className="text-sm text-gray-400">
-                        {jsonContent.name || 'Untitled Lesson'} • {
-                          jsonContent.items?.length || 0
-                        } cards
-                      </p>
-                      <Button
-                        onClick={handleSubmit}
-                        disabled={isSubmitting}
-                        className="w-full mt-4"
-                      >
-                        {isSubmitting ? 'Creating Lesson...' : 'Create Lesson'}
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <input
-                        type="file"
-                        accept=".json"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                        id="json-upload"
-                      />
-                      <label
-                        htmlFor="json-upload"
-                        className="cursor-pointer inline-flex flex-col items-center space-y-2"
-                      >
-                        <Upload className="h-8 w-8 text-gray-400" />
-                        <span className="text-gray-300">
-                          Click to upload JSON file
-                        </span>
-                        <span className="text-sm text-gray-400">
-                          or drag and drop
-                        </span>
-                      </label>
-                    </div>
-                  )}
-                  {jsonError && (
-                    <p className="mt-3 text-sm text-red-500">{jsonError}</p>
-                  )}
-                </div>
-
-                {jsonContent && (
-                  <div className="flex justify-end gap-2">
-                    <Button 
-                      variant="outline" 
-                      className="border-gray-700 hover:bg-gray-800"
-                      onClick={() => {
-                        setJsonContent(null);
-                        setJsonError(null);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      className="bg-blue-600 hover:bg-blue-700"
-                      onClick={onClose}
-                    >
-                      Import Lesson
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <LessonJsonUploader onUploadSuccess={handleUploadSuccess} onClose={onClose} />
           ) : (
             <>
               {/* Subject Selection */}
