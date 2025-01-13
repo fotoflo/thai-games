@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, CheckCircle2, FileUp, Type } from 'lucide-react';
+import { Upload, CheckCircle2, FileUp, Type, Copy, Check } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 
 const LessonJsonUploader = ({ onUploadSuccess }) => {
   const [jsonContent, setJsonContent] = useState(null);
   const [jsonError, setJsonError] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadMethod, setUploadMethod] = useState('paste'); // Changed default to 'paste'
+  const [uploadMethod, setUploadMethod] = useState('paste');
   const [pastedText, setPastedText] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const promptText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...";
+
+  const handleCopyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(promptText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy text:', err);
+    }
+  };
 
   const validateAndSetJson = (json) => {
     try {
@@ -135,6 +148,30 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
               Clear
             </Button>
           )}
+        </div>
+
+        {/* Prompt Copy Section */}
+        <div className="flex flex-col gap-1">
+          <div className="text-xs text-gray-500 font-medium">
+            Copy this prompt into your AI Assistant to create a lesson
+          </div>
+          <div className="flex items-center gap-2 p-2 bg-gray-800 rounded-md group relative">
+            <div className="flex-1 truncate text-sm text-gray-400">
+              {promptText}
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleCopyPrompt}
+              className="shrink-0 text-gray-400 hover:text-gray-300"
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-green-500" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* Upload Method Tabs */}

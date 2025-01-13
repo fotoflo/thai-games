@@ -46,7 +46,7 @@ const GuidedLessonCreator = ({ onClose }) => {
     { id: 'advanced', name: 'Advanced' },
   ];
 
-  const handleUploadSuccess = async (data) => {
+  const handleUploadSuccess = async () => {
     await invalidateLessons();
     onClose();
   };
@@ -58,6 +58,23 @@ const GuidedLessonCreator = ({ onClose }) => {
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-lg font-semibold text-gray-100">Create New Lesson</h1>
           <div className="flex items-center gap-3">
+            {!isJsonMode && selectedSubject && (
+              <Button
+                variant="ghost"
+                className="text-gray-100 hover:bg-gray-800"
+                onClick={() => {
+                  if (selectedTopic) {
+                    setSelectedTopic(null);
+                  } else if (selectedLevel) {
+                    setSelectedLevel(null);
+                  } else {
+                    setSelectedSubject(null);
+                  }
+                }}
+              >
+                Back
+              </Button>
+            )}
             <span className={`text-sm ${isJsonMode ? 'text-gray-400' : 'text-gray-100'}`}>AI Wizard</span>
             <button
               onClick={() => setIsJsonMode(!isJsonMode)}
@@ -125,7 +142,7 @@ const GuidedLessonCreator = ({ onClose }) => {
                             key={subject.id}
                             onClick={() => setSelectedSubject(subject)}
                             variant="outline"
-                            className="justify-start text-lg border-gray-700 hover:bg-gray-800"
+                            className="justify-start text-lg border-gray-700 hover:bg-gray-800 text-gray-100"
                           >
                             <span className="mr-2 text-2xl">{subject.icon}</span>
                             {subject.name}
@@ -133,7 +150,7 @@ const GuidedLessonCreator = ({ onClose }) => {
                         ))}
                         <Button 
                           variant="outline" 
-                          className="border-gray-700 hover:bg-gray-800"
+                          className="border-gray-700 hover:bg-gray-800 text-gray-100"
                           onClick={() => {
                             setIsCreatingSubject(true);
                             setNewSubject('');
@@ -188,14 +205,14 @@ const GuidedLessonCreator = ({ onClose }) => {
                             key={level.id}
                             onClick={() => setSelectedLevel(level)}
                             variant="outline"
-                            className="border-gray-700 hover:bg-gray-800"
+                            className="border-gray-700 hover:bg-gray-800 text-gray-100"
                           >
                             {level.name}
                           </Button>
                         ))}
                         <Button 
                           variant="outline" 
-                          className="border-gray-700 hover:bg-gray-800"
+                          className="border-gray-700 hover:bg-gray-800 text-gray-100"
                           onClick={() => {
                             setIsCreatingLevel(true);
                             setNewLevel('');
@@ -251,7 +268,7 @@ const GuidedLessonCreator = ({ onClose }) => {
                             key={topic.id}
                             onClick={() => setSelectedTopic(topic)}
                             variant="outline"
-                            className="justify-start text-lg border-gray-700 hover:bg-gray-800"
+                            className="justify-start text-lg border-gray-700 hover:bg-gray-800 text-gray-100"
                           >
                             <span className="mr-2 text-2xl">{topic.icon}</span>
                             {topic.name}
@@ -259,7 +276,7 @@ const GuidedLessonCreator = ({ onClose }) => {
                         ))}
                         <Button 
                           variant="outline" 
-                          className="border-gray-700 hover:bg-gray-800"
+                          className="border-gray-700 hover:bg-gray-800 text-gray-100"
                           onClick={() => {
                             setIsCreatingTopic(true);
                             setNewTopic('');
@@ -288,7 +305,7 @@ const GuidedLessonCreator = ({ onClose }) => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        className="border-gray-700 hover:bg-gray-800"
+                        className="border-gray-700 hover:bg-gray-800 text-gray-100"
                       >
                         <RefreshCw className="h-4 w-4 mr-2" />
                         Regenerate
@@ -326,10 +343,13 @@ const GuidedLessonCreator = ({ onClose }) => {
                     </div>
 
                     <div className="flex justify-end gap-2 pt-2">
-                      <Button variant="outline" className="border-gray-700 hover:bg-gray-800">
+                      <Button 
+                        variant="outline" 
+                        className="border-gray-700 hover:bg-gray-800 text-gray-100"
+                      >
                         Customize
                       </Button>
-                      <Button className="bg-blue-600 hover:bg-blue-700">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                         Create Lesson
                       </Button>
                     </div>
