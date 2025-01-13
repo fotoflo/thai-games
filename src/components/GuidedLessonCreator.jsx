@@ -41,9 +41,9 @@ const GuidedLessonCreator = ({ onClose }) => {
   ];
 
   const levels = [
-    { id: 'beginner', name: 'Beginner' },
-    { id: 'intermediate', name: 'Intermediate' },
-    { id: 'advanced', name: 'Advanced' },
+    { id: 'BEGINNER', name: 'Beginner' },
+    { id: 'INTERMEDIATE', name: 'Intermediate' },
+    { id: 'ADVANCED', name: 'Advanced' },
   ];
 
   const handleUploadSuccess = async () => {
@@ -56,7 +56,7 @@ const GuidedLessonCreator = ({ onClose }) => {
       {/* Header */}
       <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-lg font-semibold text-gray-100">Create New Lesson</h1>
+          <h1 className="text-lg font-semibold text-gray-100">Create New Lesson With AI</h1>
           <div className="flex items-center gap-3">
             {!isJsonMode && selectedSubject && (
               <Button

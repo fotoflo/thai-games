@@ -3,7 +3,7 @@
   "name": "First Words",
   "description": "Essential Thai vocabulary for beginners, covering basic greetings, polite expressions, and common descriptive words",
   "categories": ["basics", "greetings", "everyday-phrases", "adjectives"],
-  "difficulty": "beginner",
+  "difficulty": "BEGINNER",
   "subject": "Thai for English Speakers",
   "estimatedTime": 30,
   "totalItems": 10,

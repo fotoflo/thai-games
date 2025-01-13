@@ -18,7 +18,7 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
   if (showGuidedCreator) {
     return (
       <ModalContainer 
-        title="Create New Lesson" 
+        title="Create New Lesson With AI" 
         onClose={() => setShowGuidedCreator(false)}
         showHeader={false}
         className="w-full max-w-3xl"
@@ -42,7 +42,7 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
                    transition-colors font-medium"
         >
           <Plus className="w-5 h-5" />
-          Create New Lesson
+          Create New Lesson With AI
         </button>
 
         <div className="grid grid-cols-1 gap-3">

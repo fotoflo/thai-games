@@ -3,7 +3,7 @@
   "name": "Basic Thai",
   "description": "Basic Thai vocabulary focusing on simple words and common animals",
   "categories": ["basics", "animals", "nature"],
-  "difficulty": "beginner",
+  "difficulty": "BEGINNER",
   "subject": "Thai for English Speakers",
   "estimatedTime": 15,
   "totalItems": 2,
