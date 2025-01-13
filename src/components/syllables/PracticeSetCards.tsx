@@ -2,6 +2,8 @@ import React from "react";
 import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
 import { useReadThaiGame } from "@/context/ReadThaiGameContext";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 const getTextSizeClass = (text: string): string => {
   if (text.length <= 3) return "text-lg";
@@ -14,6 +16,15 @@ const getPhoneticSizeClass = (text: string): string => {
   if (text.length <= 5) return "text-xs";
   if (text.length <= 8) return "text-[10px]";
   return "text-[8px]";
+};
+
+const hasColoredSpans = (text: string): boolean => {
+  return text.includes("style='color:");
+};
+
+const stripHtml = (html: string): string => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.body.textContent || "";
 };
 
 const PracticeSetCards: React.FC<{ className?: string }> = ({
@@ -36,7 +47,10 @@ const PracticeSetCards: React.FC<{ className?: string }> = ({
             const text = item?.item?.sides?.[0]?.markdown;
             if (!text) return null;
 
-            const phoneticText = thaiToIPA(text);
+            const hasColors = hasColoredSpans(text);
+            const displayText = hasColors ? stripHtml(text) : text;
+            const phoneticText = thaiToIPA(stripHtml(text));
+
             return (
               <div
                 key={item.id}
@@ -50,13 +64,32 @@ const PracticeSetCards: React.FC<{ className?: string }> = ({
                 role="button"
                 tabIndex={0}
               >
-                <div
-                  className={`text-white ${getTextSizeClass(
-                    text
-                  )} leading-tight`}
-                >
-                  {text}
-                </div>
+                {hasColors ? (
+                  <div
+                    className={`text-white ${getTextSizeClass(
+                      displayText
+                    )} leading-tight`}
+                  >
+                    {displayText}
+                  </div>
+                ) : (
+                  <ReactMarkdown
+                    className={`text-white ${getTextSizeClass(
+                      text
+                    )} leading-tight`}
+                    rehypePlugins={[rehypeRaw]}
+                    components={{
+                      span: ({ ...props }) => (
+                        <span
+                          style={{ color: props.style?.color }}
+                          {...props}
+                        />
+                      ),
+                    }}
+                  >
+                    {text}
+                  </ReactMarkdown>
+                )}
                 <div
                   className={`text-gray-400 ${getPhoneticSizeClass(
                     phoneticText
