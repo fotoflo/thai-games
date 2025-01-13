@@ -1,9 +1,9 @@
-import Script from 'next/script';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import '../styles/globals.css'; // Ensure this line is present\
-import { ReadThaiGameProvider } from '@/context/ReadThaiGameContext';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Script from "next/script";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import "@/styles/globals.css"; // Ensure this line is present\
+import { ReadThaiGameProvider } from "../context/ReadThaiGameContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GTAG; // Use the environment variable
 
@@ -15,14 +15,14 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const handleRouteChange = (url) => {
-      window.gtag('config', GA_TRACKING_ID, {
+      window.gtag("config", GA_TRACKING_ID, {
         page_path: url,
       });
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router.events]);
 

@@ -3,13 +3,10 @@ import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 import { useReadThaiGame } from '@/context/ReadThaiGameContext';
-import { lessonApi } from '@/api/lessonApi';
-import { useQueryClient } from '@tanstack/react-query';
 import GuidedLessonCreator from './GuidedLessonCreator';
 
 const LessonListScreen = ({ onClose, onViewDetails }) => {
   const { lessons, setCurrentLesson } = useReadThaiGame();
-  const queryClient = useQueryClient();
   const [showGuidedCreator, setShowGuidedCreator] = useState(false);
 
   const handleLessonClick = (index) => {
