@@ -57,7 +57,7 @@ export const LessonSchema = z.object({
   name: z.string(),
   description: z.string(),
   categories: z.array(z.string()),
-  difficulty: z.enum(["beginner", "intermediate", "advanced"]),
+  difficulty: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
   estimatedTime: z.number(),
   totalItems: z.number(),
   version: z.number(),

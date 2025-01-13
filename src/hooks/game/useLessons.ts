@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { lessonApi } from "@/api/lessonApi";
 import { LessonWithRelations } from "@/services/lessonService";
 
@@ -11,9 +11,11 @@ interface UseLessons {
   lessons: LessonWithRelations[]; // from the api
   lessonsLoading: boolean;
   lessonsError: Error | null;
+  invalidateLessons: () => Promise<void>;
 }
 
 export const useLessons = (): UseLessons => {
+  const queryClient = useQueryClient();
   const [currentLesson, setCurrentLesson] = useState<number>(-1);
   const [progressionMode, setProgressionMode] = useState<
     "firstPass" | "spacedRepetition" | "test"
@@ -29,6 +31,10 @@ export const useLessons = (): UseLessons => {
     queryFn: lessonApi.loadLessons,
   });
 
+  const invalidateLessons = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["lessons"] });
+  };
+
   return {
     currentLesson,
     setCurrentLesson,
@@ -37,5 +43,6 @@ export const useLessons = (): UseLessons => {
     lessons,
     lessonsLoading,
     lessonsError,
+    invalidateLessons,
   };
 };

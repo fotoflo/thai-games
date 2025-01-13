@@ -10,6 +10,8 @@ export default async function handler(
     error?: string;
   }>
 ) {
+  console.log("req.method", req.method);
+
   switch (req.method) {
     case "GET":
       try {
@@ -22,7 +24,20 @@ export default async function handler(
 
     case "POST":
       try {
-        const lesson = await lessonService.createLesson(req.body);
+        const lessonData = req.body;
+
+        // Validate the lesson data
+        const validationResult = LessonSchema.safeParse(lessonData);
+        if (!validationResult.success) {
+          console.error("Validation errors:", validationResult.error);
+          return res.status(400).json({
+            error: `Invalid lesson format: ${validationResult.error.issues
+              .map((i) => i.message)
+              .join(", ")}`,
+          });
+        }
+
+        const lesson = await lessonService.createLesson(validationResult.data);
         return res.status(201).json({ lesson });
       } catch (error) {
         console.error("Failed to create lesson:", error);
@@ -30,6 +45,7 @@ export default async function handler(
       }
 
     default:
-      return res.status(405).json({ error: "Method not allowed" });
+      res.setHeader("Allow", ["GET", "POST"]);
+      res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

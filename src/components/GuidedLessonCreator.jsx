@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useReadThaiGame } from '@/context/ReadThaiGameContext';
 import { 
   GraduationCap, 
   Book, 
   Plus,
   CheckCircle2,
   XCircle,
-  RefreshCw
+  RefreshCw,
+  Upload
 } from 'lucide-react';
 
 const GuidedLessonCreator = ({ onClose }) => {
-  const [isJsonMode, setIsJsonMode] = useState(false);
+  const { invalidateLessons } = useReadThaiGame();
+  const [isJsonMode, setIsJsonMode] = useState(true);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedTopic, setSelectedTopic] = useState(null);
@@ -24,6 +27,7 @@ const GuidedLessonCreator = ({ onClose }) => {
   const [newSubject, setNewSubject] = useState('');
   const [newLevel, setNewLevel] = useState('');
   const [newTopic, setNewTopic] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const popularSubjects = [
     { id: 'thai', name: 'Thai', icon: '🇹🇭' },
@@ -44,6 +48,63 @@ const GuidedLessonCreator = ({ onClose }) => {
     { id: 'intermediate', name: 'Intermediate' },
     { id: 'advanced', name: 'Advanced' },
   ];
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      
+      // Basic validation
+      if (!json.name || !json.items || !Array.isArray(json.items)) {
+        throw new Error('Invalid lesson format: must include name and items array');
+      }
+
+      setJsonContent(json);
+      setJsonError(null);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+      setJsonError(error.message);
+      setJsonContent(null);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!jsonContent) return;
+    
+    setIsSubmitting(true);
+    try {
+      // Transform the lesson data to match Prisma schema
+      const transformedLesson = {
+        ...jsonContent,
+        difficulty: jsonContent.difficulty.toUpperCase(),
+      };
+
+      const response = await fetch('/api/lessons', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transformedLesson),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create lesson');
+      }
+
+      const data = await response.json();
+      console.log('Lesson created:', data);
+      await invalidateLessons();
+      onClose();
+    } catch (error) {
+      console.error('Error creating lesson:', error);
+      setJsonError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen bg-gray-950">
@@ -109,51 +170,39 @@ const GuidedLessonCreator = ({ onClose }) => {
                           jsonContent.items?.length || 0
                         } cards
                       </p>
-                    </div>
-                  ) : jsonError ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-center text-red-500">
-                        <XCircle className="h-8 w-8" />
-                      </div>
-                      <p className="text-gray-300">Invalid JSON format</p>
-                      <p className="text-sm text-red-400">{jsonError}</p>
+                      <Button
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                        className="w-full mt-4"
+                      >
+                        {isSubmitting ? 'Creating Lesson...' : 'Create Lesson'}
+                      </Button>
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      <Input 
-                        type="file" 
+                      <input
+                        type="file"
                         accept=".json"
+                        onChange={handleFileUpload}
                         className="hidden"
                         id="json-upload"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                              try {
-                                const json = JSON.parse(e.target?.result?.toString() || '');
-                                setJsonContent(json);
-                                setJsonError(null);
-                              } catch (error) {
-                                setJsonError(error.message || 'Could not parse JSON file');
-                                setJsonContent(null);
-                              }
-                            };
-                            reader.readAsText(file);
-                          }
-                        }}
                       />
-                      <label 
+                      <label
                         htmlFor="json-upload"
-                        className="inline-flex items-center gap-2 text-gray-400 hover:text-gray-300 cursor-pointer"
+                        className="cursor-pointer inline-flex flex-col items-center space-y-2"
                       >
-                        <Plus className="h-6 w-6" />
-                        <span>Choose JSON file</span>
+                        <Upload className="h-8 w-8 text-gray-400" />
+                        <span className="text-gray-300">
+                          Click to upload JSON file
+                        </span>
+                        <span className="text-sm text-gray-400">
+                          or drag and drop
+                        </span>
                       </label>
-                      <p className="text-sm text-gray-500">
-                        Upload a lesson JSON file that matches the required schema
-                      </p>
                     </div>
+                  )}
+                  {jsonError && (
+                    <p className="mt-3 text-sm text-red-500">{jsonError}</p>
                   )}
                 </div>
 

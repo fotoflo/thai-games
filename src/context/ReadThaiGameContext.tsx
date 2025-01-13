@@ -37,6 +37,11 @@ interface ReadThaiGameContextType {
   handleMarkForPractice: () => void;
   handleMarkAsMastered: () => void;
   handleSkipItem: () => void;
+
+  // Lessons state
+  lessonsLoading: boolean;
+  lessonsError: string | null;
+  invalidateLessons: () => void;
 }
 
 const ReadThaiGameContext = createContext<ReadThaiGameContextType | null>(null);
@@ -45,20 +50,29 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const gameSettings = useGameSettings();
-  const lessonState = useLessons();
+  const {
+    currentLesson,
+    setCurrentLesson,
+    progressionMode,
+    setProgressionMode,
+    lessons,
+    lessonsLoading,
+    lessonsError,
+    invalidateLessons,
+  } = useLessons();
   const [cardSetMachineState, sendToCardSetMachine] =
     useMachine(cardSetMachine);
 
   // Self-initialize the lesson machine
   useEffect(() => {
-    if (lessonState.lessons && lessonState.lessons.length > 0) {
+    if (lessons && lessons.length > 0) {
       sendToCardSetMachine({
         type: "INITIALIZE",
         lessonIndex: 0,
-        lessons: lessonState.lessons,
+        lessons: lessons,
       });
     }
-  }, [sendToCardSetMachine, lessonState.lessons]);
+  }, [sendToCardSetMachine, lessons]);
 
   const value = {
     // Game settings
@@ -66,13 +80,13 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
     gameState: cardSetMachineState,
     cardSetMachineState,
     // Lesson management
-    lessons: lessonState.lessons,
-    lessonsLoading: lessonState.lessonsLoading,
-    lessonsError: lessonState.lessonsError,
-    currentLesson: lessonState.currentLesson,
-    setCurrentLesson: lessonState.setCurrentLesson,
+    lessons,
+    lessonsLoading,
+    lessonsError,
+    currentLesson,
+    setCurrentLesson,
 
-    progressionMode: cardSetMachineState.context.progressionMode,
+    progressionMode,
     handleSwitchToPracticeMode: () =>
       sendToCardSetMachine({ type: "SWITCH_TO_PRACTICE" }),
     handleSwitchToFirstPassMode: () =>
@@ -92,6 +106,8 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
     handleMarkAsMastered: () =>
       sendToCardSetMachine({ type: "MARK_AS_MASTERED" }),
     handleSkipItem: () => sendToCardSetMachine({ type: "SKIP_ITEM" }),
+
+    invalidateLessons,
   };
 
   return (
