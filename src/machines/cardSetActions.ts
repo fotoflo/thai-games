@@ -1,5 +1,10 @@
 import { assign } from "xstate";
-import { RecallCategory, SuperSetItem } from "@/types/lessons";
+import {
+  Lesson,
+  LessonItem,
+  RecallCategory,
+  SuperSetItem,
+} from "@/types/lessons";
 
 export interface CardSetContext {
   lessons: any[];
@@ -13,15 +18,21 @@ export interface CardSetContext {
   superSetIndex: number;
 }
 
+export type ChooseLessonEvent = {
+  lessonIndex: number;
+  lessons: any[];
+};
+
 export type CardSetEvent =
-  | { type: "INITIALIZE"; lessonIndex: number; lessons: any[] }
+  | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent }
   | { type: "MARK_FOR_PRACTICE" }
   | { type: "MARK_AS_MASTERED" }
   | { type: "SKIP_ITEM" }
   | { type: "NEXT_ITEM" }
   | { type: "SWITCH_TO_PRACTICE" }
   | { type: "SWITCH_TO_FIRST_PASS" }
-  | { type: "SWITCH_TO_TEST" };
+  | { type: "SWITCH_TO_TEST" }
+  | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent };
 
 export const initialContext: CardSetContext = {
   lessons: [],
@@ -37,14 +48,8 @@ export const initialContext: CardSetContext = {
 
 const INITIAL_PRACTICE_SET_SIZE = 5;
 
-export type InitializeEvent = {
-  type: "INITIALIZE";
-  lessonIndex: number;
-  lessons: any[];
-};
-
 export type LessonEvent =
-  | InitializeEvent
+  | ChooseLessonEvent
   | { type: "MARK_FOR_PRACTICE" }
   | { type: "MARK_AS_MASTERED" }
   | { type: "SKIP_ITEM" }
@@ -52,7 +57,7 @@ export type LessonEvent =
   | { type: "SWITCH_TO_PRACTICE" }
   | { type: "SWITCH_TO_FIRST_PASS" };
 
-const createSuperSetItem = (item: any): SuperSetItem => ({
+const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
   id: item.id,
   item,
   lastReviewed: new Date(),
@@ -65,8 +70,10 @@ export const initialize = ({
   event,
 }: {
   context: CardSetContext;
-  event: InitializeEvent;
+  event: ChooseLessonEvent;
 }) => {
+  console.log("log initialize", event);
+
   const lessonData = event?.lessons?.[event?.lessonIndex];
   const superSetIndex = 0;
 
@@ -88,8 +95,6 @@ export const initialize = ({
     progressionMode: "firstPass",
   };
 };
-
-///METHODS
 
 const updateRecallCategory = ({
   superSet,
@@ -190,6 +195,38 @@ export const enterSwitchToFirstPass = assign({
 export const enterSwitchToTest = assign({
   progressionMode: "test" as const,
 });
+
+export const handleChooseLesson = assign(
+  ({
+    context,
+    event,
+  }: {
+    context: CardSetContext;
+    event: ChooseLessonEvent;
+  }) => {
+    console.log("log chooseLesson", event);
+    const lessonData = event?.lessons?.[event?.lessonIndex];
+    const superSet = lessonData?.items.map(createSuperSetItem);
+    const lessons = event?.lessons;
+    const currentLesson = lessons[event.lessonIndex];
+    console.log("log chooseLesson currentLesson", currentLesson);
+    // debugger;
+    const currentLessonId = currentLesson?.id;
+    const activeItem = superSet?.[0];
+    const superSetIndex = 0;
+
+    return {
+      ...context,
+      lessonData,
+      superSet,
+      lessons,
+      currentLesson,
+      currentLessonId,
+      activeItem,
+      superSetIndex,
+    };
+  }
+);
 
 export const handleMarkAsMastered = assign(
   ({ context }: { context: CardSetContext }) => {

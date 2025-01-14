@@ -86,6 +86,7 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
     currentLesson,
     setCurrentLesson,
 
+    sendToCardSetMachine,
     progressionMode,
     handleSwitchToPracticeMode: () =>
       sendToCardSetMachine({ type: "SWITCH_TO_PRACTICE" }),

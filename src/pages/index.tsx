@@ -35,7 +35,7 @@ const IndexPage: React.FC = () => {
   const closeSettings = () => setShowSettingsContainer(false);
 
   const handleViewLessonDetails = (lesson: Lesson, index: number) => {
-    setLessonDetailsSelectedLesson({ lesson, index });
+    setCurrentLesson(index);
   };
 
   if (!activeItem) {

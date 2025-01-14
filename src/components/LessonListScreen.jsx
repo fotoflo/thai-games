@@ -6,12 +6,13 @@ import { useReadThaiGame } from '@/context/ReadThaiGameContext';
 import GuidedLessonCreator from './GuidedLessonCreator';
 
 const LessonListScreen = ({ onClose, onViewDetails }) => {
-  const { lessons, setCurrentLesson } = useReadThaiGame();
+  const { lessons, setCurrentLesson, sendToCardSetMachine } = useReadThaiGame();
   const [showGuidedCreator, setShowGuidedCreator] = useState(false);
 
   const handleLessonClick = (index) => {
-    console.log("log handleLessonClick", index);
-    setCurrentLesson(index); // Set the current lesson
+    console.log("log handleLessonClick sendToCardSetMachine lessonIndex", index);
+    // setCurrentLesson(index); // Set the current lesson
+    sendToCardSetMachine({ type: "CHOOSE_LESSON", lessonIndex: index, lessons });
     onClose(); // Close the modal
   };
 

@@ -13,6 +13,7 @@ import {
   handleMarkAsMastered,
   handleSkipItem,
   initialize,
+  handleChooseLesson,
   enterSwitchToPractice,
   enterSwitchToFirstPass,
   enterSwitchToTest,
@@ -49,6 +50,7 @@ export const cardSetMachine = setup({
     handleMarkAsMastered,
     handleSkipItem,
     initialize,
+    handleChooseLesson,
     enterSwitchToPractice,
     enterSwitchToFirstPass,
     enterSwitchToTest,
@@ -76,6 +78,9 @@ export const cardSetMachine = setup({
         },
       ],
       on: {
+        CHOOSE_LESSON: {
+          actions: ["handleChooseLesson"],
+        },
         MARK_FOR_PRACTICE: {
           actions: ["handleMarkForPractice", "moveToNextSuperSetItem"],
         },
@@ -103,6 +108,9 @@ export const cardSetMachine = setup({
         },
       ],
       on: {
+        CHOOSE_LESSON: {
+          actions: ["handleChooseLesson"],
+        },
         MARK_FOR_PRACTICE: {
           actions: ["handleMarkForPractice", "moveToNextPracticeSetItem"],
           guard: "hasSuperSetPracticeItems",
