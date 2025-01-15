@@ -8,7 +8,10 @@ const LessonSelector = ({
   const carouselRef = useRef(null);
   const [showLessonList, setShowLessonList] = useState(false);
 
-  const { lessons, currentLesson, setCurrentLesson } = useReadThaiGame();
+  const game = useReadThaiGame();
+  const { lessons, currentLesson, setCurrentLesson } = game;
+
+  debugger
 
   console.log("lessonSelector currentLesson", currentLesson.name);
   console.log("lessonSelector lessons", lessons);

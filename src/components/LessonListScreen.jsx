@@ -11,7 +11,7 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
 
   const handleLessonClick = (index) => {
     console.log("log handleLessonClick sendToCardSetMachine lessonIndex", index);
-    // setCurrentLesson(index); // Set the current lesson
+    setCurrentLesson(index); // Set the current lesson
     sendToCardSetMachine({ type: "CHOOSE_LESSON", lessonIndex: index, lessons });
     onClose(); // Close the modal
   };
