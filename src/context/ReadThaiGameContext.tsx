@@ -121,18 +121,21 @@ export const ReadThaiGameProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useReadThaiGame = () => {
   const context = useContext(ReadThaiGameContext);
 
-  if (
-    context?.lessons &&
-    context?.lessons.length > 0 &&
-    context?.currentLesson === -1
-  ) {
-    context?.setCurrentLesson(0);
-  }
-
   if (!context) {
     throw new Error(
       "useReadThaiGame must be used within a ReadThaiGameProvider"
     );
   }
+
+  useEffect(() => {
+    if (
+      context.lessons &&
+      context.lessons.length > 0 &&
+      context.currentLesson === -1
+    ) {
+      context.setCurrentLesson(0);
+    }
+  }, [context.lessons, context.currentLesson]);
+
   return context;
 };
