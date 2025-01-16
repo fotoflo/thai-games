@@ -7,7 +7,7 @@ import {
 } from "@/types/lessons";
 
 export interface CardSetContext {
-  lessons: any[];
+  lessons: Lesson[];
   progressionMode: "initializing" | "firstPass" | "practice" | "test";
   superSet: SuperSetItem[];
   practiceSet: SuperSetItem[];
@@ -24,6 +24,7 @@ export type ChooseLessonEvent = {
 };
 
 export type CardSetEvent =
+  | { type: "INITIALIZE" }
   | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent }
   | { type: "MARK_FOR_PRACTICE" }
   | { type: "MARK_AS_MASTERED" }
