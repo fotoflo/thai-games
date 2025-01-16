@@ -2,7 +2,6 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { Volume2 } from "lucide-react";
 import { useThaiSpeech } from "@/hooks/useThaiSpeech";
-import { useReadThaiGame } from "@/context/ReadThaiGameContext";
 import rehypeRaw from "rehype-raw";
 
 interface ItemDisplayProps {

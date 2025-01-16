@@ -11,7 +11,6 @@ const LessonSelector = ({
   const game = useReadThaiGame();
   const { lessons, currentLesson, setCurrentLesson } = game;
 
-  debugger
 
   console.log("lessonSelector currentLesson", currentLesson.name);
   console.log("lessonSelector lessons", lessons);

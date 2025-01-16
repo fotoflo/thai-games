@@ -1,19 +1,12 @@
 import React from "react";
-import { useReadThaiGame } from "@/context/ReadThaiGameContext";
 
 const ProgressionSelector: React.FC = () => {
-  const {
-    progressionMode,
-    handleSwitchToPracticeMode,
-    handleSwitchToFirstPassMode,
-  } = useReadThaiGame();
-
   return (
     <div className="flex gap-2 mb-4">
       <button
-        onClick={handleSwitchToFirstPassMode}
+        onClick={() => send({ type: "toggle", toggle: "ON" })}
         className={`flex-1 py-2 px-4 rounded ${
-          progressionMode === "firstPass"
+          state.value === "ON"
             ? "bg-blue-600 text-white"
             : "bg-gray-700 text-gray-300"
         }`}
@@ -21,9 +14,9 @@ const ProgressionSelector: React.FC = () => {
         First Pass
       </button>
       <button
-        onClick={handleSwitchToPracticeMode}
+        onClick={() => send({ type: "toggle", toggle: "OFF" })}
         className={`flex-1 py-2 px-4 rounded ${
-          progressionMode === "practice"
+          state.value === "OFF"
             ? "bg-blue-600 text-white"
             : "bg-gray-700 text-gray-300"
         }`}

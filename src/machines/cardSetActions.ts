@@ -16,6 +16,7 @@ export interface CardSetContext {
   activeItem: SuperSetItem | null;
   currentLesson: number;
   superSetIndex: number;
+  error: string | null;
 }
 
 export type ChooseLessonEvent = {
@@ -185,12 +186,18 @@ export const handleMarkForPractice = assign(
   }
 );
 
-export const enterSwitchToPractice = assign({
-  progressionMode: "practice" as const,
+export const enterSwitchToPractice = assign(({ context }) => {
+  debugger;
+  return {
+    progressionMode: "practice" as const,
+  };
 });
 
-export const enterSwitchToFirstPass = assign({
-  progressionMode: "firstPass" as const,
+export const enterSwitchToFirstPass = assign(({ context }) => {
+  debugger;
+  return {
+    progressionMode: "firstPass" as const,
+  };
 });
 
 export const enterSwitchToTest = assign({
@@ -211,7 +218,7 @@ export const handleChooseLesson = assign(
     const lessons = event?.lessons;
     const currentLesson = lessons[event.lessonIndex];
     console.log("log chooseLesson currentLesson", currentLesson);
-    // debugger;
+
     const currentLessonId = currentLesson?.id;
     const activeItem = superSet?.[0];
     const superSetIndex = 0;
@@ -325,7 +332,6 @@ export const hasPracticeSetPracticeItems = ({
 }: {
   context: CardSetContext;
 }) => {
-  debugger;
   if (!context || !context.practiceSet) return false;
   return context.practiceSet.length > 0;
 };
@@ -343,11 +349,11 @@ export const hasSuperSetPracticeItems = ({
 };
 
 export const allItemsMastered = ({ context }: { context: CardSetContext }) => {
-  if (!context || !context.superSet) return false;
+  if (!context || !context.superSet || !context.superSet.length) return false;
   return context.superSet.every((item) => item.recallCategory === "mastered");
 };
 
 export const allItemsSeen = ({ context }: { context: CardSetContext }) => {
-  if (!context || !context.superSet) return false;
+  if (!context || !context.superSet || !context.superSet.length) return false;
   return context.superSet.every((item) => item.recallCategory !== "unseen");
 };

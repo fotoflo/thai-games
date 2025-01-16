@@ -1,10 +1,11 @@
 import React from "react";
-import { useReadThaiGame } from "../context/ReadThaiGameContext";
+import { useActor, useActorRef } from "@xstate/react";
 import GameHeader from "../components/GameHeader";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import PracticeSetCards from "@/components/syllables/PracticeSetCards";
 import ItemDisplay from "@/components/syllables/ItemDisplay";
 import { Lesson } from "@/types/lessons";
+import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 
 interface DebugSection {
   title: string;
@@ -24,25 +25,35 @@ interface ButtonGroup {
 }
 
 const DebugPage: React.FC = () => {
+  const snapshot = ReadThaiGameContext.useSelector((state) => state.context);
+  const cardSetMachineRef = ReadThaiGameContext.useActorRef();
+
   const {
-    cardSetMachineState,
-    activeItem,
     superSet,
-    superSetIndex,
     practiceSetIndex,
+    activeItem,
+    superSetIndex,
     progressionMode,
     lessons,
     currentLesson,
     setCurrentLesson,
+  } = snapshot;
 
-    // Actions
-    nextItem,
-    handleMarkForPractice,
-    handleMarkAsMastered,
-    handleSkipItem,
-    handleSwitchToPracticeMode,
-    handleSwitchToFirstPassMode,
-  } = useReadThaiGame();
+  const handleSwitchToPracticeMode = () =>
+    cardSetMachineRef.send({ type: "SWITCH_TO_PRACTICE" });
+
+  const handleSwitchToFirstPassMode = () =>
+    cardSetMachineRef.send({ type: "SWITCH_TO_FIRST_PASS" });
+
+  const handleNextItem = () => cardSetMachineRef.send({ type: "NEXT_ITEM" });
+
+  const handleMarkForPractice = () =>
+    cardSetMachineRef.send({ type: "MARK_FOR_PRACTICE" });
+
+  const handleMarkAsMastered = () =>
+    cardSetMachineRef.send({ type: "MARK_AS_MASTERED" });
+
+  const handleSkipItem = () => cardSetMachineRef.send({ type: "SKIP_ITEM" });
 
   const renderSection = ({ title, data }: DebugSection) => (
     <div className="bg-gray-800 rounded-lg p-4 w-full break-inside-avoid mb-4">
@@ -77,7 +88,7 @@ const DebugPage: React.FC = () => {
       buttons: [
         {
           label: "Next Item",
-          onClick: nextItem,
+          onClick: handleNextItem,
           disabled: !activeItem,
         },
         {
@@ -157,8 +168,8 @@ const DebugPage: React.FC = () => {
     {
       title: "SuperSet (simplified)",
       data: {
-        length: superSet.length,
-        items: superSet.map((entry) => ({
+        length: superSet?.length,
+        items: superSet?.map((entry) => ({
           id: entry.id,
           recallCategory: entry.recallCategory,
         })),
@@ -168,6 +179,7 @@ const DebugPage: React.FC = () => {
     {
       title: "Lesson State",
       data: {
+        lessonCount: lessons.length || "null",
         currentLesson,
         lesson: lessons?.[currentLesson]?.name,
         progressionMode,
@@ -183,11 +195,6 @@ const DebugPage: React.FC = () => {
       priority: 3,
     },
     {
-      title: "Game State",
-      data: cardSetMachineState,
-      priority: 2,
-    },
-    {
       title: "Working Set",
       data: superSet,
       priority: 3,
@@ -199,6 +206,7 @@ const DebugPage: React.FC = () => {
       <GameHeader title="Debug View" darkMode={true} />
 
       <span className="text-white">Current Mode: {progressionMode}</span>
+      <span className="text-white">Current State: {progressionMode}</span>
 
       <div className="max-w-7xl mx-auto">
         {/* Actions Section */}
@@ -220,17 +228,17 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        <SuperSetVisualizer className="mb-5" />
+        {/* <SuperSetVisualizer className="mb-5" /> */}
 
-        <ItemDisplay
+        {/* <ItemDisplay
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
           speakOnUnmount={false}
           invertTranslation={false}
-        />
+        /> */}
 
-        <PracticeSetCards className=" border-y-2 border-slate-700 my-2" />
+        {/* <PracticeSetCards className=" border-y-2 border-slate-700 my-2" /> */}
 
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">

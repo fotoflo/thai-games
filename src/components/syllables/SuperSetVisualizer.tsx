@@ -1,9 +1,9 @@
-import { useReadThaiGame } from "@/context/ReadThaiGameContext";
+import { cardSetMachine } from "@/machines/cardSetMachine";
 import { RecallCategory } from "@/types/lessons";
 import React from "react";
 
 const LessonSubsetVisualizer = ({ className = "" }: { className?: string }) => {
-  const { superSet, superSetIndex } = useReadThaiGame();
+  // const { superSet, superSetIndex } = useReadThaiGame();
 
   if (!superSet?.length) {
     return <div className={className}>No items in practice set</div>;

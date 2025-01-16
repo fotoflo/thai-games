@@ -25,6 +25,7 @@ const getApiUrl = (path: string) => {
 export const lessonApi = {
   loadLessons: async (): Promise<LessonWithRelations[]> => {
     try {
+      console.log("Loading lessons");
       const response = await fetch(getApiUrl("/api/lessons"));
       if (!response.ok) {
         throw new Error("Failed to fetch lessons");

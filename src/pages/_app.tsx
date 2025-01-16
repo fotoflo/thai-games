@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
-import { ReadThaiGameProvider } from "@/context/ReadThaiGameContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useGoogleAnalytics from "@/hooks/useGA";
 import type { AppProps } from "next/app";
+import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 
 const queryClient = new QueryClient();
 
@@ -13,9 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       {GoogleAnalytics}
       <QueryClientProvider client={queryClient}>
-        <ReadThaiGameProvider>
+        <ReadThaiGameContext.Provider>
           <Component {...pageProps} />
-        </ReadThaiGameProvider>
+        </ReadThaiGameContext.Provider>
       </QueryClientProvider>
     </>
   );

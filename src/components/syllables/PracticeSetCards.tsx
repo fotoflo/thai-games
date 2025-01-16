@@ -1,7 +1,6 @@
 import React from "react";
 import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
-import { useReadThaiGame } from "@/context/ReadThaiGameContext";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
