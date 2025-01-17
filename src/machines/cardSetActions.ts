@@ -5,9 +5,12 @@ import {
   RecallCategory,
   SuperSetItem,
 } from "@/types/lessons";
+import { LessonWithRelations } from "@/services/lessonService";
+
+type actorId = string | null;
 
 export interface CardSetContext {
-  lessons: Lesson[];
+  lessons: LessonWithRelations[];
   progressionMode: "initializing" | "firstPass" | "practice" | "test";
   superSet: SuperSetItem[];
   practiceSet: SuperSetItem[];
@@ -98,6 +101,21 @@ export const initialize = ({
   };
 };
 
+export const initializeWithLoadedLessons = assign(({ context, event }) => {
+  const superSet = event.output[0].items.map(createSuperSetItem);
+
+  return {
+    ...context,
+    superSet,
+    lessons: event.output,
+    practiceSet: [] as SuperSetItem[],
+    superSetIndex: 0,
+    practiceSetIndex: 0,
+    activeItem: superSet[0],
+    progressionMode: "firstPass",
+  };
+});
+
 const updateRecallCategory = ({
   superSet,
   itemId,
@@ -186,15 +204,13 @@ export const handleMarkForPractice = assign(
   }
 );
 
-export const enterSwitchToPractice = assign(({ context }) => {
-  debugger;
+export const enterSwitchToPractice = assign(({}) => {
   return {
     progressionMode: "practice" as const,
   };
 });
 
-export const enterSwitchToFirstPass = assign(({ context }) => {
-  debugger;
+export const enterSwitchToFirstPass = assign(({}) => {
   return {
     progressionMode: "firstPass" as const,
   };

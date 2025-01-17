@@ -17,6 +17,7 @@ import {
   enterSwitchToPractice,
   enterSwitchToFirstPass,
   enterSwitchToTest,
+  initializeWithLoadedLessons,
 } from "./cardSetActions";
 import { createActorContext } from "@xstate/react";
 import { lessonApi } from "@/api/lessonApi";
@@ -32,6 +33,8 @@ const initialContext: CardSetContext = {
   currentLesson: 0,
   superSetIndex: 0,
   error: null,
+  lastActorId: null,
+  actorSequence: [],
 };
 
 export const cardSetMachine = setup({
@@ -57,6 +60,7 @@ export const cardSetMachine = setup({
     enterSwitchToPractice,
     enterSwitchToFirstPass,
     enterSwitchToTest,
+    initializeWithLoadedLessons,
   },
   actors: {
     fetchLessons: fromPromise(lessonApi.loadLessons),
@@ -71,23 +75,18 @@ export const cardSetMachine = setup({
       invoke: {
         src: "fetchLessons",
         onDone: {
+          actions: ["initializeWithLoadedLessons"],
           target: "firstPass",
-          actions: assign({
-            lessons: ({ event }) => {
-              debugger;
-              return event.output;
-            },
-          }),
         },
         onError: {
-          target: "firstPass",
           actions: assign({
             error: ({ event }) => {
               console.error(event.error);
               debugger;
-              return event.error;
+              return event?.error;
             },
           }),
+          target: "firstPass",
         },
       },
     },
