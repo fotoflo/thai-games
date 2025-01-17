@@ -70,42 +70,10 @@ const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
 });
 
 // Action Functions
-export const initialize = ({
-  context,
-  event,
-}: {
-  context: CardSetContext;
-  event: ChooseLessonEvent;
-}) => {
-  console.log("log initialize", event);
-
-  const lessonData = event?.lessons?.[event?.lessonIndex];
-  const superSetIndex = 0;
-
-  const superSet = lessonData?.items.map(createSuperSetItem);
-  const practiceSet = [] as SuperSetItem[];
-
-  return {
-    ...context,
-    lessonData,
-    superSet,
-    practiceSet,
-    practiceSetSize: INITIAL_PRACTICE_SET_SIZE,
-    currentLessonId: event?.lessonIndex,
-    lessons: event?.lessons,
-    activeItem: superSet?.[superSetIndex],
-    superSetIndex,
-    practiceSetIndex: 0,
-    currentLessonData: lessonData,
-    progressionMode: "firstPass",
-  };
-};
-
-export const initializeWithLoadedLessons = assign(({ context, event }) => {
+export const initializeWithLoadedLessons = assign(({ event }) => {
   const superSet = event.output[0].items.map(createSuperSetItem);
 
   return {
-    ...context,
     superSet,
     lessons: event.output,
     practiceSet: [] as SuperSetItem[],

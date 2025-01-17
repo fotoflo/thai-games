@@ -33,8 +33,6 @@ const initialContext: CardSetContext = {
   currentLesson: 0,
   superSetIndex: 0,
   error: null,
-  lastActorId: null,
-  actorSequence: [],
 };
 
 export const cardSetMachine = setup({
@@ -55,7 +53,6 @@ export const cardSetMachine = setup({
     handleMarkForPractice,
     handleMarkAsMastered,
     handleSkipItem,
-    initialize,
     handleChooseLesson,
     enterSwitchToPractice,
     enterSwitchToFirstPass,
