@@ -1,13 +1,8 @@
-import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { lessonApi } from "@/api/lessonApi";
 import { LessonWithRelations } from "@/services/lessonService";
 
 interface UseLessons {
-  currentLesson: number;
-  setCurrentLesson: (newLesson: number) => void;
-  progressionMode: "firstPass" | "spacedRepetition" | "test";
-  setProgressionMode: (mode: "firstPass" | "spacedRepetition" | "test") => void;
   lessons: LessonWithRelations[]; // from the api
   lessonsLoading: boolean;
   lessonsError: Error | null;
@@ -16,10 +11,6 @@ interface UseLessons {
 
 export const useLessons = (): UseLessons => {
   const queryClient = useQueryClient();
-  const [currentLesson, setCurrentLesson] = useState<number>(-1);
-  const [progressionMode, setProgressionMode] = useState<
-    "firstPass" | "spacedRepetition" | "test"
-  >("firstPass");
 
   // Load lessons using React Query
   const {
@@ -29,6 +20,11 @@ export const useLessons = (): UseLessons => {
   } = useQuery({
     queryKey: ["lessons"],
     queryFn: lessonApi.loadLessons,
+    onSuccess: (data, variables, context) => {
+      debugger;
+      console.log("Todo added:", data);
+    },
+    onError: () => {},
   });
 
   const invalidateLessons = async () => {
@@ -36,10 +32,6 @@ export const useLessons = (): UseLessons => {
   };
 
   return {
-    currentLesson,
-    setCurrentLesson,
-    progressionMode,
-    setProgressionMode,
     lessons,
     lessonsLoading,
     lessonsError,

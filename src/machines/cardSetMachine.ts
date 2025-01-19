@@ -12,7 +12,6 @@ import {
   handleMarkForPractice,
   handleMarkAsMastered,
   handleSkipItem,
-  initialize,
   handleChooseLesson,
   enterSwitchToPractice,
   enterSwitchToFirstPass,
@@ -69,20 +68,9 @@ export const cardSetMachine = setup({
   initial: "loading",
   states: {
     loading: {
-      invoke: {
-        src: "fetchLessons",
-        onDone: {
+      on: {
+        INITIALIZE_WITH_LOADED_LESSONS: {
           actions: ["initializeWithLoadedLessons"],
-          target: "firstPass",
-        },
-        onError: {
-          actions: assign({
-            error: ({ event }) => {
-              console.error(event.error);
-              debugger;
-              return event?.error;
-            },
-          }),
           target: "firstPass",
         },
       },

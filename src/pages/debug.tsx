@@ -6,6 +6,7 @@ import PracticeSetCards from "@/components/syllables/PracticeSetCards";
 import ItemDisplay from "@/components/syllables/ItemDisplay";
 import { Lesson } from "@/types/lessons";
 import { ReadThaiGameContext } from "@/machines/cardSetMachine";
+import { useLessons } from "@/hooks/game/useLessons";
 
 interface DebugSection {
   title: string;
@@ -26,7 +27,6 @@ interface ButtonGroup {
 
 const DebugPage: React.FC = () => {
   const snapshot = ReadThaiGameContext.useSelector((state) => state.context);
-  const cardSetMachineRef = ReadThaiGameContext.useActorRef();
 
   const {
     superSet,
@@ -34,26 +34,36 @@ const DebugPage: React.FC = () => {
     activeItem,
     superSetIndex,
     progressionMode,
-    lessons,
     currentLesson,
-    setCurrentLesson,
   } = snapshot;
 
+  const { send: sendToCardSetMachine } = ReadThaiGameContext.useActorRef();
+
+  const { lessons, lessonsLoading, lessonsError, invalidateLessons } =
+    useLessons();
+
+  // TODO FINISH passing lessons from useLessons to cardSetMachine
+  // utilise them instead of the llessons from the invoke
+  if (!lessonsLoading && !lessonsError) {
+    console.log("lessons111", lessons);
+    sendToCardSetMachine({ type: "INITIALIZE_WITH_LOADED_LESSONS", lessons });
+  }
+
   const handleSwitchToPracticeMode = () =>
-    cardSetMachineRef.send({ type: "SWITCH_TO_PRACTICE" });
+    sendToCardSetMachine({ type: "SWITCH_TO_PRACTICE" });
 
   const handleSwitchToFirstPassMode = () =>
-    cardSetMachineRef.send({ type: "SWITCH_TO_FIRST_PASS" });
+    sendToCardSetMachine({ type: "SWITCH_TO_FIRST_PASS" });
 
-  const handleNextItem = () => cardSetMachineRef.send({ type: "NEXT_ITEM" });
+  const handleNextItem = () => sendToCardSetMachine({ type: "NEXT_ITEM" });
 
   const handleMarkForPractice = () =>
-    cardSetMachineRef.send({ type: "MARK_FOR_PRACTICE" });
+    sendToCardSetMachine({ type: "MARK_FOR_PRACTICE" });
 
   const handleMarkAsMastered = () =>
-    cardSetMachineRef.send({ type: "MARK_AS_MASTERED" });
+    sendToCardSetMachine({ type: "MARK_AS_MASTERED" });
 
-  const handleSkipItem = () => cardSetMachineRef.send({ type: "SKIP_ITEM" });
+  const handleSkipItem = () => sendToCardSetMachine({ type: "SKIP_ITEM" });
 
   const renderSection = ({ title, data }: DebugSection) => (
     <div className="bg-gray-800 rounded-lg p-4 w-full break-inside-avoid mb-4">

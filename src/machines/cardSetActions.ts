@@ -71,11 +71,11 @@ const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
 
 // Action Functions
 export const initializeWithLoadedLessons = assign(({ event }) => {
-  const superSet = event.output[0].items.map(createSuperSetItem);
+  const superSet = event.lessons[0].items.map(createSuperSetItem);
 
   return {
     superSet,
-    lessons: event.output,
+    lessons: event.lessons,
     practiceSet: [] as SuperSetItem[],
     superSetIndex: 0,
     practiceSetIndex: 0,
