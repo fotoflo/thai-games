@@ -1,6 +1,7 @@
 import { assign } from "xstate";
 import { LessonItem, RecallCategory, SuperSetItem } from "@/types/lessons";
 import { LessonWithRelations } from "@/services/lessonService";
+import { modals } from "@/hooks/useModal";
 
 export interface CardSetContext {
   lessons: LessonWithRelations[];
@@ -205,12 +206,14 @@ export const handleChooseLesson = assign(
   }
 );
 
-export const openFlashCardModal = assign({
-  FlashCardModalOpen: () => true,
+export const openFlashCardModal = assign(({ context }) => {
+  modals.flashCard.open({ activeItem: context.activeItem });
+  return { FlashCardModalOpen: true };
 });
 
-export const closeFlashCardModal = assign({
-  FlashCardModalOpen: () => false,
+export const closeFlashCardModal = assign(() => {
+  modals.flashCard.close();
+  return { FlashCardModalOpen: false };
 });
 
 export const handleMarkAsMastered = assign(
