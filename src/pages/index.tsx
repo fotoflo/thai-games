@@ -25,10 +25,10 @@ type DisplayTrigger = "speak" | "mastery" | "CheckTranslationButton" | null;
 
 const IndexPage: React.FC = () => {
   const { activeItem, setCurrentLesson } = ReadThaiGameContext.useSelector(
-    (snapshot) => {
+    ({ context }) => {
       return {
-        activeItem: snapshot.context.activeItem,
-        setCurrentLesson: snapshot.context.setCurrentLesson,
+        activeItem: context.activeItem,
+        setCurrentLesson: context.setCurrentLesson, // TODO: fix
       };
     }
   );

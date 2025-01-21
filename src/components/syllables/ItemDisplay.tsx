@@ -34,10 +34,10 @@ const ItemDisplay: React.FC<ItemDisplayProps> = ({
   sideTwoTextColor = "text-slate-400",
 }) => {
   const { activeItem, invertCard } = ReadThaiGameContext.useSelector(
-    (snapshot) => {
+    ({ context }) => {
       return {
-        activeItem: snapshot.context.activeItem,
-        invertCard: snapshot.context.invertCard,
+        activeItem: context.activeItem,
+        invertCard: context.invertCard,
       };
     }
   );

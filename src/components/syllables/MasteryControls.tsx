@@ -8,11 +8,9 @@ interface MasteryControlsProps {
 const MasteryControls: React.FC<MasteryControlsProps> = ({
   className = "",
 }) => {
-  const { progressionMode } = ReadThaiGameContext.useSelector((snapshot) => {
-    return {
-      progressionMode: snapshot.context.progressionMode,
-    };
-  });
+  const { progressionMode } = ReadThaiGameContext.useSelector(
+    ({ context }) => context.progressionMode
+  );
 
   const { send: sendToCardSetMachine } = ReadThaiGameContext.useActorRef();
 

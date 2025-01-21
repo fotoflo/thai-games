@@ -4,19 +4,12 @@ import MasteryControls from "./MasteryControls";
 import DetailCard from "./DetailCard";
 import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 
-interface FlashCardModalProps {
-  trigger: "speak" | "mastery" | "CheckTranslationButton" | null;
-  onClose: () => void;
-}
-
-const FlashCardModal: React.FC<FlashCardModalProps> = () => {
+const FlashCardModal: React.FC = () => {
   const { activeItem, FlashCardModalOpen } = ReadThaiGameContext.useSelector(
-    (snapshot) => {
-      return {
-        activeItem: snapshot.context.activeItem,
-        FlashCardModalOpen: snapshot.context.FlashCardModalOpen,
-      };
-    }
+    ({ context }) => ({
+      activeItem: context.activeItem,
+      FlashCardModalOpen: context.FlashCardModalOpen,
+    })
   );
 
   const { send: sendToCardSetMachine } = ReadThaiGameContext.useActorRef();

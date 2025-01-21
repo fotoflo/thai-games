@@ -23,7 +23,7 @@ interface ButtonGroup {
 }
 
 const DebugPage: React.FC = () => {
-  const snapshot = ReadThaiGameContext.useSelector((state) => state.context);
+  const snapshot = ReadThaiGameContext.useSelector(({ context }) => context);
 
   const {
     superSet,
