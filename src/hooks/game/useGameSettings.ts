@@ -11,7 +11,7 @@ const generateUUID = () => {
 };
 
 const DEFAULT_SETTINGS: GameSettings = {
-  invertTranslation: false,
+  invertCard: false,
   showRomanization: true,
   showExamples: true,
   audio: {
@@ -32,7 +32,7 @@ export interface UseGameSettings {
   updateSettings: (updates: Partial<Omit<GameSettings, "profile">>) => void;
   updateProfile: (updates: Partial<PlayerProfile>) => void;
   toggleInvertTranslation: () => void;
-  invertTranslation: boolean;
+  invertCard: boolean;
 }
 
 export const useGameSettings = (): UseGameSettings => {
@@ -80,7 +80,7 @@ export const useGameSettings = (): UseGameSettings => {
   const toggleInvertTranslation = useCallback((): void => {
     setSettings((prev) => ({
       ...prev,
-      invertTranslation: !prev.invertTranslation,
+      invertCard: !prev.invertCard,
     }));
   }, []);
 
@@ -89,6 +89,6 @@ export const useGameSettings = (): UseGameSettings => {
     updateSettings,
     updateProfile,
     toggleInvertTranslation,
-    invertTranslation: settings.invertTranslation,
+    invertCard: settings.invertCard,
   };
 };

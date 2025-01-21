@@ -1,12 +1,9 @@
 import React from "react";
-import { useActor, useActorRef } from "@xstate/react";
 import GameHeader from "../components/GameHeader";
-import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
-import PracticeSetCards from "@/components/syllables/PracticeSetCards";
-import ItemDisplay from "@/components/syllables/ItemDisplay";
 import { Lesson } from "@/types/lessons";
 import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 import { useLessons } from "@/hooks/game/useLessons";
+import FlashCardModal from "@/components/syllables/FlashCardModal";
 
 interface DebugSection {
   title: string;
@@ -46,7 +43,7 @@ const DebugPage: React.FC = () => {
   // utilise them instead of the llessons from the invoke
   if (!lessonsLoading && !lessonsError) {
     console.log("lessons111", lessons);
-    sendToCardSetMachine({ type: "INITIALIZE_WITH_LOADED_LESSONS", lessons });
+    sendToCardSetMachine({ type: "INITIALIZE", lessons });
   }
 
   const handleSwitchToPracticeMode = () =>
@@ -64,6 +61,12 @@ const DebugPage: React.FC = () => {
     sendToCardSetMachine({ type: "MARK_AS_MASTERED" });
 
   const handleSkipItem = () => sendToCardSetMachine({ type: "SKIP_ITEM" });
+
+  const handleOpenFlashCardModal = () =>
+    sendToCardSetMachine({ type: "OPEN_FLASH_CARD_MODAL" });
+
+  const handleCloseFlashCardModal = () =>
+    sendToCardSetMachine({ type: "CLOSE_FLASH_CARD_MODAL" });
 
   const renderSection = ({ title, data }: DebugSection) => (
     <div className="bg-gray-800 rounded-lg p-4 w-full break-inside-avoid mb-4">
@@ -115,6 +118,15 @@ const DebugPage: React.FC = () => {
           label: "Skip Item",
           onClick: handleSkipItem,
           disabled: !activeItem,
+        },
+      ],
+    },
+    {
+      title: "modals",
+      buttons: [
+        {
+          label: "Open Flash Card Modal",
+          onClick: handleOpenFlashCardModal,
         },
       ],
     },
@@ -213,6 +225,8 @@ const DebugPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 p-4">
+      <FlashCardModal />
+
       <GameHeader title="Debug View" darkMode={true} />
 
       <span className="text-white">Current Mode: {progressionMode}</span>
@@ -245,7 +259,7 @@ const DebugPage: React.FC = () => {
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
           speakOnUnmount={false}
-          invertTranslation={false}
+          invertCard={false}
         /> */}
 
         {/* <PracticeSetCards className=" border-y-2 border-slate-700 my-2" /> */}

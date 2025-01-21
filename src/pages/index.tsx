@@ -14,6 +14,7 @@ import LessonDetails from "../components/syllables/LessonDetailScreen";
 import { Lesson } from "../types/lessons";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
+import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
@@ -23,7 +24,14 @@ interface LessonDetailsSelection {
 type DisplayTrigger = "speak" | "mastery" | "CheckTranslationButton" | null;
 
 const IndexPage: React.FC = () => {
-  const { activeItem, setCurrentLesson } = useReadThaiGame();
+  const { activeItem, setCurrentLesson } = ReadThaiGameContext.useSelector(
+    (snapshot) => {
+      return {
+        activeItem: snapshot.context.activeItem,
+        setCurrentLesson: snapshot.context.setCurrentLesson,
+      };
+    }
+  );
 
   const [displayTrigger, setDisplayTrigger] = useState<DisplayTrigger>(null);
   const [showWelcome, setShowWelcome] = useState(true);

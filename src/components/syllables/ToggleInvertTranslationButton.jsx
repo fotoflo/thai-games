@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ToggleInvertTranslationButton = ({ toggleInvertTranslation, invertTranslation }) => {
+const ToggleInvertTranslationButton = ({ toggleInvertTranslation, invertCard }) => {
   
   const handleToggle = () => {
-    toggleInvertTranslation(!invertTranslation);
+    toggleInvertTranslation(!invertCard);
   };
 
   return (
@@ -17,9 +17,9 @@ const ToggleInvertTranslationButton = ({ toggleInvertTranslation, invertTranslat
       hover:bg-gray-700
       transition-colors"
       onClick={handleToggle}
-      title={invertTranslation ? 'Show Original' : 'Show Translation'}
+      title={invertCard ? 'Show Original' : 'Show Translation'}
     >
-      {invertTranslation ? (
+      {invertCard ? (
         <img
           alt="English"
           src="http://purecatamphetamine.github.io/country-flag-icons/3x2/GB.svg"

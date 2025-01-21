@@ -17,6 +17,8 @@ import {
   enterSwitchToFirstPass,
   enterSwitchToTest,
   initializeWithLoadedLessons,
+  openFlashCardModal,
+  closeFlashCardModal,
 } from "./cardSetActions";
 import { createActorContext } from "@xstate/react";
 import { lessonApi } from "@/api/lessonApi";
@@ -32,6 +34,8 @@ const initialContext: CardSetContext = {
   currentLesson: 0,
   superSetIndex: 0,
   error: null,
+  invertCard: false,
+  FlashCardModalOpen: false,
 };
 
 export const cardSetMachine = setup({
@@ -57,6 +61,8 @@ export const cardSetMachine = setup({
     enterSwitchToFirstPass,
     enterSwitchToTest,
     initializeWithLoadedLessons,
+    openFlashCardModal,
+    closeFlashCardModal,
   },
   actors: {
     fetchLessons: fromPromise(lessonApi.loadLessons),
@@ -69,7 +75,7 @@ export const cardSetMachine = setup({
   states: {
     loading: {
       on: {
-        INITIALIZE_WITH_LOADED_LESSONS: {
+        INITIALIZE: {
           actions: ["initializeWithLoadedLessons"],
           target: "firstPass",
         },
@@ -84,6 +90,12 @@ export const cardSetMachine = setup({
         },
       ],
       on: {
+        OPEN_FLASH_CARD_MODAL: {
+          actions: ["openFlashCardModal"],
+        },
+        CLOSE_FLASH_CARD_MODAL: {
+          actions: ["closeFlashCardModal"],
+        },
         CHOOSE_LESSON: {
           actions: ["handleChooseLesson"],
         },
@@ -114,6 +126,12 @@ export const cardSetMachine = setup({
         },
       ],
       on: {
+        OPEN_FLASH_CARD_MODAL: {
+          actions: ["openFlashCardModal"],
+        },
+        CLOSE_FLASH_CARD_MODAL: {
+          actions: ["closeFlashCardModal"],
+        },
         CHOOSE_LESSON: {
           actions: ["handleChooseLesson"],
         },

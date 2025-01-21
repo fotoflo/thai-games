@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { Volume2 } from "lucide-react";
 import { useThaiSpeech } from "@/hooks/useThaiSpeech";
 import rehypeRaw from "rehype-raw";
+import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 
 interface ItemDisplayProps {
   textSize?: string;
@@ -12,7 +13,7 @@ interface ItemDisplayProps {
   iconColor?: string;
   speakOnMount?: boolean;
   speakOnUnmount?: boolean;
-  invertTranslation?: boolean;
+  invertCard?: boolean;
   useFullMarkdown?: boolean;
   showBothSides?: boolean;
   sideTwoTextSize?: string;
@@ -32,7 +33,14 @@ const ItemDisplay: React.FC<ItemDisplayProps> = ({
   sideTwoTextSize = "text-sm sm:text-base",
   sideTwoTextColor = "text-slate-400",
 }) => {
-  const { activeItem, invertTranslation } = useReadThaiGame();
+  const { activeItem, invertCard } = ReadThaiGameContext.useSelector(
+    (snapshot) => {
+      return {
+        activeItem: snapshot.context.activeItem,
+        invertCard: snapshot.context.invertCard,
+      };
+    }
+  );
   const vocabItem = activeItem?.item;
 
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
@@ -41,7 +49,7 @@ const ItemDisplay: React.FC<ItemDisplayProps> = ({
     vocabItem?.sides?.[1]?.markdown
   );
 
-  const displayText = invertTranslation
+  const displayText = invertCard
     ? vocabItem?.sides?.[1]?.markdown || vocabItem?.sides?.[0]?.markdown
     : vocabItem?.sides?.[0]?.markdown || "";
 

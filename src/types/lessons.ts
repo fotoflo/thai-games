@@ -158,7 +158,7 @@ export type GameState = {
 
 // Game Settings
 export type GameSettings = {
-  invertTranslation: boolean;
+  invertCard: boolean;
   showRomanization: boolean;
   showExamples: boolean;
   audio: {

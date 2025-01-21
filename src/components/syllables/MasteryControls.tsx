@@ -1,5 +1,5 @@
 import React from "react";
-import { useReadThaiGame } from "@/context/ReadThaiGameContext";
+import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 
 interface MasteryControlsProps {
   className?: string;
@@ -8,12 +8,19 @@ interface MasteryControlsProps {
 const MasteryControls: React.FC<MasteryControlsProps> = ({
   className = "",
 }) => {
-  const {
-    progressionMode,
-    handleMarkForPractice,
-    handleMarkAsMastered,
-    handleSkipItem,
-  } = useReadThaiGame();
+  const { progressionMode } = ReadThaiGameContext.useSelector((snapshot) => {
+    return {
+      progressionMode: snapshot.context.progressionMode,
+    };
+  });
+
+  const { send: sendToCardSetMachine } = ReadThaiGameContext.useActorRef();
+
+  const handleMarkForPractice = () =>
+    sendToCardSetMachine({ type: "MARK_FOR_PRACTICE" });
+  const handleMarkAsMastered = () =>
+    sendToCardSetMachine({ type: "MARK_AS_MASTERED" });
+  const handleSkipItem = () => sendToCardSetMachine({ type: "SKIP_ITEM" });
 
   return (
     <div className={`flex justify-around gap-2 ${className}`}>

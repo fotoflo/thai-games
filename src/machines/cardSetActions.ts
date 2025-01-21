@@ -1,13 +1,6 @@
 import { assign } from "xstate";
-import {
-  Lesson,
-  LessonItem,
-  RecallCategory,
-  SuperSetItem,
-} from "@/types/lessons";
+import { LessonItem, RecallCategory, SuperSetItem } from "@/types/lessons";
 import { LessonWithRelations } from "@/services/lessonService";
-
-type actorId = string | null;
 
 export interface CardSetContext {
   lessons: LessonWithRelations[];
@@ -20,15 +13,19 @@ export interface CardSetContext {
   currentLesson: number;
   superSetIndex: number;
   error: string | null;
+  invertCard: boolean;
+  FlashCardModalOpen: boolean;
 }
 
 export type ChooseLessonEvent = {
   lessonIndex: number;
-  lessons: any[];
+  lessons: LessonWithRelations[];
 };
 
 export type CardSetEvent =
-  | { type: "INITIALIZE" }
+  | { type: "OPEN_FLASH_CARD_MODAL" }
+  | { type: "CLOSE_FLASH_CARD_MODAL" }
+  | { type: "INITIALIZE"; lessons: LessonWithRelations[] }
   | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent }
   | { type: "MARK_FOR_PRACTICE" }
   | { type: "MARK_AS_MASTERED" }
@@ -39,19 +36,7 @@ export type CardSetEvent =
   | { type: "SWITCH_TO_TEST" }
   | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent };
 
-export const initialContext: CardSetContext = {
-  lessons: [],
-  progressionMode: "initializing",
-  superSet: [],
-  practiceSet: [],
-  practiceSetSize: 0,
-  practiceSetIndex: 0,
-  activeItem: null,
-  currentLesson: 0,
-  superSetIndex: 0,
-};
-
-const INITIAL_PRACTICE_SET_SIZE = 5;
+export const INITIAL_PRACTICE_SET_SIZE = 5;
 
 export type LessonEvent =
   | ChooseLessonEvent
@@ -219,6 +204,14 @@ export const handleChooseLesson = assign(
     };
   }
 );
+
+export const openFlashCardModal = assign({
+  FlashCardModalOpen: () => true,
+});
+
+export const closeFlashCardModal = assign({
+  FlashCardModalOpen: () => false,
+});
 
 export const handleMarkAsMastered = assign(
   ({ context }: { context: CardSetContext }) => {
