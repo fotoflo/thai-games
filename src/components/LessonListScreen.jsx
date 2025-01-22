@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
-import { useReadThaiGame } from '@/context/ReadThaiGameContext';
 import GuidedLessonCreator from './GuidedLessonCreator';
+import { useCardSetMachine } from '@/machines/cardSetMachine';
 
 const LessonListScreen = ({ onClose, onViewDetails }) => {
-  const { lessons, setCurrentLesson, sendToCardSetMachine } = useReadThaiGame();
+  const { lessons, setCurrentLesson, sendToCardSetMachine } = useCardSetMachine();
   const [showGuidedCreator, setShowGuidedCreator] = useState(false);
 
   const handleLessonClick = (index) => {

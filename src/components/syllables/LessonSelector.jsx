@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import LessonListScreen from '../LessonListScreen';
-import { useReadThaiGame } from '@/context/ReadThaiGameContext';
+import { useCardSetMachine } from '@/machines/cardSetMachine';
 
 const LessonSelector = ({ 
   onViewDetails 
@@ -8,8 +8,7 @@ const LessonSelector = ({
   const carouselRef = useRef(null);
   const [showLessonList, setShowLessonList] = useState(false);
 
-  const game = useReadThaiGame();
-  const { lessons, currentLesson, setCurrentLesson } = game;
+  const { lessons, currentLesson, setCurrentLesson } = useCardSetMachine();
 
 
   console.log("lessonSelector currentLesson", currentLesson.name);

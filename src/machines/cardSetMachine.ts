@@ -35,7 +35,6 @@ const initialContext: CardSetContext = {
   superSetIndex: 0,
   error: null,
   invertCard: false,
-  FlashCardModalOpen: false,
 };
 
 export const cardSetMachine = setup({
