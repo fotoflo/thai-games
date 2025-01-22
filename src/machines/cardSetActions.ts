@@ -15,7 +15,6 @@ export interface CardSetContext {
   superSetIndex: number;
   error: string | null;
   invertCard: boolean;
-  FlashCardModalOpen: boolean;
 }
 
 export type ChooseLessonEvent = {
@@ -206,15 +205,19 @@ export const handleChooseLesson = assign(
   }
 );
 
-export const openFlashCardModal = assign(({ context }) => {
-  modals.flashCard.open({ activeItem: context.activeItem });
-  return { FlashCardModalOpen: true };
-});
+export const openFlashCardModal = ({
+  context,
+}: {
+  context: CardSetContext;
+}) => {
+  if (context.activeItem) {
+    modals.flashCard.open({ activeItem: context.activeItem });
+  }
+};
 
-export const closeFlashCardModal = assign(() => {
+export const closeFlashCardModal = () => {
   modals.flashCard.close();
-  return { FlashCardModalOpen: false };
-});
+};
 
 export const handleMarkAsMastered = assign(
   ({ context }: { context: CardSetContext }) => {
