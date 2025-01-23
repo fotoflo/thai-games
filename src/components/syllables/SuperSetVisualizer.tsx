@@ -1,9 +1,9 @@
-import { cardSetMachine } from "@/machines/cardSetMachine";
-import { RecallCategory } from "@/types/lessons";
 import React from "react";
+import { RecallCategory } from "@/types/lessons";
+import { useSuperSet } from "@/hooks/game/useReadThaiGame";
 
-const LessonSubsetVisualizer = ({ className = "" }: { className?: string }) => {
-  // const { superSet, superSetIndex } = useReadThaiGame();
+const SuperSetVisualizer = ({ className = "" }: { className?: string }) => {
+  const { superSet, superSetIndex } = useSuperSet();
 
   if (!superSet?.length) {
     return <div className={className}>No items in practice set</div>;
@@ -63,7 +63,7 @@ const LessonSubsetVisualizer = ({ className = "" }: { className?: string }) => {
   );
 };
 
-export default LessonSubsetVisualizer;
+export default SuperSetVisualizer;
 
 const getStatusColor = (status: RecallCategory): string => {
   switch (status) {

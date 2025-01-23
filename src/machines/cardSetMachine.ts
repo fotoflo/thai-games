@@ -159,3 +159,4 @@ export const cardSetMachine = setup({
 });
 
 export const ReadThaiGameContext = createActorContext(cardSetMachine);
+export const ReadThaiGameSelector = ReadThaiGameContext.useSelector;

@@ -1,9 +1,19 @@
 import React from "react";
 import GameHeader from "../components/GameHeader";
-import { Lesson } from "@/types/lessons";
 import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 import { useLessons } from "@/hooks/game/useLessons";
 import FlashCardModal from "@/components/syllables/FlashCardModal";
+import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
+import ItemDisplay from "@/components/syllables/ItemDisplay";
+import PracticeSetCards from "@/components/syllables/PracticeSetCards";
+import {
+  useSuperSet,
+  useActiveItem,
+  useGameMode,
+  usePracticeSet,
+  useGameLessons,
+  useGameActions,
+} from "@/hooks/game/useReadThaiGame";
 
 interface DebugSection {
   title: string;
@@ -24,49 +34,100 @@ interface ButtonGroup {
 
 const DebugPage: React.FC = () => {
   const snapshot = ReadThaiGameContext.useSelector(({ context }) => context);
-
+  const { superSet, superSetIndex } = useSuperSet();
+  const { practiceSet, practiceSetIndex } = usePracticeSet();
+  const { activeItem } = useActiveItem();
+  const { progressionMode } = useGameMode();
+  const { lessons: apiLessons, lessonsLoading, lessonsError } = useLessons();
+  const { sendReadThaiGameContext } = useGameLessons();
   const {
-    superSet,
-    practiceSetIndex,
-    activeItem,
-    superSetIndex,
-    progressionMode,
-    currentLesson,
-  } = snapshot;
-
-  const { send: sendToCardSetMachine } = ReadThaiGameContext.useActorRef();
-
-  const { lessons, lessonsLoading, lessonsError, invalidateLessons } =
-    useLessons();
+    nextItem,
+    markForPractice,
+    markAsMastered,
+    skipItem,
+    openFlashCard,
+    switchToPractice,
+    switchToFirstPass,
+  } = useGameActions();
 
   // TODO FINISH passing lessons from useLessons to cardSetMachine
   // utilise them instead of the llessons from the invoke
   if (!lessonsLoading && !lessonsError) {
-    console.log("lessons111", lessons);
-    sendToCardSetMachine({ type: "INITIALIZE", lessons });
+    console.log("lessons111", apiLessons);
+    sendReadThaiGameContext({ type: "INITIALIZE", lessons: apiLessons });
   }
 
-  const handleSwitchToPracticeMode = () =>
-    sendToCardSetMachine({ type: "SWITCH_TO_PRACTICE" });
-
-  const handleSwitchToFirstPassMode = () =>
-    sendToCardSetMachine({ type: "SWITCH_TO_FIRST_PASS" });
-
-  const handleNextItem = () => sendToCardSetMachine({ type: "NEXT_ITEM" });
-
-  const handleMarkForPractice = () =>
-    sendToCardSetMachine({ type: "MARK_FOR_PRACTICE" });
-
-  const handleMarkAsMastered = () =>
-    sendToCardSetMachine({ type: "MARK_AS_MASTERED" });
-
-  const handleSkipItem = () => sendToCardSetMachine({ type: "SKIP_ITEM" });
-
-  const handleOpenFlashCardModal = () =>
-    sendToCardSetMachine({ type: "OPEN_FLASH_CARD_MODAL" });
-
-  const handleCloseFlashCardModal = () =>
-    sendToCardSetMachine({ type: "CLOSE_FLASH_CARD_MODAL" });
+  const buttonGroups: ButtonGroup[] = [
+    {
+      title: "Item Actions",
+      buttons: [
+        {
+          label: "Next Item",
+          onClick: nextItem,
+          disabled: !activeItem,
+        },
+        {
+          label: "Mark for Practice",
+          onClick: markForPractice,
+          disabled: !activeItem,
+        },
+        {
+          label: "Mark as Mastered",
+          onClick: markAsMastered,
+          disabled: !activeItem,
+        },
+        {
+          label: "Skip Item",
+          onClick: skipItem,
+          disabled: !activeItem,
+        },
+      ],
+    },
+    {
+      title: "modals",
+      buttons: [
+        {
+          label: "Open Flash Card Modal",
+          onClick: openFlashCard,
+        },
+      ],
+    },
+    {
+      title: "Mode Selection",
+      buttons: [
+        {
+          label: "First Pass Mode",
+          onClick: switchToFirstPass,
+          disabled: progressionMode === "firstPass",
+        },
+        {
+          label: "Practice Mode",
+          onClick: switchToPractice,
+          disabled: progressionMode === "practice",
+        },
+      ],
+    },
+    {
+      title: "Lesson Control",
+      buttons: [
+        {
+          label: "Reset Lesson",
+          onClick: () => {
+            // TODO: Add setCurrentLesson to actions
+            switchToFirstPass();
+          },
+          disabled: false,
+        },
+        {
+          label: "Clear Local Storage",
+          onClick: () => {
+            localStorage.clear();
+            window.location.reload();
+          },
+        },
+      ],
+    },
+  ];
 
   const renderSection = ({ title, data }: DebugSection) => (
     <div className="bg-gray-800 rounded-lg p-4 w-full break-inside-avoid mb-4">
@@ -94,78 +155,6 @@ const DebugPage: React.FC = () => {
       {label}
     </button>
   );
-
-  const buttonGroups: ButtonGroup[] = [
-    {
-      title: "Item Actions",
-      buttons: [
-        {
-          label: "Next Item",
-          onClick: handleNextItem,
-          disabled: !activeItem,
-        },
-        {
-          label: "Mark for Practice",
-          onClick: handleMarkForPractice,
-          disabled: !activeItem,
-        },
-        {
-          label: "Mark as Mastered",
-          onClick: handleMarkAsMastered,
-          disabled: !activeItem,
-        },
-        {
-          label: "Skip Item",
-          onClick: handleSkipItem,
-          disabled: !activeItem,
-        },
-      ],
-    },
-    {
-      title: "modals",
-      buttons: [
-        {
-          label: "Open Flash Card Modal",
-          onClick: handleOpenFlashCardModal,
-        },
-      ],
-    },
-    {
-      title: "Mode Selection",
-      buttons: [
-        {
-          label: "First Pass Mode",
-          onClick: handleSwitchToFirstPassMode,
-          disabled: progressionMode === "firstPass",
-        },
-        {
-          label: "Practice Mode",
-          onClick: handleSwitchToPracticeMode,
-          disabled: progressionMode === "practice",
-        },
-      ],
-    },
-    {
-      title: "Lesson Control",
-      buttons: [
-        {
-          label: "Reset Lesson",
-          onClick: () => {
-            setCurrentLesson(0);
-            handleSwitchToFirstPassMode();
-          },
-          disabled: false,
-        },
-        {
-          label: "Clear Local Storage",
-          onClick: () => {
-            localStorage.clear();
-            window.location.reload();
-          },
-        },
-      ],
-    },
-  ];
 
   const sections: DebugSection[] = [
     {
@@ -201,12 +190,12 @@ const DebugPage: React.FC = () => {
     {
       title: "Lesson State",
       data: {
-        lessonCount: lessons.length || "null",
-        currentLesson,
-        lesson: lessons?.[currentLesson]?.name,
+        lessonCount: apiLessons.length || "null",
+        currentLesson: snapshot.currentLesson,
+        lesson: apiLessons?.[snapshot.currentLesson]?.name,
         progressionMode,
-        lessonItems: lessons?.[currentLesson]?.items.map(
-          (item: Lesson) => item.id
+        lessonItems: apiLessons?.[snapshot.currentLesson]?.items?.map(
+          (item) => item.id
         ),
       },
       priority: 2,
@@ -252,17 +241,17 @@ const DebugPage: React.FC = () => {
           </div>
         </div>
 
-        {/* <SuperSetVisualizer className="mb-5" /> */}
+        <SuperSetVisualizer className="mb-5" />
 
-        {/* <ItemDisplay
+        <ItemDisplay
           iconSize={52}
           textSize="text-6xl"
           className="flex items-center justify-center mb-10"
           speakOnUnmount={false}
           invertCard={false}
-        /> */}
+        />
 
-        {/* <PracticeSetCards className=" border-y-2 border-slate-700 my-2" /> */}
+        <PracticeSetCards className="border-y-2 border-slate-700 my-2" />
 
         {/* State Views Section - Masonry Layout */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4">

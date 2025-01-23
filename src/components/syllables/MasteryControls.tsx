@@ -1,5 +1,5 @@
 import React from "react";
-import { ReadThaiGameContext } from "@/machines/cardSetMachine";
+import { useGameMode, useGameActions } from "@/hooks/game/useReadThaiGame";
 
 interface MasteryControlsProps {
   className?: string;
@@ -8,36 +8,27 @@ interface MasteryControlsProps {
 const MasteryControls: React.FC<MasteryControlsProps> = ({
   className = "",
 }) => {
-  const { progressionMode } = ReadThaiGameContext.useSelector(
-    ({ context }) => context.progressionMode
-  );
-
-  const { send: sendToCardSetMachine } = ReadThaiGameContext.useActorRef();
-
-  const handleMarkForPractice = () =>
-    sendToCardSetMachine({ type: "MARK_FOR_PRACTICE" });
-  const handleMarkAsMastered = () =>
-    sendToCardSetMachine({ type: "MARK_AS_MASTERED" });
-  const handleSkipItem = () => sendToCardSetMachine({ type: "SKIP_ITEM" });
+  const { progressionMode } = useGameMode();
+  const { markForPractice, markAsMastered, skipItem } = useGameActions();
 
   return (
     <div className={`flex justify-around gap-2 ${className}`}>
       {progressionMode === "firstPass" && (
         <>
           <button
-            onClick={handleMarkForPractice}
+            onClick={markForPractice}
             className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
           >
             Practice
           </button>
           <button
-            onClick={handleMarkAsMastered}
+            onClick={markAsMastered}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           >
             Mastered
           </button>
           <button
-            onClick={handleSkipItem}
+            onClick={skipItem}
             className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Skip
@@ -48,13 +39,13 @@ const MasteryControls: React.FC<MasteryControlsProps> = ({
       {progressionMode === "practice" && (
         <>
           <button
-            onClick={handleMarkAsMastered}
+            onClick={markAsMastered}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           >
             Mastered
           </button>
           <button
-            onClick={handleMarkForPractice}
+            onClick={markForPractice}
             className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
           >
             Keep Practicing

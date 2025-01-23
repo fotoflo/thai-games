@@ -3,6 +3,7 @@ import { PlusCircle } from "lucide-react";
 import { thaiToIPA } from "../../utils/thaiToIPA";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import { usePracticeSet, useActiveItem } from "@/hooks/game/useReadThaiGame";
 
 const getTextSizeClass = (text: string): string => {
   if (text.length <= 3) return "text-lg";
@@ -29,7 +30,8 @@ const stripHtml = (html: string): string => {
 const PracticeSetCards: React.FC<{ className?: string }> = ({
   className = "",
 }) => {
-  const { practiceSet, activeItem } = useReadThaiGame();
+  const { practiceSet } = usePracticeSet();
+  const activeItem = useActiveItem();
 
   const isEmpty = practiceSet?.length === 0;
   const hasMoreCards = false; // practiceSetSize > practiceSet?.length;
