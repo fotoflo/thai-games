@@ -3,16 +3,16 @@ import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
 import GuidedLessonCreator from './GuidedLessonCreator';
-import { useCardSetMachine } from '@/machines/cardSetMachine';
+import { useLessons } from '@/hooks/game/useLessons';
+import { useGameActions } from '@/hooks/game/useReadThaiGame';
 
 const LessonListScreen = ({ onClose, onViewDetails }) => {
-  const { lessons, setCurrentLesson, sendToCardSetMachine } = useCardSetMachine();
+  const { lessons: apiLessons } = useLessons();
+  const { chooseLesson } = useGameActions();
   const [showGuidedCreator, setShowGuidedCreator] = useState(false);
 
   const handleLessonClick = (index) => {
-    console.log("log handleLessonClick sendToCardSetMachine lessonIndex", index);
-    setCurrentLesson(index); // Set the current lesson
-    sendToCardSetMachine({ type: "CHOOSE_LESSON", lessonIndex: index, lessons });
+    chooseLesson(index, apiLessons);
     onClose(); // Close the modal
   };
 
@@ -47,7 +47,7 @@ const LessonListScreen = ({ onClose, onViewDetails }) => {
         </button>
 
         <div className="grid grid-cols-1 gap-3">
-          {lessons.map((lesson, index) => (
+          {apiLessons?.map((lesson, index) => (
             <div 
               key={lesson.id || index} 
               className="bg-slate-800/30 rounded-xl overflow-hidden border border-slate-700/50"

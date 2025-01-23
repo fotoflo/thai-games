@@ -31,8 +31,13 @@ export const useModal = <T = void>() => {
 // Simple global reference to control modals
 export const modals: {
   flashCard: ModalControls<FlashCardData>;
+  lessonList: ModalControls<void>;
 } = {
   flashCard: {
+    open: () => {},
+    close: () => {},
+  },
+  lessonList: {
     open: () => {},
     close: () => {},
   },
