@@ -6,6 +6,7 @@ import FlashCardModal from "@/components/syllables/FlashCardModal";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import ItemDisplay from "@/components/syllables/ItemDisplay";
 import PracticeSetCards from "@/components/syllables/PracticeSetCards";
+import { modals } from "@/hooks/useModal";
 import {
   useSuperSet,
   useActiveItem,
@@ -45,7 +46,6 @@ const DebugPage: React.FC = () => {
     markForPractice,
     markAsMastered,
     skipItem,
-    openFlashCard,
     switchToPractice,
     switchToFirstPass,
   } = useGameActions();
@@ -88,7 +88,7 @@ const DebugPage: React.FC = () => {
       buttons: [
         {
           label: "Open Flash Card Modal",
-          onClick: openFlashCard,
+          onClick: () => activeItem && modals.flashCard.open({ activeItem }),
         },
       ],
     },

@@ -23,12 +23,6 @@ export const useGameActions = () => {
       sendReadThaiGameContext({ type: "SWITCH_TO_FIRST_PASS" }),
     switchToTest: () => sendReadThaiGameContext({ type: "SWITCH_TO_TEST" }),
 
-    // Modal controls
-    openFlashCard: () =>
-      sendReadThaiGameContext({ type: "OPEN_FLASH_CARD_MODAL" }),
-    closeFlashCard: () =>
-      sendReadThaiGameContext({ type: "CLOSE_FLASH_CARD_MODAL" }),
-
     // Lesson management
     chooseLesson: (lessonIndex: number, lessons: LessonWithRelations[]) =>
       sendReadThaiGameContext({

@@ -23,8 +23,6 @@ export type ChooseLessonEvent = {
 };
 
 export type CardSetEvent =
-  | { type: "OPEN_FLASH_CARD_MODAL" }
-  | { type: "CLOSE_FLASH_CARD_MODAL" }
   | { type: "INITIALIZE"; lessons: LessonWithRelations[] }
   | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent }
   | { type: "MARK_FOR_PRACTICE" }
@@ -33,8 +31,7 @@ export type CardSetEvent =
   | { type: "NEXT_ITEM" }
   | { type: "SWITCH_TO_PRACTICE" }
   | { type: "SWITCH_TO_FIRST_PASS" }
-  | { type: "SWITCH_TO_TEST" }
-  | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent };
+  | { type: "SWITCH_TO_TEST" };
 
 export const INITIAL_PRACTICE_SET_SIZE = 5;
 
@@ -204,20 +201,6 @@ export const handleChooseLesson = assign(
     };
   }
 );
-
-export const openFlashCardModal = ({
-  context,
-}: {
-  context: CardSetContext;
-}) => {
-  if (context.activeItem) {
-    modals.flashCard.open({ activeItem: context.activeItem });
-  }
-};
-
-export const closeFlashCardModal = () => {
-  modals.flashCard.close();
-};
 
 export const handleMarkAsMastered = assign(
   ({ context }: { context: CardSetContext }) => {
