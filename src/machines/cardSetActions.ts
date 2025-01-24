@@ -17,7 +17,7 @@ export interface CardSetContext {
   invertCard: boolean;
 }
 
-export type ChooseLessonEvent = {
+export type ChooseLessonEventData = {
   type: "CHOOSE_LESSON";
   lessonIndex: number;
   lessons: LessonWithRelations[];
@@ -25,7 +25,7 @@ export type ChooseLessonEvent = {
 
 export type CardSetEvent =
   | { type: "INITIALIZE"; lessons: LessonWithRelations[] }
-  | { type: "CHOOSE_LESSON"; chooseLessonEvent: ChooseLessonEvent }
+  | { type: "CHOOSE_LESSON"; data: ChooseLessonEventData }
   | { type: "MARK_FOR_PRACTICE" }
   | { type: "MARK_AS_MASTERED" }
   | { type: "SKIP_ITEM" }
@@ -37,7 +37,7 @@ export type CardSetEvent =
 export const INITIAL_PRACTICE_SET_SIZE = 5;
 
 export type LessonEvent =
-  | ChooseLessonEvent
+  | ChooseLessonEventData
   | { type: "MARK_FOR_PRACTICE" }
   | { type: "MARK_AS_MASTERED" }
   | { type: "SKIP_ITEM" }
@@ -177,7 +177,7 @@ export const handleChooseLesson = assign(
     event,
   }: {
     context: CardSetContext;
-    event: ChooseLessonEvent;
+    event: ChooseLessonEventData;
   }) => {
     const lessonData = event.lessons[event.lessonIndex];
     const superSet = lessonData?.items.map(createSuperSetItem);

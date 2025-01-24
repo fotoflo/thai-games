@@ -27,7 +27,8 @@ export const useGameActions = () => {
     chooseLesson: (lessonIndex: number, lessons: LessonWithRelations[]) =>
       sendReadThaiGameContext({
         type: "CHOOSE_LESSON",
-        chooseLessonEvent: { lessonIndex, lessons },
+        lessonIndex,
+        lessons,
       }),
 
     // Initialization
