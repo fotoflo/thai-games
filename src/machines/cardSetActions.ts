@@ -18,6 +18,7 @@ export interface CardSetContext {
 }
 
 export type ChooseLessonEvent = {
+  type: "CHOOSE_LESSON";
   lessonIndex: number;
   lessons: LessonWithRelations[];
 };
@@ -48,7 +49,7 @@ const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
   id: item.id,
   item,
   lastReviewed: new Date(),
-  recallCategory: "unseen",
+  recallCategory: "unseen" as RecallCategory,
 });
 
 // Action Functions
@@ -178,14 +179,11 @@ export const handleChooseLesson = assign(
     context: CardSetContext;
     event: ChooseLessonEvent;
   }) => {
-    console.log("log chooseLesson", event);
-    const lessonData = event?.lessons?.[event?.lessonIndex];
+    const lessonData = event.lessons[event.lessonIndex];
     const superSet = lessonData?.items.map(createSuperSetItem);
-    const lessons = event?.lessons;
-    const currentLesson = lessons[event.lessonIndex];
-    console.log("log chooseLesson currentLesson", currentLesson);
+    const lessons = event.lessons;
+    const currentLesson = event.lessonIndex;
 
-    const currentLessonId = currentLesson?.id;
     const activeItem = superSet?.[0];
     const superSetIndex = 0;
 
@@ -195,7 +193,6 @@ export const handleChooseLesson = assign(
       superSet,
       lessons,
       currentLesson,
-      currentLessonId,
       activeItem,
       superSetIndex,
     };

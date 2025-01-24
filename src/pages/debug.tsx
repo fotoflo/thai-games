@@ -16,6 +16,7 @@ import {
   useGameActions,
 } from "@/hooks/game/useReadThaiGame";
 import LessonListModal from "@/components/LessonListModal";
+import LessonDetailsModal from "@/components/LessonDetailsModal";
 
 interface DebugSection {
   title: string;
@@ -221,6 +222,7 @@ const DebugPage: React.FC = () => {
     <div className="min-h-screen bg-gray-900 p-4">
       <FlashCardModal />
       <LessonListModal />
+      <LessonDetailsModal />
 
       <GameHeader title="Debug View" darkMode={true} />
 

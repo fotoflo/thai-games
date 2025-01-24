@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { SuperSetItem } from "@/types/lessons";
+import { Lesson } from "@/types/lessons";
 
 interface FlashCardData {
   activeItem: SuperSetItem;
+}
+
+interface LessonDetailsData {
+  lesson: Lesson;
+  index: number;
 }
 
 interface ModalControls<T> {
@@ -32,12 +38,17 @@ export const useModal = <T = void>() => {
 export const modals: {
   flashCard: ModalControls<FlashCardData>;
   lessonList: ModalControls<void>;
+  lessonDetails: ModalControls<LessonDetailsData>;
 } = {
   flashCard: {
     open: () => {},
     close: () => {},
   },
   lessonList: {
+    open: () => {},
+    close: () => {},
+  },
+  lessonDetails: {
     open: () => {},
     close: () => {},
   },
