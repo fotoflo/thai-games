@@ -77,7 +77,7 @@ const LessonDetails = ({
   const studyButton = (
     <button
       onClick={() => {
-        onStudyLesson(lessonIndex);
+        onStudyLesson(0);
         onClose();
       }}
       className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"

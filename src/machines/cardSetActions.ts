@@ -45,9 +45,9 @@ export type LessonEvent =
   | { type: "SWITCH_TO_PRACTICE" }
   | { type: "SWITCH_TO_FIRST_PASS" };
 
-const createSuperSetItem = (item: LessonItem): SuperSetItem => ({
-  id: item.id,
-  item,
+const createSuperSetItem = (item: Partial<LessonItem>): SuperSetItem => ({
+  id: item.id!,
+  item: item as LessonItem,
   lastReviewed: new Date(),
   recallCategory: "unseen" as RecallCategory,
 });
