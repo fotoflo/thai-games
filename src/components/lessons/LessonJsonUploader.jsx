@@ -12,47 +12,49 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
   const [pastedText, setPastedText] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const promptText = `Please create a lesson about [TOPIC]. If no topic was provided, please ask me what topic I'd like to create a lesson about.
-
-Use the following JSON schema to structure the lesson:
+  const promptText = `Please create a bilingual vocabulary lesson using this schema:
 
 {
-  "name": "Title of the Lesson",
-  "description": "A clear description of what will be learned",
-  "subject": "Main subject area",
-  "categories": [
+  "lessonInfo": {
+    "title": "string (in both languages)",
+    "description": "string (in English)",
+    "category": "string",
+    "difficulty": "enum: BEGINNER | INTERMEDIATE | ADVANCED",
+    "estimatedTime": "number (minutes)"
+  },
+  "vocabulary": [
     {
-      "id": "category-1",
-      "name": "Category Name"
-    }
-  ],
-  "difficulty": "BEGINNER",  // Must be: BEGINNER, INTERMEDIATE, or ADVANCED
-  "estimatedTime": 30,       // Time in minutes
-  "totalItems": 1,           // Number of items in the lesson
-  "version": 1,
-  "items": [
-    {
-      "id": "item-1",
-      "sides": [
-        {
-          "markdown": "Front side content",
-          "metadata": {
-            "pronunciation": "optional pronunciation guide",
-            "notes": "optional additional notes"
-          }
-        },
-        {
-          "markdown": "Back side content"
-        }
-      ],
-      "practiceHistory": [],
-      "recallCategory": "UNSEEN",  // Must be: UNSEEN, SKIPPED, MASTERED, or PRACTICE
-      "tags": ["tag1", "tag2"],
-      "categories": ["category1"],
-      "intervalModifier": 1
+      "id": "string",
+      "side1": {
+        "text": "string (primary language)",
+        "pronunciation": "string (optional)"
+      },
+      "side2": {
+        "text": "string (secondary language)"
+      },
+      "tags": ["string"]
     }
   ]
-}`;
+}
+
+Please tell me:
+1. What topic would you like to learn vocabulary for?
+2. How many vocabulary cards would you like (recommended: 5-20)?
+3. Which two languages would you like to learn? (default: Thai-English)
+
+I'll then create a custom lesson matching your specifications.
+
+Example topic areas:
+- Kitchen items
+- Animals
+- Colors
+- Numbers
+- Family members
+- Weather
+- Transportation
+- Food and drinks
+- Clothing
+- Body parts`;
 
   const handleCopyPrompt = async () => {
     try {
@@ -103,8 +105,6 @@ Use the following JSON schema to structure the lesson:
               }
             });
           }
-          if (!item.practiceHistory) missingFields.push(`Item ${index + 1} is missing practiceHistory array`);
-          if (!item.recallCategory) missingFields.push(`Item ${index + 1} is missing recallCategory`);
           if (!item.tags || !Array.isArray(item.tags)) missingFields.push(`Item ${index + 1} is missing tags array`);
           if (!item.categories || !Array.isArray(item.categories)) missingFields.push(`Item ${index + 1} is missing categories array`);
           if (typeof item.intervalModifier !== 'number') missingFields.push(`Item ${index + 1} is missing intervalModifier number`);

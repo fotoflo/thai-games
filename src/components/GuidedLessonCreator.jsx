@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useReadThaiGame } from '@/hooks/game/useReadThaiGame';
+import { useLessons } from '@/hooks/game/useLessons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ import {
 import LessonJsonUploader from './lessons/LessonJsonUploader';
 
 const GuidedLessonCreator = ({ onClose }) => {
-  const { invalidateLessons } = useReadThaiGame();
+  const { invalidateLessons } = useLessons();
   const [isJsonMode, setIsJsonMode] = useState(true);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);

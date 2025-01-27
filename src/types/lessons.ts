@@ -43,8 +43,11 @@ export const PracticeEventSchema = z.object({
 export const LessonItemSchema = z.object({
   id: z.string(),
   sides: z.tuple([CardSideSchema, CardSideSchema]),
-  practiceHistory: z.array(PracticeEventSchema),
-  recallCategory: z.enum(["UNSEEN", "SKIPPED", "MASTERED", "PRACTICE"]),
+  practiceHistory: z.array(PracticeEventSchema).optional().default([]),
+  recallCategory: z
+    .enum(["UNSEEN", "SKIPPED", "MASTERED", "PRACTICE"])
+    .optional()
+    .default("UNSEEN"),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   tags: z.array(z.string()),
