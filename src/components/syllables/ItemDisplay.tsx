@@ -4,6 +4,7 @@ import { Volume2 } from "lucide-react";
 import { useThaiSpeech } from "@/hooks/useThaiSpeech";
 import rehypeRaw from "rehype-raw";
 import { useActiveItem, useCardDisplay } from "@/hooks/game/useReadThaiGame";
+import { LessonItem } from "@/types/lessons";
 
 interface ItemDisplayProps {
   textSize?: string;
@@ -18,6 +19,7 @@ interface ItemDisplayProps {
   showBothSides?: boolean;
   sideTwoTextSize?: string;
   sideTwoTextColor?: string;
+  vocabItem?: LessonItem;
 }
 
 const ItemDisplay: React.FC<ItemDisplayProps> = ({
@@ -28,14 +30,17 @@ const ItemDisplay: React.FC<ItemDisplayProps> = ({
   iconColor = "text-gray-400",
   speakOnMount = false,
   speakOnUnmount = false,
+  invertCard: propInvertCard = false,
   useFullMarkdown = false,
   showBothSides = false,
   sideTwoTextSize = "text-sm sm:text-base",
   sideTwoTextColor = "text-slate-400",
+  vocabItem: propVocabItem,
 }) => {
-  const activeItem = useActiveItem();
-  const { invertCard } = useCardDisplay();
-  const vocabItem = activeItem?.item;
+  const { activeItem } = useActiveItem();
+  const { invertCard: cardDisplayInvertCard } = useCardDisplay();
+  const vocabItem = propVocabItem || activeItem?.item;
+  const shouldInvertCard = propInvertCard || cardDisplayInvertCard;
 
   const { speaking, hasThai, error, handleSpeak } = useThaiSpeech(
     speakOnMount,
@@ -43,7 +48,7 @@ const ItemDisplay: React.FC<ItemDisplayProps> = ({
     vocabItem?.sides?.[1]?.markdown
   );
 
-  const displayText = invertCard
+  const displayText = shouldInvertCard
     ? vocabItem?.sides?.[1]?.markdown || vocabItem?.sides?.[0]?.markdown
     : vocabItem?.sides?.[0]?.markdown || "";
 
