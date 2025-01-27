@@ -12,7 +12,47 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
   const [pastedText, setPastedText] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const promptText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...";
+  const promptText = `Please create a lesson about [TOPIC]. If no topic was provided, please ask me what topic I'd like to create a lesson about.
+
+Use the following JSON schema to structure the lesson:
+
+{
+  "name": "Title of the Lesson",
+  "description": "A clear description of what will be learned",
+  "subject": "Main subject area",
+  "categories": [
+    {
+      "id": "category-1",
+      "name": "Category Name"
+    }
+  ],
+  "difficulty": "BEGINNER",  // Must be: BEGINNER, INTERMEDIATE, or ADVANCED
+  "estimatedTime": 30,       // Time in minutes
+  "totalItems": 1,           // Number of items in the lesson
+  "version": 1,
+  "items": [
+    {
+      "id": "item-1",
+      "sides": [
+        {
+          "markdown": "Front side content",
+          "metadata": {
+            "pronunciation": "optional pronunciation guide",
+            "notes": "optional additional notes"
+          }
+        },
+        {
+          "markdown": "Back side content"
+        }
+      ],
+      "practiceHistory": [],
+      "recallCategory": "UNSEEN",  // Must be: UNSEEN, SKIPPED, MASTERED, or PRACTICE
+      "tags": ["tag1", "tag2"],
+      "categories": ["category1"],
+      "intervalModifier": 1
+    }
+  ]
+}`;
 
   const handleCopyPrompt = async () => {
     try {
@@ -354,8 +394,30 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
             </div>
           )}
           {jsonError && (
-            <div className="mt-3 text-sm text-red-500 text-left whitespace-pre-wrap bg-red-500/10 p-4 rounded-md border border-red-500/20">
-              {jsonError}
+            <div className="mt-3 text-sm text-red-500 text-left whitespace-pre-wrap bg-red-500/10 p-4 rounded-md border border-red-500/20 font-mono">
+              {jsonError.includes('Invalid JSON format') ? (
+                // JSON parsing error
+                <div className="space-y-2">
+                  <div className="font-semibold">JSON Format Error</div>
+                  {jsonError}
+                </div>
+              ) : jsonError.includes('Validation failed') ? (
+                // Validation error from API
+                <div className="space-y-2">
+                  <div className="font-semibold">Validation Errors</div>
+                  {jsonError.split('\n').map((line, i) => (
+                    <div key={i} className={`${line.startsWith('  -') ? 'pl-4 text-red-400' : line.includes(':') ? 'font-medium text-red-500' : ''}`}>
+                      {line}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // Other errors
+                <div className="space-y-2">
+                  <div className="font-semibold">Error</div>
+                  {jsonError}
+                </div>
+              )}
             </div>
           )}
         </div>

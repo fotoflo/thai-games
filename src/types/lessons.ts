@@ -58,7 +58,7 @@ export const CategorySchema = z.object({
 });
 
 export const LessonSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string(),
   description: z.string(),
   categories: z.array(CategorySchema),

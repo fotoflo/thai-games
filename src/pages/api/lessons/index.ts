@@ -31,14 +31,36 @@ export default async function handler(
         const validationResult = LessonSchema.safeParse(lessonData);
         if (!validationResult.success) {
           console.error("Validation errors:", validationResult.error);
+
+          // Group validation issues by path for better organization
+          const issuesByPath: Record<string, string[]> = {};
+          validationResult.error.issues.forEach((issue) => {
+            const path = issue.path.join(".");
+            if (!issuesByPath[path]) {
+              issuesByPath[path] = [];
+            }
+            issuesByPath[path].push(issue.message);
+          });
+
+          // Format the error message
+          const errorMessage = Object.entries(issuesByPath)
+            .map(([path, messages]) => {
+              return `${path}:\n  - ${messages.join("\n  - ")}`;
+            })
+            .join("\n\n");
+
           return res.status(400).json({
-            error: `Invalid lesson format: ${validationResult.error.issues
-              .map((i) => i.message)
-              .join(", ")}`,
+            error: `Validation failed with the following issues:\n\n${errorMessage}`,
           });
         }
 
-        const lesson = await lessonService.createLesson(validationResult?.data);
+        // Transform categories to match the expected format
+        const transformedData = {
+          ...validationResult.data,
+          categories: validationResult.data.categories.map((cat) => cat.name),
+        };
+
+        const lesson = await lessonService.createLesson(transformedData);
         return res.status(201).json({ lesson });
       } catch (error) {
         console.error("Failed to create lesson:", error);
