@@ -25,7 +25,7 @@ const LessonHeader = ({
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-emerald-500" />
           <span className="text-sm font-medium text-emerald-500">
-            {lesson?.categories?.join(", ")}
+            {lesson?.categories?.map((cat) => cat.name).join(", ")}
           </span>
         </div>
         <h1 className="text-2xl font-semibold">{lesson?.name}</h1>
