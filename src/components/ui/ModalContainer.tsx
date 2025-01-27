@@ -46,11 +46,11 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 z-50"
+      className="fixed inset-0 bg-black/70 z-50 flex justify-center p-8"
       onClick={handleBackdropClick}
     >
       <div
-        className="fixed inset-0 bg-slate-900 text-white flex flex-col md:m-8 md:rounded-lg overflow-hidden"
+        className="bg-slate-900 text-white flex flex-col rounded-lg overflow-hidden h-full w-full max-w-[800px]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Fixed Header Section */}

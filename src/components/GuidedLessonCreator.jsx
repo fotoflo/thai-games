@@ -52,10 +52,10 @@ const GuidedLessonCreator = ({ onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-950">
+    <div className="flex flex-col max-h-[90vh]">
       {/* Header */}
-      <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur sticky top-0 z-10">
+        <div className="px-6 py-3 flex justify-between items-center">
           <h1 className="text-lg font-semibold text-gray-100">Create New Lesson With AI</h1>
           <div className="flex items-center gap-3">
             {!isJsonMode && selectedSubject && (
@@ -96,7 +96,7 @@ const GuidedLessonCreator = ({ onClose }) => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto px-4 py-4 space-y-8">
+        <div className="p-6 space-y-4">
           {isJsonMode ? (
             <LessonJsonUploader onUploadSuccess={handleUploadSuccess} onClose={onClose} />
           ) : (

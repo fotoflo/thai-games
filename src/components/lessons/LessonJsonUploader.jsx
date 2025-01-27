@@ -132,7 +132,7 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-gray-900 border-gray-800 w-full">
       <CardContent className="p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-gray-100">
