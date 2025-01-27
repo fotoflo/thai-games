@@ -26,11 +26,56 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
 
   const validateAndSetJson = (json) => {
     try {
-      // Basic validation
-      if (!json.name || !json.items || !Array.isArray(json.items)) {
-        throw new Error('Invalid lesson format: must include name and items array');
+      // Check for required fields with descriptive error messages
+      const requiredFields = {
+        name: "Lesson name",
+        description: "Lesson description",
+        categories: "Categories array",
+        subject: "Subject",
+        difficulty: "Difficulty level (BEGINNER, INTERMEDIATE, or ADVANCED)",
+        estimatedTime: "Estimated completion time",
+        totalItems: "Total number of items",
+        version: "Lesson version",
+        items: "Lesson items array"
+      };
+
+      const missingFields = [];
+      for (const [field, description] of Object.entries(requiredFields)) {
+        if (field === 'difficulty') {
+          if (!json[field] || !['BEGINNER', 'INTERMEDIATE', 'ADVANCED'].includes(json[field].toUpperCase())) {
+            missingFields.push(`${description} must be one of: BEGINNER, INTERMEDIATE, ADVANCED`);
+          }
+        } else if (!json[field]) {
+          missingFields.push(description);
+        }
       }
 
+      // Check items array structure if it exists
+      if (json.items && Array.isArray(json.items)) {
+        json.items.forEach((item, index) => {
+          if (!item.id) missingFields.push(`Item ${index + 1} is missing an ID`);
+          if (!item.sides || !Array.isArray(item.sides) || item.sides.length !== 2) {
+            missingFields.push(`Item ${index + 1} must have exactly 2 sides`);
+          } else {
+            item.sides.forEach((side, sideIndex) => {
+              if (!side.markdown) {
+                missingFields.push(`Item ${index + 1}, side ${sideIndex + 1} is missing markdown content`);
+              }
+            });
+          }
+          if (!item.practiceHistory) missingFields.push(`Item ${index + 1} is missing practiceHistory array`);
+          if (!item.recallCategory) missingFields.push(`Item ${index + 1} is missing recallCategory`);
+          if (!item.tags || !Array.isArray(item.tags)) missingFields.push(`Item ${index + 1} is missing tags array`);
+          if (!item.categories || !Array.isArray(item.categories)) missingFields.push(`Item ${index + 1} is missing categories array`);
+          if (typeof item.intervalModifier !== 'number') missingFields.push(`Item ${index + 1} is missing intervalModifier number`);
+        });
+      }
+
+      if (missingFields.length > 0) {
+        throw new Error('Missing required fields:\n- ' + missingFields.join('\n- '));
+      }
+
+      // If we get here, basic validation passed
       setJsonContent(json);
       setJsonError(null);
     } catch (error) {
@@ -58,10 +103,27 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
   const handlePastedJson = () => {
     console.log("pastedText", pastedText);
     try {
-      const json = JSON.parse(pastedText);
+      // First try to parse the JSON and provide helpful formatting tips if it fails
+      let json;
+      try {
+        json = JSON.parse(pastedText);
+      } catch (parseError) {
+        const errorMessage = parseError.message;
+        let helpfulMessage = 'Invalid JSON format. Common issues to check:\n';
+        helpfulMessage += '- Ensure all property names are in double quotes (e.g., "name": "value")\n';
+        helpfulMessage += '- Check for missing commas between properties\n';
+        helpfulMessage += '- Ensure arrays and objects are properly closed\n';
+        helpfulMessage += '- Remove any trailing commas\n\n';
+        helpfulMessage += 'Parser error: ' + errorMessage;
+        
+        setJsonError(helpfulMessage);
+        setJsonContent(null);
+        return;
+      }
+
       validateAndSetJson(json);
     } catch (error) {
-      setJsonError('Invalid JSON format: ' + error.message);
+      setJsonError(error.message);
       setJsonContent(null);
     }
   };
@@ -76,10 +138,27 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
     setPastedText(text);
     
     try {
-      const json = JSON.parse(text);
+      // First try to parse the JSON and provide helpful formatting tips if it fails
+      let json;
+      try {
+        json = JSON.parse(text);
+      } catch (parseError) {
+        const errorMessage = parseError.message;
+        let helpfulMessage = 'Invalid JSON format. Common issues to check:\n';
+        helpfulMessage += '- Ensure all property names are in double quotes (e.g., "name": "value")\n';
+        helpfulMessage += '- Check for missing commas between properties\n';
+        helpfulMessage += '- Ensure arrays and objects are properly closed\n';
+        helpfulMessage += '- Remove any trailing commas\n\n';
+        helpfulMessage += 'Parser error: ' + errorMessage;
+        
+        setJsonError(helpfulMessage);
+        setJsonContent(null);
+        return;
+      }
+
       validateAndSetJson(json);
     } catch (error) {
-      setJsonError('Invalid JSON format: ' + error.message);
+      setJsonError(error.message);
       setJsonContent(null);
     }
   };
@@ -275,7 +354,9 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
             </div>
           )}
           {jsonError && (
-            <p className="mt-3 text-sm text-red-500">{jsonError}</p>
+            <div className="mt-3 text-sm text-red-500 text-left whitespace-pre-wrap bg-red-500/10 p-4 rounded-md border border-red-500/20">
+              {jsonError}
+            </div>
           )}
         </div>
       </CardContent>
