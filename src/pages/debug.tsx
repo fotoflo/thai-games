@@ -17,6 +17,7 @@ import {
 import LessonDetails from "@/components/syllables/LessonDetailScreen";
 import LessonListScreen from "@/components/LessonListScreen";
 import ModalContainer from "@/components/ui/ModalContainer";
+import GuidedLessonCreator from "@/components/GuidedLessonCreator";
 
 interface DebugSection {
   title: string;
@@ -52,6 +53,7 @@ const DebugPage: React.FC = () => {
   } = useGameActions();
 
   const [showLessonList, setShowLessonList] = useState(false);
+  const [showAiWizard, setShowAiWizard] = useState(false);
 
   // TODO FINISH passing lessons from useLessons to cardSetMachine
   // utilise them instead of the llessons from the invoke
@@ -96,6 +98,10 @@ const DebugPage: React.FC = () => {
         {
           label: "Open Lesson List",
           onClick: () => setShowLessonList(true),
+        },
+        {
+          label: "Open AI Wizard",
+          onClick: () => setShowAiWizard(true),
         },
       ],
     },
@@ -230,6 +236,15 @@ const DebugPage: React.FC = () => {
           showHeader={true}
         >
           <LessonListScreen onClose={() => setShowLessonList(false)} />
+        </ModalContainer>
+      )}
+      {showAiWizard && (
+        <ModalContainer
+          title="Create New Lesson With AI"
+          onClose={() => setShowAiWizard(false)}
+          showHeader={false}
+        >
+          <GuidedLessonCreator onClose={() => setShowAiWizard(false)} />
         </ModalContainer>
       )}
 
