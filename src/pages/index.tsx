@@ -14,29 +14,16 @@ import LessonDetails from "@/components/syllables/LessonDetailScreen";
 import { Lesson } from "@/types/lessons";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import CheckTranslationButton from "@/components/syllables/CheckTranslationButton";
-import {
-  useGameLessons,
-  useActiveItem,
-  useGameActions,
-} from "@/hooks/game/useReadThaiGame";
+import { useGameLessons, useActiveItem } from "@/hooks/game/useReadThaiGame";
 import { modals } from "@/hooks/useModal";
-import LessonDetailsModal from "@/components/LessonDetailsModal";
-
-interface LessonDetailsSelection {
-  lesson: Lesson;
-  index: number;
-}
 
 const IndexPage: React.FC = () => {
   const { activeItem } = useActiveItem();
   const { lessons: apiLessons, lessonsLoading, lessonsError } = useLessons();
   const { sendReadThaiGameContext } = useGameLessons();
-  const { chooseLesson } = useGameActions();
 
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false);
-  const [lessonDetailsSelectedLesson, setLessonDetailsSelectedLesson] =
-    useState<LessonDetailsSelection | null>(null);
 
   // Initialize lessons when they are loaded
   if (!lessonsLoading && !lessonsError && apiLessons) {
@@ -47,7 +34,12 @@ const IndexPage: React.FC = () => {
   const closeSettings = () => setShowSettingsContainer(false);
 
   const handleViewLessonDetails = (lesson: Lesson, index: number) => {
-    setLessonDetailsSelectedLesson({ lesson, index });
+    const lessonWithTimestamps = {
+      ...lesson,
+      createdAt: lesson.createdAt || new Date(),
+      updatedAt: lesson.updatedAt || new Date(),
+    };
+    modals.lessonDetails.open({ lesson: lessonWithTimestamps, index });
   };
 
   if (!activeItem) {
@@ -85,7 +77,7 @@ const IndexPage: React.FC = () => {
         />
 
         <FlashCardModal />
-        <LessonDetailsModal />
+        <LessonDetails />
 
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
@@ -113,26 +105,6 @@ const IndexPage: React.FC = () => {
         {/* Modals */}
         {showSettingsContainer && (
           <SettingsModalContainer onClose={closeSettings} />
-        )}
-        {lessonDetailsSelectedLesson && (
-          <div className="fixed inset-0 z-50">
-            <LessonDetails
-              lesson={lessonDetailsSelectedLesson.lesson}
-              lessonIndex={lessonDetailsSelectedLesson.index}
-              onClose={() => setLessonDetailsSelectedLesson(null)}
-              onStudyLesson={(index) => {
-                const lessonWithTimestamps = {
-                  ...lessonDetailsSelectedLesson.lesson,
-                  createdAt:
-                    lessonDetailsSelectedLesson.lesson.createdAt || new Date(),
-                  updatedAt:
-                    lessonDetailsSelectedLesson.lesson.updatedAt || new Date(),
-                };
-                chooseLesson(index, [lessonWithTimestamps]);
-                setLessonDetailsSelectedLesson(null);
-              }}
-            />
-          </div>
         )}
       </div>
     </>
