@@ -125,31 +125,11 @@ const IndexPage: React.FC = () => {
                   createdAt: new Date(),
                   updatedAt: new Date(),
                   subject: lessonDetailsSelectedLesson.lesson.subject || null,
-                  difficulty:
-                    lessonDetailsSelectedLesson.lesson.difficulty.toUpperCase() as
-                      | "BEGINNER"
-                      | "INTERMEDIATE"
-                      | "ADVANCED",
                   items: lessonDetailsSelectedLesson.lesson.items.map(
                     (item) => ({
                       ...item,
-                      recallCategory: item.recallCategory.toUpperCase() as
-                        | "UNSEEN"
-                        | "SKIPPED"
-                        | "MASTERED"
-                        | "PRACTICE",
-                      practiceHistory: item.practiceHistory.map((history) => ({
-                        ...history,
-                        result: history.result.toUpperCase() as
-                          | "UNSEEN"
-                          | "SKIPPED"
-                          | "MASTERED"
-                          | "PRACTICE",
-                        sourceCategory: history.sourceCategory.toUpperCase() as
-                          | "PRACTICE"
-                          | "MASTERED"
-                          | "UNSEEN",
-                      })),
+                      categories: item.tags || [], // Using tags as categories if no categories exist
+                      intervalModifier: 1, // Default value
                     })
                   ),
                   categories: lessonDetailsSelectedLesson.lesson.categories.map(

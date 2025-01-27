@@ -2,12 +2,12 @@ import { z } from "zod";
 
 // Basic Types
 export type InterleaveStrategy = "random" | "balanced" | "progressive";
-export type RecallCategory = "unseen" | "skipped" | "mastered" | "practice";
+export type RecallCategory = "UNSEEN" | "SKIPPED" | "MASTERED" | "PRACTICE";
 export type ConfidenceLevel = 1 | 2 | 3 | 4 | 5;
-export type CardSource = "practice" | "mastered" | "unseen";
+export type CardSource = "PRACTICE" | "MASTERED" | "UNSEEN";
+export type Difficulty = "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
 
 // Card Structure
-
 export const CardSideSchema = z.object({
   markdown: z.string(),
   metadata: z
@@ -25,7 +25,7 @@ export const CardSideSchema = z.object({
 
 export const PracticeEventSchema = z.object({
   timestamp: z.number(),
-  result: z.enum(["unseen", "skipped", "mastered", "practice"]),
+  result: z.enum(["UNSEEN", "SKIPPED", "MASTERED", "PRACTICE"]),
   timeSpent: z.number(),
   recalledSide: z.union([z.literal(0), z.literal(1)]),
   confidenceLevel: z.union([
@@ -37,19 +37,17 @@ export const PracticeEventSchema = z.object({
   ]),
   isCorrect: z.boolean(),
   attemptCount: z.number(),
-  sourceCategory: z.enum(["practice", "mastered", "unseen"]),
+  sourceCategory: z.enum(["PRACTICE", "MASTERED", "UNSEEN"]),
 });
 
 export const LessonItemSchema = z.object({
   id: z.string(),
   sides: z.tuple([CardSideSchema, CardSideSchema]),
   practiceHistory: z.array(PracticeEventSchema),
-  recallCategory: z.enum(["unseen", "skipped", "mastered", "practice"]),
+  recallCategory: z.enum(["UNSEEN", "SKIPPED", "MASTERED", "PRACTICE"]),
   createdAt: z.number().optional(),
   updatedAt: z.number().optional(),
   tags: z.array(z.string()),
-  categories: z.array(z.string()),
-  intervalModifier: z.number(),
 });
 
 export const LessonSchema = z.object({
@@ -57,121 +55,25 @@ export const LessonSchema = z.object({
   name: z.string(),
   description: z.string(),
   categories: z.array(z.string()),
+  subject: z.string().optional(),
   difficulty: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
   estimatedTime: z.number(),
   totalItems: z.number(),
   version: z.number(),
   items: z.array(LessonItemSchema),
-  subject: z.string().optional(),
 });
 
-// Lesson Structure
-export type Lesson = {
-  id: string;
-  name: string;
-  description: string;
-  categories: string[];
-  subject?: string;
-  difficulty: "beginner" | "intermediate" | "advanced";
-  estimatedTime: number; // minutes
-  totalItems: number;
-  version: number; // For data migrations
-  items: LessonItem[];
-};
+// Type Exports
+export type Lesson = z.infer<typeof LessonSchema>;
+export type LessonItem = z.infer<typeof LessonItemSchema>;
+export type PracticeEvent = z.infer<typeof PracticeEventSchema>;
+export type CardSide = z.infer<typeof CardSideSchema>;
 
-// Core Lesson Items
-export type LessonItem = {
-  id: string;
-  sides: [CardSide, CardSide];
-  practiceHistory: PracticeEvent[];
-  recallCategory: RecallCategory;
-  createdAt: number;
-  updatedAt: number;
-  tags: string[];
-  categories: string[]; // e.g. ['greetings', 'numbers', 'food']
-  intervalModifier: number; // For SRS algorithm
-};
-
-export type LessonSubset = {
-  unseenItems: SuperSetItem[];
-  practiceItems: SuperSetItem[];
-  masteredItems: SuperSetItem[];
-  skippedItems: SuperSetItem[];
-};
-
-// SuperSet Item
+// Game Types
 export type SuperSetItem = {
   id: string;
-  recallCategory: RecallCategory;
   item: LessonItem;
-  lastReviewed: Date;
+  recallCategory: RecallCategory;
 };
 
 export type SuperSet = SuperSetItem[];
-
-export type CardSide = {
-  markdown: string; // Can include text, images, audio via markdown syntax
-  metadata?: {
-    pronunciation?: string;
-    notes?: string;
-  };
-};
-
-// Practice Events and History
-export type PracticeEvent = {
-  timestamp: number;
-  result: RecallCategory;
-  timeSpent: number; // milliseconds
-  recalledSide: 0 | 1; // Index of the side being recalled
-  confidenceLevel: ConfidenceLevel;
-  isCorrect: boolean; // Self-reported accuracy
-  attemptCount: number; // Times seen in this session
-  sourceCategory: CardSource;
-};
-
-// Lesson Metadata
-export type LessonMetadata = {
-  id: string;
-  name: string;
-  description: string;
-  categories: string[];
-  difficulty: "beginner" | "intermediate" | "advanced";
-  estimatedTime: number; // minutes
-  totalItems: number;
-  version: number; // For data migrations
-};
-
-// Main Game State
-export type GameState = {
-  // All available lessons (lazy loaded)
-  lessonData: Lesson[];
-
-  currentLesson: Lesson;
-  currentLessonId: string;
-
-  superSet: SuperSet;
-  practiceSet: SuperSet;
-  practiceSetSize: number;
-
-  lessonSubset: LessonSubset;
-};
-
-// Game Settings
-export type GameSettings = {
-  invertCard: boolean;
-  showRomanization: boolean;
-  showExamples: boolean;
-  audio: {
-    enabled: boolean;
-    volume: number;
-    autoPlay: boolean;
-  };
-  profile: PlayerProfile;
-};
-
-export type PlayerProfile = {
-  id: string;
-  name: string;
-  createdAt: number;
-  lastLogin: number;
-};
