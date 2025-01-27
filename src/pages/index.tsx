@@ -1,43 +1,46 @@
 import React, { useState } from "react";
-import { useReadThaiGame } from "../context/ReadThaiGameContext";
-import ItemDisplay from "../components/syllables/ItemDisplay";
-import MasteryControls from "../components/syllables/MasteryControls";
-import WelcomeModal from "../components/ReadThaiWelcomeModal";
-import FlashCardModal from "../components/syllables/FlashCardModal";
-import SettingsModalContainer from "../components/SettingsModalContainer";
-import PracticeSetCards from "../components/syllables/PracticeSetCards";
-import LessonSelector from "../components/syllables/LessonSelector";
-import ProgressionSelector from "../components/syllables/ProgressionSelector";
-import SettingsHamburger from "../components/ui/SettingsHamburger";
-import Divider from "../components/ui/divider";
-import LessonDetails from "../components/syllables/LessonDetailScreen";
-import { Lesson } from "../types/lessons";
+import { useLessons } from "@/hooks/game/useLessons";
+import ItemDisplay from "@/components/syllables/ItemDisplay";
+import MasteryControls from "@/components/syllables/MasteryControls";
+import WelcomeModal from "@/components/ReadThaiWelcomeModal";
+import FlashCardModal from "@/components/syllables/FlashCardModal";
+import SettingsModalContainer from "@/components/SettingsModalContainer";
+import PracticeSetCards from "@/components/syllables/PracticeSetCards";
+import LessonSelector from "@/components/syllables/LessonSelector";
+import ProgressionSelector from "@/components/syllables/ProgressionSelector";
+import SettingsHamburger from "@/components/ui/SettingsHamburger";
+import Divider from "@/components/ui/divider";
+import LessonDetails from "@/components/syllables/LessonDetailScreen";
+import { Lesson } from "@/types/lessons";
 import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
-import CheckTranslationButton from "../components/syllables/CheckTranslationButton";
-import { ReadThaiGameContext } from "@/machines/cardSetMachine";
+import CheckTranslationButton from "@/components/syllables/CheckTranslationButton";
+import {
+  useGameLessons,
+  useActiveItem,
+  useGameActions,
+} from "@/hooks/game/useReadThaiGame";
+import { modals } from "@/hooks/useModal";
 
 interface LessonDetailsSelection {
   lesson: Lesson;
   index: number;
 }
 
-type DisplayTrigger = "speak" | "mastery" | "CheckTranslationButton" | null;
-
 const IndexPage: React.FC = () => {
-  const { activeItem, setCurrentLesson } = ReadThaiGameContext.useSelector(
-    ({ context }) => {
-      return {
-        activeItem: context.activeItem,
-        setCurrentLesson: context.setCurrentLesson, // TODO: fix
-      };
-    }
-  );
+  const { activeItem } = useActiveItem();
+  const { lessons: apiLessons, lessonsLoading, lessonsError } = useLessons();
+  const { sendReadThaiGameContext } = useGameLessons();
+  const { chooseLesson } = useGameActions();
 
-  const [displayTrigger, setDisplayTrigger] = useState<DisplayTrigger>(null);
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false);
   const [lessonDetailsSelectedLesson, setLessonDetailsSelectedLesson] =
     useState<LessonDetailsSelection | null>(null);
+
+  // Initialize lessons when they are loaded
+  if (!lessonsLoading && !lessonsError && apiLessons) {
+    sendReadThaiGameContext({ type: "INITIALIZE", lessons: apiLessons });
+  }
 
   const openSettings = () => setShowSettingsContainer(true);
   const closeSettings = () => setShowSettingsContainer(false);
@@ -77,13 +80,10 @@ const IndexPage: React.FC = () => {
         />
 
         <CheckTranslationButton
-          onClick={() => setDisplayTrigger("CheckTranslationButton")}
+          onClick={() => activeItem && modals.flashCard.open({ activeItem })}
         />
 
-        <FlashCardModal
-          trigger={displayTrigger}
-          onClose={() => setDisplayTrigger(null)}
-        />
+        <FlashCardModal />
 
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
@@ -119,7 +119,47 @@ const IndexPage: React.FC = () => {
               lessonIndex={lessonDetailsSelectedLesson.index}
               onClose={() => setLessonDetailsSelectedLesson(null)}
               onStudyLesson={(index) => {
-                setCurrentLesson(index);
+                // Convert Lesson to LessonWithRelations format
+                const lessonWithRelations = {
+                  ...lessonDetailsSelectedLesson.lesson,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  subject: lessonDetailsSelectedLesson.lesson.subject || null,
+                  difficulty:
+                    lessonDetailsSelectedLesson.lesson.difficulty.toUpperCase() as
+                      | "BEGINNER"
+                      | "INTERMEDIATE"
+                      | "ADVANCED",
+                  items: lessonDetailsSelectedLesson.lesson.items.map(
+                    (item) => ({
+                      ...item,
+                      recallCategory: item.recallCategory.toUpperCase() as
+                        | "UNSEEN"
+                        | "SKIPPED"
+                        | "MASTERED"
+                        | "PRACTICE",
+                      practiceHistory: item.practiceHistory.map((history) => ({
+                        ...history,
+                        result: history.result.toUpperCase() as
+                          | "UNSEEN"
+                          | "SKIPPED"
+                          | "MASTERED"
+                          | "PRACTICE",
+                        sourceCategory: history.sourceCategory.toUpperCase() as
+                          | "PRACTICE"
+                          | "MASTERED"
+                          | "UNSEEN",
+                      })),
+                    })
+                  ),
+                  categories: lessonDetailsSelectedLesson.lesson.categories.map(
+                    (category) => ({
+                      id: category,
+                      name: category,
+                    })
+                  ),
+                };
+                chooseLesson(index, [lessonWithRelations]);
                 setLessonDetailsSelectedLesson(null);
               }}
             />

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import LessonListScreen from '../LessonListScreen';
-import { useCardSetMachine } from '@/machines/cardSetMachine';
+import { useGameLessons, useGameActions } from '@/hooks/game/useReadThaiGame';
 
 const LessonSelector = ({ 
   onViewDetails 
@@ -8,10 +8,10 @@ const LessonSelector = ({
   const carouselRef = useRef(null);
   const [showLessonList, setShowLessonList] = useState(false);
 
-  const { lessons, currentLesson, setCurrentLesson } = useCardSetMachine();
+  const { lessons, currentLesson } = useGameLessons();
+  const { chooseLesson } = useGameActions();
 
-
-  console.log("lessonSelector currentLesson", currentLesson.name);
+  console.log("lessonSelector currentLesson", currentLesson);
   console.log("lessonSelector lessons", lessons);
 
   return (
@@ -52,7 +52,7 @@ const LessonSelector = ({
         <LessonListScreen
           onClose={() => setShowLessonList(false)}
           lessons={lessons}
-          setCurrentLesson={setCurrentLesson}
+          setCurrentLesson={(index) => chooseLesson(index, lessons)}
           onViewDetails={onViewDetails}
         />
       )}
