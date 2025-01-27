@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import GameHeader from "../components/GameHeader";
 import { ReadThaiGameContext } from "@/machines/cardSetMachine";
 import { useLessons } from "@/hooks/game/useLessons";
@@ -11,12 +11,12 @@ import {
   useSuperSet,
   useActiveItem,
   useGameMode,
-  usePracticeSet,
   useGameLessons,
   useGameActions,
 } from "@/hooks/game/useReadThaiGame";
-import LessonListModal from "@/components/LessonListModal";
 import LessonDetails from "@/components/syllables/LessonDetailScreen";
+import LessonListScreen from "@/components/LessonListScreen";
+import ModalContainer from "@/components/ui/ModalContainer";
 
 interface DebugSection {
   title: string;
@@ -38,7 +38,6 @@ interface ButtonGroup {
 const DebugPage: React.FC = () => {
   const snapshot = ReadThaiGameContext.useSelector(({ context }) => context);
   const { superSet, superSetIndex } = useSuperSet();
-  const { practiceSet, practiceSetIndex } = usePracticeSet();
   const { activeItem } = useActiveItem();
   const { progressionMode } = useGameMode();
   const { lessons: apiLessons, lessonsLoading, lessonsError } = useLessons();
@@ -51,6 +50,8 @@ const DebugPage: React.FC = () => {
     switchToPractice,
     switchToFirstPass,
   } = useGameActions();
+
+  const [showLessonList, setShowLessonList] = useState(false);
 
   // TODO FINISH passing lessons from useLessons to cardSetMachine
   // utilise them instead of the llessons from the invoke
@@ -94,7 +95,7 @@ const DebugPage: React.FC = () => {
         },
         {
           label: "Open Lesson List",
-          onClick: () => modals.lessonList.open(),
+          onClick: () => setShowLessonList(true),
         },
       ],
     },
@@ -178,7 +179,7 @@ const DebugPage: React.FC = () => {
       title: "Active Item Index",
       data: {
         superSetIndex,
-        practiceSetIndex,
+        practiceSetIndex: null, // Removed unused practiceSetIndex
       },
       priority: 1,
     },
@@ -221,8 +222,16 @@ const DebugPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 p-4">
       <FlashCardModal />
-      <LessonListModal />
       <LessonDetails />
+      {showLessonList && (
+        <ModalContainer
+          title="Choose a Lesson"
+          onClose={() => setShowLessonList(false)}
+          showHeader={true}
+        >
+          <LessonListScreen onClose={() => setShowLessonList(false)} />
+        </ModalContainer>
+      )}
 
       <GameHeader title="Debug View" darkMode={true} />
 

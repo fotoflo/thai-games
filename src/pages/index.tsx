@@ -16,11 +16,14 @@ import SuperSetVisualizer from "@/components/syllables/SuperSetVisualizer";
 import CheckTranslationButton from "@/components/syllables/CheckTranslationButton";
 import { useGameLessons, useActiveItem } from "@/hooks/game/useReadThaiGame";
 import { modals } from "@/hooks/useModal";
+import LessonListScreen from "@/components/LessonListScreen";
+import ModalContainer from "@/components/ui/ModalContainer";
 
 const IndexPage: React.FC = () => {
   const { activeItem } = useActiveItem();
   const { lessons: apiLessons, lessonsLoading, lessonsError } = useLessons();
   const { sendReadThaiGameContext } = useGameLessons();
+  const [showLessonList, setShowLessonList] = useState(false);
 
   const [showWelcome, setShowWelcome] = useState(true);
   const [showSettingsContainer, setShowSettingsContainer] = useState(false);
@@ -79,6 +82,16 @@ const IndexPage: React.FC = () => {
         <FlashCardModal />
         <LessonDetails />
 
+        {showLessonList && (
+          <ModalContainer
+            title="Choose a Lesson"
+            onClose={() => setShowLessonList(false)}
+            showHeader={true}
+          >
+            <LessonListScreen onClose={() => setShowLessonList(false)} />
+          </ModalContainer>
+        )}
+
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 bg-opacity-90 p-4">
           <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 
@@ -94,7 +107,10 @@ const IndexPage: React.FC = () => {
 
           {/* Lesson Selection */}
           <div className="">
-            <LessonSelector onViewDetails={handleViewLessonDetails} />
+            <LessonSelector
+              onViewDetails={handleViewLessonDetails}
+              onOpenLessonList={() => setShowLessonList(true)}
+            />
 
             <Divider className="mb-4 -mx-4" borderClass="border-slate-700" />
 

@@ -1,18 +1,12 @@
-import React, { useRef, useState } from 'react';
-import LessonListScreen from '../LessonListScreen';
-import { useGameLessons, useGameActions } from '@/hooks/game/useReadThaiGame';
+import React, { useRef } from 'react';
+import { useGameLessons } from '@/hooks/game/useReadThaiGame';
 
 const LessonSelector = ({ 
-  onViewDetails 
+  onViewDetails,
+  onOpenLessonList
 }) => {
   const carouselRef = useRef(null);
-  const [showLessonList, setShowLessonList] = useState(false);
-
   const { lessons, currentLesson } = useGameLessons();
-  const { chooseLesson } = useGameActions();
-
-  console.log("lessonSelector currentLesson", currentLesson);
-  console.log("lessonSelector lessons", lessons);
 
   return (
     <div className="flex items-center mb-6">
@@ -36,7 +30,7 @@ const LessonSelector = ({
                 </button>
               )}
               <button
-                onClick={() => setShowLessonList(true)}
+                onClick={onOpenLessonList}
                 className={`px-3 py-2 rounded-md transition-colors bg-gray-700 hover:bg-gray-600 text-gray-300`}
               >
                 More Lessons
@@ -47,17 +41,8 @@ const LessonSelector = ({
           )}
         </div>
       </div>
-
-      {showLessonList && (
-        <LessonListScreen
-          onClose={() => setShowLessonList(false)}
-          lessons={lessons}
-          setCurrentLesson={(index) => chooseLesson(index, lessons)}
-          onViewDetails={onViewDetails}
-        />
-      )}
     </div>
   );
-};
+}
 
 export default LessonSelector; 
