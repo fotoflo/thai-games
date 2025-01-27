@@ -45,22 +45,31 @@ export const LessonItemSchema = z.object({
   sides: z.tuple([CardSideSchema, CardSideSchema]),
   practiceHistory: z.array(PracticeEventSchema),
   recallCategory: z.enum(["UNSEEN", "SKIPPED", "MASTERED", "PRACTICE"]),
-  createdAt: z.number().optional(),
-  updatedAt: z.number().optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
   tags: z.array(z.string()),
+  categories: z.array(z.string()),
+  intervalModifier: z.number(),
+});
+
+export const CategorySchema = z.object({
+  id: z.string(),
+  name: z.string(),
 });
 
 export const LessonSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  categories: z.array(z.string()),
-  subject: z.string().optional(),
+  categories: z.array(CategorySchema),
+  subject: z.string().nullable(),
   difficulty: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
   estimatedTime: z.number(),
   totalItems: z.number(),
   version: z.number(),
   items: z.array(LessonItemSchema),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
 });
 
 // Type Exports
@@ -68,6 +77,7 @@ export type Lesson = z.infer<typeof LessonSchema>;
 export type LessonItem = z.infer<typeof LessonItemSchema>;
 export type PracticeEvent = z.infer<typeof PracticeEventSchema>;
 export type CardSide = z.infer<typeof CardSideSchema>;
+export type Category = z.infer<typeof CategorySchema>;
 
 // Game Types
 export type SuperSetItem = {

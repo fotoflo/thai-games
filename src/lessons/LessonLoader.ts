@@ -24,7 +24,8 @@ export const getLessonsByTag = ({
 }: {
   lessons: Lesson[];
   tag: string;
-}): Lesson[] => lessons.filter((lesson) => lesson.categories.includes(tag));
+}): Lesson[] =>
+  lessons.filter((lesson) => lesson.categories.some((cat) => cat.name === tag));
 
 export const getLessonsByDifficulty = ({
   lessons,

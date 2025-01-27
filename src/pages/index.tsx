@@ -119,27 +119,14 @@ const IndexPage: React.FC = () => {
               lessonIndex={lessonDetailsSelectedLesson.index}
               onClose={() => setLessonDetailsSelectedLesson(null)}
               onStudyLesson={(index) => {
-                // Convert Lesson to LessonWithRelations format
-                const lessonWithRelations = {
+                const lessonWithTimestamps = {
                   ...lessonDetailsSelectedLesson.lesson,
-                  createdAt: new Date(),
-                  updatedAt: new Date(),
-                  subject: lessonDetailsSelectedLesson.lesson.subject || null,
-                  items: lessonDetailsSelectedLesson.lesson.items.map(
-                    (item) => ({
-                      ...item,
-                      categories: item.tags || [], // Using tags as categories if no categories exist
-                      intervalModifier: 1, // Default value
-                    })
-                  ),
-                  categories: lessonDetailsSelectedLesson.lesson.categories.map(
-                    (category) => ({
-                      id: category,
-                      name: category,
-                    })
-                  ),
+                  createdAt:
+                    lessonDetailsSelectedLesson.lesson.createdAt || new Date(),
+                  updatedAt:
+                    lessonDetailsSelectedLesson.lesson.updatedAt || new Date(),
                 };
-                chooseLesson(index, [lessonWithRelations]);
+                chooseLesson(index, [lessonWithTimestamps]);
                 setLessonDetailsSelectedLesson(null);
               }}
             />
