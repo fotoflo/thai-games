@@ -17,6 +17,18 @@ const LessonListScreen = ({ onClose }) => {
     onClose(); // Close the modal
   };
 
+  const handleViewDetails = (e, lesson, index) => {
+    e.stopPropagation(); // Prevent the click from bubbling up
+    console.log("Opening lesson details for:", lesson.name);
+    const lessonWithTimestamps = {
+      ...lesson,
+      createdAt: lesson.createdAt || new Date(),
+      updatedAt: lesson.updatedAt || new Date(),
+    };
+    modals.lessonDetails.open({ lesson: lessonWithTimestamps, index });
+    onClose(); // Close the lesson list modal
+  };
+
   if (showGuidedCreator) {
     return (
       <ModalContainer 
@@ -76,11 +88,7 @@ const LessonListScreen = ({ onClose }) => {
                 </div>
 
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation(); // Prevent the click from bubbling up
-                    modals.lessonDetails.open({ lesson, index });
-                    onClose(); // Close the lesson list modal
-                  }}
+                  onClick={(e) => handleViewDetails(e, lesson, index)}
                   className="px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-slate-200 
                            rounded-lg text-sm transition-colors"
                 >

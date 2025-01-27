@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, BookOpen, Globe } from "lucide-react";
 import { Lesson } from "@/types/lessons";
 import ModalContainer from "../ui/ModalContainer";
 import DetailCard from "./DetailCard";
 import ItemDisplay from "./ItemDisplay";
+import { useModal, modals } from "@/hooks/useModal";
+import { useGameActions } from "@/hooks/game/useReadThaiGame";
 
-interface LessonDetailsProps {
+interface LessonDetailsData {
   lesson: Lesson;
-  onClose: () => void;
-  onStudyLesson: (index: number) => void;
-  lessonIndex: number;
+  index: number;
 }
 
 const LessonHeader = ({
@@ -54,13 +54,29 @@ const LessonHeader = ({
   </div>
 );
 
-const LessonDetails = ({
-  lesson,
-  onClose,
-  onStudyLesson,
-  lessonIndex,
-}: LessonDetailsProps) => {
+const LessonDetails = () => {
   const [expandedItems, setExpandedItems] = useState(new Set());
+  const modal = useModal<LessonDetailsData>();
+  const { chooseLesson } = useGameActions();
+
+  // Register the modal as soon as possible
+  useEffect(() => {
+    if (modal) {
+      modals.lessonDetails = modal;
+      console.log("Registered lessonDetails modal:", modal);
+    }
+  }, [modal]);
+
+  if (!modal.isOpen || !modal.data) {
+    console.log("Modal not open or no data:", {
+      isOpen: modal.isOpen,
+      data: modal.data,
+    });
+    return null;
+  }
+
+  const { lesson } = modal.data;
+  console.log("Rendering lesson details for:", lesson?.name);
 
   const toggleExamples = (index: number) => {
     setExpandedItems((prev) => {
@@ -77,8 +93,13 @@ const LessonDetails = ({
   const studyButton = (
     <button
       onClick={() => {
-        onStudyLesson(0);
-        onClose();
+        const lessonWithTimestamps = {
+          ...lesson,
+          createdAt: lesson.createdAt || new Date(),
+          updatedAt: lesson.updatedAt || new Date(),
+        };
+        chooseLesson(0, [lessonWithTimestamps]);
+        modal.close();
       }}
       className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
     >
@@ -89,11 +110,11 @@ const LessonDetails = ({
 
   return (
     <ModalContainer
-      onClose={onClose}
+      onClose={modal.close}
       showHeader={true}
       bottomButtons={studyButton}
       gradientColor="from-emerald-600/20"
-      headerContent={<LessonHeader lesson={lesson} onClose={onClose} />}
+      headerContent={<LessonHeader lesson={lesson} onClose={modal.close} />}
     >
       {/* Vocabulary Overview Grid */}
       <div className="py-4">
