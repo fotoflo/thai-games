@@ -50,7 +50,7 @@ export const speakThai = ({
     onEnd();
   };
 
-  utterance.onerror = (error) => {
+  utterance.onerror = () => {
     setSpeaking(false);
     setError("Speech synthesis failed");
     onEnd();

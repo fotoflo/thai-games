@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
-import { AlertTriangle, Copy, CopyCheck, AlertCircle, Bug, MessageCircle } from 'lucide-react';
+import { AlertTriangle, Copy, CopyCheck, MessageCircle } from 'lucide-react';
 
-const DebugPanelModal = ({ onClose, reportProblem, reportPossibleProblem, copyDebugInfo, copied, workingList, possibleProblemList, problemList }) => {
+const DebugPanelModal = ({ onClose, copyDebugInfo, copied, workingList, possibleProblemList, problemList }) => {
   const modalRef = useRef();
 
   const clearLocalStorage = () => {

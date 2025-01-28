@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Button } from './ui/button';
 
 const ThaiDesktopKeyboard = ({ handleLetterClick, getNextLetter, hintActive, darkMode }) => {
   // This maps QWERTY keys to their Thai equivalents - verified from screenshot
-  const thaiKeyMap = {
+  const thaiKeyMap = useMemo(() => ({
     // Numbers row
     '1': 'ๅ', '2': '/', '3': '-', '4': 'ภ', '5': 'ถ', '6': 'ุ', '7': 'ึ', '8': 'ค', '9': 'ต', '0': 'จ', '-': 'ข', '=': 'ช',
     // Top row
@@ -12,7 +12,7 @@ const ThaiDesktopKeyboard = ({ handleLetterClick, getNextLetter, hintActive, dar
     'a': 'ฟ', 's': 'ห', 'd': 'ก', 'f': 'ด', 'g': 'เ', 'h': '้', 'j': '่', 'k': 'า', 'l': 'ส', ';': 'ว', "'": 'ง',
     // Bottom row
     'z': 'ผ', 'x': 'ป', 'c': 'แ', 'v': 'อ', 'b': 'ิ', 'n': 'ื', 'm': 'ท', ',': 'ม', '.': 'ใ', '/': 'ฝ', ']': 'ณ'
-  };
+  }), []);
 
   const keyboardLayout = [
     // Numbers row (12 keys)

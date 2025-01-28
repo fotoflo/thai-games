@@ -15,7 +15,7 @@ export const useDebugMode = (workingList, possibleProblemList, problemList) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       return true;
-    } catch (err) {
+    } catch {
       return false;
     }
   };

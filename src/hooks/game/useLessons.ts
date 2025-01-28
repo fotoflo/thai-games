@@ -20,11 +20,6 @@ export const useLessons = (): UseLessons => {
   } = useQuery({
     queryKey: ["lessons"],
     queryFn: lessonApi.loadLessons,
-    onSuccess: (data, variables, context) => {
-      debugger;
-      console.log("Todo added:", data);
-    },
-    onError: () => {},
   });
 
   const invalidateLessons = async () => {

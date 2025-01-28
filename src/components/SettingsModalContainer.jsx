@@ -23,7 +23,7 @@ const SettingsModalContainer = ({ onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
-  }, []);
+  }, [closeModal]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -36,7 +36,7 @@ const SettingsModalContainer = ({ onClose }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [modalRef]);
+  }, [modalRef, closeModal]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center z-50">

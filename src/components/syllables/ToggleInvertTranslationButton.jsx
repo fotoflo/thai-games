@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const ToggleInvertTranslationButton = ({ toggleInvertTranslation, invertCard }) => {
   
@@ -20,16 +21,20 @@ const ToggleInvertTranslationButton = ({ toggleInvertTranslation, invertCard }) 
       title={invertCard ? 'Show Original' : 'Show Translation'}
     >
       {invertCard ? (
-        <img
+        <Image
           alt="English"
           src="http://purecatamphetamine.github.io/country-flag-icons/3x2/GB.svg"
-          className="w-6 h-4" // Adjust size as needed
+          width={24}
+          height={16}
+          className="w-6 h-4"
         />
       ) : (
-        <img
+        <Image
           alt="Thailand"
           src="http://purecatamphetamine.github.io/country-flag-icons/3x2/TH.svg"
-          className="w-6 h-4" // Adjust size as needed
+          width={24}
+          height={16}
+          className="w-6 h-4"
         />
       )}
     </button>
