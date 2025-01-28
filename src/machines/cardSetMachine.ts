@@ -1,4 +1,4 @@
-import { assign, fromPromise, setup } from "xstate";
+import { fromPromise, setup } from "xstate";
 import {
   CardSetContext,
   CardSetEvent,

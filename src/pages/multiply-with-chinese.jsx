@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -56,7 +56,7 @@ const MultiplicationGame = () => {
   });
   const questionRef = useRef(null);
 
-  const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  const chineseNumbers = useMemo(() => ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'], []);
 
   const toChineseNumber = useCallback((num) => {
     num = parseInt(num);

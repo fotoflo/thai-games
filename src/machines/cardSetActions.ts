@@ -1,7 +1,6 @@
 import { assign } from "xstate";
 import { LessonItem, RecallCategory, SuperSetItem } from "@/types/lessons";
 import { LessonWithRelations } from "@/services/lessonService";
-import { modals } from "@/hooks/useModal";
 
 export interface CardSetContext {
   lessons: LessonWithRelations[];

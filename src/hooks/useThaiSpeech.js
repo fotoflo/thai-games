@@ -1,10 +1,6 @@
 // src/hooks/useThaiSpeech.js
 import { useState, useEffect, useCallback } from "react";
 
-const MAX_RETRIES = 5;
-const INITIAL_RETRY_DELAY = 100;
-const MAX_RETRY_DELAY = 2000;
-
 let globalThaiVoice = null;
 let globalSpeaking = false;
 let globalError = "";

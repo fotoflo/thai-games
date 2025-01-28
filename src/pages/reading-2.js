@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Volume2 } from "lucide-react";
 import { thaiLessons } from "@/lessons/reading-2-vocab";
 
-export default () => {
+const Reading2Page = () => {
   const [currentCategory, setCurrentCategory] = useState("where");
   const [showTranslation, setShowTranslation] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,7 +90,7 @@ export default () => {
           <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-4">
               <p className="text-4xl">
-                {currentLessons[currentIndex].segments.map((segment, idx) =>
+                {currentLessons[currentIndex].segments.map((segment) =>
                   renderWord(segment)
                 )}
                 <span className="text-black mx-1">?</span>
@@ -111,7 +111,7 @@ export default () => {
               </Button>
             </div>
             <p className="text-2xl text-gray-600">
-              {currentLessons[currentIndex].segments.map((segment, idx) =>
+              {currentLessons[currentIndex].segments.map((segment) =>
                 renderWord(segment, true)
               )}
               <span className="text-black mx-1">?</span>
@@ -199,3 +199,5 @@ export default () => {
     </Card>
   );
 };
+
+export default Reading2Page;
