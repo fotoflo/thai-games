@@ -12,39 +12,47 @@ const LessonJsonUploader = ({ onUploadSuccess }) => {
   const [pastedText, setPastedText] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const promptText = `Please create a bilingual vocabulary lesson using this schema:
+  const promptText = `Please create a lesson about [TOPIC]. If no topic was provided, please ask me what topic I'd like to create a lesson about.
+
+Use the following JSON schema to structure the lesson:
 
 {
-  "lessonInfo": {
-    "title": "string (in both languages)",
-    "description": "string (in English)",
-    "category": "string",
-    "difficulty": "enum: BEGINNER | INTERMEDIATE | ADVANCED",
-    "estimatedTime": "number (minutes)"
-  },
-  "vocabulary": [
+  "name": "Title of the Lesson (in both languages if bilingual)",
+  "description": "A clear description of what will be learned",
+  "subject": "Main subject area (e.g., Thai Language)",
+  "categories": [
     {
-      "id": "string",
-      "side1": {
-        "text": "string (primary language)",
-        "pronunciation": "string (optional)"
-      },
-      "side2": {
-        "text": "string (secondary language)"
-      },
-      "tags": ["string"]
+      "id": "category-1",
+      "name": "Category Name"
+    }
+  ],
+  "difficulty": "BEGINNER",  // Must be: BEGINNER, INTERMEDIATE, or ADVANCED
+  "estimatedTime": 30,       // Time in minutes
+  "totalItems": 1,           // Number of items in the lesson
+  "version": 1,
+  "items": [
+    {
+      "id": "item-1",
+      "sides": [
+        {
+          "markdown": "Front side content (e.g., Thai text)",
+          "metadata": {
+            "pronunciation": "Pronunciation guide",
+            "notes": "Additional notes (optional)"
+          }
+        },
+        {
+          "markdown": "Back side content (e.g., English translation)"
+        }
+      ],
+      "tags": ["tag1", "tag2"],
+      "categories": ["category1"],
+      "intervalModifier": 1
     }
   ]
 }
 
-Please tell me:
-1. What topic would you like to learn vocabulary for?
-2. How many vocabulary cards would you like (recommended: 5-20)?
-3. Which two languages would you like to learn? (default: Thai-English)
-
-I'll then create a custom lesson matching your specifications.
-
-Example topic areas:
+Example topics:
 - Kitchen items
 - Animals
 - Colors
