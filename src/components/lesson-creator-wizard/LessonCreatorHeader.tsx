@@ -7,7 +7,6 @@ const LessonCreatorHeader: React.FC<HeaderProps> = ({
   setIsJsonMode,
   canGoBack,
   onBack,
-  onClose,
 }) => {
   return (
     <div className="border-b border-gray-800 bg-gray-900/50 backdrop-blur sticky top-0 z-10">

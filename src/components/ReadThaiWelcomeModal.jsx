@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { X, RefreshCcw, Check } from 'lucide-react';
 import ItemDisplay from './syllables/ItemDisplay';
 
@@ -29,7 +29,7 @@ const WelcomeModal = ({ isOpen, onClose }) => {
         
         <p className="mb-6 text-gray-300">
           Your brain can only hold a few things at once - 
-          that's why we teach just 5 at a time
+          that&apos;s why we teach just 5 at a time
         </p>
 
         <div className="space-y-6 mb-8">

@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
 import SettingsScreen from './SettingsScreen';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 const SettingsModalContainer = ({ onClose }) => {
   const router = useRouter();
   const [showDebugPanel, setShowDebugPanel] = useState(false);
   const modalRef = useRef(null);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     onClose();
     router.push('/');
-  };
+  }, [onClose, router]);
 
   useEffect(() => {
     const handleEscapeKey = (event) => {
