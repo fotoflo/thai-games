@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BookOpen, Plus } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
-import GuidedLessonCreator from './GuidedLessonCreator';
+import LessonCreatorWizard from './LessonCreatorWizard';
 import { useLessons } from '@/hooks/game/useLessons';
 import { useGameActions } from '@/hooks/game/useReadThaiGame';
 import { modals } from '@/hooks/useModal';
@@ -37,7 +37,7 @@ const LessonListScreen = ({ onClose }) => {
         showHeader={false}
         className="w-full max-w-3xl"
       >
-        <GuidedLessonCreator onClose={() => setShowGuidedCreator(false)} />
+        <LessonCreatorWizard onClose={() => setShowGuidedCreator(false)} />
       </ModalContainer>
     );
   }

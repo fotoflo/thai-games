@@ -17,7 +17,7 @@ import {
 import LessonDetails from "@/components/syllables/LessonDetailScreen";
 import LessonListScreen from "@/components/LessonListScreen";
 import ModalContainer from "@/components/ui/ModalContainer";
-import GuidedLessonCreator from "@/components/GuidedLessonCreator";
+import LessonCreatorWizard from "@/components/LessonCreatorWizard";
 
 interface DebugSection {
   title: string;
@@ -244,7 +244,7 @@ const DebugPage: React.FC = () => {
           onClose={() => setShowAiWizard(false)}
           showHeader={false}
         >
-          <GuidedLessonCreator onClose={() => setShowAiWizard(false)} />
+          <LessonCreatorWizard onClose={() => setShowAiWizard(false)} />
         </ModalContainer>
       )}
 
