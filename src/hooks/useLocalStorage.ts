@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-const useLocalStorage = (key: string, initialValue: any) => {
+const useLocalStorage = <T>(key: string, initialValue: T) => {
   // Always start with initialValue on server-side
-  const [storedValue, setStoredValue] = useState(initialValue);
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
 
   // Only run once on mount to get the localStorage value
   useEffect(() => {
@@ -14,9 +14,9 @@ const useLocalStorage = (key: string, initialValue: any) => {
       setStoredValue(value);
     } catch (error) {
       console.error(error);
-      return initialValue;
+      setStoredValue(initialValue);
     }
-  }, [key]);
+  }, [key, initialValue]);
 
   // Update local storage whenever the stored value changes
   useEffect(() => {
