@@ -18,6 +18,7 @@ import LessonDetails from "@/components/syllables/LessonDetailScreen";
 import LessonListScreen from "@/components/LessonListScreen";
 import ModalContainer from "@/components/ui/ModalContainer";
 import LessonCreatorWizard from "@/components/LessonCreatorWizard";
+import LessonWizard from "@/components/lesson-wizard/LessonWizard";
 
 interface DebugSection {
   title: string;
@@ -53,7 +54,7 @@ const DebugPage: React.FC = () => {
   } = useGameActions();
 
   const [showLessonList, setShowLessonList] = useState(false);
-  const [showAiWizard, setShowAiWizard] = useState(false);
+  const [showLanguageWizard, setShowLanguageWizard] = useState(false);
 
   // TODO FINISH passing lessons from useLessons to cardSetMachine
   // utilise them instead of the llessons from the invoke
@@ -61,6 +62,21 @@ const DebugPage: React.FC = () => {
     console.log("lessons111", apiLessons);
     sendReadThaiGameContext({ type: "INITIALIZE", lessons: apiLessons });
   }
+
+  const handleWizardComplete = (state) => {
+    console.log("Language wizard completed with state:", state);
+    // Extract the language preferences
+    const { knownLanguages, proficiencyLevels, targetLanguage } = state;
+
+    // Log the language learning context
+    console.log(
+      "User knows:",
+      knownLanguages.map((lang) => `${lang} (${proficiencyLevels[lang]})`)
+    );
+    console.log("Wants to learn:", targetLanguage);
+
+    setShowLanguageWizard(false);
+  };
 
   const buttonGroups: ButtonGroup[] = [
     {
@@ -100,8 +116,8 @@ const DebugPage: React.FC = () => {
           onClick: () => setShowLessonList(true),
         },
         {
-          label: "Open AI Wizard",
-          onClick: () => setShowAiWizard(true),
+          label: "Open Language Wizard",
+          onClick: () => setShowLanguageWizard(true),
         },
       ],
     },
@@ -238,13 +254,17 @@ const DebugPage: React.FC = () => {
           <LessonListScreen onClose={() => setShowLessonList(false)} />
         </ModalContainer>
       )}
-      {showAiWizard && (
+      {showLanguageWizard && (
         <ModalContainer
-          title="Create New Lesson With AI"
-          onClose={() => setShowAiWizard(false)}
+          title="Language Learning Wizard"
+          onClose={() => setShowLanguageWizard(false)}
           showHeader={false}
+          className="w-full max-w-5xl"
         >
-          <LessonCreatorWizard onClose={() => setShowAiWizard(false)} />
+          <LessonWizard
+            onComplete={handleWizardComplete}
+            onClose={() => setShowLanguageWizard(false)}
+          />
         </ModalContainer>
       )}
 
