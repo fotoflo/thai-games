@@ -1,7 +1,8 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { WizardState } from "../types";
 import { TypeAnimation } from "react-type-animation";
+import { Sparkles } from "lucide-react";
 
 interface LessonTopicScreenProps {
   state: WizardState;
@@ -245,11 +246,34 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
   updateState,
   onComplete,
 }) => {
+  const [showCustomInput, setShowCustomInput] = useState(false);
+  const [customTopic, setCustomTopic] = useState("");
   const topics = state.lessonType ? topicsByType[state.lessonType] : [];
 
   const handleTopicSelect = (topicId: string) => {
-    updateState({ selectedTopic: topicId });
-    onComplete({ ...state, selectedTopic: topicId });
+    if (topicId === "custom") {
+      setShowCustomInput(true);
+    } else {
+      updateState({ selectedTopic: topicId });
+      onComplete({ ...state, selectedTopic: topicId });
+    }
+  };
+
+  const handleCustomTopicSubmit = () => {
+    if (customTopic.trim()) {
+      const customTopicId = `custom-${customTopic
+        .toLowerCase()
+        .replace(/\s+/g, "-")}`;
+      updateState({
+        selectedTopic: customTopicId,
+        customTopicTitle: customTopic,
+      });
+      onComplete({
+        ...state,
+        selectedTopic: customTopicId,
+        customTopicTitle: customTopic,
+      });
+    }
   };
 
   return (
@@ -269,6 +293,75 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Custom Topic Card - Now at the top */}
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className={`p-4 rounded-xl border col-span-full ${
+              showCustomInput
+                ? "border-rose-500 bg-gray-800"
+                : "border-gray-700 bg-gray-900 hover:border-rose-800"
+            } transition-colors duration-200 group`}
+          >
+            {!showCustomInput ? (
+              <button
+                className="w-full text-left"
+                onClick={() => handleTopicSelect("custom")}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">✨</span>
+                  <div>
+                    <h3 className="font-medium text-white group-hover:text-rose-400 transition-colors flex items-center gap-2">
+                      Custom Topic
+                      <Sparkles className="w-4 h-4" />
+                    </h3>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Create a personalized lesson with AI assistance
+                    </p>
+                  </div>
+                </div>
+              </button>
+            ) : (
+              <AnimatePresence>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                >
+                  <div className="flex flex-col gap-3">
+                    <input
+                      type="text"
+                      value={customTopic}
+                      onChange={(e) => setCustomTopic(e.target.value)}
+                      placeholder="Enter your topic..."
+                      className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-rose-500"
+                      autoFocus
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleCustomTopicSubmit}
+                        disabled={!customTopic.trim()}
+                        className="flex-1 px-3 py-1.5 bg-rose-600 hover:bg-rose-500 disabled:bg-gray-700 text-white rounded-lg transition-colors"
+                      >
+                        Create Lesson
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowCustomInput(false);
+                          setCustomTopic("");
+                        }}
+                        className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            )}
+          </motion.div>
+
+          {/* Regular Topic Cards */}
           {topics.map((topic) => (
             <motion.button
               key={topic.id}

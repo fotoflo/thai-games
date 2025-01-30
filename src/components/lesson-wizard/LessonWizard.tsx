@@ -8,6 +8,7 @@ import { TargetLanguageScreen } from "./components/TargetLanguageScreen";
 import { PathSelectionScreen } from "./components/PathSelectionScreen";
 import { JsonUploadScreen } from "./components/JsonUploadScreen";
 import { LessonTopicScreen } from "./components/LessonTopicScreen";
+import { LessonPreviewScreen } from "./components/LessonPreviewScreen";
 
 interface LessonWizardProps {
   onComplete: (state: WizardState) => void;
@@ -28,6 +29,7 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     lessonType: null,
     lessonData: null,
     selectedTopic: null,
+    customTopicTitle: null,
   });
 
   const updateState = (updates: Partial<WizardState>) => {
@@ -40,6 +42,9 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     if (state.view === "jsonUpload") {
       setView("pathSelect");
       updateState({ pathType: null }); // Reset path type when going back
+    } else if (state.view === "lessonPreview") {
+      setView("lessonTopic");
+      updateState({ selectedTopic: null }); // Reset topic when going back
     } else if (state.view === "lessonTopic") {
       setView("pathSelect");
       updateState({ lessonType: null }); // Reset lesson type when going back
@@ -60,6 +65,8 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     } else if (state.view === "pathSelect" && state.lessonType) {
       setView("lessonTopic");
     } else if (state.view === "lessonTopic" && state.selectedTopic) {
+      setView("lessonPreview");
+    } else if (state.view === "lessonPreview") {
       onComplete(state);
     } else if (state.view === "jsonUpload" && state.lessonData) {
       onComplete(state);
@@ -129,6 +136,13 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
           )}
           {state.view === "lessonTopic" && (
             <LessonTopicScreen
+              state={state}
+              updateState={updateState}
+              onComplete={handleComplete}
+            />
+          )}
+          {state.view === "lessonPreview" && (
+            <LessonPreviewScreen
               state={state}
               updateState={updateState}
               onComplete={onComplete}

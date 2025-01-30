@@ -4,7 +4,8 @@ export type WizardView =
   | "targetSelect"
   | "pathSelect"
   | "jsonUpload"
-  | "lessonTopic";
+  | "lessonTopic"
+  | "lessonPreview";
 
 export interface Language {
   code: string;
@@ -72,4 +73,5 @@ export interface WizardState {
   lessonType: LessonType;
   lessonData: LessonData | null;
   selectedTopic: string | null;
+  customTopicTitle: string | null;
 }
