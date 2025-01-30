@@ -6,7 +6,7 @@ import { TypeAnimation } from "react-type-animation";
 interface PathSelectionScreenProps {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
-  onComplete: () => void;
+  onComplete: (state: WizardState) => void;
 }
 
 const lessonTypes = [
@@ -63,8 +63,9 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
   };
 
   const handleTypeSelect = (typeId: LessonType) => {
+    const updatedState = { ...state, lessonType: typeId };
     updateState({ lessonType: typeId });
-    onComplete();
+    onComplete(updatedState);
   };
 
   return (

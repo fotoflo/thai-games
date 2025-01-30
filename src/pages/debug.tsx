@@ -63,10 +63,20 @@ const DebugPage: React.FC = () => {
     sendReadThaiGameContext({ type: "INITIALIZE", lessons: apiLessons });
   }
 
-  const handleWizardComplete = (state) => {
+  const handleWizardComplete = (state: WizardState) => {
     console.log("Language wizard completed with state:", state);
+
+    // Store the wizard state in localStorage for persistence
+    localStorage.setItem("languageWizardState", JSON.stringify(state));
+
     // Extract the language preferences
-    const { knownLanguages, proficiencyLevels, targetLanguage } = state;
+    const {
+      knownLanguages,
+      proficiencyLevels,
+      targetLanguage,
+      lessonType,
+      pathType,
+    } = state;
 
     // Log the language learning context
     console.log(
@@ -74,6 +84,17 @@ const DebugPage: React.FC = () => {
       knownLanguages.map((lang) => `${lang} (${proficiencyLevels[lang]})`)
     );
     console.log("Wants to learn:", targetLanguage);
+    console.log("Path type:", pathType);
+    console.log("Lesson type:", lessonType);
+
+    // If it's a new lesson path, we'll handle that differently
+    if (pathType === "new") {
+      // TODO: Handle new lesson creation
+      console.log("Creating new lesson...");
+    } else {
+      // Handle existing lesson path
+      console.log("Loading existing lesson...");
+    }
 
     setShowLanguageWizard(false);
   };

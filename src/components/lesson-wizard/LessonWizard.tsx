@@ -43,8 +43,15 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
   const handleComplete = () => {
     if (state.view === "targetSelect") {
       setView("pathSelect");
-    } else {
-      onComplete(state);
+    } else if (state.view === "pathSelect" && state.lessonType) {
+      // Only complete if we have all required data
+      if (
+        state.knownLanguages.length > 0 &&
+        state.targetLanguage &&
+        state.pathType
+      ) {
+        onComplete(state);
+      }
     }
   };
 
