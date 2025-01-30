@@ -7,6 +7,7 @@ import { LanguageSelectScreen } from "./components/LanguageSelectScreen";
 import { TargetLanguageScreen } from "./components/TargetLanguageScreen";
 import { PathSelectionScreen } from "./components/PathSelectionScreen";
 import { JsonUploadScreen } from "./components/JsonUploadScreen";
+import { LessonTopicScreen } from "./components/LessonTopicScreen";
 
 interface LessonWizardProps {
   onComplete: (state: WizardState) => void;
@@ -26,6 +27,7 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     pathType: null,
     lessonType: null,
     lessonData: null,
+    selectedTopic: null,
   });
 
   const updateState = (updates: Partial<WizardState>) => {
@@ -38,6 +40,11 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     if (state.view === "jsonUpload") {
       setView("pathSelect");
       updateState({ pathType: null }); // Reset path type when going back
+    } else if (state.view === "lessonTopic") {
+      setView("pathSelect");
+      updateState({ lessonType: null }); // Reset lesson type when going back
+    } else if (state.view === "pathSelect") {
+      setView("targetSelect");
     } else if (state.view === "targetSelect") {
       setView("languageSelect");
     } else if (state.view === "languageSelect") {
@@ -51,14 +58,9 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     } else if (state.view === "pathSelect" && state.pathType === "new") {
       setView("jsonUpload");
     } else if (state.view === "pathSelect" && state.lessonType) {
-      // Only complete if we have all required data
-      if (
-        state.knownLanguages.length > 0 &&
-        state.targetLanguage &&
-        state.pathType
-      ) {
-        onComplete(state);
-      }
+      setView("lessonTopic");
+    } else if (state.view === "lessonTopic" && state.selectedTopic) {
+      onComplete(state);
     } else if (state.view === "jsonUpload" && state.lessonData) {
       onComplete(state);
     }
@@ -120,6 +122,13 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
           )}
           {state.view === "jsonUpload" && (
             <JsonUploadScreen
+              state={state}
+              updateState={updateState}
+              onComplete={onComplete}
+            />
+          )}
+          {state.view === "lessonTopic" && (
+            <LessonTopicScreen
               state={state}
               updateState={updateState}
               onComplete={onComplete}
