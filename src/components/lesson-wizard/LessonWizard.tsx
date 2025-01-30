@@ -77,7 +77,7 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-gray-950 flex flex-col">
       <WizardHeader
         showBack={state.view !== "welcome"}
         proficiencyLevels={state.proficiencyLevels}
@@ -87,44 +87,46 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
         onRemoveLanguage={handleRemoveLanguage}
       />
 
-      <AnimatePresence mode="wait">
-        {state.view === "welcome" && (
-          <WelcomeScreen
-            showNext={state.showNext}
-            onShowNext={() => updateState({ showNext: true })}
-            onGetStarted={() => setView("languageSelect")}
-          />
-        )}
-        {state.view === "languageSelect" && (
-          <LanguageSelectScreen
-            state={state}
-            updateState={updateState}
-            onContinue={() => setView("targetSelect")}
-          />
-        )}
-        {state.view === "targetSelect" && (
-          <TargetLanguageScreen
-            state={state}
-            updateState={updateState}
-            onComplete={handleComplete}
-          />
-        )}
-        {state.view === "pathSelect" && (
-          <PathSelectionScreen
-            state={state}
-            updateState={updateState}
-            onComplete={handleComplete}
-            setView={setView}
-          />
-        )}
-        {state.view === "jsonUpload" && (
-          <JsonUploadScreen
-            state={state}
-            updateState={updateState}
-            onComplete={onComplete}
-          />
-        )}
-      </AnimatePresence>
+      <div className="flex-1">
+        <AnimatePresence mode="wait">
+          {state.view === "welcome" && (
+            <WelcomeScreen
+              showNext={state.showNext}
+              onShowNext={() => updateState({ showNext: true })}
+              onGetStarted={() => setView("languageSelect")}
+            />
+          )}
+          {state.view === "languageSelect" && (
+            <LanguageSelectScreen
+              state={state}
+              updateState={updateState}
+              onContinue={() => setView("targetSelect")}
+            />
+          )}
+          {state.view === "targetSelect" && (
+            <TargetLanguageScreen
+              state={state}
+              updateState={updateState}
+              onComplete={handleComplete}
+            />
+          )}
+          {state.view === "pathSelect" && (
+            <PathSelectionScreen
+              state={state}
+              updateState={updateState}
+              onComplete={handleComplete}
+              setView={setView}
+            />
+          )}
+          {state.view === "jsonUpload" && (
+            <JsonUploadScreen
+              state={state}
+              updateState={updateState}
+              onComplete={onComplete}
+            />
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

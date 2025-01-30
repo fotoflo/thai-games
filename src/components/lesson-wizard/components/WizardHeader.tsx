@@ -23,12 +23,12 @@ export const WizardHeader: React.FC<WizardHeaderProps> = ({
 }) => {
   return (
     <motion.div
-      className="fixed top-0 left-0 right-0 z-50"
+      className="w-full bg-gray-950"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
     >
       {/* Navigation Buttons */}
-      <div className="absolute right-0 top-0 flex items-center gap-2 p-4">
+      <div className="relative flex items-center justify-end gap-2 p-4">
         {showBack && onBack && (
           <button
             onClick={onBack}
@@ -46,7 +46,7 @@ export const WizardHeader: React.FC<WizardHeaderProps> = ({
       </div>
 
       {/* Language Tags */}
-      <div className="w-full p-6 bg-gray-950/80 backdrop-blur-sm border-b border-gray-800">
+      <div className="w-full p-6 bg-gray-950 border-b border-gray-800">
         <LanguageTags
           proficiencyLevels={proficiencyLevels}
           targetLanguage={targetLanguage}
