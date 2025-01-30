@@ -7,6 +7,7 @@ import { ProficiencyLevels } from "../types";
 interface WizardHeaderProps {
   showBack?: boolean;
   proficiencyLevels: ProficiencyLevels;
+  targetLanguage?: string | null;
   onBack?: () => void;
   onClose: () => void;
   onRemoveLanguage?: (language: string) => void;
@@ -15,6 +16,7 @@ interface WizardHeaderProps {
 export const WizardHeader: React.FC<WizardHeaderProps> = ({
   showBack = false,
   proficiencyLevels,
+  targetLanguage,
   onBack,
   onClose,
   onRemoveLanguage,
@@ -47,6 +49,7 @@ export const WizardHeader: React.FC<WizardHeaderProps> = ({
       <div className="w-full p-6 bg-gray-950/80 backdrop-blur-sm border-b border-gray-800">
         <LanguageTags
           proficiencyLevels={proficiencyLevels}
+          targetLanguage={targetLanguage}
           onRemove={onRemoveLanguage}
         />
       </div>

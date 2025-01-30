@@ -58,6 +58,7 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
       <WizardHeader
         showBack={state.view !== "welcome"}
         proficiencyLevels={state.proficiencyLevels}
+        targetLanguage={state.targetLanguage}
         onBack={handleBack}
         onClose={onClose}
         onRemoveLanguage={handleRemoveLanguage}
