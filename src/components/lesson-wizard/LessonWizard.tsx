@@ -6,6 +6,7 @@ import { WelcomeScreen } from "./components/WelcomeScreen";
 import { LanguageSelectScreen } from "./components/LanguageSelectScreen";
 import { TargetLanguageScreen } from "./components/TargetLanguageScreen";
 import { PathSelectionScreen } from "./components/PathSelectionScreen";
+import { JsonUploadScreen } from "./components/JsonUploadScreen";
 
 interface LessonWizardProps {
   onComplete: (state: WizardState) => void;
@@ -24,6 +25,7 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     targetLanguage: null,
     pathType: null,
     lessonType: null,
+    lessonData: null,
   });
 
   const updateState = (updates: Partial<WizardState>) => {
@@ -33,7 +35,10 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
   const setView = (view: WizardView) => updateState({ view });
 
   const handleBack = () => {
-    if (state.view === "targetSelect") {
+    if (state.view === "jsonUpload") {
+      setView("pathSelect");
+      updateState({ pathType: null }); // Reset path type when going back
+    } else if (state.view === "targetSelect") {
       setView("languageSelect");
     } else if (state.view === "languageSelect") {
       setView("welcome");
@@ -43,6 +48,8 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
   const handleComplete = () => {
     if (state.view === "targetSelect") {
       setView("pathSelect");
+    } else if (state.view === "pathSelect" && state.pathType === "new") {
+      setView("jsonUpload");
     } else if (state.view === "pathSelect" && state.lessonType) {
       // Only complete if we have all required data
       if (
@@ -52,6 +59,8 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
       ) {
         onComplete(state);
       }
+    } else if (state.view === "jsonUpload" && state.lessonData) {
+      onComplete(state);
     }
   };
 
@@ -102,6 +111,14 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
         )}
         {state.view === "pathSelect" && (
           <PathSelectionScreen
+            state={state}
+            updateState={updateState}
+            onComplete={handleComplete}
+            setView={setView}
+          />
+        )}
+        {state.view === "jsonUpload" && (
+          <JsonUploadScreen
             state={state}
             updateState={updateState}
             onComplete={onComplete}

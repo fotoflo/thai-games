@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { WizardState, PathType, LessonType } from "../types";
+import { WizardState, PathType, LessonType, WizardView } from "../types";
 import { TypeAnimation } from "react-type-animation";
 
 interface PathSelectionScreenProps {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
   onComplete: (state: WizardState) => void;
+  setView: (view: WizardView) => void;
 }
 
 const lessonTypes = [
@@ -52,6 +53,7 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
   state,
   updateState,
   onComplete,
+  setView,
 }) => {
   const [showLessonTypes, setShowLessonTypes] = useState(false);
 
@@ -59,6 +61,8 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
     updateState({ pathType: path });
     if (path === "existing") {
       setShowLessonTypes(true);
+    } else if (path === "new") {
+      setView("jsonUpload");
     }
   };
 

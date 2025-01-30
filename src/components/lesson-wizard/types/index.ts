@@ -2,7 +2,8 @@ export type WizardView =
   | "welcome"
   | "languageSelect"
   | "targetSelect"
-  | "pathSelect";
+  | "pathSelect"
+  | "jsonUpload";
 
 export interface Language {
   code: string;
@@ -24,6 +25,39 @@ export type LessonType =
   | "business"
   | null;
 
+export interface LessonCategory {
+  id: string;
+  name: string;
+}
+
+export interface LessonSide {
+  markdown: string;
+  metadata?: {
+    pronunciation?: string;
+    [key: string]: unknown;
+  };
+}
+
+export interface LessonItem {
+  id: string;
+  sides: LessonSide[];
+  tags: string[];
+  categories: string[];
+  intervalModifier: number;
+}
+
+export interface LessonData {
+  name: string;
+  description: string;
+  subject: string;
+  categories: LessonCategory[];
+  difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED";
+  estimatedTime: number;
+  totalItems: number;
+  version: number;
+  items: LessonItem[];
+}
+
 export interface WizardState {
   view: WizardView;
   showNext: boolean;
@@ -35,4 +69,5 @@ export interface WizardState {
   targetLanguage: string | null;
   pathType: PathType;
   lessonType: LessonType;
+  lessonData: LessonData | null;
 }
