@@ -1,14 +1,23 @@
-import React, { useRef, useEffect } from 'react';
-import { AlertTriangle, Copy, CopyCheck, MessageCircle } from 'lucide-react';
+import React, { useRef, useEffect, useState } from 'react';
+import { AlertTriangle, Copy, CopyCheck, MessageCircle, Wand2 } from 'lucide-react';
+import ModalContainer from './ui/ModalContainer';
+import LessonWizard from './lesson-wizard/LessonWizard';
 
 const DebugPanelModal = ({ onClose, copyDebugInfo, copied, workingList, possibleProblemList, problemList }) => {
   const modalRef = useRef();
+  const [showNewWizard, setShowNewWizard] = useState(false);
 
   const clearLocalStorage = () => {
     if (window.confirm('Are you sure you want to clear all local storage? This will reset all progress.')) {
       localStorage.clear();
       window.location.reload();
     }
+  };
+
+  const handleWizardComplete = (state) => {
+    console.log('Wizard completed with state:', state);
+    setShowNewWizard(false);
+    // TODO: Handle the wizard completion, e.g., create a new lesson
   };
 
   // Close modal on outside click
@@ -24,6 +33,22 @@ const DebugPanelModal = ({ onClose, copyDebugInfo, copied, workingList, possible
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose]);
+
+  if (showNewWizard) {
+    return (
+      <ModalContainer 
+        title="New Language Learning Wizard" 
+        onClose={() => setShowNewWizard(false)}
+        showHeader={false}
+        className="w-full max-w-3xl"
+      >
+        <LessonWizard 
+          onComplete={handleWizardComplete} 
+          onClose={() => setShowNewWizard(false)}
+        />
+      </ModalContainer>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-100 flex items-center justify-center z-50">
@@ -46,6 +71,14 @@ const DebugPanelModal = ({ onClose, copyDebugInfo, copied, workingList, possible
             <button onClick={copyDebugInfo} className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white">
               {copied ? <CopyCheck size={20} /> : <Copy size={20} />}
               {copied ? 'Copied!' : 'Copy Debug'}
+            </button>
+
+            <button 
+              onClick={() => setShowNewWizard(true)} 
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <Wand2 size={20} />
+              Try New Language Wizard
             </button>
 
             {/* Display Lists */}
