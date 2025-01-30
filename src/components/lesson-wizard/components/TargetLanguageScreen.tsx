@@ -15,13 +15,7 @@ export const TargetLanguageScreen: React.FC<TargetLanguageScreenProps> = ({
   updateState,
   onComplete,
 }) => {
-  const { knownLanguages, targetLanguage, customLanguage, showCustomInput } =
-    state;
-
-  // Filter out languages the user already knows
-  const availableLanguages = commonLanguages.filter(
-    (lang) => !knownLanguages.includes(lang.name)
-  );
+  const { targetLanguage, customLanguage, showCustomInput } = state;
 
   const handleLanguageSelect = (language: (typeof commonLanguages)[0]) => {
     if (language.code === "other") {
@@ -59,7 +53,7 @@ export const TargetLanguageScreen: React.FC<TargetLanguageScreenProps> = ({
 
         <motion.div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {[
-            ...availableLanguages,
+            ...commonLanguages,
             { code: "other", name: "Another Language", flag: "🌐" },
           ].map((language) => (
             <motion.button
