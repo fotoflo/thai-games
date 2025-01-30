@@ -5,6 +5,7 @@ import { WizardHeader } from "./components/WizardHeader";
 import { WelcomeScreen } from "./components/WelcomeScreen";
 import { LanguageSelectScreen } from "./components/LanguageSelectScreen";
 import { TargetLanguageScreen } from "./components/TargetLanguageScreen";
+import { PathSelectionScreen } from "./components/PathSelectionScreen";
 
 interface LessonWizardProps {
   onComplete: (state: WizardState) => void;
@@ -21,6 +22,8 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     customLanguage: "",
     showCustomInput: false,
     targetLanguage: null,
+    pathType: null,
+    lessonType: null,
   });
 
   const updateState = (updates: Partial<WizardState>) => {
@@ -38,7 +41,11 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
   };
 
   const handleComplete = () => {
-    onComplete(state);
+    if (state.view === "targetSelect") {
+      setView("pathSelect");
+    } else {
+      onComplete(state);
+    }
   };
 
   const handleRemoveLanguage = (language: string) => {
@@ -84,6 +91,13 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
             state={state}
             updateState={updateState}
             onComplete={handleComplete}
+          />
+        )}
+        {state.view === "pathSelect" && (
+          <PathSelectionScreen
+            state={state}
+            updateState={updateState}
+            onComplete={onComplete}
           />
         )}
       </AnimatePresence>

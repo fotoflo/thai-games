@@ -1,4 +1,8 @@
-export type WizardView = "welcome" | "languageSelect" | "targetSelect";
+export type WizardView =
+  | "welcome"
+  | "languageSelect"
+  | "targetSelect"
+  | "pathSelect";
 
 export interface Language {
   code: string;
@@ -10,6 +14,16 @@ export interface ProficiencyLevels {
   [key: string]: string;
 }
 
+export type PathType = "existing" | "new" | null;
+export type LessonType =
+  | "conversational"
+  | "nouns"
+  | "scenarios"
+  | "grammar"
+  | "culture"
+  | "business"
+  | null;
+
 export interface WizardState {
   view: WizardView;
   showNext: boolean;
@@ -19,4 +33,6 @@ export interface WizardState {
   customLanguage: string;
   showCustomInput: boolean;
   targetLanguage: string | null;
+  pathType: PathType;
+  lessonType: LessonType;
 }
