@@ -7,28 +7,23 @@ interface WelcomeScreenProps {
   showNext: boolean;
   onShowNext: () => void;
   onGetStarted: () => void;
-  onClose: () => void;
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   showNext,
   onShowNext,
   onGetStarted,
-  onClose,
 }) => {
   return (
     <motion.div
-      className="flex flex-col items-center justify-center min-h-screen bg-gray-950 relative"
+      className="flex flex-col items-center justify-center min-h-screen bg-gray-950 pt-24"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onAnimationComplete={onShowNext}
     >
       {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-8 right-8 p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
-      >
+      <button className="absolute top-8 right-8 p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
         <X size={24} />
       </button>
 

@@ -1,33 +1,22 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { WizardState } from "../types";
-import { LanguageTags } from "./LanguageTags";
 import { commonLanguages } from "../data/constants";
 import { toTitleCase } from "../utils/stringUtils";
-import { ArrowLeft, X } from "lucide-react";
 
 interface TargetLanguageScreenProps {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
   onComplete: () => void;
-  onBack: () => void;
-  onClose: () => void;
 }
 
 export const TargetLanguageScreen: React.FC<TargetLanguageScreenProps> = ({
   state,
   updateState,
   onComplete,
-  onBack,
-  onClose,
 }) => {
-  const {
-    knownLanguages,
-    proficiencyLevels,
-    targetLanguage,
-    customLanguage,
-    showCustomInput,
-  } = state;
+  const { knownLanguages, targetLanguage, customLanguage, showCustomInput } =
+    state;
 
   // Filter out languages the user already knows
   const availableLanguages = commonLanguages.filter(
@@ -54,29 +43,11 @@ export const TargetLanguageScreen: React.FC<TargetLanguageScreenProps> = ({
 
   return (
     <motion.div
-      className="min-h-screen bg-gray-950 p-6 pt-24 relative"
+      className="min-h-screen bg-gray-950 p-6 pt-24"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Back Button */}
-      <button
-        onClick={onBack}
-        className="absolute top-8 left-8 p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
-      >
-        <ArrowLeft size={24} />
-      </button>
-
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-8 right-8 p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
-      >
-        <X size={24} />
-      </button>
-
-      <LanguageTags proficiencyLevels={proficiencyLevels} />
-
       <div className="max-w-4xl mx-auto">
         <motion.h2
           className="text-2xl font-bold text-white mb-8"

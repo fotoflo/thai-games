@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { WizardState, WizardView } from "./types";
+import { WizardHeader } from "./components/WizardHeader";
 import { WelcomeScreen } from "./components/WelcomeScreen";
 import { LanguageSelectScreen } from "./components/LanguageSelectScreen";
 import { TargetLanguageScreen } from "./components/TargetLanguageScreen";
@@ -40,15 +41,34 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
     onComplete(state);
   };
 
+  const handleRemoveLanguage = (language: string) => {
+    const newKnownLanguages = state.knownLanguages.filter(
+      (l) => l !== language
+    );
+    const newProficiencyLevels = { ...state.proficiencyLevels };
+    delete newProficiencyLevels[language];
+    updateState({
+      knownLanguages: newKnownLanguages,
+      proficiencyLevels: newProficiencyLevels,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-950">
+      <WizardHeader
+        showBack={state.view !== "welcome"}
+        proficiencyLevels={state.proficiencyLevels}
+        onBack={handleBack}
+        onClose={onClose}
+        onRemoveLanguage={handleRemoveLanguage}
+      />
+
       <AnimatePresence mode="wait">
         {state.view === "welcome" && (
           <WelcomeScreen
             showNext={state.showNext}
             onShowNext={() => updateState({ showNext: true })}
             onGetStarted={() => setView("languageSelect")}
-            onClose={onClose}
           />
         )}
         {state.view === "languageSelect" && (
@@ -56,8 +76,6 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
             state={state}
             updateState={updateState}
             onContinue={() => setView("targetSelect")}
-            onBack={handleBack}
-            onClose={onClose}
           />
         )}
         {state.view === "targetSelect" && (
@@ -65,8 +83,6 @@ const LessonWizard: React.FC<LessonWizardProps> = ({ onComplete, onClose }) => {
             state={state}
             updateState={updateState}
             onComplete={handleComplete}
-            onBack={handleBack}
-            onClose={onClose}
           />
         )}
       </AnimatePresence>
