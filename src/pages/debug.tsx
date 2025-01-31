@@ -310,6 +310,7 @@ const DebugPage: React.FC = () => {
           <JsonUploadScreen
             state={mockWizardState}
             updateState={handleWizardStateUpdate}
+            onClose={() => setShowJsonUpload(false)}
           />
         </ModalContainer>
       )}

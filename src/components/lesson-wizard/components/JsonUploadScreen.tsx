@@ -3,18 +3,19 @@ import { motion } from "framer-motion";
 import { WizardState, LessonData } from "../types";
 import { Upload, CheckCircle2, FileUp, Type, Copy, Check } from "lucide-react";
 import { getCompletedWizardPrompt } from "../data/lessonPrompts";
-import { useRouter } from "next/router";
+import { modals } from "@/hooks/useModal";
 
 interface JsonUploadScreenProps {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
+  onClose?: () => void;
 }
 
 export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
   state,
   updateState,
+  onClose,
 }) => {
-  const router = useRouter();
   const [jsonContent, setJsonContent] = useState<LessonData | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -238,6 +239,9 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
         difficulty:
           jsonContent.difficulty.toUpperCase() as LessonData["difficulty"],
         totalItems: jsonContent.items.length,
+        // Ensure createdAt and updatedAt are set
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       // Update the wizard state with the lesson data
@@ -256,19 +260,34 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create lesson");
+        // Try to get the error message from the response
+        let errorMessage = "Failed to create lesson";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // If we can't parse the error JSON, use the status text
+          errorMessage = `Failed to create lesson: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
       const createdLesson = await response.json();
 
-      // Show success state briefly before navigating
+      // Show success state briefly
       setIsNavigating(true);
-
-      // Small delay to show success state
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Navigate to lesson detail screen
-      await router.push(`/lessons/${createdLesson.id}`);
+      // Open the lesson details modal
+      modals.lessonDetails.open({
+        lesson: createdLesson,
+        index: 0,
+      });
+
+      // Close this modal/screen if onClose is provided
+      if (onClose) {
+        onClose();
+      }
     } catch (error) {
       console.error("Error submitting lesson:", error);
       setJsonError(
