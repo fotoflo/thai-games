@@ -56,6 +56,7 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
   setView,
 }) => {
   const [showLessonTypes, setShowLessonTypes] = useState(false);
+  const [animationKey, setAnimationKey] = React.useState(0);
 
   const handlePathSelect = (path: PathType) => {
     updateState({ pathType: path });
@@ -79,6 +80,14 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      {/* Debug Replay Button */}
+      <button
+        onClick={() => setAnimationKey((prev) => prev + 1)}
+        className="fixed top-4 right-4 px-3 py-1 bg-white/10 hover:bg-white/20 text-white/50 text-sm rounded-full transition-colors"
+      >
+        Replay Animations
+      </button>
+
       <div className="max-w-4xl mx-auto">
         {!state.pathType && (
           <>
@@ -88,9 +97,36 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
               className="text-2xl font-bold text-white mb-8"
               cursor={true}
               repeat={0}
+              key={`type-${animationKey}`}
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              variants={{
+                show: {
+                  transition: {
+                    staggerChildren: 0.2,
+                    delayChildren: 1.7,
+                  },
+                },
+              }}
+              initial="hidden"
+              animate="show"
+              key={`paths-${animationKey}`}
+            >
               <motion.button
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.8 },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                    },
+                  },
+                }}
                 whileHover={{
                   scale: 1.02,
                   boxShadow: "0 0 20px 2px rgba(0, 255, 242, 0.1)",
@@ -109,6 +145,19 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
               </motion.button>
 
               <motion.button
+                variants={{
+                  hidden: { opacity: 0, y: 20, scale: 0.8 },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                    },
+                  },
+                }}
                 whileHover={{
                   scale: 1.02,
                   boxShadow: "0 0 20px 2px rgba(233, 69, 96, 0.1)",
@@ -125,7 +174,7 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
                   Design a custom lesson tailored to your needs
                 </p>
               </motion.button>
-            </div>
+            </motion.div>
           </>
         )}
 
@@ -140,11 +189,38 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
               className="text-2xl font-bold text-white mb-8"
               cursor={true}
               repeat={0}
+              key={`type-lessons-${animationKey}`}
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+              variants={{
+                show: {
+                  transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 1.7,
+                  },
+                },
+              }}
+              initial="hidden"
+              animate="show"
+              key={`lessons-${animationKey}`}
+            >
               {lessonTypes.map((type) => (
                 <motion.button
                   key={type.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 20, scale: 0.8 },
+                    show: {
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                      },
+                    },
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`p-4 rounded-xl border ${
@@ -167,7 +243,7 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
                   </div>
                 </motion.button>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </div>

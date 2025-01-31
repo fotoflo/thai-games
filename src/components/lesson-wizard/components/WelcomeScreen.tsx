@@ -75,7 +75,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             </h1>
 
             <TypeAnimation
-              sequence={[1000, "Your personal AI language app", 1000]}
+              sequence={[600, "Your personal AI language App", 200]}
               wrapper="h1"
               className="text-gray-400"
               cursor={true}
@@ -87,7 +87,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: showNext ? 1 : 0, y: showNext ? 0 : 20 }}
-          transition={{ delay: 3 }}
+          transition={{ delay: 2 }}
         >
           <motion.button
             whileHover={{ scale: 1.05 }}

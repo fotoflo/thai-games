@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { WizardState } from "../types";
 import { TypeAnimation } from "react-type-animation";
 import { Sparkles } from "lucide-react";
@@ -248,6 +248,7 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
 }) => {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customTopic, setCustomTopic] = useState("");
+  const [animationKey, setAnimationKey] = React.useState(0);
   const topics = state.lessonType ? topicsByType[state.lessonType] : [];
 
   const handleTopicSelect = (topicId: string) => {
@@ -283,111 +284,129 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="max-w-4xl mx-auto">
+      {/* Debug Replay Button */}
+      <button
+        onClick={() => setAnimationKey((prev) => prev + 1)}
+        className="fixed top-4 right-4 px-3 py-1 bg-white/10 hover:bg-white/20 text-white/50 text-sm rounded-full transition-colors"
+      >
+        Replay Animations
+      </button>
+
+      <div className="max-w-6xl mx-auto">
         <TypeAnimation
-          sequence={["Choose a specific topic to learn", 1000]}
+          sequence={["Choose Your Lesson Topic", 1000]}
           wrapper="h2"
-          className="text-2xl font-bold text-white mb-8"
+          className="text-2xl font-bold text-white mb-8 text-center"
           cursor={true}
           repeat={0}
+          key={`type-${animationKey}`}
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {/* Custom Topic Card - Now at the top */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`p-4 rounded-xl border col-span-full ${
-              showCustomInput
-                ? "border-rose-500 bg-gray-800"
-                : "border-gray-700 bg-gray-900 hover:border-rose-800"
-            } transition-colors duration-200 group`}
-          >
-            {!showCustomInput ? (
-              <button
-                className="w-full text-left"
-                onClick={() => handleTopicSelect("custom")}
+        <motion.div
+          key={`categories-${animationKey}`}
+          variants={{
+            show: {
+              transition: {
+                staggerChildren: 0.2,
+                delayChildren: 1.7,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="show"
+          className="grid gap-8"
+        >
+          {Object.entries(topicsByType).map(
+            ([category, topics], categoryIndex) => (
+              <motion.div
+                key={category}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      staggerChildren: 0.1,
+                      delayChildren: 0.2,
+                    },
+                  },
+                }}
+                className="space-y-4"
               >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">✨</span>
-                  <div>
-                    <h3 className="font-medium text-white group-hover:text-rose-400 transition-colors flex items-center gap-2">
-                      Custom Topic
-                      <Sparkles className="w-4 h-4" />
-                    </h3>
-                    <p className="text-sm text-gray-400 mt-1">
-                      Create a personalized lesson with AI assistance
-                    </p>
-                  </div>
-                </div>
-              </button>
-            ) : (
-              <AnimatePresence>
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
+                <motion.h3
+                  className="text-xl font-semibold text-white capitalize"
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    show: {
+                      opacity: 1,
+                      x: 0,
+                      transition: {
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 15,
+                      },
+                    },
+                  }}
                 >
-                  <div className="flex flex-col gap-3">
-                    <input
-                      type="text"
-                      value={customTopic}
-                      onChange={(e) => setCustomTopic(e.target.value)}
-                      placeholder="Enter your topic..."
-                      className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-rose-500"
-                      autoFocus
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={handleCustomTopicSubmit}
-                        disabled={!customTopic.trim()}
-                        className="flex-1 px-3 py-1.5 bg-rose-600 hover:bg-rose-500 disabled:bg-gray-700 text-white rounded-lg transition-colors"
-                      >
-                        Create Lesson
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowCustomInput(false);
-                          setCustomTopic("");
-                        }}
-                        className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition-colors"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            )}
-          </motion.div>
+                  {category.replace("-", " ")}
+                </motion.h3>
 
-          {/* Regular Topic Cards */}
-          {topics.map((topic) => (
-            <motion.button
-              key={topic.id}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`p-4 rounded-xl border ${
-                state.selectedTopic === topic.id
-                  ? "border-blue-500 bg-gray-800"
-                  : "border-gray-700 bg-gray-900"
-              } transition-colors duration-200 text-left group`}
-              onClick={() => handleTopicSelect(topic.id)}
-            >
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">{topic.icon}</span>
-                <div>
-                  <h3 className="font-medium text-white group-hover:text-blue-400 transition-colors">
-                    {topic.title}
-                  </h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    {topic.description}
-                  </p>
-                </div>
-              </div>
-            </motion.button>
-          ))}
-        </div>
+                <motion.div
+                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+                  variants={{
+                    show: {
+                      transition: {
+                        staggerChildren: 0.1,
+                      },
+                    },
+                  }}
+                >
+                  {topics.map((topic) => (
+                    <motion.button
+                      key={topic.id}
+                      variants={{
+                        hidden: {
+                          opacity: 0,
+                          y: 20,
+                          scale: 0.8,
+                        },
+                        show: {
+                          opacity: 1,
+                          y: 0,
+                          scale: 1,
+                          transition: {
+                            type: "spring",
+                            stiffness: 100,
+                            damping: 15,
+                          },
+                        },
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleTopicSelect(topic.id)}
+                      className="p-4 rounded-xl border border-gray-700 bg-gray-900 hover:bg-gray-800 transition-colors text-left"
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">{topic.icon}</span>
+                        <div>
+                          <h4 className="font-medium text-white">
+                            {topic.title}
+                          </h4>
+                          <p className="text-sm text-gray-400 mt-1">
+                            {topic.description}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.button>
+                  ))}
+                </motion.div>
+              </motion.div>
+            )
+          )}
+        </motion.div>
       </div>
     </motion.div>
   );
