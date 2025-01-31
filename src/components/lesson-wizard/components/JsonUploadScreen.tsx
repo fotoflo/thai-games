@@ -8,13 +8,11 @@ import { useRouter } from "next/router";
 interface JsonUploadScreenProps {
   state: WizardState;
   updateState: (updates: Partial<WizardState>) => void;
-  onComplete: (state: WizardState) => void;
 }
 
 export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
   state,
   updateState,
-  onComplete,
 }) => {
   const router = useRouter();
   const [jsonContent, setJsonContent] = useState<LessonData | null>(null);
@@ -457,10 +455,21 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-xl bg-emerald-900/50 border border-emerald-800 text-emerald-200 flex items-center gap-2"
+              className="p-4 rounded-xl bg-emerald-900/50 border border-emerald-800 text-emerald-200"
             >
-              <CheckCircle2 className="w-5 h-5" />
-              <span>JSON validated successfully!</span>
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle2 className="w-5 h-5" />
+                <span>JSON validated successfully!</span>
+              </div>
+              <div className="pl-7 text-sm">
+                <p className="text-emerald-300 font-medium">
+                  {jsonContent.name}
+                </p>
+                <p className="text-emerald-400/80">
+                  {jsonContent.items.length} cards •{" "}
+                  {jsonContent.difficulty.toLowerCase()} difficulty
+                </p>
+              </div>
             </motion.div>
           )}
 
