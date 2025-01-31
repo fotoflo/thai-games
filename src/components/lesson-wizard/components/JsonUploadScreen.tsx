@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { WizardState, LessonData } from "../types";
 import { Upload, CheckCircle2, FileUp, Type, Copy, Check } from "lucide-react";
-import { getCompleteLessonPrompt } from "../data/lessonPrompts";
+import { getCompletedWizardPrompt } from "../data/lessonPrompts";
+import { useRouter } from "next/router";
 
 interface JsonUploadScreenProps {
   state: WizardState;
@@ -15,6 +16,7 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
   updateState,
   onComplete,
 }) => {
+  const router = useRouter();
   const [jsonContent, setJsonContent] = useState<LessonData | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,34 +35,64 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
 
       // Check for required fields with descriptive error messages
       const requiredFields = {
-        name: "Lesson name",
-        description: "Lesson description",
+        name: "Lesson name (max 48 chars)",
+        description: "Lesson description (max 128 chars)",
         categories: "Categories array",
-        subject: "Subject",
+        subject: "Subject (max 48 chars)",
         difficulty: "Difficulty level (BEGINNER, INTERMEDIATE, or ADVANCED)",
         estimatedTime: "Estimated completion time",
-        totalItems: "Total number of items",
         version: "Lesson version",
-        items: "Lesson items array",
+        items: "Lesson items array (must have at least 5 items)",
       };
 
       const missingFields: string[] = [];
+
+      // Validate field presence and format
       for (const [field, description] of Object.entries(requiredFields)) {
-        if (field === "difficulty") {
-          const difficulty = String(jsonObj[field] || "").toUpperCase();
-          if (!["BEGINNER", "INTERMEDIATE", "ADVANCED"].includes(difficulty)) {
-            missingFields.push(
-              `${description} must be one of: BEGINNER, INTERMEDIATE, ADVANCED`
-            );
-          }
-        } else if (!jsonObj[field]) {
+        if (!jsonObj[field]) {
           missingFields.push(description);
+          continue;
+        }
+
+        // Additional format validations
+        switch (field) {
+          case "name":
+            if (String(jsonObj[field]).length > 48) {
+              missingFields.push("Lesson name must be 48 characters or less");
+            }
+            break;
+          case "description":
+            if (String(jsonObj[field]).length > 128) {
+              missingFields.push("Description must be 128 characters or less");
+            }
+            break;
+          case "subject":
+            if (String(jsonObj[field]).length > 48) {
+              missingFields.push("Subject must be 48 characters or less");
+            }
+            break;
+          case "difficulty":
+            const difficulty = String(jsonObj[field] || "").toUpperCase();
+            if (
+              !["BEGINNER", "INTERMEDIATE", "ADVANCED"].includes(difficulty)
+            ) {
+              missingFields.push(
+                `${description} must be one of: BEGINNER, INTERMEDIATE, ADVANCED`
+              );
+            }
+            break;
         }
       }
 
       // Check items array structure if it exists
       const items = jsonObj.items as Array<unknown>;
-      if (Array.isArray(items)) {
+      if (!Array.isArray(items)) {
+        missingFields.push("Items must be an array");
+      } else {
+        if (items.length < 5) {
+          missingFields.push("Lesson must have at least 5 items");
+        }
+
         items.forEach((item, index) => {
           if (typeof item !== "object" || item === null) {
             missingFields.push(`Item ${index + 1} must be an object`);
@@ -107,13 +139,17 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
       }
 
       if (missingFields.length > 0) {
-        throw new Error(
-          "Missing required fields:\n- " + missingFields.join("\n- ")
-        );
+        throw new Error("Validation Errors:\n- " + missingFields.join("\n- "));
       }
 
       // If we get here, basic validation passed
-      setJsonContent(json as LessonData);
+      const validatedJson = {
+        ...jsonObj,
+        totalItems: (jsonObj.items as Array<unknown>).length,
+        difficulty: String(jsonObj.difficulty).toUpperCase(),
+      } as LessonData;
+
+      setJsonContent(validatedJson);
       setJsonError(null);
     } catch (error) {
       console.error("Error validating JSON:", error);
@@ -143,33 +179,51 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
     }
   };
 
-  const handlePastedJson = () => {
+  const handlePaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const text = e.clipboardData?.getData("text") || "";
+    setPastedText(text);
+
     try {
-      // First try to parse the JSON and provide helpful formatting tips if it fails
-      let json;
-      try {
-        json = JSON.parse(pastedText);
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Invalid JSON";
-        let helpfulMessage = "Invalid JSON format. Common issues to check:\n";
-        helpfulMessage +=
-          '- Ensure all property names are in double quotes (e.g., "name": "value")\n';
-        helpfulMessage += "- Check for missing commas between properties\n";
-        helpfulMessage += "- Ensure arrays and objects are properly closed\n";
-        helpfulMessage += "- Remove any trailing commas\n\n";
-        helpfulMessage += "Parser error: " + errorMessage;
-
-        setJsonError(helpfulMessage);
-        setJsonContent(null);
-        return;
-      }
-
+      const json = JSON.parse(text);
       validateAndSetJson(json);
     } catch (error) {
-      setJsonError(
-        error instanceof Error ? error.message : "Failed to validate JSON"
-      );
+      const errorMessage =
+        error instanceof Error ? error.message : "Invalid JSON";
+      let helpfulMessage = "Invalid JSON format. Common issues to check:\n";
+      helpfulMessage +=
+        '- Ensure all property names are in double quotes (e.g., "name": "value")\n';
+      helpfulMessage += "- Check for missing commas between properties\n";
+      helpfulMessage += "- Ensure arrays and objects are properly closed\n";
+      helpfulMessage += "- Remove any trailing commas\n\n";
+      helpfulMessage += "Parser error: " + errorMessage;
+
+      setJsonError(helpfulMessage);
+      setJsonContent(null);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    setPastedText(newText);
+  };
+
+  const handlePastedJson = () => {
+    try {
+      const json = JSON.parse(pastedText);
+      validateAndSetJson(json);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Invalid JSON";
+      let helpfulMessage = "Invalid JSON format. Common issues to check:\n";
+      helpfulMessage +=
+        '- Ensure all property names are in double quotes (e.g., "name": "value")\n';
+      helpfulMessage += "- Check for missing commas between properties\n";
+      helpfulMessage += "- Ensure arrays and objects are properly closed\n";
+      helpfulMessage += "- Remove any trailing commas\n\n";
+      helpfulMessage += "Parser error: " + errorMessage;
+
+      setJsonError(helpfulMessage);
       setJsonContent(null);
     }
   };
@@ -179,9 +233,37 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
 
     setIsSubmitting(true);
     try {
+      // Transform the lesson data to match requirements
+      const transformedLesson = {
+        ...jsonContent,
+        difficulty:
+          jsonContent.difficulty.toUpperCase() as LessonData["difficulty"],
+        totalItems: jsonContent.items.length,
+      };
+
       // Update the wizard state with the lesson data
-      updateState({ lessonData: jsonContent });
-      onComplete({ ...state, lessonData: jsonContent });
+      updateState({
+        lessonData: transformedLesson,
+        difficulty: transformedLesson.difficulty,
+      });
+
+      // Create the lesson
+      const response = await fetch("/api/lessons", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(transformedLesson),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create lesson");
+      }
+
+      const createdLesson = await response.json();
+
+      // Navigate to lesson detail screen
+      router.push(`/lessons/${createdLesson.id}`);
     } catch (error) {
       console.error("Error submitting lesson:", error);
       setJsonError("Failed to submit lesson. Please try again.");
@@ -190,9 +272,15 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
     }
   };
 
+  const handleClear = () => {
+    setJsonContent(null);
+    setJsonError(null);
+    setPastedText("");
+  };
+
   const handleCopyPrompt = async () => {
     try {
-      const prompt = getCompleteLessonPrompt(state);
+      const prompt = getCompletedWizardPrompt(state);
       await navigator.clipboard.writeText(prompt);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -303,11 +391,22 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
             <div className="space-y-4">
               <textarea
                 value={pastedText}
-                onChange={(e) => setPastedText(e.target.value)}
+                onChange={handleChange}
+                onPaste={handlePaste}
                 className="w-full h-64 p-4 rounded-xl bg-gray-900 border border-gray-700 text-white font-mono text-sm resize-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
                 placeholder="Paste your lesson JSON here..."
               />
               <div className="flex justify-end gap-2">
+                {pastedText && (
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleClear}
+                    className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700"
+                  >
+                    Clear
+                  </motion.button>
+                )}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

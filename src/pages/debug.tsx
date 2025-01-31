@@ -18,6 +18,8 @@ import LessonDetails from "@/components/syllables/LessonDetailScreen";
 import LessonListScreen from "@/components/LessonListScreen";
 import ModalContainer from "@/components/ui/ModalContainer";
 import LessonWizard from "@/components/lesson-wizard/LessonWizard";
+import { WizardState } from "@/components/lesson-wizard/types";
+import { JsonUploadScreen } from "@/components/lesson-wizard/components/JsonUploadScreen";
 
 interface DebugSection {
   title: string;
@@ -54,6 +56,7 @@ const DebugPage: React.FC = () => {
 
   const [showLessonList, setShowLessonList] = useState(false);
   const [showLanguageWizard, setShowLanguageWizard] = useState(false);
+  const [showJsonUpload, setShowJsonUpload] = useState(false);
 
   // TODO FINISH passing lessons from useLessons to cardSetMachine
   // utilise them instead of the llessons from the invoke
@@ -69,33 +72,24 @@ const DebugPage: React.FC = () => {
     localStorage.setItem("languageWizardState", JSON.stringify(state));
 
     // Extract the language preferences
-    const {
-      knownLanguages,
-      proficiencyLevels,
-      targetLanguage,
-      lessonType,
-      pathType,
-    } = state;
+    const { knownLanguages, proficiencyLevels, targetLanguage, lessonType } =
+      state;
 
     // Log the language learning context
     console.log(
       "User knows:",
-      knownLanguages.map((lang) => `${lang} (${proficiencyLevels[lang]})`)
+      knownLanguages.map(
+        (lang: string) => `${lang} (${proficiencyLevels[lang]})`
+      )
     );
     console.log("Wants to learn:", targetLanguage);
-    console.log("Path type:", pathType);
     console.log("Lesson type:", lessonType);
 
-    // If it's a new lesson path, we'll handle that differently
-    if (pathType === "new") {
-      // TODO: Handle new lesson creation
-      console.log("Creating new lesson...");
-    } else {
-      // Handle existing lesson path
-      console.log("Loading existing lesson...");
-    }
-
     setShowLanguageWizard(false);
+  };
+
+  const handleWizardStateUpdate = (updates: Partial<WizardState>) => {
+    console.log("Wizard state updates:", updates);
   };
 
   const buttonGroups: ButtonGroup[] = [
@@ -138,6 +132,10 @@ const DebugPage: React.FC = () => {
         {
           label: "Open Language Wizard",
           onClick: () => setShowLanguageWizard(true),
+        },
+        {
+          label: "Open JSON Upload",
+          onClick: () => setShowJsonUpload(true),
         },
       ],
     },
@@ -261,6 +259,21 @@ const DebugPage: React.FC = () => {
     },
   ];
 
+  // Add mock state for JsonUploadScreen
+  const mockWizardState: WizardState = {
+    knownLanguages: ["English"],
+    proficiencyLevels: { English: "Native" },
+    selectedForProficiency: null,
+    customLanguage: "",
+    showCustomInput: false,
+    targetLanguage: "Thai",
+    lessonType: "conversational",
+    selectedTopic: null,
+    customTopicTitle: null,
+    difficulty: null,
+    lessonData: null,
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 p-4">
       <FlashCardModal />
@@ -284,6 +297,20 @@ const DebugPage: React.FC = () => {
           <LessonWizard
             onComplete={handleWizardComplete}
             onClose={() => setShowLanguageWizard(false)}
+          />
+        </ModalContainer>
+      )}
+      {showJsonUpload && (
+        <ModalContainer
+          title="Upload Lesson JSON"
+          onClose={() => setShowJsonUpload(false)}
+          showHeader={true}
+          className="w-full max-w-5xl"
+        >
+          <JsonUploadScreen
+            state={mockWizardState}
+            updateState={handleWizardStateUpdate}
+            onComplete={() => setShowJsonUpload(false)}
           />
         </ModalContainer>
       )}
