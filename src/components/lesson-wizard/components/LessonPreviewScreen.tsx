@@ -2,11 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { WizardState, LessonType } from "../types";
 import { TypeAnimation } from "react-type-animation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Copy, Check } from "lucide-react";
+import { getCompletedWizardPrompt } from "../data/lessonPrompts";
 
 interface LessonPreviewScreenProps {
   state: WizardState;
-  updateState: (updates: Partial<WizardState>) => void;
   onComplete: (state: WizardState) => void;
 }
 
@@ -293,10 +293,10 @@ const formatKnownLanguages = (languages: string[]): string => {
 
 export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
   state,
-  updateState,
   onComplete,
 }) => {
   const [isGenerating, setIsGenerating] = React.useState(true);
+  const [copied, setCopied] = React.useState(false);
   const [previewItems, setPreviewItems] = React.useState<
     Array<{
       front: string;
@@ -353,6 +353,17 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
     }, 2000);
   };
 
+  const handleCopyPrompt = async () => {
+    try {
+      const prompt = getCompletedWizardPrompt(state);
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy text:", err);
+    }
+  };
+
   return (
     <motion.div
       className="min-h-screen bg-gray-950 p-6 pt-24"
@@ -372,27 +383,47 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
         <div className="space-y-6">
           {/* Topic Info */}
           <div className="p-6 rounded-xl bg-gray-900 border border-gray-800">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">
-                {getLessonTypeEmoji(state.lessonType)}
-              </span>
-              <div>
-                <h3 className="text-xl font-semibold text-white">
-                  {state.targetLanguage} for{" "}
-                  {formatKnownLanguages(state.knownLanguages)} Speakers
-                </h3>
-                <p className="text-gray-300 mt-1 font-medium">
-                  {state.lessonType && getLessonTypeTitle(state.lessonType)}
-                  {state.selectedTopic && (
-                    <>
-                      <span className="mx-2">•</span>
-                      <span className="text-blue-400">
-                        {getTopicTitle(state)}
-                      </span>
-                    </>
-                  )}
-                </p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">
+                  {getLessonTypeEmoji(state.lessonType)}
+                </span>
+                <div>
+                  <h3 className="text-xl font-semibold text-white">
+                    {state.targetLanguage} for{" "}
+                    {formatKnownLanguages(state.knownLanguages)} Speakers
+                  </h3>
+                  <p className="text-gray-300 mt-1 font-medium">
+                    {state.lessonType && getLessonTypeTitle(state.lessonType)}
+                    {state.selectedTopic && (
+                      <>
+                        <span className="mx-2">•</span>
+                        <span className="text-blue-400">
+                          {getTopicTitle(state)}
+                        </span>
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleCopyPrompt}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    <span>Generate with AI</span>
+                  </>
+                )}
+              </motion.button>
             </div>
           </div>
 

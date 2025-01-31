@@ -172,7 +172,10 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
                   Create New Lesson with Your Own AI
                 </h3>
                 <p className="text-gray-400">
-                  Design a custom lesson tailored to your needs
+                  Design a custom lesson, useful if you&apos;re studying with a
+                  textbook - you can use your smartphone camera and upload
+                  anything you like into ChatGPT and ask it to create a lesson
+                  for you.
                 </p>
               </motion.button>
             </motion.div>

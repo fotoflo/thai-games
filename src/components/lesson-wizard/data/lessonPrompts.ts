@@ -151,3 +151,92 @@ export const FORMATTING_NOTES = `Important formatting notes:
 2. For Chinese-Thai-English lessons:
    - Include Chinese characters with pinyin in parentheses
    - Format for side 2: "*thai-pronunciation*<br /><br />汉字 (hàn zì)<br /><br />english-meaning<br /><br />Example sentences:\\n1. Thai sentence\\n(pronunciation)\\nEnglish translation<br /><br />2. Thai sentence\\n(pronunciation)\\nEnglish translation"`;
+
+export const getCompletedWizardPrompt = (state: WizardState): string => {
+  const {
+    targetLanguage,
+    knownLanguages,
+    lessonType,
+    selectedTopic,
+    customTopicTitle,
+    difficulty,
+  } = state;
+
+  const languagePair =
+    targetLanguage && knownLanguages?.length > 0
+      ? `${targetLanguage} for ${knownLanguages.join(" & ")} Speakers`
+      : "your chosen language pair";
+
+  const topic = customTopicTitle || selectedTopic || "your chosen topic";
+  const lessonTypeStr = lessonType
+    ? lessonType.charAt(0).toUpperCase() + lessonType.slice(1)
+    : "your chosen lesson type";
+  const difficultyStr = difficulty || "BEGINNER";
+
+  return `Please create a language learning lesson with the following specifications:
+
+LESSON DETAILS
+-------------
+Language Pair: ${languagePair}
+Lesson Type: ${lessonTypeStr}
+Topic: ${topic}
+Difficulty: ${difficultyStr}
+
+FORMATTING REQUIREMENTS
+-----------------------------
+1. For Thai words, use tone colors with spans:
+   - Rising tone: <span style='color: #FF4545'>rising</span>
+   - Falling tone: <span style='color: #4545FF'>falling</span>
+
+2. For Chinese-Thai-English lessons:
+   - Include Chinese characters with pinyin in parentheses
+   - Format for side 2: "*thai-pronunciation*<br /><br />汉字 (hàn zì)<br /><br />english-meaning"
+   - Example sentences should follow this format:
+     "Example sentences:\\n1. Thai sentence\\n(pronunciation)\\nEnglish translation"
+
+JSON SCHEMA
+------------------
+Generate a lesson using this exact schema with 20 items:
+
+{
+  "name": "${topic} - ${languagePair}", // max 48 chars
+  "description": "Learn ${topic} in ${targetLanguage}", // max 128 chars
+  "subject": "${targetLanguage} Language", // max 48 chars
+  "categories": [
+    {
+      "id": "${lessonType}",
+      "name": "${lessonTypeStr}"
+    }
+  ],
+  "difficulty": "${difficultyStr}",
+  "estimatedTime": 30,
+  "totalItems": 20,
+  "version": 1,
+  "items": [
+    {
+      "id": "unique-id-001",
+      "sides": [
+        {
+          "markdown": "<span style='color: #FF4545'>ผัด</span><span style='color: #4545FF'>ไทย</span>",
+          "metadata": {
+            "pronunciation": "pad-thai"
+          }
+        },
+        {
+          "markdown": "*pad-thai*<br /><br />炒河粉 (chǎo hé fěn)<br /><br />Pad Thai (stir-fried rice noodles)<br /><br />Example sentences:\\n1. ผัดไทยร้านนี้อร่อยมาก\\n(pad-thai raan nee aroi maak)\\nThe pad thai at this restaurant is very delicious<br /><br />2. คุณชอบผัดไทยไหม\\n(khun chop pad-thai mai)\\nDo you like pad thai?"
+        }
+      ],
+      "tags": ["${lessonType}", "${topic.toLowerCase()}", "${difficultyStr.toLowerCase()}"],
+      "categories": ["${lessonType}"],
+      "intervalModifier": 1
+    }
+  ]
+}
+
+Please generate a complete lesson JSON following all formatting requirements. Make sure to:
+1. Include exactly 20 relevant items for the chosen topic and difficulty level
+2. Follow the tone marking colors for Thai words
+3. Include proper translations and pronunciations
+4. Add appropriate example sentences for each item
+5. Use appropriate vocabulary for the ${difficultyStr} difficulty level`;
+};
