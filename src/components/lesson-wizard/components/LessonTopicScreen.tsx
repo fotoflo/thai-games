@@ -265,15 +265,15 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
       const customTopicId = `custom-${customTopic
         .toLowerCase()
         .replace(/\s+/g, "-")}`;
-      updateState({
-        selectedTopic: customTopicId,
-        customTopicTitle: customTopic,
-      });
-      onComplete({
+      const updatedState = {
         ...state,
         selectedTopic: customTopicId,
         customTopicTitle: customTopic,
-      });
+      };
+      updateState(updatedState);
+      onComplete(updatedState);
+      setShowCustomInput(false);
+      setCustomTopic("");
     }
   };
 
@@ -316,6 +316,41 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
           animate="show"
           className="grid gap-8"
         >
+          {/* Custom Topic Button */}
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: {
+                opacity: 1,
+                y: 0,
+                transition: {
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 15,
+                },
+              },
+            }}
+            className="space-y-4"
+          >
+            <motion.button
+              onClick={() => handleTopicSelect("custom")}
+              className="w-full p-4 rounded-xl border border-gray-700 bg-gray-900 hover:bg-gray-800 transition-colors text-left group"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">✨</span>
+                <div>
+                  <h4 className="font-medium text-white group-hover:text-blue-400 transition-colors">
+                    Custom Topic
+                  </h4>
+                  <p className="text-sm text-gray-400 mt-1">
+                    Create a personalized lesson with your own topic
+                  </p>
+                </div>
+              </div>
+            </motion.button>
+          </motion.div>
+
+          {/* Regular Topic Categories */}
           {Object.entries(topicsByType).map(
             ([category, topics], categoryIndex) => (
               <motion.div
@@ -407,6 +442,55 @@ export const LessonTopicScreen: React.FC<LessonTopicScreenProps> = ({
             )
           )}
         </motion.div>
+
+        {/* Custom Topic Input Modal */}
+        {showCustomInput && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 bg-gray-950/80 backdrop-blur-sm flex items-center justify-center p-6 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-800"
+            >
+              <h3 className="text-xl font-semibold text-white mb-4">
+                Enter Custom Topic
+              </h3>
+              <input
+                type="text"
+                value={customTopic}
+                onChange={(e) => setCustomTopic(e.target.value)}
+                placeholder="e.g., Travel Photography, Local Markets..."
+                className="w-full p-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none mb-4"
+                autoFocus
+              />
+              <div className="flex justify-end gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setShowCustomInput(false);
+                    setCustomTopic("");
+                  }}
+                  className="px-4 py-2 rounded-lg bg-gray-800 text-white hover:bg-gray-700"
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleCustomTopicSubmit}
+                  disabled={!customTopic.trim()}
+                  className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-500 disabled:opacity-50 disabled:hover:bg-blue-600"
+                >
+                  Create Topic
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </motion.div>
   );

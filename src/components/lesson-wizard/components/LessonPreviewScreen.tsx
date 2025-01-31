@@ -260,10 +260,13 @@ const lessonTypes = {
 };
 
 const getTopicTitle = (state: WizardState): string => {
+  // If it's a custom topic, return the custom title
   if (state.customTopicTitle) return state.customTopicTitle;
+
+  // If no lesson type or selected topic, return empty
   if (!state.lessonType || !state.selectedTopic) return "";
 
-  // Find the topic in the full topics array
+  // Find the topic in the topics array
   const topic = topicsByType[state.lessonType].find(
     (t) => t.id === state.selectedTopic
   );
