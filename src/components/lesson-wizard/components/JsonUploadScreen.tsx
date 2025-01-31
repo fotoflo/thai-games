@@ -4,6 +4,7 @@ import { WizardState, LessonData } from "../types";
 import { Upload, CheckCircle2, FileUp, Type, Copy, Check } from "lucide-react";
 import { getCompletedWizardPrompt } from "../data/lessonPrompts";
 import { modals } from "@/hooks/useModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface JsonUploadScreenProps {
   state: WizardState;
@@ -18,11 +19,71 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
 }) => {
   const [jsonContent, setJsonContent] = useState<LessonData | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isNavigating, setIsNavigating] = useState(false);
   const [uploadMethod, setUploadMethod] = useState<"paste" | "file">("paste");
   const [pastedText, setPastedText] = useState("");
   const [copied, setCopied] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  // Create lesson mutation
+  const createLessonMutation = useMutation({
+    mutationFn: async (lesson: LessonData) => {
+      const response = await fetch("/api/lessons", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(lesson),
+      });
+
+      if (!response.ok) {
+        // Try to get the error message from the response
+        let errorMessage = "Failed to create lesson";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorData.error || errorMessage;
+        } catch {
+          // If we can't parse the error JSON, use the status text
+          errorMessage = `Failed to create lesson: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const { lesson: createdLesson } = await response.json();
+      return createdLesson;
+    },
+    onSuccess: (createdLesson) => {
+      // Invalidate and refetch lessons query
+      queryClient.invalidateQueries({ queryKey: ["lessons"] });
+
+      // Update the lesson details modal with the real data
+      modals.lessonDetails.open({
+        lesson: {
+          ...createdLesson,
+          // Add required fields for LessonDetails component
+          practiceHistory: [],
+          recallCategory: "UNSEEN",
+        },
+        index: 0,
+      });
+    },
+    onError: (error) => {
+      console.error("Error submitting lesson:", error);
+      setJsonError(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit lesson. Please try again."
+      );
+
+      // Close the lesson details modal on error
+      modals.lessonDetails.close();
+
+      // Reopen the JSON upload modal
+      if (onClose) {
+        onClose();
+      }
+    },
+  });
 
   const validateAndSetJson = (json: unknown) => {
     try {
@@ -231,74 +292,57 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
   const handleSubmit = async () => {
     if (!jsonContent) return;
 
-    setIsSubmitting(true);
-    try {
-      // Transform the lesson data to match requirements
-      const transformedLesson = {
-        ...jsonContent,
-        difficulty:
-          jsonContent.difficulty.toUpperCase() as LessonData["difficulty"],
-        totalItems: jsonContent.items.length,
-        // Ensure createdAt and updatedAt are set
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+    // Create an optimistic version of the lesson with properly transformed items
+    const optimisticLesson = {
+      ...jsonContent,
+      id: `temp-${Date.now()}`, // Temporary ID that will be replaced
+      difficulty:
+        jsonContent.difficulty.toUpperCase() as LessonData["difficulty"],
+      totalItems: jsonContent.items.length,
+      items: jsonContent.items.map((item) => ({
+        ...item,
+        sides: [
+          {
+            markdown: item.sides[0].markdown,
+            metadata: item.sides[0].metadata
+              ? {
+                  pronunciation: item.sides[0].metadata.pronunciation,
+                }
+              : undefined,
+          },
+          {
+            markdown: item.sides[1].markdown,
+            metadata: item.sides[1].metadata
+              ? {
+                  pronunciation: item.sides[1].metadata.pronunciation,
+                }
+              : undefined,
+          },
+        ] as [(typeof item.sides)[0], (typeof item.sides)[1]],
+        practiceHistory: [],
+        recallCategory: "UNSEEN" as const,
+      })),
+    };
 
-      // Update the wizard state with the lesson data
-      updateState({
-        lessonData: transformedLesson,
-        difficulty: transformedLesson.difficulty,
-      });
+    // Update the wizard state with the lesson data
+    updateState({
+      lessonData: optimisticLesson,
+      difficulty: optimisticLesson.difficulty,
+    });
 
-      // Create the lesson
-      const response = await fetch("/api/lessons", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(transformedLesson),
-      });
+    // Show the lesson details modal immediately with optimistic data
+    modals.lessonDetails.open({
+      lesson: optimisticLesson,
+      index: 0,
+    });
 
-      if (!response.ok) {
-        // Try to get the error message from the response
-        let errorMessage = "Failed to create lesson";
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.message || errorData.error || errorMessage;
-        } catch {
-          // If we can't parse the error JSON, use the status text
-          errorMessage = `Failed to create lesson: ${response.statusText}`;
-        }
-        throw new Error(errorMessage);
-      }
-
-      const createdLesson = await response.json();
-
-      // Show success state briefly
-      setIsNavigating(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Open the lesson details modal
-      modals.lessonDetails.open({
-        lesson: createdLesson,
-        index: 0,
-      });
-
-      // Close this modal/screen if onClose is provided
-      if (onClose) {
-        onClose();
-      }
-    } catch (error) {
-      console.error("Error submitting lesson:", error);
-      setJsonError(
-        error instanceof Error
-          ? error.message
-          : "Failed to submit lesson. Please try again."
-      );
-      setIsNavigating(false);
-    } finally {
-      setIsSubmitting(false);
+    // Close the JSON upload modal
+    if (onClose) {
+      onClose();
     }
+
+    // Create the lesson in the background
+    createLessonMutation.mutate(optimisticLesson);
   };
 
   const handleClear = () => {
@@ -515,18 +559,13 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSubmit}
-                disabled={isSubmitting || isNavigating}
+                disabled={createLessonMutation.isPending}
                 className="px-8 py-3 text-lg font-medium text-white rounded-lg bg-blue-600 hover:bg-blue-500 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {isSubmitting ? (
+                {createLessonMutation.isPending ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>Creating Lesson...</span>
-                  </>
-                ) : isNavigating ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Opening Lesson...</span>
                   </>
                 ) : (
                   "Create Lesson"
