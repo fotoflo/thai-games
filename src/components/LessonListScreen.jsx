@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { BookOpen, Plus, Languages } from 'lucide-react';
+import { BookOpen, Languages } from 'lucide-react';
 import LessonItemsIcon from './Icons/LessonItemsIcon';
 import ModalContainer from './ui/ModalContainer';
-import LessonCreatorWizard from './LessonCreatorWizard';
 import LessonWizard from './lesson-wizard/LessonWizard';
 import { useLessons } from '@/hooks/game/useLessons';
 import { useGameActions } from '@/hooks/game/useReadThaiGame';
@@ -11,7 +10,6 @@ import { modals } from '@/hooks/useModal';
 const LessonListScreen = ({ onClose }) => {
   const { lessons: apiLessons } = useLessons();
   const { chooseLesson } = useGameActions();
-  const [showGuidedCreator, setShowGuidedCreator] = useState(false);
   const [showLanguageWizard, setShowLanguageWizard] = useState(false);
 
   const handleLessonClick = (index) => {
@@ -34,8 +32,6 @@ const LessonListScreen = ({ onClose }) => {
   const handleLanguageWizardComplete = (state) => {
     console.log('Language wizard completed:', state);
     setShowLanguageWizard(false);
-    // TODO: Use the language preferences to customize the lesson creation
-    setShowGuidedCreator(true);
   };
 
   if (showLanguageWizard) {
@@ -54,18 +50,6 @@ const LessonListScreen = ({ onClose }) => {
     );
   }
 
-  if (showGuidedCreator) {
-    return (
-      <ModalContainer 
-        title="Create New Lesson With AI" 
-        onClose={() => setShowGuidedCreator(false)}
-        showHeader={false}
-        className="w-full max-w-3xl"
-      >
-        <LessonCreatorWizard onClose={() => setShowGuidedCreator(false)} />
-      </ModalContainer>
-    );
-  }
 
   return (
     <div className="px-4 pb-4 space-y-4">
@@ -76,17 +60,7 @@ const LessonListScreen = ({ onClose }) => {
                  transition-colors duration-200"
       >
         <Languages className="w-5 h-5" />
-        <span>Create New Lesson (Language Wizard)</span>
-      </button>
-
-      <button
-        onClick={() => setShowGuidedCreator(true)}
-        className="w-full flex items-center justify-center gap-2 px-4 py-3 
-                 bg-blue-600 hover:bg-blue-700 text-white rounded-xl 
-                 transition-colors duration-200"
-      >
-        <Plus className="w-5 h-5" />
-        <span>Create New Lesson (Classic)</span>
+        <span>Create New Lesson with AI</span>
       </button>
 
       <div className="grid grid-cols-1 gap-3">

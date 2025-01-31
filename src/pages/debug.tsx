@@ -17,7 +17,6 @@ import {
 import LessonDetails from "@/components/syllables/LessonDetailScreen";
 import LessonListScreen from "@/components/LessonListScreen";
 import ModalContainer from "@/components/ui/ModalContainer";
-import LessonCreatorWizard from "@/components/LessonCreatorWizard";
 import LessonWizard from "@/components/lesson-wizard/LessonWizard";
 
 interface DebugSection {
