@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { LanguageTags } from "./LanguageTags";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 interface WelcomeScreenProps {
   showNext: boolean;
@@ -16,7 +17,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 }) => {
   return (
     <motion.div
-      className="flex flex-col items-center justify-center min-h-screen bg-gray-950 pt-24"
+      className="fixed inset-0 flex items-center justify-center bg-gray-950"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -27,47 +28,69 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         <X size={24} />
       </button>
 
-      <LanguageTags />
+      <div className="flex flex-col items-center gap-6 -mt-20">
+        <LanguageTags />
 
-      {/* Welcome Card */}
-      <motion.div
-        className="relative w-96 h-48 rounded-2xl overflow-hidden shadow-xl bg-gray-900 border border-gray-800"
-        animate={{
-          boxShadow: [
-            "0 0 0 0 rgba(30, 64, 175, 0)",
-            "0 0 20px 2px rgba(30, 64, 175, 0.2)",
-            "0 0 0 0 rgba(30, 64, 175, 0)",
-          ],
-        }}
-        transition={{ duration: 3, repeat: Infinity }}
-      >
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.h1
-            className="text-5xl font-bold text-white"
+        {/* Palo Image */}
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="w-60 h-60 relative"
+        >
+          <Image
+            src="/assets/images/palo.svg"
+            alt="Palo AI"
+            width={240}
+            height={240}
+            priority
+            onError={(e) => {
+              console.error("Error loading image:", e);
+            }}
+            style={{ objectFit: "contain" }}
+          />
+        </motion.div>
+
+        {/* Welcome Card */}
+        <motion.div
+          className="relative w-96 rounded-2xl overflow-hidden shadow-xl bg-gray-900 border border-gray-800 p-6"
+          animate={{
+            boxShadow: [
+              "0 0 0 0 rgba(30, 64, 175, 0)",
+              "0 0 20px 2px rgba(30, 64, 175, 0.2)",
+              "0 0 0 0 rgba(30, 64, 175, 0)",
+            ],
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+        >
+          <motion.div
+            className="text-center"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            Welcome
-          </motion.h1>
-        </div>
-      </motion.div>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Welcome to Palo AI
+            </h1>
+            <p className="text-gray-400">Your personal AI language app</p>
+          </motion.div>
+        </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: showNext ? 1 : 0, y: showNext ? 0 : 20 }}
-        transition={{ delay: 1 }}
-        className="mt-12"
-      >
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-8 py-3 text-lg font-medium text-white rounded-lg bg-blue-600 hover:bg-blue-500 shadow-lg"
-          onClick={onGetStarted}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: showNext ? 1 : 0, y: showNext ? 0 : 20 }}
+          transition={{ delay: 0.5 }}
         >
-          Get Started
-        </motion.button>
-      </motion.div>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 text-lg font-medium text-white rounded-lg bg-blue-600 hover:bg-blue-500 shadow-lg"
+            onClick={onGetStarted}
+          >
+            Get Started
+          </motion.button>
+        </motion.div>
+      </div>
     </motion.div>
   );
 };
