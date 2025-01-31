@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { WizardState, LessonType } from "../types";
 import { TypeAnimation } from "react-type-animation";
 import { Loader2 } from "lucide-react";
-import { toTitleCase } from "../utils/stringUtils";
 
 interface LessonPreviewScreenProps {
   state: WizardState;
@@ -28,7 +27,36 @@ const topicsByType: Record<NonNullLessonType, TopicData[]> = {
       description: "Learn phrases for introducing yourself and making friends",
       icon: "👋",
     },
-    // ... other conversational topics
+    {
+      id: "restaurant",
+      title: "At the Restaurant",
+      description: "Order food and interact with restaurant staff",
+      icon: "🍽️",
+    },
+    {
+      id: "shopping",
+      title: "Shopping",
+      description: "Bargain, ask about items, and make purchases",
+      icon: "🛍️",
+    },
+    {
+      id: "directions",
+      title: "Asking for Directions",
+      description: "Navigate and ask for help finding places",
+      icon: "🗺️",
+    },
+    {
+      id: "small-talk",
+      title: "Small Talk",
+      description: "Casual conversation about weather, hobbies, and daily life",
+      icon: "💭",
+    },
+    {
+      id: "transportation",
+      title: "Public Transportation",
+      description: "Buy tickets and navigate public transit",
+      icon: "🚌",
+    },
   ],
   nouns: [
     {
@@ -37,7 +65,36 @@ const topicsByType: Record<NonNullLessonType, TopicData[]> = {
       description: "Common ingredients, dishes, and beverages",
       icon: "🍜",
     },
-    // ... other noun topics
+    {
+      id: "clothing",
+      title: "Clothing & Accessories",
+      description: "Items of clothing and fashion terms",
+      icon: "👕",
+    },
+    {
+      id: "household",
+      title: "Household Items",
+      description: "Common objects found in homes",
+      icon: "🏠",
+    },
+    {
+      id: "nature",
+      title: "Nature & Animals",
+      description: "Plants, animals, and natural phenomena",
+      icon: "🌿",
+    },
+    {
+      id: "technology",
+      title: "Technology",
+      description: "Modern devices and digital terms",
+      icon: "📱",
+    },
+    {
+      id: "body-health",
+      title: "Body & Health",
+      description: "Body parts and health-related terms",
+      icon: "🫀",
+    },
   ],
   scenarios: [
     {
@@ -46,7 +103,36 @@ const topicsByType: Record<NonNullLessonType, TopicData[]> = {
       description: "Medical appointments and health concerns",
       icon: "👨‍⚕️",
     },
-    // ... other scenario topics
+    {
+      id: "job-interview",
+      title: "Job Interview",
+      description: "Professional conversations and work discussions",
+      icon: "💼",
+    },
+    {
+      id: "airport",
+      title: "At the Airport",
+      description: "Navigate airports and flight-related situations",
+      icon: "✈️",
+    },
+    {
+      id: "hotel",
+      title: "Hotel Stay",
+      description: "Check-in, services, and room-related requests",
+      icon: "🏨",
+    },
+    {
+      id: "emergency",
+      title: "Emergency Situations",
+      description: "Important phrases for urgent situations",
+      icon: "🚨",
+    },
+    {
+      id: "banking",
+      title: "Banking & Finance",
+      description: "Financial transactions and services",
+      icon: "🏦",
+    },
   ],
   grammar: [
     {
@@ -55,7 +141,36 @@ const topicsByType: Record<NonNullLessonType, TopicData[]> = {
       description: "Learn fundamental sentence patterns",
       icon: "📝",
     },
-    // ... other grammar topics
+    {
+      id: "verb-tenses",
+      title: "Verb Tenses",
+      description: "Past, present, and future expressions",
+      icon: "⏳",
+    },
+    {
+      id: "questions",
+      title: "Question Formation",
+      description: "Different ways to ask questions",
+      icon: "❓",
+    },
+    {
+      id: "particles",
+      title: "Particles & Connectors",
+      description: "Essential connecting words and particles",
+      icon: "🔗",
+    },
+    {
+      id: "modifiers",
+      title: "Adjectives & Adverbs",
+      description: "Words that modify nouns and verbs",
+      icon: "✨",
+    },
+    {
+      id: "honorifics",
+      title: "Politeness & Honorifics",
+      description: "Formal and polite language usage",
+      icon: "🎭",
+    },
   ],
   culture: [
     {
@@ -64,7 +179,36 @@ const topicsByType: Record<NonNullLessonType, TopicData[]> = {
       description: "Traditional holidays and customs",
       icon: "🎉",
     },
-    // ... other culture topics
+    {
+      id: "etiquette",
+      title: "Social Etiquette",
+      description: "Cultural norms and polite behavior",
+      icon: "🤝",
+    },
+    {
+      id: "food-culture",
+      title: "Food Culture",
+      description: "Dining customs and food traditions",
+      icon: "🥢",
+    },
+    {
+      id: "arts",
+      title: "Arts & Entertainment",
+      description: "Traditional and modern cultural activities",
+      icon: "🎨",
+    },
+    {
+      id: "beliefs",
+      title: "Beliefs & Values",
+      description: "Cultural values and belief systems",
+      icon: "🙏",
+    },
+    {
+      id: "daily-life",
+      title: "Daily Life & Customs",
+      description: "Everyday cultural practices",
+      icon: "🌅",
+    },
   ],
   business: [
     {
@@ -73,36 +217,66 @@ const topicsByType: Record<NonNullLessonType, TopicData[]> = {
       description: "Conduct and participate in meetings",
       icon: "👥",
     },
-    // ... other business topics
+    {
+      id: "negotiations",
+      title: "Negotiations",
+      description: "Business deals and agreements",
+      icon: "🤝",
+    },
+    {
+      id: "presentations",
+      title: "Presentations",
+      description: "Give and respond to presentations",
+      icon: "📊",
+    },
+    {
+      id: "email",
+      title: "Email & Communication",
+      description: "Professional written communication",
+      icon: "📧",
+    },
+    {
+      id: "networking",
+      title: "Networking",
+      description: "Professional relationship building",
+      icon: "🌐",
+    },
+    {
+      id: "reports",
+      title: "Reports & Documentation",
+      description: "Business documentation and reporting",
+      icon: "📑",
+    },
   ],
+};
+
+const lessonTypes = {
+  conversational: { title: "Conversational", icon: "💬" },
+  nouns: { title: "Common Nouns", icon: "📚" },
+  scenarios: { title: "Common Scenarios", icon: "🎭" },
+  grammar: { title: "Grammar Focus", icon: "✏️" },
+  culture: { title: "Cultural Context", icon: "🌏" },
+  business: { title: "Business & Professional", icon: "💼" },
 };
 
 const getTopicTitle = (state: WizardState): string => {
   if (state.customTopicTitle) return state.customTopicTitle;
   if (!state.lessonType || !state.selectedTopic) return "";
-  return (
-    topicsByType[state.lessonType]?.find((t) => t.id === state.selectedTopic)
-      ?.title || ""
+
+  // Find the topic in the full topics array
+  const topic = topicsByType[state.lessonType].find(
+    (t) => t.id === state.selectedTopic
   );
+
+  return topic?.title || "";
 };
 
 const getLessonTypeEmoji = (type: LessonType | null): string => {
-  switch (type) {
-    case "conversational":
-      return "💬";
-    case "nouns":
-      return "📚";
-    case "scenarios":
-      return "🎭";
-    case "grammar":
-      return "✏️";
-    case "culture":
-      return "🌏";
-    case "business":
-      return "💼";
-    default:
-      return "📖";
-  }
+  return type ? lessonTypes[type]?.icon || "📖" : "📖";
+};
+
+const getLessonTypeTitle = (type: LessonType | null): string => {
+  return type ? lessonTypes[type]?.title || "" : "";
 };
 
 const formatKnownLanguages = (languages: string[]): string => {
@@ -205,8 +379,15 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
                   {formatKnownLanguages(state.knownLanguages)} Speakers
                 </h3>
                 <p className="text-gray-300 mt-1 font-medium">
-                  {state.lessonType && toTitleCase(state.lessonType)} •{" "}
-                  {getTopicTitle(state)}
+                  {state.lessonType && getLessonTypeTitle(state.lessonType)}
+                  {state.selectedTopic && (
+                    <>
+                      <span className="mx-2">•</span>
+                      <span className="text-blue-400">
+                        {getTopicTitle(state)}
+                      </span>
+                    </>
+                  )}
                 </p>
               </div>
             </div>
