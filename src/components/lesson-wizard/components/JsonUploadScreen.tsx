@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { WizardState, LessonData } from "../types";
 import { Upload, CheckCircle2, FileUp, Type, Copy, Check } from "lucide-react";
-import { TypeAnimation } from "react-type-animation";
+import {
+  LESSON_CREATION_PROMPT,
+  LESSON_SCHEMA_EXAMPLE,
+  FORMATTING_NOTES,
+} from "../data/lessonPrompts";
 
 interface JsonUploadScreenProps {
   state: WizardState;
@@ -21,26 +25,9 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
   const [uploadMethod, setUploadMethod] = useState<"paste" | "file">("paste");
   const [pastedText, setPastedText] = useState("");
   const [copied, setCopied] = useState(false);
-
-  const promptText = `I'll help you create a language learning lesson. Please ask the user these questions in sequence:
-
-1. First, ask them to choose a language pair:
-   1. Thai for English Speakers
-   2. Chinese for English Speakers
-   3. Thai for Chinese-English Bilinguals (includes both Chinese and English translations)
-   4. Japanese for English Speakers
-   5. Korean for English Speakers
-   6. Other (let them specify)
-
-2. Then, ask them what type of lesson they'd like:
-   1. Common Phrases & Expressions
-   2. Real-life Situations & Dialogues
-   3. Core Vocabulary
-   4. Grammar Patterns
-   5. Cultural Topics
-   6. Other (let them specify)
-
-[Rest of the prompt text...]`;
+  const [promptType, setPromptType] = useState<
+    "creation" | "schema" | "formatting"
+  >("creation");
 
   const validateAndSetJson = (json: unknown) => {
     try {
@@ -212,7 +199,19 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
 
   const handleCopyPrompt = async () => {
     try {
-      await navigator.clipboard.writeText(promptText);
+      let textToCopy = "";
+      switch (promptType) {
+        case "creation":
+          textToCopy = LESSON_CREATION_PROMPT;
+          break;
+        case "schema":
+          textToCopy = LESSON_SCHEMA_EXAMPLE;
+          break;
+        case "formatting":
+          textToCopy = FORMATTING_NOTES;
+          break;
+      }
+      await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -238,31 +237,84 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
             <h3 className="text-white font-medium">
               Use the prompt with your own AI
             </h3>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={handleCopyPrompt}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4" />
-                  <span>Copy Prompt</span>
-                </>
-              )}
-            </motion.button>
+            <div className="flex gap-2">
+              <select
+                value={promptType}
+                onChange={(e) =>
+                  setPromptType(e.target.value as typeof promptType)
+                }
+                className="px-3 py-1.5 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700"
+              >
+                <option value="creation">Lesson Creation Guide</option>
+                <option value="schema">JSON Schema</option>
+                <option value="formatting">Formatting Rules</option>
+              </select>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleCopyPrompt}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    <span>
+                      Copy{" "}
+                      {promptType === "creation"
+                        ? "Guide"
+                        : promptType === "schema"
+                        ? "Schema"
+                        : "Rules"}
+                    </span>
+                  </>
+                )}
+              </motion.button>
+            </div>
           </div>
-          <p className="text-gray-400 text-sm">
-            Copy the prompt and use it with your own ChatGPT, Claude, DeepSeek
-            or any other AI to generate a lesson JSON. Our prompt will instruct
-            your AI to guide you through creating a structured lesson, which you
-            can then paste in here.
-          </p>
+          <div className="text-gray-400 text-sm">
+            <div className="mb-2">
+              Copy the prompt and use it with your own ChatGPT, Claude, DeepSeek
+              or any other AI to generate a lesson JSON. Our prompt will:
+            </div>
+            <ul className="list-disc list-inside space-y-1 ml-2">
+              <li>Guide you through creating a structured lesson</li>
+              <li>Help you choose appropriate language pairs and topics</li>
+              <li>
+                Ensure proper formatting for different language combinations
+              </li>
+              <li>Generate a complete lesson with 20 items</li>
+            </ul>
+          </div>
+          <div className="mt-4">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-gray-800 border border-gray-700">
+              <div className="flex-1">
+                {promptType === "creation" && (
+                  <span className="text-gray-300">
+                    Step-by-step guide to create a language learning lesson with
+                    AI assistance
+                  </span>
+                )}
+                {promptType === "schema" && (
+                  <span className="text-gray-300">
+                    JSON schema template with examples and field descriptions
+                  </span>
+                )}
+                {promptType === "formatting" && (
+                  <span className="text-gray-300">
+                    Rules for formatting Thai tones and multilingual content
+                  </span>
+                )}
+              </div>
+              <div className="text-xs text-gray-500">
+                Click Copy to use with your AI
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="space-y-6">
