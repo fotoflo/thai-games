@@ -228,13 +228,42 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
       exit={{ opacity: 0 }}
     >
       <div className="max-w-4xl mx-auto">
-        <TypeAnimation
-          sequence={["Create a new lesson from JSON", 1000]}
-          wrapper="h2"
-          className="text-2xl font-bold text-white mb-8"
-          cursor={true}
-          repeat={0}
-        />
+        <h2 className="text-2xl font-bold text-white mb-8">
+          Create a new lesson from JSON
+        </h2>
+
+        {/* Prompt Helper */}
+        <div className="mt-8 p-4 rounded-xl bg-gray-900 border border-gray-800 mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-white font-medium">
+              Use the prompt with your own AI
+            </h3>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleCopyPrompt}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4" />
+                  <span>Copy Prompt</span>
+                </>
+              )}
+            </motion.button>
+          </div>
+          <p className="text-gray-400 text-sm">
+            Copy the prompt and use it with your own ChatGPT, Claude, DeepSeek
+            or any other AI to generate a lesson JSON. Our prompt will instruct
+            your AI to guide you through creating a structured lesson, which you
+            can then paste in here.
+          </p>
+        </div>
 
         <div className="space-y-6">
           {/* Method Selection */}
@@ -334,38 +363,6 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
               <span>JSON validated successfully!</span>
             </motion.div>
           )}
-
-          {/* Prompt Helper */}
-          <div className="mt-8 p-4 rounded-xl bg-gray-900 border border-gray-800">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-white font-medium">
-                Need help creating a lesson?
-              </h3>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleCopyPrompt}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700"
-              >
-                {copied ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4" />
-                    <span>Copy Prompt</span>
-                  </>
-                )}
-              </motion.button>
-            </div>
-            <p className="text-gray-400 text-sm">
-              Copy the prompt and use it with ChatGPT, Claude, DeepSeek or any
-              other AI to generate a lesson JSON. The AI will guide you through
-              creating a structured lesson, which you can then paste in here.
-            </p>
-          </div>
 
           {/* Submit Button */}
           {jsonContent && !jsonError && (

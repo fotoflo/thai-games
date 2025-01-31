@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { WizardState, LessonType } from "../types";
 import { TypeAnimation } from "react-type-animation";
 import { Loader2 } from "lucide-react";
+import { toTitleCase } from "../utils/stringUtils";
 
 interface LessonPreviewScreenProps {
   state: WizardState;
@@ -85,6 +86,34 @@ const getTopicTitle = (state: WizardState): string => {
   );
 };
 
+const getLessonTypeEmoji = (type: LessonType | null): string => {
+  switch (type) {
+    case "conversational":
+      return "💬";
+    case "nouns":
+      return "📚";
+    case "scenarios":
+      return "🎭";
+    case "grammar":
+      return "✏️";
+    case "culture":
+      return "🌏";
+    case "business":
+      return "💼";
+    default:
+      return "📖";
+  }
+};
+
+const formatKnownLanguages = (languages: string[]): string => {
+  if (languages.length === 0) return "";
+  if (languages.length === 1) return languages[0];
+  if (languages.length === 2) return `${languages[0]} & ${languages[1]}`;
+  return `${languages.slice(0, -1).join(", ")}, & ${
+    languages[languages.length - 1]
+  }`;
+};
+
 export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
   state,
   updateState,
@@ -165,14 +194,22 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
 
         <div className="space-y-6">
           {/* Topic Info */}
-          <div className="p-4 rounded-xl bg-gray-900 border border-gray-800">
-            <h3 className="text-lg font-medium text-white mb-2">
-              {getTopicTitle(state)}
-            </h3>
-            <p className="text-gray-400">
-              {state.targetLanguage} for {state.knownLanguages.join(" & ")}{" "}
-              speakers
-            </p>
+          <div className="p-6 rounded-xl bg-gray-900 border border-gray-800">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">
+                {getLessonTypeEmoji(state.lessonType)}
+              </span>
+              <div>
+                <h3 className="text-xl font-semibold text-white">
+                  {state.targetLanguage} for{" "}
+                  {formatKnownLanguages(state.knownLanguages)} Speakers
+                </h3>
+                <p className="text-gray-300 mt-1 font-medium">
+                  {state.lessonType && toTitleCase(state.lessonType)} •{" "}
+                  {getTopicTitle(state)}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Preview Cards */}

@@ -140,7 +140,8 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
                   Existing Lesson Path
                 </h3>
                 <p className="text-gray-400">
-                  Follow a structured learning path with curated lessons
+                  Follow a structured learning path with lessons curated by our
+                  AI
                 </p>
               </motion.button>
 
@@ -168,7 +169,7 @@ export const PathSelectionScreen: React.FC<PathSelectionScreenProps> = ({
               >
                 <div className="text-3xl mb-4">✨</div>
                 <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-rose-400 transition-colors">
-                  Create New Lesson
+                  Create New Lesson with Your Own AI
                 </h3>
                 <p className="text-gray-400">
                   Design a custom lesson tailored to your needs
