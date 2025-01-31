@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { WizardState } from "../types";
 import { commonLanguages } from "../data/constants";
 import { toTitleCase } from "../utils/stringUtils";
+import { TypeAnimation } from "react-type-animation";
 
 interface LanguageSelectScreenProps {
   state: WizardState;
@@ -74,13 +75,13 @@ export const LanguageSelectScreen: React.FC<LanguageSelectScreenProps> = ({
       exit={{ opacity: 0 }}
     >
       <div className="max-w-4xl mx-auto">
-        <motion.h2
+        <TypeAnimation
+          sequence={["Select Languages You Know", 1000]}
+          wrapper="h2"
           className="text-2xl font-bold text-white mb-8"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-        >
-          Select languages you know
-        </motion.h2>
+          cursor={true}
+          repeat={0}
+        />
 
         <motion.div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {[
@@ -200,7 +201,7 @@ export const LanguageSelectScreen: React.FC<LanguageSelectScreenProps> = ({
               className="px-8 py-3 text-lg font-medium text-white rounded-lg bg-blue-600 hover:bg-blue-500 shadow-lg"
               onClick={onContinue}
             >
-              Continue
+              Next: Select Target Language
             </motion.button>
           </motion.div>
         )}

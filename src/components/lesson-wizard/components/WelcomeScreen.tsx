@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { LanguageTags } from "./LanguageTags";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { TypeAnimation } from "react-type-animation";
 
 interface WelcomeScreenProps {
   showNext: boolean;
@@ -67,19 +68,26 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             className="text-center"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.5 }}
           >
             <h1 className="text-3xl font-bold text-white mb-2">
               Welcome to Palo AI
             </h1>
-            <p className="text-gray-400">Your personal AI language app</p>
+
+            <TypeAnimation
+              sequence={[1000, "Your personal AI language app", 1000]}
+              wrapper="h1"
+              className="text-gray-400"
+              cursor={true}
+              repeat={0}
+            />
           </motion.div>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: showNext ? 1 : 0, y: showNext ? 0 : 20 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 3 }}
         >
           <motion.button
             whileHover={{ scale: 1.05 }}
