@@ -18,6 +18,7 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
   const [jsonContent, setJsonContent] = useState<LessonData | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [uploadMethod, setUploadMethod] = useState<"paste" | "file">("paste");
   const [pastedText, setPastedText] = useState("");
   const [copied, setCopied] = useState(false);
@@ -55,18 +56,18 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
         // Additional format validations
         switch (field) {
           case "name":
-            if (String(jsonObj[field]).length > 48) {
-              missingFields.push("Lesson name must be 48 characters or less");
+            if (String(jsonObj[field]).length > 128) {
+              missingFields.push("Lesson name must be 128 characters or less");
             }
             break;
           case "description":
-            if (String(jsonObj[field]).length > 128) {
-              missingFields.push("Description must be 128 characters or less");
+            if (String(jsonObj[field]).length > 512) {
+              missingFields.push("Description must be 512 characters or less");
             }
             break;
           case "subject":
-            if (String(jsonObj[field]).length > 48) {
-              missingFields.push("Subject must be 48 characters or less");
+            if (String(jsonObj[field]).length > 128) {
+              missingFields.push("Subject must be 128 characters or less");
             }
             break;
           case "difficulty":
@@ -87,8 +88,8 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
       if (!Array.isArray(items)) {
         missingFields.push("Items must be an array");
       } else {
-        if (items.length < 5) {
-          missingFields.push("Lesson must have at least 5 items");
+        if (items.length < 1) {
+          missingFields.push("Lesson must have at least 1 item");
         }
 
         items.forEach((item, index) => {
@@ -260,11 +261,22 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
 
       const createdLesson = await response.json();
 
+      // Show success state briefly before navigating
+      setIsNavigating(true);
+
+      // Small delay to show success state
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Navigate to lesson detail screen
-      router.push(`/lessons/${createdLesson.id}`);
+      await router.push(`/lessons/${createdLesson.id}`);
     } catch (error) {
       console.error("Error submitting lesson:", error);
-      setJsonError("Failed to submit lesson. Please try again.");
+      setJsonError(
+        error instanceof Error
+          ? error.message
+          : "Failed to submit lesson. Please try again."
+      );
+      setIsNavigating(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -484,10 +496,22 @@ export const JsonUploadScreen: React.FC<JsonUploadScreenProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="px-8 py-3 text-lg font-medium text-white rounded-lg bg-blue-600 hover:bg-blue-500 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isSubmitting || isNavigating}
+                className="px-8 py-3 text-lg font-medium text-white rounded-lg bg-blue-600 hover:bg-blue-500 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {isSubmitting ? "Creating Lesson..." : "Create Lesson"}
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Creating Lesson...</span>
+                  </>
+                ) : isNavigating ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>Opening Lesson...</span>
+                  </>
+                ) : (
+                  "Create Lesson"
+                )}
               </motion.button>
             </motion.div>
           )}
