@@ -1,357 +1,190 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { WizardState, LessonType } from "../types";
+import { motion, AnimatePresence } from "framer-motion";
+import { WizardState, LessonType, LessonData } from "../types";
 import { TypeAnimation } from "react-type-animation";
 import { Loader2, Copy, Check } from "lucide-react";
 import { getCompletedWizardPrompt } from "../data/lessonPrompts";
+import { useMutation } from "@tanstack/react-query";
 
 interface LessonPreviewScreenProps {
   state: WizardState;
   onComplete: (state: WizardState) => void;
 }
 
-interface TopicData {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
+interface StreamingItem {
+  sides: Array<{
+    markdown: string;
+    metadata?: {
+      pronunciation?: string;
+    };
+  }>;
 }
 
-type NonNullLessonType = Exclude<LessonType, null>;
-
-const topicsByType: Record<NonNullLessonType, TopicData[]> = {
-  conversational: [
-    {
-      id: "meeting-friends",
-      title: "Meeting New Friends",
-      description: "Learn phrases for introducing yourself and making friends",
-      icon: "👋",
-    },
-    {
-      id: "restaurant",
-      title: "At the Restaurant",
-      description: "Order food and interact with restaurant staff",
-      icon: "🍽️",
-    },
-    {
-      id: "shopping",
-      title: "Shopping",
-      description: "Bargain, ask about items, and make purchases",
-      icon: "🛍️",
-    },
-    {
-      id: "directions",
-      title: "Asking for Directions",
-      description: "Navigate and ask for help finding places",
-      icon: "🗺️",
-    },
-    {
-      id: "small-talk",
-      title: "Small Talk",
-      description: "Casual conversation about weather, hobbies, and daily life",
-      icon: "💭",
-    },
-    {
-      id: "transportation",
-      title: "Public Transportation",
-      description: "Buy tickets and navigate public transit",
-      icon: "🚌",
-    },
-  ],
-  nouns: [
-    {
-      id: "food-drinks",
-      title: "Food & Drinks",
-      description: "Common ingredients, dishes, and beverages",
-      icon: "🍜",
-    },
-    {
-      id: "clothing",
-      title: "Clothing & Accessories",
-      description: "Items of clothing and fashion terms",
-      icon: "👕",
-    },
-    {
-      id: "household",
-      title: "Household Items",
-      description: "Common objects found in homes",
-      icon: "🏠",
-    },
-    {
-      id: "nature",
-      title: "Nature & Animals",
-      description: "Plants, animals, and natural phenomena",
-      icon: "🌿",
-    },
-    {
-      id: "technology",
-      title: "Technology",
-      description: "Modern devices and digital terms",
-      icon: "📱",
-    },
-    {
-      id: "body-health",
-      title: "Body & Health",
-      description: "Body parts and health-related terms",
-      icon: "🫀",
-    },
-  ],
-  scenarios: [
-    {
-      id: "doctor-visit",
-      title: "Doctor's Visit",
-      description: "Medical appointments and health concerns",
-      icon: "👨‍⚕️",
-    },
-    {
-      id: "job-interview",
-      title: "Job Interview",
-      description: "Professional conversations and work discussions",
-      icon: "💼",
-    },
-    {
-      id: "airport",
-      title: "At the Airport",
-      description: "Navigate airports and flight-related situations",
-      icon: "✈️",
-    },
-    {
-      id: "hotel",
-      title: "Hotel Stay",
-      description: "Check-in, services, and room-related requests",
-      icon: "🏨",
-    },
-    {
-      id: "emergency",
-      title: "Emergency Situations",
-      description: "Important phrases for urgent situations",
-      icon: "🚨",
-    },
-    {
-      id: "banking",
-      title: "Banking & Finance",
-      description: "Financial transactions and services",
-      icon: "🏦",
-    },
-  ],
-  grammar: [
-    {
-      id: "basic-sentence",
-      title: "Basic Sentence Structure",
-      description: "Learn fundamental sentence patterns",
-      icon: "📝",
-    },
-    {
-      id: "verb-tenses",
-      title: "Verb Tenses",
-      description: "Past, present, and future expressions",
-      icon: "⏳",
-    },
-    {
-      id: "questions",
-      title: "Question Formation",
-      description: "Different ways to ask questions",
-      icon: "❓",
-    },
-    {
-      id: "particles",
-      title: "Particles & Connectors",
-      description: "Essential connecting words and particles",
-      icon: "🔗",
-    },
-    {
-      id: "modifiers",
-      title: "Adjectives & Adverbs",
-      description: "Words that modify nouns and verbs",
-      icon: "✨",
-    },
-    {
-      id: "honorifics",
-      title: "Politeness & Honorifics",
-      description: "Formal and polite language usage",
-      icon: "🎭",
-    },
-  ],
-  culture: [
-    {
-      id: "festivals",
-      title: "Festivals & Celebrations",
-      description: "Traditional holidays and customs",
-      icon: "🎉",
-    },
-    {
-      id: "etiquette",
-      title: "Social Etiquette",
-      description: "Cultural norms and polite behavior",
-      icon: "🤝",
-    },
-    {
-      id: "food-culture",
-      title: "Food Culture",
-      description: "Dining customs and food traditions",
-      icon: "🥢",
-    },
-    {
-      id: "arts",
-      title: "Arts & Entertainment",
-      description: "Traditional and modern cultural activities",
-      icon: "🎨",
-    },
-    {
-      id: "beliefs",
-      title: "Beliefs & Values",
-      description: "Cultural values and belief systems",
-      icon: "🙏",
-    },
-    {
-      id: "daily-life",
-      title: "Daily Life & Customs",
-      description: "Everyday cultural practices",
-      icon: "🌅",
-    },
-  ],
-  business: [
-    {
-      id: "meetings",
-      title: "Business Meetings",
-      description: "Conduct and participate in meetings",
-      icon: "👥",
-    },
-    {
-      id: "negotiations",
-      title: "Negotiations",
-      description: "Business deals and agreements",
-      icon: "🤝",
-    },
-    {
-      id: "presentations",
-      title: "Presentations",
-      description: "Give and respond to presentations",
-      icon: "📊",
-    },
-    {
-      id: "email",
-      title: "Email & Communication",
-      description: "Professional written communication",
-      icon: "📧",
-    },
-    {
-      id: "networking",
-      title: "Networking",
-      description: "Professional relationship building",
-      icon: "🌐",
-    },
-    {
-      id: "reports",
-      title: "Reports & Documentation",
-      description: "Business documentation and reporting",
-      icon: "📑",
-    },
-  ],
-};
+interface StreamingMetadata {
+  name: string;
+  description: string;
+  subject: string;
+  difficulty: string;
+  categories: Array<{ name: string; id: string }>;
+}
 
 const lessonTypes = {
-  conversational: { title: "Conversational", icon: "💬" },
-  nouns: { title: "Common Nouns", icon: "📚" },
-  scenarios: { title: "Common Scenarios", icon: "🎭" },
-  grammar: { title: "Grammar Focus", icon: "✏️" },
-  culture: { title: "Cultural Context", icon: "🌏" },
-  business: { title: "Business & Professional", icon: "💼" },
-};
-
-const getTopicTitle = (state: WizardState): string => {
-  // If it's a custom topic, return the custom title
-  if (state.customTopicTitle) return state.customTopicTitle;
-
-  // If no lesson type or selected topic, return empty
-  if (!state.lessonType || !state.selectedTopic) return "";
-
-  // Find the topic in the topics array
-  const topic = topicsByType[state.lessonType].find(
-    (t) => t.id === state.selectedTopic
-  );
-
-  return topic?.title || "";
-};
+  conversational: { icon: "💬" },
+  nouns: { icon: "📚" },
+  scenarios: { icon: "🎭" },
+  grammar: { icon: "✏️" },
+  culture: { icon: "🌏" },
+  business: { icon: "💼" },
+} as const;
 
 const getLessonTypeEmoji = (type: LessonType | null): string => {
   return type ? lessonTypes[type]?.icon || "📖" : "📖";
 };
 
-const getLessonTypeTitle = (type: LessonType | null): string => {
-  return type ? lessonTypes[type]?.title || "" : "";
-};
-
-const formatKnownLanguages = (languages: string[]): string => {
-  if (languages.length === 0) return "";
-  if (languages.length === 1) return languages[0];
-  if (languages.length === 2) return `${languages[0]} & ${languages[1]}`;
-  return `${languages.slice(0, -1).join(", ")}, & ${
-    languages[languages.length - 1]
-  }`;
-};
+const FETCH_TIMEOUT_MS = 120000; // 2 minutes
 
 export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
   state,
   onComplete,
 }) => {
-  const [isGenerating, setIsGenerating] = React.useState(true);
   const [copied, setCopied] = React.useState(false);
-  const [previewItems, setPreviewItems] = React.useState<
-    Array<{
-      front: string;
-      back: string;
-    }>
-  >([]);
+  const [streamingMetadata, setStreamingMetadata] =
+    React.useState<StreamingMetadata | null>(null);
+  const [streamingItems, setStreamingItems] = React.useState<StreamingItem[]>(
+    []
+  );
+  const [totalItems, setTotalItems] = React.useState(0);
+
+  // Create a mutation for generating lessons
+  const generateLessonMutation = useMutation({
+    mutationFn: async () => {
+      const prompt = getCompletedWizardPrompt(state);
+      console.log("Frontend: Starting generation with prompt:", prompt);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
+      try {
+        console.log("Frontend: Sending request...");
+        const response = await fetch("/api/generate-lesson", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
+          signal: controller.signal,
+        });
+
+        console.log("Frontend: Got response:", {
+          ok: response.ok,
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+        });
+
+        if (!response.ok) throw new Error("Failed to generate lesson");
+        if (!response.body) throw new Error("No response body");
+
+        const reader = response.body.getReader();
+        let lesson: LessonData | null = null;
+
+        console.log("Frontend: Starting to read stream...");
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            console.log("Frontend: Stream complete");
+            break;
+          }
+
+          const text = new TextDecoder().decode(value);
+          console.log("Frontend: Received chunk:", text);
+
+          const lines = text.split("\n");
+          console.log("Frontend: Processing", lines.length, "lines");
+
+          for (const line of lines) {
+            if (!line.trim() || !line.startsWith("data: ")) {
+              console.log("Frontend: Skipping empty/invalid line");
+              continue;
+            }
+            if (line.includes("[DONE]")) {
+              console.log("Frontend: Received DONE signal");
+              break;
+            }
+
+            try {
+              const data = JSON.parse(line.slice(5));
+              console.log("Frontend: Parsed event:", { type: data.type, data });
+
+              switch (data.type) {
+                case "start":
+                  console.log("Frontend: Handling start event");
+                  setStreamingMetadata(null);
+                  setStreamingItems([]);
+                  break;
+                case "metadata":
+                  console.log("Frontend: Setting metadata:", data.data);
+                  setStreamingMetadata(data.data);
+                  break;
+                case "items":
+                  console.log("Frontend: Adding items:", {
+                    newItems: data.items.length,
+                    currentTotal: streamingItems.length,
+                    incomingTotal: data.total,
+                  });
+                  setStreamingItems((prev) => {
+                    console.log("Frontend: Previous items:", prev.length);
+                    const newItems = [...prev, ...data.items];
+                    console.log("Frontend: Updated items:", newItems.length);
+                    return newItems;
+                  });
+                  setTotalItems(data.total);
+                  break;
+                case "complete":
+                  console.log("Frontend: Received complete lesson");
+                  lesson = data.lesson;
+                  break;
+                case "error":
+                  console.error("Frontend: Received error:", data.error);
+                  throw new Error(data.error);
+              }
+            } catch (parseError) {
+              console.error(
+                "Frontend: Error parsing line:",
+                parseError,
+                "Line:",
+                line
+              );
+            }
+          }
+        }
+
+        if (!lesson) throw new Error("No complete lesson received");
+        return lesson;
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    },
+    onSuccess: (lesson: LessonData) => {
+      // Don't immediately complete - just store the lesson data
+      console.log("Frontend: Mutation succeeded with lesson:", lesson);
+    },
+    onError: (error) => {
+      console.error("Frontend: Mutation failed:", error);
+    },
+  });
+
+  // Debug useEffect to monitor state changes
+  React.useEffect(() => {
+    console.log("Frontend: streamingItems updated:", streamingItems);
+  }, [streamingItems]);
 
   React.useEffect(() => {
-    // Simulate AI generation - replace with actual API call
-    const timer = setTimeout(() => {
-      setPreviewItems([
-        {
-          front: "Hello, how are you?",
-          back: "สวัสดี คุณสบายดีไหม",
-        },
-        {
-          front: "Nice to meet you",
-          back: "ยินดีที่ได้รู้จัก",
-        },
-        {
-          front: "What's your name?",
-          back: "คุณชื่ออะไร",
-        },
-      ]);
-      setIsGenerating(false);
-    }, 2000);
+    console.log("Frontend: streamingMetadata updated:", streamingMetadata);
+  }, [streamingMetadata]);
 
-    return () => clearTimeout(timer);
+  // Start generation when component mounts
+  React.useEffect(() => {
+    generateLessonMutation.mutate();
   }, []);
-
-  const handleApprove = () => {
-    onComplete(state);
-  };
-
-  const handleRegenerate = () => {
-    setIsGenerating(true);
-    // Simulate regeneration - replace with actual API call
-    setTimeout(() => {
-      setPreviewItems([
-        {
-          front: "Where are you from?",
-          back: "คุณมาจากไหน",
-        },
-        {
-          front: "I'm from America",
-          back: "ผมมาจากอเมริกา",
-        },
-        {
-          front: "Do you like Thai food?",
-          back: "คุณชอบอาหารไทยไหม",
-        },
-      ]);
-      setIsGenerating(false);
-    }, 2000);
-  };
 
   const handleCopyPrompt = async () => {
     try {
@@ -382,7 +215,12 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
 
         <div className="space-y-6">
           {/* Topic Info */}
-          <div className="p-6 rounded-xl bg-gray-900 border border-gray-800">
+          <motion.div
+            className="p-6 rounded-xl bg-gray-900 border border-gray-800"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-2xl">
@@ -390,19 +228,12 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
                 </span>
                 <div>
                   <h3 className="text-xl font-semibold text-white">
-                    {state.targetLanguage} for{" "}
-                    {formatKnownLanguages(state.knownLanguages)} Speakers
+                    {streamingMetadata?.name ||
+                      `${state.targetLanguage} Lesson`}
                   </h3>
                   <p className="text-gray-300 mt-1 font-medium">
-                    {state.lessonType && getLessonTypeTitle(state.lessonType)}
-                    {state.selectedTopic && (
-                      <>
-                        <span className="mx-2">•</span>
-                        <span className="text-blue-400">
-                          {getTopicTitle(state)}
-                        </span>
-                      </>
-                    )}
+                    {streamingMetadata?.description ||
+                      "Generating lesson content..."}
                   </p>
                 </div>
               </div>
@@ -420,54 +251,120 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    <span>Generate with AI</span>
+                    <span>Copy Prompt</span>
                   </>
                 )}
               </motion.button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Preview Cards */}
-          {isGenerating ? (
-            <div className="flex items-center justify-center p-12">
-              <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-              <span className="ml-3 text-gray-400">
-                Generating lesson content...
-              </span>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {previewItems.map((item, index) => (
+          <div className="space-y-4">
+            {!streamingItems.length && generateLessonMutation.isPending && (
+              <motion.div
+                className="flex items-center justify-center p-12"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                <span className="ml-3 text-gray-400">
+                  Generating lesson content...
+                </span>
+              </motion.div>
+            )}
+
+            <AnimatePresence mode="popLayout">
+              {streamingItems.map((item, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{
+                    duration: 0.3,
+                    delay: index * 0.1,
+                    ease: "easeOut",
+                  }}
                   className="p-4 rounded-xl bg-gray-900 border border-gray-800"
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="text-white font-medium">{item.front}</p>
-                      <p className="text-gray-400 mt-2">{item.back}</p>
+                      <p className="text-white font-medium">
+                        {item.sides[0].markdown}
+                      </p>
+                      <p className="text-gray-400 mt-2">
+                        {item.sides[1].markdown}
+                      </p>
+                      {item.sides[0].metadata?.pronunciation && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          {item.sides[0].metadata.pronunciation}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </motion.div>
               ))}
-            </div>
+            </AnimatePresence>
+
+            {streamingItems.length > 0 && (
+              <motion.p
+                className="text-gray-400 text-sm text-center mt-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                Generated {streamingItems.length} of {totalItems || "?"} items
+              </motion.p>
+            )}
+          </div>
+
+          {generateLessonMutation.isError && (
+            <motion.div
+              className="p-6 rounded-xl bg-red-900/20 border border-red-800"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="text-red-400 font-medium mb-2">
+                Error generating lesson:
+              </p>
+              <p className="text-red-300 mb-4 font-mono text-sm whitespace-pre-wrap">
+                {generateLessonMutation.error instanceof Error
+                  ? generateLessonMutation.error.message
+                  : "An unexpected error occurred"}
+              </p>
+              <button
+                onClick={() => generateLessonMutation.mutate()}
+                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white"
+              >
+                Try Again
+              </button>
+            </motion.div>
           )}
 
           {/* Action Buttons */}
           <div className="flex gap-4 justify-end pt-4">
             <button
-              onClick={handleRegenerate}
-              disabled={isGenerating}
+              onClick={() => generateLessonMutation.mutate()}
+              disabled={generateLessonMutation.isPending}
               className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 transition-colors disabled:opacity-50"
             >
               Regenerate
             </button>
             <button
-              onClick={handleApprove}
-              disabled={isGenerating}
+              onClick={() => {
+                if (generateLessonMutation.data) {
+                  onComplete({
+                    ...state,
+                    lessonData: generateLessonMutation.data,
+                    difficulty: generateLessonMutation.data.difficulty,
+                  });
+                }
+              }}
+              disabled={
+                generateLessonMutation.isPending || !generateLessonMutation.data
+              }
               className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white transition-colors disabled:opacity-50"
             >
               Create Lesson
