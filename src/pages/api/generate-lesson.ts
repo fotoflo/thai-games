@@ -1,5 +1,8 @@
 import { OpenAI } from "openai";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { calculateTokenCosts } from "@/utils/tokenCosts";
+import { PrismaClient } from "@prisma/client";
+import { lessonService } from "@/services/lessonService";
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing OPENAI_API_KEY environment variable");
@@ -8,6 +11,8 @@ if (!process.env.OPENAI_API_KEY) {
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
+const prisma = new PrismaClient();
 
 // Configure API route options
 export const config = {
@@ -66,6 +71,9 @@ export default async function handler(
         temperature: 0.7,
         max_tokens: 4000,
         stream: true,
+        stream_options: {
+          include_usage: true,
+        },
       },
       {
         timeout: 120000, // 2 minute timeout
@@ -81,33 +89,28 @@ export default async function handler(
     let accumulatedJson = "";
     let lastParsedItemCount = 0;
     let lastMetadataSent = false;
+    let finalTokenUsage = null;
 
     try {
       for await (const chunk of stream) {
         if (!isClientConnected) break;
 
+        // Store the final token usage when available
+        if (chunk.usage) {
+          console.log("Received token usage:", chunk.usage);
+          finalTokenUsage = chunk.usage;
+        }
+
         const content = chunk.choices[0]?.delta?.content;
         if (!content) continue;
 
-        // Debug logging for the first few chunks
-        if (accumulatedJson.length < 500) {
-          console.log("Received chunk:", {
-            content,
-            chunkLength: content.length,
-            accumulatedLength: accumulatedJson.length,
-            chunk: chunk.choices[0]?.delta,
-          });
-        }
+        console.log("Received chunk:", {
+          content,
+          chunkLength: content.length,
+          accumulatedLength: accumulatedJson.length,
+        });
 
         accumulatedJson += content;
-
-        // Log the current state of accumulated JSON periodically
-        if (accumulatedJson.length % 500 === 0) {
-          console.log(
-            "Current accumulated JSON length:",
-            accumulatedJson.length
-          );
-        }
 
         // Only try to parse if we have what looks like a complete object
         if (
@@ -116,7 +119,6 @@ export default async function handler(
           (accumulatedJson.match(/{/g) || []).length ===
             (accumulatedJson.match(/}/g) || []).length
         ) {
-          console.log("Attempting to parse accumulated JSON...");
           try {
             // Try to parse the accumulated JSON
             const partialLesson = JSON.parse(accumulatedJson);
@@ -134,7 +136,6 @@ export default async function handler(
               partialLesson.subject &&
               partialLesson.difficulty
             ) {
-              console.log("Sending metadata to client...");
               if (isClientConnected) {
                 const metadataEvent = `data: {"type":"metadata","data":${JSON.stringify(
                   {
@@ -145,7 +146,6 @@ export default async function handler(
                     categories: partialLesson.categories || [],
                   }
                 )}}\n\n`;
-                console.log("Metadata event:", metadataEvent);
                 res.write(metadataEvent);
                 lastMetadataSent = true;
               }
@@ -153,16 +153,11 @@ export default async function handler(
 
             // Send new items as they come in
             if (partialLesson.items?.length > lastParsedItemCount) {
-              console.log("New items found:", {
-                new: partialLesson.items.length - lastParsedItemCount,
-                total: partialLesson.items.length,
-              });
               const newItems = partialLesson.items.slice(lastParsedItemCount);
               if (isClientConnected) {
                 const itemsEvent = `data: {"type":"items","items":${JSON.stringify(
                   newItems
                 )},"total":${partialLesson.items.length}}\n\n`;
-                console.log("Items event:", itemsEvent);
                 res.write(itemsEvent);
               }
               lastParsedItemCount = partialLesson.items.length;
@@ -185,6 +180,7 @@ export default async function handler(
       // Final validation and completion
       if (isClientConnected) {
         try {
+          console.log("Processing final response...");
           const finalLesson = JSON.parse(accumulatedJson);
 
           // Validate lesson structure
@@ -194,24 +190,74 @@ export default async function handler(
           if (!finalLesson.name || !finalLesson.description) {
             throw new Error("Lesson must have name and description");
           }
+          debugger;
+          // Calculate token costs using the final usage data
+          if (!finalTokenUsage) {
+            console.error("No token usage data received");
+            throw new Error("Failed to get token usage data");
+          }
 
+          const tokenCosts = calculateTokenCosts({
+            inputTokens: finalTokenUsage.prompt_tokens,
+            outputTokens: finalTokenUsage.completion_tokens,
+            model: "gpt-4o-mini-2024-07-18",
+          });
+
+          console.log("Saving lesson to database...");
+          // Save lesson and token usage to database
+          const savedLesson = await lessonService.createLesson({
+            name: finalLesson.name,
+            description: finalLesson.description,
+            subject: finalLesson.subject,
+            difficulty: finalLesson.difficulty,
+            estimatedTime: finalLesson.estimatedTime || 30,
+            totalItems: finalLesson.items.length,
+            version: finalLesson.version || 1,
+            items: finalLesson.items,
+            categories: finalLesson.categories.map(
+              (cat: { name: string }) => cat.name
+            ),
+            aiModel: "gpt-4o-mini-2024-07-18",
+          });
+
+          console.log("Saving token usage...");
+          // Create token usage record
+          await prisma.tokenUsage.create({
+            data: {
+              lessonId: savedLesson.id,
+              inputTokens: tokenCosts.inputTokens,
+              inputCostPerToken: tokenCosts.inputCostPerToken,
+              inputTotalCost: tokenCosts.inputTotalCost,
+              outputTokens: tokenCosts.outputTokens,
+              outputCostPerToken: tokenCosts.outputCostPerToken,
+              outputTotalCost: tokenCosts.outputTotalCost,
+              totalTokens: tokenCosts.totalTokens,
+              totalCost: tokenCosts.totalCost,
+            },
+          });
+
+          console.log("Sending final response...");
+          // Send the complete response with lesson and token usage
           res.write(
             `data: {"type":"complete","lesson":${JSON.stringify(
               finalLesson
-            )}}\n\n`
+            )},"tokenUsage":${JSON.stringify(tokenCosts)}}\n\n`
           );
           res.write("data: [DONE]\n\n");
+          res.end();
         } catch (error: unknown) {
+          console.error("Error in final processing:", error);
           const errorMessage =
             error instanceof Error ? error.message : "Invalid JSON response";
           res.write(
             `data: {"type":"error","error":${JSON.stringify(errorMessage)}}\n\n`
           );
+          res.end();
         }
-        res.end();
       }
     } catch (streamError: unknown) {
       // Handle stream-specific errors
+      console.error("Stream error:", streamError);
       if (streamError instanceof Error) {
         const errorMessage = streamError.message;
         if (isClientConnected) {

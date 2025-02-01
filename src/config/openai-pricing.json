@@ -1,0 +1,188 @@
+{
+  "text_tokens": [
+    {
+      "model": "gpt-4o-2024-08-06",
+      "input_cost_per_million": 2.5,
+      "cached_input_cost_per_million": 1.25,
+      "output_cost_per_million": 10.0
+    },
+    {
+      "model": "gpt-4o-2024-11-20",
+      "input_cost_per_million": 2.5,
+      "cached_input_cost_per_million": 1.25,
+      "output_cost_per_million": 10.0
+    },
+    {
+      "model": "gpt-4o-2024-05-13",
+      "input_cost_per_million": 5.0,
+      "output_cost_per_million": 15.0
+    },
+    {
+      "model": "gpt-4o-audio-preview-2024-12-17",
+      "input_cost_per_million": 2.5,
+      "output_cost_per_million": 10.0
+    },
+    {
+      "model": "gpt-4o-realtime-preview-2024-12-17",
+      "input_cost_per_million": 5.0,
+      "cached_input_cost_per_million": 2.5,
+      "output_cost_per_million": 20.0
+    },
+    {
+      "model": "gpt-4o-mini-2024-07-18",
+      "input_cost_per_million": 0.15,
+      "cached_input_cost_per_million": 0.075,
+      "output_cost_per_million": 0.6
+    },
+    {
+      "model": "o1-2024-12-17",
+      "input_cost_per_million": 15.0,
+      "cached_input_cost_per_million": 7.5,
+      "output_cost_per_million": 60.0
+    },
+    {
+      "model": "o3-mini-2025-01-31",
+      "input_cost_per_million": 1.1,
+      "cached_input_cost_per_million": 0.55,
+      "output_cost_per_million": 4.4
+    },
+    {
+      "model": "o1-mini-2024-09-12",
+      "input_cost_per_million": 1.1,
+      "cached_input_cost_per_million": 0.55,
+      "output_cost_per_million": 4.4
+    }
+  ],
+  "audio_tokens": [
+    {
+      "model": "gpt-4o-audio-preview-2024-12-17",
+      "input_cost_per_million": 40.0,
+      "output_cost_per_million": 80.0
+    },
+    {
+      "model": "gpt-4o-mini-audio-preview-2024-12-17",
+      "input_cost_per_million": 10.0,
+      "output_cost_per_million": 20.0
+    },
+    {
+      "model": "gpt-4o-realtime-preview-2024-12-17",
+      "input_cost_per_million": 40.0,
+      "cached_input_cost_per_million": 2.5,
+      "output_cost_per_million": 80.0
+    }
+  ],
+  "fine_tuning": [
+    {
+      "model": "gpt-4o-2024-08-06",
+      "training_cost_per_million": 25.0,
+      "input_cost_per_million": 3.75,
+      "cached_input_cost_per_million": 1.875,
+      "output_cost_per_million": 15.0
+    },
+    {
+      "model": "gpt-4o-mini-2024-07-18",
+      "training_cost_per_million": 3.0,
+      "input_cost_per_million": 0.3,
+      "cached_input_cost_per_million": 0.15,
+      "output_cost_per_million": 1.2
+    }
+  ],
+  "assistants_api": {
+    "code_interpreter": {
+      "cost_per_session": 0.03
+    },
+    "file_search": {
+      "cost_per_gb_per_day": 0.1,
+      "free_gb": 1
+    }
+  },
+  "transcription_speech_generation": {
+    "whisper": {
+      "use_case": "transcription",
+      "cost_per_minute": 0.006
+    },
+    "tts": {
+      "use_case": "speech_generation",
+      "cost_per_million_characters": 15.0
+    },
+    "tts_hd": {
+      "use_case": "speech_generation",
+      "cost_per_million_characters": 30.0
+    }
+  },
+  "image_generation": [
+    {
+      "model": "DALL\u00b7E 3",
+      "quality": "standard",
+      "1024x1024": 0.04,
+      "1024x1792": 0.08
+    },
+    {
+      "model": "DALL\u00b7E 3",
+      "quality": "HD",
+      "1024x1024": 0.08,
+      "1024x1792": 0.12
+    },
+    {
+      "model": "DALL\u00b7E 2",
+      "256x256": 0.016,
+      "512x512": 0.018,
+      "1024x1024": 0.02
+    }
+  ],
+  "embeddings": [
+    {
+      "model": "text-embedding-3-small",
+      "cost_per_million": 0.02
+    },
+    {
+      "model": "text-embedding-3-large",
+      "cost_per_million": 0.13
+    }
+  ],
+  "moderation": {
+    "omni-moderation-latest": {
+      "cost": "free"
+    },
+    "text-moderation-latest": {
+      "cost": "free"
+    }
+  },
+  "other_models": [
+    {
+      "model": "chatgpt-4o-latest",
+      "input_cost_per_million": 5.0,
+      "output_cost_per_million": 15.0
+    },
+    {
+      "model": "gpt-4-turbo-2024-04-09",
+      "input_cost_per_million": 10.0,
+      "output_cost_per_million": 30.0
+    },
+    {
+      "model": "gpt-4-0613",
+      "input_cost_per_million": 30.0,
+      "output_cost_per_million": 60.0
+    },
+    {
+      "model": "gpt-4-32k",
+      "input_cost_per_million": 60.0,
+      "output_cost_per_million": 120.0
+    },
+    {
+      "model": "gpt-3.5-turbo-0125",
+      "input_cost_per_million": 0.5,
+      "output_cost_per_million": 1.5
+    },
+    {
+      "model": "davinci-002",
+      "input_cost_per_million": 2.0,
+      "output_cost_per_million": 2.0
+    },
+    {
+      "model": "babbage-002",
+      "input_cost_per_million": 0.4,
+      "output_cost_per_million": 0.4
+    }
+  ]
+}
