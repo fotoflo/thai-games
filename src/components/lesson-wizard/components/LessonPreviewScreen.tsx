@@ -1,8 +1,8 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { WizardState, LessonType, LessonData } from "../types";
+import { WizardState, LessonData } from "../types";
 import { TypeAnimation } from "react-type-animation";
-import { Loader2, Copy, Check } from "lucide-react";
+import { Loader2, Copy, Check, BookOpen, Globe } from "lucide-react";
 import { getCompletedWizardPrompt } from "../data/lessonPrompts";
 import { useMutation } from "@tanstack/react-query";
 
@@ -28,20 +28,11 @@ interface StreamingMetadata {
   categories: Array<{ name: string; id: string }>;
 }
 
-const lessonTypes = {
-  conversational: { icon: "💬" },
-  nouns: { icon: "📚" },
-  scenarios: { icon: "🎭" },
-  grammar: { icon: "✏️" },
-  culture: { icon: "🌏" },
-  business: { icon: "💼" },
-} as const;
-
-const getLessonTypeEmoji = (type: LessonType | null): string => {
-  return type ? lessonTypes[type]?.icon || "📖" : "📖";
-};
-
 const FETCH_TIMEOUT_MS = 120000; // 2 minutes
+
+const parseMarkdown = (text: string) => {
+  return text.replace(/<br\s*\/?>/g, "\n");
+};
 
 export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
   state,
@@ -221,20 +212,33 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">
-                  {getLessonTypeEmoji(state.lessonType)}
-                </span>
-                <div>
-                  <h3 className="text-xl font-semibold text-white">
-                    {streamingMetadata?.name ||
-                      `${state.targetLanguage} Lesson`}
-                  </h3>
-                  <p className="text-gray-300 mt-1 font-medium">
-                    {streamingMetadata?.description ||
-                      "Generating lesson content..."}
-                  </p>
+            <div className="flex items-start justify-between">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-emerald-500" />
+                  <span className="text-sm font-medium text-emerald-500">
+                    {streamingMetadata?.categories
+                      ?.map((cat) => cat.name)
+                      .join(", ") || "Generating..."}
+                  </span>
+                </div>
+                <h1 className="text-2xl font-semibold text-white">
+                  {streamingMetadata?.name || `${state.targetLanguage} Lesson`}
+                </h1>
+                <p className="text-sm text-slate-300 leading-relaxed">
+                  {streamingMetadata?.description ||
+                    "Generating lesson content..."}
+                </p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  <span className="px-3 py-1.5 bg-slate-800/50 rounded-full text-sm inline-flex items-center gap-2">
+                    <Globe className="w-3.5 h-3.5" />
+                    {streamingMetadata?.subject || state.targetLanguage}
+                  </span>
+                  {streamingMetadata?.difficulty && (
+                    <span className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 rounded-full text-sm">
+                      {streamingMetadata.difficulty}
+                    </span>
+                  )}
                 </div>
               </div>
               <motion.button
@@ -286,18 +290,18 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
                     delay: index * 0.1,
                     ease: "easeOut",
                   }}
-                  className="p-4 rounded-xl bg-gray-900 border border-gray-800"
+                  className="p-4 rounded-xl bg-gray-900 border border-gray-800 hover:bg-gray-800/50 transition-colors"
                 >
                   <div className="flex justify-between items-start">
-                    <div>
-                      <p className="text-white font-medium">
-                        {item.sides[0].markdown}
+                    <div className="space-y-2">
+                      <p className="text-lg sm:text-xl text-white font-medium whitespace-pre-line">
+                        {parseMarkdown(item.sides[0].markdown)}
                       </p>
-                      <p className="text-gray-400 mt-2">
-                        {item.sides[1].markdown}
+                      <p className="text-base sm:text-lg text-gray-400 whitespace-pre-line">
+                        {parseMarkdown(item.sides[1].markdown)}
                       </p>
                       {item.sides[0].metadata?.pronunciation && (
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-gray-500 font-mono">
                           {item.sides[0].metadata.pronunciation}
                         </p>
                       )}
