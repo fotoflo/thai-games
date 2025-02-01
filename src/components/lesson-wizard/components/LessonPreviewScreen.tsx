@@ -5,6 +5,7 @@ import { TypeAnimation } from "react-type-animation";
 import { Loader2, Copy, Check, BookOpen, Globe } from "lucide-react";
 import { getCompletedWizardPrompt } from "../data/lessonPrompts";
 import { useMutation } from "@tanstack/react-query";
+import { LanguageCard } from "@/components/ui/LanguageCard";
 
 interface LessonPreviewScreenProps {
   state: WizardState;
@@ -29,10 +30,6 @@ interface StreamingMetadata {
 }
 
 const FETCH_TIMEOUT_MS = 120000; // 2 minutes
-
-const parseMarkdown = (text: string) => {
-  return text.replace(/<br\s*\/?>/g, "\n");
-};
 
 export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
   state,
@@ -121,13 +118,8 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
                     currentTotal: streamingItems.length,
                     incomingTotal: data.total,
                   });
-                  setStreamingItems((prev) => {
-                    console.log("Frontend: Previous items:", prev.length);
-                    const newItems = [...prev, ...data.items];
-                    console.log("Frontend: Updated items:", newItems.length);
-                    return newItems;
-                  });
-                  setTotalItems(data.total);
+                  setStreamingItems((prev) => [...prev, ...data.items]);
+                  setTotalItems(data.total || 3);
                   break;
                 case "complete":
                   console.log("Frontend: Received complete lesson");
@@ -239,6 +231,23 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
                       {streamingMetadata.difficulty}
                     </span>
                   )}
+                  <select
+                    value={state.numberOfItems || 3}
+                    onChange={(e) => {
+                      const newState = {
+                        ...state,
+                        numberOfItems: parseInt(e.target.value),
+                      };
+                      onComplete(newState);
+                      // Trigger regeneration
+                      generateLessonMutation.mutate();
+                    }}
+                    className="px-3 py-1.5 bg-gray-800 text-gray-300 rounded-full text-sm border border-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    <option value="3">3 Cards</option>
+                    <option value="5">5 Cards</option>
+                    <option value="10">10 Cards</option>
+                  </select>
                 </div>
               </div>
               <motion.button
@@ -280,46 +289,39 @@ export const LessonPreviewScreen: React.FC<LessonPreviewScreenProps> = ({
 
             <AnimatePresence mode="popLayout">
               {streamingItems.map((item, index) => (
-                <motion.div
+                <LanguageCard
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: index * 0.1,
-                    ease: "easeOut",
-                  }}
-                  className="p-4 rounded-xl bg-gray-900 border border-gray-800 hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex justify-between items-start">
-                    <div className="space-y-2">
-                      <p className="text-lg sm:text-xl text-white font-medium whitespace-pre-line">
-                        {parseMarkdown(item.sides[0].markdown)}
-                      </p>
-                      <p className="text-base sm:text-lg text-gray-400 whitespace-pre-line">
-                        {parseMarkdown(item.sides[1].markdown)}
-                      </p>
-                      {item.sides[0].metadata?.pronunciation && (
-                        <p className="text-sm text-gray-500 font-mono">
-                          {item.sides[0].metadata.pronunciation}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
+                  frontSide={item.sides[0]}
+                  backSide={item.sides[1]}
+                  maxBackLines={2}
+                  showPronunciation={true}
+                />
               ))}
             </AnimatePresence>
 
             {streamingItems.length > 0 && (
-              <motion.p
-                className="text-gray-400 text-sm text-center mt-4"
+              <motion.div
+                className="text-center mt-4 space-y-2 px-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                Generated {streamingItems.length} of {totalItems || "?"} items
-              </motion.p>
+                <div className="relative w-full bg-gray-800 rounded-full h-2 mb-4 overflow-hidden">
+                  <motion.div
+                    className="absolute left-0 top-0 h-full bg-blue-500 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{
+                      width: `${
+                        (streamingItems.length / (totalItems || 3)) * 100
+                      }%`,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+                <p className="text-gray-400 text-sm">
+                  Generated {streamingItems.length} of {totalItems || 3} items
+                </p>
+              </motion.div>
             )}
           </div>
 

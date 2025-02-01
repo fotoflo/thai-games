@@ -35,6 +35,7 @@ export interface WizardState {
   selectedTopic: string | null;
   customTopicTitle: string | null;
   difficulty: "BEGINNER" | "INTERMEDIATE" | "ADVANCED" | null;
+  numberOfItems: number;
   lessonData: LessonData | null;
 }
 

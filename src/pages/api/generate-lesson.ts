@@ -8,6 +8,10 @@ if (!process.env.OPENAI_API_KEY) {
   throw new Error("Missing OPENAI_API_KEY environment variable");
 }
 
+if (!process.env.OPENAI_MODEL) {
+  throw new Error("Missing OPENAI_MODEL environment variable");
+}
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -50,21 +54,19 @@ export default async function handler(
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
 
-    console.log("Creating stream...");
+    console.log("[API] Starting lesson generation...");
     const stream = await openai.chat.completions.create(
       {
-        model: "gpt-4o-mini",
+        model: process.env.OPENAI_MODEL as string,
         messages: [
           {
             role: "system",
             content:
-              "You are a language learning expert who creates structured lessons. Generate a SMALL lesson with exactly 2-3 items based on the provided requirements. Format the response as a valid JSON object with the following structure: { name: string, description: string, subject: string, difficulty: string, categories: Array<{name: string, id: string}>, items: Array<{sides: Array<{markdown: string}>}> }. Keep responses concise and focused on just 2-3 key language elements.",
+              "You are a language learning expert who creates structured lessons. Generate a focused lesson based on the provided requirements. Format the response as a valid JSON object with the following structure: { name: string, description: string, subject: string, difficulty: string, categories: Array<{name: string, id: string}>, items: Array<{sides: Array<{markdown: string}>}> }.",
           },
           {
             role: "user",
-            content:
-              prompt +
-              "\n\nIMPORTANT: Please include ONLY 2-3 items in this lesson to keep it focused and concise.",
+            content: prompt,
           },
         ],
         response_format: { type: "json_object" },
@@ -85,32 +87,29 @@ export default async function handler(
       res.write('data: {"type":"start"}\n\n');
     }
 
-    console.log("Stream created, beginning to process chunks...");
     let accumulatedJson = "";
-    let lastParsedItemCount = 0;
     let lastMetadataSent = false;
     let finalTokenUsage = null;
+    let hasReceivedItems = false;
 
     try {
       for await (const chunk of stream) {
-        if (!isClientConnected) break;
+        if (!isClientConnected) {
+          console.log("[API] Client disconnected, stopping generation");
+          break;
+        }
 
         // Store the final token usage when available
         if (chunk.usage) {
-          console.log("Received token usage:", chunk.usage);
           finalTokenUsage = chunk.usage;
+          console.log("[API] Token usage:", finalTokenUsage);
         }
 
         const content = chunk.choices[0]?.delta?.content;
         if (!content) continue;
 
-        console.log("Received chunk:", {
-          content,
-          chunkLength: content.length,
-          accumulatedLength: accumulatedJson.length,
-        });
-
         accumulatedJson += content;
+        console.log("[API] Received chunk:", content);
 
         // Only try to parse if we have what looks like a complete object
         if (
@@ -122,11 +121,6 @@ export default async function handler(
           try {
             // Try to parse the accumulated JSON
             const partialLesson = JSON.parse(accumulatedJson);
-            console.log("Successfully parsed JSON. Found:", {
-              hasName: !!partialLesson.name,
-              hasDescription: !!partialLesson.description,
-              itemCount: partialLesson.items?.length || 0,
-            });
 
             // Send metadata once we have it
             if (
@@ -137,6 +131,10 @@ export default async function handler(
               partialLesson.difficulty
             ) {
               if (isClientConnected) {
+                console.log("[API] Sending metadata:", {
+                  name: partialLesson.name,
+                  difficulty: partialLesson.difficulty,
+                });
                 const metadataEvent = `data: {"type":"metadata","data":${JSON.stringify(
                   {
                     name: partialLesson.name,
@@ -152,15 +150,18 @@ export default async function handler(
             }
 
             // Send new items as they come in
-            if (partialLesson.items?.length > lastParsedItemCount) {
-              const newItems = partialLesson.items.slice(lastParsedItemCount);
+            if (partialLesson.items?.length > 0) {
+              hasReceivedItems = true;
               if (isClientConnected) {
+                console.log("[API] Sending items:", {
+                  count: partialLesson.items.length,
+                  first: partialLesson.items[0].sides[0].markdown.slice(0, 50),
+                });
                 const itemsEvent = `data: {"type":"items","items":${JSON.stringify(
-                  newItems
-                )},"total":${partialLesson.items.length}}\n\n`;
+                  partialLesson.items
+                )},"total":3}\n\n`;
                 res.write(itemsEvent);
               }
-              lastParsedItemCount = partialLesson.items.length;
             }
           } catch (parseError) {
             // Only log in development and only if it's not a simple incomplete JSON error
@@ -171,7 +172,7 @@ export default async function handler(
                 parseError.message.includes("Unexpected end")
               )
             ) {
-              console.debug("JSON parse error:", parseError);
+              console.debug("[API] JSON parse error:", parseError);
             }
           }
         }
@@ -180,8 +181,13 @@ export default async function handler(
       // Final validation and completion
       if (isClientConnected) {
         try {
-          console.log("Processing final response...");
+          console.log("[API] Processing final response...");
           const finalLesson = JSON.parse(accumulatedJson);
+
+          // Only validate if we've actually received items
+          if (!hasReceivedItems) {
+            throw new Error("No items were generated. Please try again.");
+          }
 
           // Validate lesson structure
           if (!finalLesson.items?.length) {
@@ -190,20 +196,20 @@ export default async function handler(
           if (!finalLesson.name || !finalLesson.description) {
             throw new Error("Lesson must have name and description");
           }
-          debugger;
+
           // Calculate token costs using the final usage data
           if (!finalTokenUsage) {
-            console.error("No token usage data received");
+            console.error("[API] No token usage data received");
             throw new Error("Failed to get token usage data");
           }
 
           const tokenCosts = calculateTokenCosts({
             inputTokens: finalTokenUsage.prompt_tokens,
             outputTokens: finalTokenUsage.completion_tokens,
-            model: "gpt-4o-mini-2024-07-18",
+            model: process.env.OPENAI_MODEL as string,
           });
 
-          console.log("Saving lesson to database...");
+          console.log("[API] Saving lesson to database...");
           // Save lesson and token usage to database
           const savedLesson = await lessonService.createLesson({
             name: finalLesson.name,
@@ -217,10 +223,10 @@ export default async function handler(
             categories: finalLesson.categories.map(
               (cat: { name: string }) => cat.name
             ),
-            aiModel: "gpt-4o-mini-2024-07-18",
+            aiModel: process.env.OPENAI_MODEL as string,
           });
 
-          console.log("Saving token usage...");
+          console.log("[API] Saving token usage...");
           // Create token usage record
           await prisma.tokenUsage.create({
             data: {
@@ -236,7 +242,7 @@ export default async function handler(
             },
           });
 
-          console.log("Sending final response...");
+          console.log("[API] Generation complete, sending final response");
           // Send the complete response with lesson and token usage
           res.write(
             `data: {"type":"complete","lesson":${JSON.stringify(
@@ -246,7 +252,7 @@ export default async function handler(
           res.write("data: [DONE]\n\n");
           res.end();
         } catch (error: unknown) {
-          console.error("Error in final processing:", error);
+          console.error("[API] Error in final processing:", error);
           const errorMessage =
             error instanceof Error ? error.message : "Invalid JSON response";
           res.write(

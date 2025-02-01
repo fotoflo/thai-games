@@ -68,7 +68,7 @@ PART 2: FORMATTING REQUIREMENTS
 
 PART 3: JSON SCHEMA
 ------------------
-Generate a lesson using this exact schema with 20 items:
+Generate a lesson using this exact schema with 10 items:
 
 {
   "name": "Title of the Lesson (in both languages if bilingual)", // max 48 chars
@@ -82,7 +82,7 @@ Generate a lesson using this exact schema with 20 items:
   ],
   "difficulty": "BEGINNER",  // Must be: BEGINNER, INTERMEDIATE, or ADVANCED
   "estimatedTime": 30,       // Time in minutes
-  "totalItems": 20,          // Must be 20 items
+  "totalItems": 10,          // Must be 10 items
   "version": 1,
   "items": [
     {
@@ -105,7 +105,7 @@ Generate a lesson using this exact schema with 20 items:
   ]
 }
 
-Please follow these steps in order and generate a complete lesson JSON following all formatting requirements. Make sure to include exactly 20 items in your lesson.`;
+Please follow these steps in order and generate a complete lesson JSON following all formatting requirements. Make sure to include exactly 10 items in your lesson.`;
 };
 
 export const LESSON_SCHEMA_EXAMPLE = `{
@@ -120,7 +120,7 @@ export const LESSON_SCHEMA_EXAMPLE = `{
   ],
   "difficulty": "BEGINNER",  // Must be: BEGINNER, INTERMEDIATE, or ADVANCED
   "estimatedTime": 30,       // Time in minutes
-  "totalItems": 1,           // Number of items in the lesson
+  "totalItems": 10,           // Number of items in the lesson
   "version": 1,
   "items": [
     {
@@ -172,6 +172,7 @@ export const getCompletedWizardPrompt = (state: WizardState): string => {
     ? lessonType.charAt(0).toUpperCase() + lessonType.slice(1)
     : "your chosen lesson type";
   const difficultyStr = difficulty || "BEGINNER";
+  const numberOfItems = state.numberOfItems || 3;
 
   return `Please create a language learning lesson with the following specifications:
 
@@ -181,6 +182,7 @@ Language Pair: ${languagePair}
 Lesson Type: ${lessonTypeStr}
 Topic: ${topic}
 Difficulty: ${difficultyStr}
+Number of Items: ${numberOfItems}
 
 FORMATTING REQUIREMENTS
 -----------------------------
@@ -196,7 +198,7 @@ FORMATTING REQUIREMENTS
 
 JSON SCHEMA
 ------------------
-Generate a lesson using this exact schema with 20 items:
+Generate a lesson using this exact schema with ${numberOfItems} items:
 
 {
   "name": "${topic} - ${languagePair}", // max 48 chars
@@ -210,7 +212,7 @@ Generate a lesson using this exact schema with 20 items:
   ],
   "difficulty": "${difficultyStr}",
   "estimatedTime": 30,
-  "totalItems": 20,
+  "totalItems": ${numberOfItems},
   "version": 1,
   "items": [
     {
@@ -234,7 +236,7 @@ Generate a lesson using this exact schema with 20 items:
 }
 
 Please generate a complete lesson JSON following all formatting requirements. Make sure to:
-1. Include exactly 20 relevant items for the chosen topic and difficulty level
+1. Include exactly ${numberOfItems} relevant items for the chosen topic and difficulty level
 2. Follow the tone marking colors for Thai words
 3. Include proper translations and pronunciations
 4. Add appropriate example sentences for each item
