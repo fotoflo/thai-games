@@ -17,8 +17,6 @@ import {
   enterSwitchToFirstPass,
   enterSwitchToTest,
   initializeWithLoadedLessons,
-  openFlashCardModal,
-  closeFlashCardModal,
 } from "./cardSetActions";
 import { createActorContext } from "@xstate/react";
 import { lessonApi } from "@/api/lessonApi";
@@ -60,8 +58,6 @@ export const cardSetMachine = setup({
     enterSwitchToFirstPass,
     enterSwitchToTest,
     initializeWithLoadedLessons,
-    openFlashCardModal,
-    closeFlashCardModal,
   },
   actors: {
     fetchLessons: fromPromise(lessonApi.loadLessons),
